@@ -1,4 +1,13 @@
 {
+    "name": "wow-e2e-api-automation",
+    "version": "1.0.0",
+    "description": "E2E API Automation Framework",
+    "main": "index.js",
+    "scripts": {
+        "cypress:open": "cypress open"
+    },
+    "author": "Test Automation Atom|Autobots Chapter",
+    "license": "ISC",
     "devDependencies": {
         "cypress": "^6.4.0"
     }

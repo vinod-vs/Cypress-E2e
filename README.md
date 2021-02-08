@@ -15,4 +15,4 @@ This project will be used to automate the End to End Web and API scenarios for W
 TODO: Describe and show how to build your code and run the tests. 
 
 # Contribute
-If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW_Automation-Cypress and create a pull request for review.
+If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation and create a pull request for review.
