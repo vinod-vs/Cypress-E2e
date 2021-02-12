@@ -16,3 +16,9 @@ TODO: Describe and show how to build your code and run the tests.
 
 # Contribute
 If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation and create a pull request for review.
+
+# ToDo:
+1. Running test with multiple set of data and iterate through it.
+2. Executing tests in parallel and get the test report consolidated.
+3. CI/CD pipeline variables with smart selection for Browser, Run Env. and Base URL.
+4. Custom commands to be used across multiple tests.

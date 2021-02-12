@@ -1,1 +1,13 @@
-{}
+{
+    "$schema": "https://on.cypress.io/cypress.schema.json",
+    "baseUrl": "https://uatsite.woolworths.com.au/",
+    "viewportHeight": 1080,
+    "viewportWidth": 1440,
+    "video": true,
+    "videosFolder": "cypress/videos",
+    "videoCompression": 32,
+    "videoUploadOnPasses": true,
+    "screenshotOnRunFailure": true,
+    "screenshotsFolder": "cypress/screenshots",
+    "trashAssetsBeforeRuns": true
+}
