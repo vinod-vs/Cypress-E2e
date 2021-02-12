@@ -1,7 +1,15 @@
 {
     "baseUrl": "https://uatsite.woolworths.com.au/",
-    "env":  {
+    "env": {
         "b2cLogin": "apis/ui/Login/LoginWithCredential"
     },
-    "video": false
+    "viewportHeight": 1080,
+    "viewportWidth": 1440,
+    "video": false,
+    "videosFolder": "cypress/videos",
+    "videoCompression": 32,
+    "videoUploadOnPasses": true,
+    "screenshotOnRunFailure": true,
+    "screenshotsFolder": "cypress/screenshots",
+    "trashAssetsBeforeRuns": true
 }
