@@ -14,19 +14,7 @@ describe("Perform Login via API", () => {
 
     it('Login', function() {
         for (var shopper of this.b2cShopper) {
-            cy.request('POST', '/apis/ui/Login/loginwithcredential', shopper).then((response) => {
-                expect(response.body).to.have.property('LoginResult', 'Success')
-            })
-
-            cy.getCookie('w-rctx').should('exist')
-        }
-    })
-
-    it('Login using Commands', function() {
-        for (var shopper of this.b2cShopper) {
             cy.LoginViaApi(shopper)
         }
-
-        cy.getCookie('w-rctx').should('exist')
     })
 })

@@ -15,11 +15,13 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import './apiCommands'
+import './uiCommands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
 // note this may conflict with clearcookies as defaults always supersedes
 Cypress.Cookies.defaults({
-  preserve: ['w-rctx']
+    preserve: ['w-rctx']
 })
