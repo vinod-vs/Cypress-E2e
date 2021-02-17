@@ -4,11 +4,25 @@
     "description": "E2E API Automation Framework",
     "main": "index.js",
     "scripts": {
-        "cypress:open": "cypress open"
+        "cypress:open": "cypress open",
+        "cypress:run": "cypress run",
+        "cypress:spec": "cypress run --spec"
     },
     "author": "Test Automation Atom|Autobots Chapter",
     "license": "ISC",
     "devDependencies": {
-        "cypress": "^6.4.0"
+        "cypress": "^6.4.0",
+        "standard": "^16.0.3"
+    },
+    "standard": {
+        "env": [
+            "mocha"
+        ],
+        "globals": [
+            "cy",
+            "Cypress",
+            "expect",
+            "assert"
+        ]
     }
 }

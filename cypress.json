@@ -1,1 +1,7 @@
-{}
+{
+    "baseUrl": "https://uatsite.woolworths.com.au/",
+    "env":  {
+        "b2cLogin": "apis/ui/Login/LoginWithCredential"
+    },
+    "video": false
+}

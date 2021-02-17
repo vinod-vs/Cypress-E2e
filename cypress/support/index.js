@@ -18,3 +18,8 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// note this may conflict with clearcookies as defaults always supersedes
+Cypress.Cookies.defaults({
+  preserve: ['w-rctx']
+})
