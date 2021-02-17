@@ -9,5 +9,12 @@
     "videoUploadOnPasses": true,
     "screenshotOnRunFailure": true,
     "screenshotsFolder": "cypress/screenshots",
-    "trashAssetsBeforeRuns": true
+    "trashAssetsBeforeRuns": true,
+    "reporter": "mochawesome",
+    "reporterOptions": {
+        "reportDir": "cypress/results",
+        "overwrite": true,
+        "html": true,
+        "json": true
+    }
 }
