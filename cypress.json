@@ -1,7 +1,11 @@
 {
     "baseUrl": "https://uatsite.woolworths.com.au/",
     "env": {
-        "b2cLogin": "apis/ui/Login/LoginWithCredential"
+        "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
+        "uat": "https://uatsite.woolworths.com.au/",
+        "prod": "https://woolworths.com.au/",
+        "b2cLoginEndpoint": "apis/ui/Login/LoginWithCredential",
+        "productSearchEndpoint": "apis/ui/Search/products"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1440,

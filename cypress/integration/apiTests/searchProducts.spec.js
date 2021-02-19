@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
 
-var shoppers = require('../fixtures/b2cShoppers.json')
+import shoppers from '../../fixtures/b2cShoppers.json'
+import '../../support/api/login/login'
+import '../../support/api/search/search'
 
 describe("Perform Login via API", () => {
     before(() => {
@@ -8,16 +10,19 @@ describe("Perform Login via API", () => {
         cy.clearLocalStorage({ domain: null })
     })
 
-    beforeEach(function() {
+    beforeEach(() => {
         Cypress.Cookies.preserveOnce('w-rctx', 'akaalb_uatsite', 'akavpau_uatsite', 'INGRESSCOOKIE', 'uat-wow-auth-token', 'wow-auth-token')
 
         cy.fixture('b2cShoppers.json').as('b2cShopper')
     })
 
-    shoppers.forEach((shopper) => {
-        it('Login as ' + shopper.email, function() {
-            cy.LoginViaApi(shopper)
-        })
+    it('Search product', () => {
+        cy.loginViaApi(shoppers[0])
 
+        cy.apiSearch('Milk').then((response) => {
+            expect(response.SearchResultsCount).to.be.greaterThan(0)
+
+            cy.log(response.SearchResultsCount)
+        })
     })
 })
