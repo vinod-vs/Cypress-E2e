@@ -3,24 +3,23 @@
 import shoppers from '../../fixtures/b2cShoppers'
 import '../../support/api/login/login'
 
-describe("Perform Login via API", () => {
-before(() => {
+describe('Perform Login via API', () => {
+  before(() => {
     cy.clearCookies({ domain: null })
     cy.clearLocalStorage({ domain: null })
-})
+  })
 
-beforeEach(() => {
+  beforeEach(() => {
     Cypress.Cookies.preserveOnce('w-rctx', 'akaalb_uatsite', 'akavpau_uatsite', 'INGRESSCOOKIE', 'uat-wow-auth-token', 'wow-auth-token')
-})
+  })
 
-shoppers.forEach((shopper) => {
+  shoppers.forEach((shopper) => {
     it('Login as ' + shopper.email, () => {
-        cy.loginViaApi(shopper).then((response) => {
-            expect(response).to.have.property('LoginResult', 'Success')
+      cy.loginViaApi(shopper).then((response) => {
+        expect(response).to.have.property('LoginResult', 'Success')
 
-            cy.getCookie('w-rctx').should('exist')
-        })
+        cy.getCookie('w-rctx').should('exist')
+      })
     })
-})
-})
+  })
 })
