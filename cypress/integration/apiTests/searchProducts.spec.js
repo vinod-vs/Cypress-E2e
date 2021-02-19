@@ -11,12 +11,6 @@ describe('Perform Login via API', () => {
     cy.clearLocalStorage({ domain: null })
   })
 
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('w-rctx', 'akaalb_uatsite', 'akavpau_uatsite', 'INGRESSCOOKIE', 'uat-wow-auth-token', 'wow-auth-token')
-
-    cy.fixture('b2cShoppers.json').as('b2cShopper')
-  })
-
   it('Search product', () => {
     cy.loginViaApi(shoppers[0])
 
