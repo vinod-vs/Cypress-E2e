@@ -23,5 +23,5 @@ import './uiCommands'
 
 // note this may conflict with clearcookies as defaults always supersedes
 Cypress.Cookies.defaults({
-    preserve: ['w-rctx']
+  preserve: ['w-rctx']
 })
