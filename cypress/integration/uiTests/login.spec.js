@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
-const shoppers = require('../fixtures/b2cShoppers.json')
+import shoppers from '../../fixtures/b2cShoppers.json'
+import '../../support/ui/login/login'
 
 describe('Perform Login via UI', () => {
   before(() => {
@@ -13,8 +14,8 @@ describe('Perform Login via UI', () => {
   })
 
   shoppers.forEach((shopper) => {
-    it('Login as ' + shopper.email, function () {
-      cy.LoginViaUi(shopper)
+    it('Login as ' + shopper.email, () => {
+      cy.loginViaUi(shopper)
     })
   })
 })

@@ -1,4 +1,4 @@
-Cypress.Commands.add('LoginViaUi', (shopper) => {
+Cypress.Commands.add('loginViaUi', (shopper) => {
   cy.visit('shop/securelogin')
 
   cy.get('#loginForm-Email').type(shopper.email)
