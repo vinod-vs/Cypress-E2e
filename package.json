@@ -6,8 +6,9 @@
     "scripts": {
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
+        "cypress:runCi": "cypress run --config",
         "cypress:spec": "cypress run --spec",
-        "test": "npx standard && npm run cypress:run"
+        "test": "npx standard && npm run cypress:runCi"
     },
     "author": "Test Automation Atom|Autobots Chapter",
     "license": "ISC",

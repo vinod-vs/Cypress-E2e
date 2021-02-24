@@ -27,5 +27,5 @@ Before creating a pull request, make sure that `npm test` runs without any error
 4. Slack integration - Kristian
 5. Custom commands to be used across multiple tests. - Ara
 6. Update readme file to include info. about using the cypress test automation project and running tests. - Amit, Kristian, Ara
-7. Having custom command files for specific functional modules. - Amit
+7. ~~Having custom command files for specific functional modules.~~ - Amit
 8. Allure reporting implementation. - Ara

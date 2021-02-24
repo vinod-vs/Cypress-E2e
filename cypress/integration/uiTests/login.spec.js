@@ -13,9 +13,7 @@ describe('Perform Login via UI', () => {
     cy.fixture('b2cShoppers.json').as('b2cShopper')
   })
 
-  shoppers.forEach((shopper) => {
-    it('Login as ' + shopper.email, () => {
-      cy.loginViaUi(shopper)
-    })
+  it('Login as ' + shoppers[0].email, () => {
+    cy.loginViaUi(shoppers[0])
   })
 })

@@ -3,6 +3,28 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+parameters:
+- name: baseUrl
+  displayName: Base URL
+  type: string
+  default: https://uatsite.woolworths.com.au/
+  values:
+  - https://uatsite.woolworths.com.au/
+  - https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/
+  - https://woolworths.com.au/
+  - https://stagingsite.woolworths.com.au
+  - https://preprodsite.woolworths.com.au
+
+- name: browser
+  displayName: Browser
+  type: string
+  default: chrome
+  values:
+  - chrome
+  - edge
+  - firefox
+  - electron
+
 trigger:
 - main
 
@@ -17,5 +39,5 @@ steps:
 
 - script: |
     npm install
-    npm test
+    npm test baseUrl=${{ parameters.baseUrl }} browser ${{ parameters.browser }}
   displayName: 'npm install and test'
