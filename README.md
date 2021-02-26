@@ -13,6 +13,9 @@ This project will be used to automate the End to End Web and API scenarios for W
 # Build and Test
 TBA
 
+# View local allure results
+1. Run `npm run allure:open` this will spin up a local webserver to host the allure results generated during the latest run
+
 # Contribute
 If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation and create a pull request for review.
 

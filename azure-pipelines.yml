@@ -26,18 +26,28 @@ parameters:
   - electron
 
 trigger:
-- main
+  - main
 
 pool:
   name: wlx-ubuntu1804
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "14.x"
+    displayName: "Install Node.js"
 
-- script: |
-    npm install
-    npm test baseUrl=${{ parameters.baseUrl }} browser ${{ parameters.browser }}
-  displayName: 'npm install and test'
+  - script: |
+      npm install
+      npm test baseUrl=${{ parameters.baseUrl }} browser ${{ parameters.browser }}
+    displayName: "npm install and test"
+
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testRunner: 'JUnit'
+      testResultsFiles: '**/results-*.xml'
+      testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
+      mergeTestResults: true
+      searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
+    displayName: "Generate test run"

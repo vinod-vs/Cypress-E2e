@@ -5,7 +5,9 @@
         "uat": "https://uatsite.woolworths.com.au/",
         "prod": "https://woolworths.com.au/",
         "b2cLoginEndpoint": "apis/ui/Login/LoginWithCredential",
-        "productSearchEndpoint": "apis/ui/Search/products"
+        "productSearchEndpoint": "apis/ui/Search/products",
+        "allure": true,
+        "allureResultsPath": "cypress/allure-results"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1440,
@@ -16,11 +18,8 @@
     "screenshotOnRunFailure": true,
     "screenshotsFolder": "cypress/screenshots",
     "trashAssetsBeforeRuns": true,
-    "reporter": "mochawesome",
+    "reporter": "cypress-multi-reporters",
     "reporterOptions": {
-        "reportDir": "cypress/results",
-        "overwrite": true,
-        "html": true,
-        "json": true
+      "configFile": "reporterConfig.json"
     }
 }
