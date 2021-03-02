@@ -14,7 +14,13 @@ This project will be used to automate the End to End Web and API scenarios for W
 TBA
 
 # View local allure results
-1. Run `npm run allure:open` this will spin up a local webserver to host the allure results generated during the latest run
+
+ After running a test, run `npm run allure:trend` in the terminal to generate allure results during the latest test run.
+
+This will generate an allure html report and serve it to localhost where the HTML results can be viewed. Note that the HTML file can't be directly opened in the browser unless it is served.
+
+If there is an existing allure-report in your local, then historic trends of the test cases can also be viewed on the HTML report. Click on the test case and select the History tab to view past run results.
+
 
 # Contribute
 If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation and create a pull request for review.
