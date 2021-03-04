@@ -21,6 +21,15 @@ This will generate an allure html report and serve it to localhost where the HTM
 
 If there is an existing allure-report in your local, then historic trends of the test cases can also be viewed on the HTML report. Click on the test case and select the History tab to view past run results.
 
+# Running in parallel via Docker
+
+1. Ensure the docker daemon is running. 
+2. If this is the first time building the image, then in the terminal, run `docker-compose up --build`. This should create the image from the DockerFile. 
+3. If the docker image has been built previously, the `--build` command can be skipped and simply execute `docker-compose up`
+4. After the test runs, check the `cypress/allure-reports` folder. The json reports should be there.
+5. To generate the HTML report, simply run `npm run allure:trend`
+
+
 
 # Contribute
 If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation and create a pull request for review.

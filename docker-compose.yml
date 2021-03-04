@@ -14,13 +14,25 @@ services:
       #  2. any change that the developer applies to Cypress files on the host
       #     machine immediately takes effect within the cypress container (no docker
       #     rebuild required).
-      - ./cypress:/cypress
-      - ./cypress.json:/cypress.json
+    - ./cypress:/cypress
+    - ./cypress.json:/cypress.json
+    - ./reporterConfig.json:/reporterConfig.json
+   
   ui-container:
     build: .
     command: "--spec cypress/integration/uiTests/login.spec.js"
     # if running UI, ipc has to be set
     ipc: host
     volumes:
-      - ./cypress:/cypress
-      - ./cypress.json:/cypress.json
+      # mount the host directory cypress and the file cypress.json as
+      # volumes within the container
+      # this means that:
+      #  1. anything that Cypress writes to these folders (e.g., screenshots,
+      #     videos) appears also on the Docker host's filesystem
+      #  2. any change that the developer applies to Cypress files on the host
+      #     machine immediately takes effect within the cypress container (no docker
+      #     rebuild required).
+    - ./cypress:/cypress
+    - ./cypress.json:/cypress.json
+    - ./reporterConfig.json:/reporterConfig.json
+    
