@@ -2,6 +2,8 @@
 # Build a general Node.js project with npm.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+variables:
+  - group: WOWE2EAPIAUTOMATION
 
 parameters:
 - name: baseUrl
@@ -36,11 +38,29 @@ steps:
     inputs:
       versionSpec: "14.x"
     displayName: "Install Node.js"
-
   - script: |
       npm install
       npm test baseUrl=${{ parameters.baseUrl }} browser ${{ parameters.browser }}
-    displayName: "npm install and test"
+      npm run allure:generate
+    displayName: "Npm install and test"
+
+  - task: AzureCLI@2
+    displayName: "Download Report History"
+    inputs:
+      azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+      scriptType: "pscore"
+      scriptLocation: "inlineScript"
+      inlineScript: |
+        az config set extension.use_dynamic_install=yes_without_prompt
+        echo '============================================ Retrieving history from blob =================================='
+        az storage blob directory download -c '$web' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV) -s history -d 'cypress/allure-results' --recursive
+      powerShellErrorActionPreference: "continue"
+
+  - task: Npm@1
+    inputs:
+      command: custom
+      customCommand: run allure:generate
+    displayName: "Generate Allure Results"
 
   - task: PublishTestResults@2
     condition: succeededOrFailed()
@@ -50,4 +70,15 @@ steps:
       testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
       mergeTestResults: true
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
-    displayName: "Generate test run"
+    displayName: "Publish Test Results"
+
+  - task: AzureCLI@2
+    displayName: "Upload Allure Reports"
+    inputs:
+      azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+      scriptType: "pscore"
+      scriptLocation: "inlineScript"
+      inlineScript: |
+        echo '============================================ Uploading to blob storage =================================='
+        az storage blob upload-batch -d '$web' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+      powerShellErrorActionPreference: "continue"
