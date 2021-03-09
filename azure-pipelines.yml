@@ -36,11 +36,30 @@ steps:
     inputs:
       versionSpec: "14.x"
     displayName: "Install Node.js"
-
   - script: |
       npm install
       npm test baseUrl=${{ parameters.baseUrl }} browser ${{ parameters.browser }}
+      npm run allure:generate
     displayName: "npm install and test"
+
+  - task: AzureCLI@2
+    displayName: "Download Report History"
+    inputs:
+      azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+      scriptType: "pscore"
+      scriptLocation: "inlineScript"
+      inlineScript: |
+        az config set extension.use_dynamic_install=yes_without_prompt
+        echo '============================================ Retrieving history from blob =================================='
+        az storage blob directory download -c '$web' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV) -s history -d 'cypress/allure-results' --recursive
+        echo 'Download completed...'
+      powerShellErrorActionPreference: "continue"
+
+  - task: Npm@1
+    inputs:
+      command: custom
+      customCommand: run allure:generate
+    displayName: "Generate Allure Results"
 
   - task: PublishTestResults@2
     condition: succeededOrFailed()
@@ -51,3 +70,15 @@ steps:
       mergeTestResults: true
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
     displayName: "Generate test run"
+
+  - task: AzureCLI@2
+    displayName: "Upload Allure Reports"
+    inputs:
+      azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+      scriptType: "pscore"
+      scriptLocation: "inlineScript"
+      inlineScript: |
+        echo '============================================ Uploading to blob storage =================================='
+        az storage blob upload-batch -d '$web' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+        echo 'Upload completed...'
+      powerShellErrorActionPreference: "continue"
