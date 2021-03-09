@@ -51,3 +51,16 @@ steps:
       mergeTestResults: true
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
     displayName: "Generate test run"
+
+  - task: SlackNotification@6
+    inputs:
+      SlackApiToken: 'xapp-1-A01QWL69C84-1840572733362-258f41954952aef3164b1782060b5e81dee1e75f7a271ed2b436abae9e68c4c1'
+      MessageAuthor: 'Azure DevOps'
+      Channel: 'wow-e2e-api-automation-notifications'
+      NotificationType: 'ChatMessage'
+      Message: |
+        {
+            "text": "Hello, World!"
+        }
+      AuthorName: 'Kristian'
+      Title: 'Test'
