@@ -1,0 +1,10 @@
+{
+    "accountAmount": 0,
+    "accountPassword": null,
+    "openpayAmount": 0,
+    "payments": [{
+        "amount": 0,
+        "paymentInstrumentId": 0,
+        "stepUpToken": "tokenise-stepup-token"
+    }]
+}
