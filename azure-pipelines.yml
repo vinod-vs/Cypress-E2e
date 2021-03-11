@@ -59,4 +59,4 @@ steps:
         echo "Build.Reason: $(Build.Reason)"
         echo "Pull Request: $(PullRequest)"
         echo "Build.SourceBranch: $(Build.SourceBranch)"
-        echo "Agent.JobStatus: $(Agent.JobStatus)
+        echo "Agent.JobStatus: $(Agent.JobStatus)"
