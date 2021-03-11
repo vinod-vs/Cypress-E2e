@@ -58,5 +58,4 @@ steps:
       targetType: 'inline'
       script: |
         # Write your commands here
-        echo -X POST --data-raw "'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)* \nReport can be found here: <insert link>' }
-"
+        echo -X POST --data-raw "'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)* \nReport can be found here: <insert link>' }"
