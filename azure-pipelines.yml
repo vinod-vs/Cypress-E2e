@@ -57,7 +57,6 @@ steps:
       targetType: 'inline'
       script: |
         # Write your commands here
-        echo "Build.Reason: $(Build.Reason)"
-        echo "Build.SourceVersion: $(Build.SourceVersion) $(Build.SourceVersionMessage)"
+        echo "Build.SourceVersion: $(Build.BuildId) $(Build.SourceVersionMessage)"
         echo "Build.SourceBranch: $(Build.SourceBranch)"
         echo "Agent.JobStatus: $(Agent.JobStatus)"
