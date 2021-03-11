@@ -52,6 +52,7 @@ steps:
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
     displayName: "Generate test run"
   - task: Bash@3
+    condition: succeededOrFailed()
     inputs:
       targetType: 'inline'
       script: |
