@@ -51,12 +51,12 @@ steps:
       mergeTestResults: true
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
     displayName: "Generate test run"
+
   - task: Bash@3
     condition: succeededOrFailed()
     inputs:
       targetType: 'inline'
       script: |
         # Write your commands here
-        echo "Build.SourceVersion: $(Build.BuildId) $(Build.SourceVersionMessage)"
-        echo "Build.SourceBranch: $(Build.SourceBranch)"
-        echo "Agent.JobStatus: $(Agent.JobStatus)"
+        echo -X POST --data-raw "'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)* \nReport can be found here: <insert link>' }
+"
