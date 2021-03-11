@@ -39,11 +39,11 @@ Before creating a pull request, make sure that `npm test` runs without any error
 
  
 # ToDo:
-1. ~~Running test with multiple set of data and iterate through it.~~ - Amit
+1. ~~Running test with multiple set of data and iterate through it.~~
 2. Executing tests in parallel and get the test report consolidated. - Ara
-3. CI/CD pipeline variables with smart selection for Browser, Run Env. variable and Base URL. - Kristian
+3. ~~CI/CD pipeline variables with smart selection for Browser, Run Env. variable and Base URL.~~
 4. Slack integration - Kristian
-5. Custom commands to be used across multiple tests. - Ara
+5. ~~Custom commands to be used across multiple tests.~~
 6. Update readme file to include info. about using the cypress test automation project and running tests. - Amit, Kristian, Ara
 7. ~~Having custom command files for specific functional modules.~~ - Amit
-8. Allure reporting implementation. - Ara
+8. ~~Allure reporting implementation.~~
