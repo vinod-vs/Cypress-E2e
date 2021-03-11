@@ -56,4 +56,10 @@ steps:
       targetType: 'inline'
       script: |
         # Write your commands here
+        echo "Build.Reason: $(Build.Reason)"
+        echo "Build.QueuedBy: $(Build.QueuedBy)"
+        echo "Build.SourceBranch: $(Build.SourceBranch)"
+        echo "Build.QueuedBy $(Build.QueuedBy)"
+        echo "Build.RequestedFor: $(Build.RequestedFor)"
+        echo "$(Build.DefinitionName)"
         echo "$(Build.DefinitionName)"
