@@ -58,4 +58,4 @@ steps:
       targetType: 'inline'
       script: |
         # Write your commands here
-        curl -X POST --data-raw "'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)* \nReport can be found here: <insert link>' }" https://hooks.slack.com/services/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
+        curl -X POST --data-raw "{'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)* \nReport can be found here: <insert link>' }}" https://hooks.slack.com/services/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
