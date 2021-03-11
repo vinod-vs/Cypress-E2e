@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+/* eslint-disable no-unused-expressions */
 
 import shopper from '../../fixtures/login.json'
 import searchBody from '../../fixtures/productSearch.json'
@@ -32,23 +33,23 @@ describe('Place an Order using Credit Card', () => {
     })
 
     cy.searchDeliveryAddress(addressSearchBody).then((response) => {
-      expect(response.Response[0].Id).to.not.empty
+      expect(response.Response[0].Id).to.not.be.empty
 
-      expect(response.Response[0].Id).to.not.null
+      expect(response.Response[0].Id).to.not.be.null
     })
 
     cy.addDeliveryAddress().then((response) => {
       expect(response.Address.AddressId).to.greaterThan(0)
 
-      expect(response.Address.AddressId).to.not.null
+      expect(response.Address.AddressId).to.not.be.null
 
       expect(response.Address.AreaId).to.greaterThan(0)
 
-      expect(response.Address.AreaId).to.not.null
+      expect(response.Address.AreaId).to.not.be.null
 
       expect(response.Address.SuburbId).to.greaterThan(0)
 
-      expect(response.Address.SuburbId).to.not.null
+      expect(response.Address.SuburbId).to.not.be.null
     })
 
     cy.deliveryTimeSlot().then((response) => {
@@ -109,9 +110,9 @@ describe('Place an Order using Credit Card', () => {
     })
 
     cy.digitalPay(digitalPayment).then((response) => {
-      expect(response.TransactionReceipt).to.not.null
+      expect(response.TransactionReceipt).to.not.be.null
 
-      expect(response.PlacedOrderId).to.not.null
+      expect(response.PlacedOrderId).to.not.be.null
 
       confirmOrderParameter.placedOrderId = response.PlacedOrderId
     })
