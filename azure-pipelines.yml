@@ -53,7 +53,7 @@ steps:
     displayName: "Generate test run"
 
   - task: Bash@3
-    condition: succeededOrFailed()
+    condition: always()
     inputs:
       targetType: 'inline'
       script: |
