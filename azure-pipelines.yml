@@ -85,7 +85,7 @@ steps:
       powerShellErrorActionPreference: "continue"
 
   - task: Bash@3
-    condition: eq(variables.isMain, true)
+    condition: eq(variables.isMain, false)
     inputs:
       targetType: 'inline'
       script: |
