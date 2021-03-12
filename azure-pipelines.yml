@@ -72,7 +72,7 @@ steps:
       testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
       mergeTestResults: true
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
-    displayName: "Generate test run"
+    displayName: "Publish Test Results"
 
   - task: AzureCLI@2
     displayName: "Upload Allure Reports"
