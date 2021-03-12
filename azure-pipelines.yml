@@ -85,7 +85,7 @@ steps:
       powerShellErrorActionPreference: "continue"
 
   - task: Bash@3
-    condition: eq(variables.isMain, false)
+    condition: eq(variables.isMain, true)
     inputs:
       targetType: 'inline'
       script: |
@@ -124,4 +124,4 @@ steps:
                 },
                 "url": "https://wowonline.visualstudio.com/Woolworths%20Online/_build/results?buildId=$(Build.BuildId)&view=results"
             }]
-        }]}' https://hooks.slack.com/services/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
+        }]}' https://hooks.slack.com/services/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
