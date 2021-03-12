@@ -5,7 +5,7 @@ import searchBody from '../../fixtures/productSearch.json'
 import '../../support/api/login/login'
 import '../../support/api/search/search'
 
-describe('Perform Login via API', () => {
+describe('Search product via API', () => {
   before(() => {
     cy.clearCookies({ domain: null })
     cy.clearLocalStorage({ domain: null })
@@ -16,10 +16,8 @@ describe('Perform Login via API', () => {
 
     searchBody.SearchTerm = 'Milk'
 
-    cy.apiSearch(searchBody).then((response) => {
+    cy.productSearch(searchBody).then((response) => {
       expect(response.SearchResultsCount).to.be.greaterThan(0)
-
-      cy.log(response.SearchResultsCount)
     })
   })
 })

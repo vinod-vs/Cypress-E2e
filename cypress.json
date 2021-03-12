@@ -4,8 +4,19 @@
         "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
         "uat": "https://uatsite.woolworths.com.au/",
         "prod": "https://woolworths.com.au/",
-        "b2cLoginEndpoint": "apis/ui/Login/LoginWithCredential",
+        "b2cLoginEndpoint": "apis/ui/login/loginwithcredential",
         "productSearchEndpoint": "apis/ui/Search/products",
+        "addressSearchEndpoint": "apis/ui/address/search",
+        "addressAutoEndpoint": "apis/ui/address/auto",
+        "timeSlotsEndpoint": "apis/ui/Timeslots",
+        "fulfilmentEndpoint": "apis/ui/Fulfilment",
+        "clearTrolleyEndpoint": "apis/ui/Trolley/Clear",
+        "addItemsToTrolleyEndpoint": "apis/ui/Trolley/Items",
+        "navigateToCheckoutEndpoint": "apis/ui/Checkout",
+        "creditCardIframeEndpoint": "apis/ui/Checkout/DigitalPay/InitializeCreditCardIframe",
+        "creditCardPaymentEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
+        "digitalPaymentEndpoint": "apis/ui/Checkout/DigitalPay/Payment",
+        "confirmOrderEndpoint": "apis/ui/Checkout/ConfirmOrder",
         "allure": true,
         "allureResultsPath": "cypress/allure-results"
     },
@@ -20,6 +31,6 @@
     "trashAssetsBeforeRuns": true,
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
-      "configFile": "reporterConfig.json"
+        "configFile": "reporterConfig.json"
     }
 }
