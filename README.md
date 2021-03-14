@@ -21,13 +21,18 @@ This will generate an allure html report and serve it to localhost where the HTM
 
 If there is an existing allure-report in your local, then historic trends of the test cases can also be viewed on the HTML report. Click on the test case and select the History tab to view past run results.
 
-# Running in parallel via Docker
+# View test reports from CI
+
+There are two reports generated as a result of the CI run. One is the VSTS test result, which can be seen in the `Tests` tab in the pipeline.
+Another report is in allure, hosted in Azure Blob storage: https://wowe2eautomation.z8.web.core.windows.net/
+
+# Running in parallel via Docker Locally
 
 1. Ensure the docker daemon is running. 
 2. If this is the first time building the image, then in the terminal, run `docker-compose up --build`. This should create the image from the DockerFile. 
 3. If the docker image has been built previously, the `--build` command can be skipped and simply execute `docker-compose up`
 4. After the test runs, check the `cypress/allure-reports` folder. The json reports should be there.
-5. To generate the HTML report, simply run `npm run allure:trend`
+5. To generate the HTML report, simply run `npm run allure:trend`.
 
 
 
