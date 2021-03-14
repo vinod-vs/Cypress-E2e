@@ -4,6 +4,8 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 variables:
   - group: WOWE2EAPIAUTOMATION
+  - name: isMain
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 parameters:
 - name: baseUrl
@@ -82,3 +84,45 @@ steps:
         echo '============================================ Uploading to blob storage =================================='
         az storage blob upload-batch -d '$web' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
       powerShellErrorActionPreference: "continue"
+
+  - task: Bash@3
+    condition: eq(variables.isMain, true)
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Write your commands here
+        echo $(Build.BuildId)
+        curl -X POST -H 'Content-type: application/json' --data '{
+        "blocks": [
+        { 
+            "type": "section",
+            "text":
+            {
+                "type": "mrkdwn",
+                "text": "Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)*"
+            }
+        },
+        {
+            "type": "actions",
+            "elements": [
+            {
+                "type": "button",
+                "text":
+                {
+                    "type": "plain_text",
+                    "text": "Allure Report",
+                    "emoji": true
+                },
+                "url": "https://wowe2eautomation.z8.web.core.windows.net"
+            },
+            {
+                "type": "button",
+                "text":
+                {
+                    "type": "plain_text",
+                    "text": "Pipeline Results",
+                    "emoji": true
+                },
+                "url": "https://wowonline.visualstudio.com/Woolworths%20Online/_build/results?buildId=$(Build.BuildId)&view=results"
+            }]
+        }]}' https://hooks.slack.com/services/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
