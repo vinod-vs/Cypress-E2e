@@ -6,9 +6,9 @@
     "scripts": {
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
-        "cypress:runCi": "cypress run --config",
         "cypress:spec": "cypress run --spec",
-        "test": "npx standard && npm run cypress:runCi",
+        "pretest": "npx standard",
+        "test": "cypress run",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
         "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
