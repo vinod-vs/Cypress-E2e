@@ -3,7 +3,7 @@
 import shoppers from '../../fixtures/b2cShoppers.json'
 import '../../support/ui/login/login'
 
-describe('Perform Login via UI', () => {
+describe.skip('Perform Login via UI', () => {
   before(() => {
     cy.clearCookies({ domain: null })
     cy.clearLocalStorage({ domain: null })
