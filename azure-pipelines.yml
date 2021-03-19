@@ -40,6 +40,8 @@ steps:
     inputs:
       versionSpec: "14.x"
     displayName: "Install Node.js"
+    continueOnError: true
+    condition: succeededOrFailed()
   - script: |
       npm install
       npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }}
@@ -47,7 +49,6 @@ steps:
 
   - task: AzureCLI@2
     displayName: "Download Report History"
-    continueOnError: true
     condition: succeededOrFailed()
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
@@ -60,6 +61,7 @@ steps:
       powerShellErrorActionPreference: "continue"
 
   - task: Npm@1
+    condition: succeededOrFailed()
     inputs:
       command: custom
       customCommand: run allure:generate
