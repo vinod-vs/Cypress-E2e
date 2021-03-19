@@ -68,7 +68,7 @@ steps:
     inputs:
       testRunner: 'JUnit'
       testResultsFiles: '**/results-*.xml'
-      testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
+      testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
       mergeTestResults: true
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
     displayName: "Publish Test Results"
@@ -132,7 +132,7 @@ steps:
   - powershell: |
     $minLastUpdatedDate = Get-Date (Get-Date).AddDays(-1) -Format s
     $maxLastUpdatedDate = Get-Date -Format s
-    $queryString = "runTitle=WOWE2EAPI-$(Build.BuildNumber)&minLastUpdatedDate=$minLastUpdatedDate&maxLastUpdatedDate=$maxLastUpdatedDate&buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1";
+    $queryString = "runTitle=WOwE2EAPI-$(Build.BuildNumber)&minLastUpdatedDate=$minLastUpdatedDate&maxLastUpdatedDate=$maxLastUpdatedDate&buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1";
     $testRuns = Invoke-RestMethod -Uri "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/test/runs?$queryString" `
       -Method Get `
       -UseBasicParsing `
