@@ -47,6 +47,8 @@ steps:
 
   - task: AzureCLI@2
     displayName: "Download Report History"
+    continueOnError: true
+    condition: succeededOrFailed()
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
       scriptType: "pscore"
@@ -74,6 +76,7 @@ steps:
     displayName: "Publish Test Results"
 
   - task: AzureCLI@2
+    condition: succeededOrFailed()
     displayName: "Upload Allure Reports"
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
@@ -127,61 +130,61 @@ steps:
         }]}' https://hooks.slack.com/services/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
 
 
-  - powershell: |
-    $minLastUpdatedDate = Get-Date (Get-Date).AddDays(-1) -Format s
-    $maxLastUpdatedDate = Get-Date -Format s
-    $queryString = "runTitle=WOwE2EAPI-$(Build.BuildNumber)&minLastUpdatedDate=$minLastUpdatedDate&maxLastUpdatedDate=$maxLastUpdatedDate&buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1";
-    $testRuns = Invoke-RestMethod -Uri "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/test/runs?$queryString" `
-      -Method Get `
-      -UseBasicParsing `
-      -Authentication Bearer `
-      -Token (ConvertTo-SecureString -String $(System.AccessToken) -AsPlainText -Force)
+  # - powershell: |
+  #   $minLastUpdatedDate = Get-Date (Get-Date).AddDays(-1) -Format s
+  #   $maxLastUpdatedDate = Get-Date -Format s
+  #   $queryString = "runTitle=WOwE2EAPI-$(Build.BuildNumber)&minLastUpdatedDate=$minLastUpdatedDate&maxLastUpdatedDate=$maxLastUpdatedDate&buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1";
+  #   $testRuns = Invoke-RestMethod -Uri "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/test/runs?$queryString" `
+  #     -Method Get `
+  #     -UseBasicParsing `
+  #     -Authentication Bearer `
+  #     -Token (ConvertTo-SecureString -String $(System.AccessToken) -AsPlainText -Force)
 
-    $testRun = $testRuns.value[0]
-    if ($testRun) {
-      $testRunId = $testRun.id;
-      $testResultDetailsUrl = "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_testManagement/runs?_a=runCharts&runId=$testRunId"
+  #   $testRun = $testRuns.value[0]
+  #   if ($testRun) {
+  #     $testRunId = $testRun.id;
+  #     $testResultDetailsUrl = "$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_testManagement/runs?_a=runCharts&runId=$testRunId"
 
-      $passedCount = ($testRun.runStatistics | Where-Object {$_.outcome -eq 'Passed'}).count
-      $failedCount = ($testRun.runStatistics | Where-Object {$_.outcome -eq 'Failed'}).count
-      $totalCount = $passedCount + $failedCount
-      if ($totalCount -le 0) {
-        return
-      }
-      $passRate = [math]::Round($passedCount / $totalCount * 100, 2)
-      $color = 'good';
-      if ($passRate -lt 50) {
-        $color = 'danger';
-        Write-Host "##vso[task.logissue type=error]Pass rate below 50% at $passRate% while testing ${{ parameters.default }}"
-      } elseif ($passRate -lt 90) {
-        $color = 'warning';
-        Write-Host "##vso[task.logissue type=warning]Pass rate $passRate% while testing ${{ parameters.default }}"
-      }
+  #     $passedCount = ($testRun.runStatistics | Where-Object {$_.outcome -eq 'Passed'}).count
+  #     $failedCount = ($testRun.runStatistics | Where-Object {$_.outcome -eq 'Failed'}).count
+  #     $totalCount = $passedCount + $failedCount
+  #     if ($totalCount -le 0) {
+  #       return
+  #     }
+  #     $passRate = [math]::Round($passedCount / $totalCount * 100, 2)
+  #     $color = 'good';
+  #     if ($passRate -lt 50) {
+  #       $color = 'danger';
+  #       Write-Host "##vso[task.logissue type=error]Pass rate below 50% at $passRate% while testing ${{ parameters.default }}"
+  #     } elseif ($passRate -lt 90) {
+  #       $color = 'warning';
+  #       Write-Host "##vso[task.logissue type=warning]Pass rate $passRate% while testing ${{ parameters.default }}"
+  #     }
 
-      $slackMessage = @{
-          attachments = @(
-            @{
-              fallback = $testRun.name + " : Pass percentage $passRate%"
-              title = $testRun.name
-              title_link = $testResultDetailsUrl
-              color = $color
-              fields = @(
-                  @{title = 'Passed - Scenarios'; value = $passedCount; short = 'true'},
-                  @{title = 'Failed - Scenarios'; value = $failedCount; short = 'true'},
-                  @{title = 'Total - Scenarios'; value = $totalCount; short = 'true'},
-                  @{title = 'Pass percentage'; value = "$passRate%"; short = 'true'}
-              )
-            }
-          )
-      } | ConvertTo-Json -Depth 5
+  #     $slackMessage = @{
+  #         attachments = @(
+  #           @{
+  #             fallback = $testRun.name + " : Pass percentage $passRate%"
+  #             title = $testRun.name
+  #             title_link = $testResultDetailsUrl
+  #             color = $color
+  #             fields = @(
+  #                 @{title = 'Passed - Scenarios'; value = $passedCount; short = 'true'},
+  #                 @{title = 'Failed - Scenarios'; value = $failedCount; short = 'true'},
+  #                 @{title = 'Total - Scenarios'; value = $totalCount; short = 'true'},
+  #                 @{title = 'Pass percentage'; value = "$passRate%"; short = 'true'}
+  #             )
+  #           }
+  #         )
+  #     } | ConvertTo-Json -Depth 5
 
-      Invoke-RestMethod -Uri 'https://hooks.slack.com/services/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' `
-        -Method Post `
-        -Body $slackMessage `
-        -UseBasicParsing `
-        -ContentType 'application/json'
-    }
-  displayName: 'Post test results to Slack'
-  continueOnError: true
-  condition: and(succeededOrFailed(), ne('https://hooks.slack.com/services/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', ''))
+  #     Invoke-RestMethod -Uri 'https://hooks.slack.com/services/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' `
+  #       -Method Post `
+  #       -Body $slackMessage `
+  #       -UseBasicParsing `
+  #       -ContentType 'application/json'
+  #   }
+  # displayName: 'Post test results to Slack'
+  # continueOnError: true
+  # condition: and(succeededOrFailed(), ne('https://hooks.slack.com/services/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', ''))
       
