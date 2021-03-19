@@ -91,5 +91,4 @@ steps:
       script: |
         # Write your commands here
         echo $(Build.BuildId)
-        curl -X GET $(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/test/runs?buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1";\
-        --header 'Authorization: Bearer $(System.AccessToken)'
+        curl -X GET --header 'Authorization: Bearer $(System.AccessToken)' $(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/test/runs?buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1" | echo
