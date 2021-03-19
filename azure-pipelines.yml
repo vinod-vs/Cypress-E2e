@@ -187,5 +187,5 @@ steps:
     }
   displayName: 'Post test results to Slack'
   continueOnError: true
-  condition: and(succeededOrFailed(), ne('${{ parameters.SlackWebhookUrl }}', ''))
+  condition: and(succeededOrFailed(), ne('https://hooks.slack.com/services/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', ''))
       
