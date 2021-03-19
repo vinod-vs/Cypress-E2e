@@ -156,10 +156,10 @@ steps:
       $color = 'good';
       if ($passRate -lt 50) {
         $color = 'danger';
-        Write-Host "##vso[task.logissue type=error]Pass rate below 50% at $passRate% while testing ${{ parameters.TraderUrl }}"
+        Write-Host "##vso[task.logissue type=error]Pass rate below 50% at $passRate% while testing ${{ parameters.default }}"
       } elseif ($passRate -lt 90) {
         $color = 'warning';
-        Write-Host "##vso[task.logissue type=warning]Pass rate $passRate% while testing ${{ parameters.TraderUrl }}"
+        Write-Host "##vso[task.logissue type=warning]Pass rate $passRate% while testing ${{ parameters.default }}"
       }
 
       $slackMessage = @{
