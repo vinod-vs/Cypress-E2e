@@ -1,0 +1,95 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+variables:
+  - group: WOWE2EAPIAUTOMATION
+  - name: isMain
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+parameters:
+- name: baseUrl
+  displayName: Base URL
+  type: string
+  default: https://uatsite.woolworths.com.au/
+  values:
+  - https://uatsite.woolworths.com.au/
+  - https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/
+  - https://woolworths.com.au/
+  - https://stagingsite.woolworths.com.au
+  - https://preprodsite.woolworths.com.au
+
+- name: browser
+  displayName: Browser
+  type: string
+  default: chrome
+  values:
+  - chrome
+  - edge
+  - firefox
+  - electron
+
+trigger:
+  - main
+
+pool:
+  name: wlx-ubuntu1804
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "14.x"
+    displayName: "Install Node.js"
+  - script: |
+      npm install
+      npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }}
+    displayName: "Npm install and test"
+
+  - task: AzureCLI@2
+    displayName: "Download Report History"
+    inputs:
+      azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+      scriptType: "pscore"
+      scriptLocation: "inlineScript"
+      inlineScript: |
+        az config set extension.use_dynamic_install=yes_without_prompt
+        echo '============================================ Retrieving history from blob =================================='
+        az storage blob directory download -c '$web' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV) -s history -d 'cypress/allure-results' --recursive
+      powerShellErrorActionPreference: "continue"
+
+  - task: Npm@1
+    inputs:
+      command: custom
+      customCommand: run allure:generate
+    displayName: "Generate Allure Results"
+
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testRunner: 'JUnit'
+      testResultsFiles: '**/results-*.xml'
+      testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
+      mergeTestResults: true
+      searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
+    displayName: "Publish Test Results"
+
+  - task: AzureCLI@2
+    displayName: "Upload Allure Reports"
+    inputs:
+      azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+      scriptType: "pscore"
+      scriptLocation: "inlineScript"
+      inlineScript: |
+        echo '============================================ Uploading to blob storage =================================='
+        az storage blob upload-batch -d '$web' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+      powerShellErrorActionPreference: "continue"
+
+  - task: Bash@3
+    condition: eq(variables.isMain, true)
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Write your commands here
+        echo $(Build.BuildId)
+        curl -X GET $(System.TeamFoundationCollectionUri)$(System.TeamProject)/_apis/test/runs?buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1";\
+        --header 'Authorization: Bearer $(System.AccessToken)'
