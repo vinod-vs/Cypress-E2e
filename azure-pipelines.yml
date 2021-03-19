@@ -46,7 +46,6 @@ steps:
     displayName: "Npm install and test"
 
   - task: AzureCLI@2
-    condition: succeededOrFailed()
     displayName: "Download Report History"
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
@@ -59,7 +58,6 @@ steps:
       powerShellErrorActionPreference: "continue"
 
   - task: Npm@1
-    condition: succeededOrFailed()
     inputs:
       command: custom
       customCommand: run allure:generate
