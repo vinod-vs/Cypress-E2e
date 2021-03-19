@@ -47,7 +47,6 @@ steps:
 
   - task: AzureCLI@2
     displayName: "Download Report History"
-    condition: succeededOrFailed()
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
       scriptType: "pscore"
@@ -63,9 +62,9 @@ steps:
       command: custom
       customCommand: run allure:generate
     displayName: "Generate Allure Results"
-    condition: succeededOrFailed()
 
   - task: PublishTestResults@2
+    condition: succeededOrFailed()
     inputs:
       testRunner: 'JUnit'
       testResultsFiles: '**/results-*.xml'
@@ -73,11 +72,9 @@ steps:
       mergeTestResults: true
       searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
     displayName: "Publish Test Results"
-    condition: succeededOrFailed()
 
   - task: AzureCLI@2
     displayName: "Upload Allure Reports"
-    condition: succeededOrFailed()
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
       scriptType: "pscore"
@@ -89,7 +86,6 @@ steps:
 
   - task: Bash@3
     condition: eq(variables.isMain, true)
-    condition: succeededOrFailed()
     inputs:
       targetType: 'inline'
       script: |
