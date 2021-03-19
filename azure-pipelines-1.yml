@@ -85,7 +85,7 @@ steps:
       powerShellErrorActionPreference: "continue"
 
   - task: Bash@3
-    condition: always
+    condition: always()
     inputs:
       targetType: 'inline'
       script: |
