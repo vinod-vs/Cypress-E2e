@@ -42,10 +42,11 @@ steps:
     displayName: "Install Node.js"
   - script: |
       npm install
-      npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }}
+      npm test --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }}
     displayName: "Npm install and test"
 
   - task: AzureCLI@2
+    condition: succeededOrFailed()
     displayName: "Download Report History"
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
@@ -58,6 +59,7 @@ steps:
       powerShellErrorActionPreference: "continue"
 
   - task: Npm@1
+    condition: succeededOrFailed()
     inputs:
       command: custom
       customCommand: run allure:generate
@@ -81,7 +83,8 @@ steps:
       scriptLocation: "inlineScript"
       inlineScript: |
         echo '============================================ Uploading to blob storage =================================='
-        az storage blob upload-batch -d '$web' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+        az storage blob upload-batch -d '$web/$(Build.BuildId)' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+        echo 'Report location is /$(Build.BuildId)'
       powerShellErrorActionPreference: "continue"
 
   - task: Bash@3
