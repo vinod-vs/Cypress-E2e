@@ -43,6 +43,7 @@ steps:
   - script: |
       npm install
       npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }}
+      npm run allure:generate
     displayName: "Npm install and test"
 
   - task: AzureCLI@2
