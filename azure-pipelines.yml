@@ -46,6 +46,7 @@ steps:
     displayName: "Npm install and test"
 
   - task: AzureCLI@2
+    condition: succeededOrFailed()
     displayName: "Download Report History"
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
@@ -58,6 +59,7 @@ steps:
       powerShellErrorActionPreference: "continue"
 
   - task: Npm@1
+    condition: succeededOrFailed()
     inputs:
       command: custom
       customCommand: run allure:generate
@@ -75,13 +77,17 @@ steps:
 
   - task: AzureCLI@2
     displayName: "Upload Allure Reports"
+    condition: succeededOrFailed()
     inputs:
       azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
       scriptType: "pscore"
       scriptLocation: "inlineScript"
       inlineScript: |
-        echo '============================================ Uploading to blob storage =================================='
-        az storage blob upload-batch -d '$web' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+        echo '============================================ Uploading run results to blob storage =================================='
+        az storage blob upload-batch -d '$web/$(Build.BuildId)' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+        echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/$(Build.BuildId)/'
+        az storage blob upload-batch -d '$web/history' -s allure-report/history --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+        echo 'Uploaded history to blob storage...'
       powerShellErrorActionPreference: "continue"
 
   - task: Bash@3
@@ -112,7 +118,7 @@ steps:
                     "text": "Allure Report",
                     "emoji": true
                 },
-                "url": "https://wowe2eautomation.z8.web.core.windows.net"
+                "url": "https://wowe2eautomation.z8.web.core.windows.net/$(Build.BuildId)/"
             },
             {
                 "type": "button",
