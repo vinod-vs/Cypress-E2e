@@ -9,7 +9,6 @@
         "cypress:spec": "cypress run --spec",
         "pretest": "npx standard",
         "test": "cypress run",
-        "posttest": "npm run allure:generate",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
         "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
