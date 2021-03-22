@@ -7,7 +7,7 @@
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "cypress:spec": "cypress run --spec",
-        "pretest": "npx standard",
+        "pretest": "npx standard || true",
         "test": "cypress run",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
