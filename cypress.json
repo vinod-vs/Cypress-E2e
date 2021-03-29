@@ -19,6 +19,7 @@
         "confirmOrderEndpoint": "apis/ui/Checkout/ConfirmOrder",
         "addNewListEndPoint": "apis/ui/mylists/add",
         "deleteListEndPoint": "apis/ui/mylists/deleteList/",
+        "myListsEndPoint": "apis/ui/mylists/",
         "allure": true,
         "allureResultsPath": "cypress/allure-results"
     },
