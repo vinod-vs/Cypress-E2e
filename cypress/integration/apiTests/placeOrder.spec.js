@@ -66,7 +66,7 @@ describe('Place an Order using Credit Card', () => {
       expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
     })
 
-    searchBody.SearchTerm = 'Liquor'
+    searchBody.SearchTerm = 'Cake'
 
     cy.productSearch(searchBody).then((response) => {
       expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -74,7 +74,7 @@ describe('Place an Order using Credit Card', () => {
       let x
 
       for (x in response.Products) {
-        if (response.Products[x].Products[0].IsInStock === true) {
+        if (response.Products[x].Products[0].Price !== null) {
           productStockCode = response.Products[x].Products[0].Stockcode
 
           break
@@ -82,11 +82,11 @@ describe('Place an Order using Credit Card', () => {
       }
       addItemsBody.StockCode = productStockCode
 
-      addItemsBody.Quantity = 4
+      addItemsBody.Quantity = 10
     })
 
     cy.addItemsToTrolley(addItemsBody).then((response) => {
-      expect(response.TotalTrolleyItemQuantity).to.be.eqls(4)
+      expect(response.TotalTrolleyItemQuantity).to.be.eqls(10)
 
       expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
     })
