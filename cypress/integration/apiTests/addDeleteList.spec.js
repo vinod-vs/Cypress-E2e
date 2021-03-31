@@ -12,6 +12,8 @@ import '../../support/api/list/addItemToList'
 import '../../support/api/search/search'
 import '../../support/api/list/getProductsInList'
 
+const faker = require('faker')
+
 describe('Add a new list, add items in the list and delete the list', () => {
   before(() => {
     cy.clearCookies({ domain: null })
@@ -22,6 +24,8 @@ describe('Add a new list, add items in the list and delete the list', () => {
     cy.loginViaApi(shopper.b2c).then((response) => {
       expect(response).to.have.property('LoginResult', 'Success')
     })
+
+    listName.Name = faker.commerce.productName()
 
     cy.addList(listName).then((response) => {
       expect(response).to.have.property('Message', 'The new list has been created sucessfully')
