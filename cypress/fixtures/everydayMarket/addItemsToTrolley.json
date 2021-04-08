@@ -1,0 +1,22 @@
+{
+    "Test1": [
+        {
+            "StockCode": "1073741884",
+            "Quantity": "2"
+        },
+        {
+            "StockCode": "793315",
+            "Quantity": "10"
+        }
+    ],
+    "Test2": [
+        {
+            "StockCode": "1073741886",
+            "Quantity": "1"
+        },
+        {
+            "StockCode": "1073741885",
+            "Quantity": "2"
+        }
+    ]
+}
