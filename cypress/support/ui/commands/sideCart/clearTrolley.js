@@ -1,9 +1,10 @@
-import HomePage from '../pageObjects/HomePage';
-import SideCartPage from '../pageObjects/SideCartPage';
-import SearchResultsPage from '../pageObjects/SearchResultsPage';
+import HomePage from '../../pageObjects/homePage/HomePage';
+import SideCartPage from '../../pageObjects/sideCart/SideCartPage';
+import CheckoutPage from '../../pageObjects/checkout/CheckoutPage';
 
 const homePage = new HomePage();
 const sideCartPage = new SideCartPage();
+const checkoutPage = new CheckoutPage();
 
 Cypress.Commands.add('clearTrolley', (shopper) => {
     //clear cart if required
@@ -20,8 +21,12 @@ Cypress.Commands.add('clearTrolley', (shopper) => {
             cy.wait(1000);
             sideCartPage.getConfirmClearCartLink().click();
             cy.wait(1000);
-            sideCartPage.getCloseSideCartButton().click();
-            cy.wait(1000);
+
+            //Verify the cart is empty
+            cy.verifyEmptyCart()
+
+            //Close cart
+            cy.closeCart()
         }
     })
 })
@@ -30,6 +35,18 @@ Cypress.Commands.add('viewCart', () => {
     //Click on View Cart button to Open the cart
     sideCartPage.getViewCartButton().click()
     cy.wait(1000);
+
+    //Verify the cart is open
+    sideCartPage.getCheckoutButton().should('be.visible')
+})
+
+Cypress.Commands.add('closeCart', () => {
+    //Click Close cart
+    sideCartPage.getCloseSideCartButton().click();
+    cy.wait(1000);
+
+    //Verify the cart is closed
+    sideCartPage.getCheckoutButton().should('not.be.visible')
 })
 
 Cypress.Commands.add('clickCheckout', () => {
@@ -37,4 +54,13 @@ Cypress.Commands.add('clickCheckout', () => {
     sideCartPage.getCheckoutButton().click()
     cy.url().should('include', '/checkout');
     cy.wait(1000);
+
+    //Verify checkout page is open
+    checkoutPage.getPaymentInstructionsFrame().should('be.visible')
+})
+
+Cypress.Commands.add('verifyEmptyCart', () => {
+    //Verify the cart is empty
+    sideCartPage.getEmptyCartImage().should('be.visible')
+    sideCartPage.getEmptyCartTitle().should('be.visible')
 })

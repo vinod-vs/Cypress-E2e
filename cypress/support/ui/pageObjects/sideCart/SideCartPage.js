@@ -19,6 +19,15 @@ class SideCartPage {
     getCheckoutButton() {
         return cy.get('.cart-checkout-button > .button')
     }
+
+    getEmptyCartImage() {
+        return cy.get('.empty-cart-image')
+    }
+
+    getEmptyCartTitle() {
+        return cy.get('.empty-cart-title')
+    }
+
 }
 
 export default SideCartPage;

@@ -1,6 +1,6 @@
-import HomePage from '../pageObjects/HomePage';
-import SideCartPage from '../pageObjects/SideCartPage';
-import SearchResultsPage from '../pageObjects/SearchResultsPage';
+import HomePage from '../../pageObjects/homePage/HomePage';
+import SideCartPage from '../../pageObjects/sideCart/SideCartPage';
+import SearchResultsPage from '../../pageObjects/search/SearchResultsPage';
 
 const homePage = new HomePage();
 const sideCartPage = new SideCartPage();
@@ -28,32 +28,21 @@ Cypress.Commands.add('searchAndAddProductsToCart', (items) => {
         //Adding remaining quantity
         var i;
         for (i = 1; i < item.Quantity; i++) {
-            cy.log('Debug i: ' + i)
             searchResultsPage.getIncreaseQuantityButton().eq(0).click()
             cy.wait(500);
         }
+
+        //Verify the right quantity is added
+        cy.get('.cartControls-quantityInput').then(function (quantityElement) {
+            const quantity = quantityElement.text();
+            cy.log('Quantity added: ' + quantity)
+        })
         cy.wait(1000);
 
         //Clear search
         homePage.getClearSearchHeader().click()
         cy.wait(1000);
 
-        //TO-DO verify the desired item and quantity is added to cart
-    });
-})
-
-Cypress.Commands.add('searchAndAddProductsToCart2', (items) => {
-    items.forEach(item => {
-        cy.log("Adding item: " + item.StockCode + ", of quantity: " + item.Quantity + " to cart.")
-        var i;
-        for (i = 0; i < item.Quantity; i++) {
-            cy.log("Debug Outside i: " + i)
-            if (i == 0) {
-                cy.log("Deug i==0: " + i)
-            } else if (i >= 1) {
-                cy.log("Deug i>=1: " + i)
-            }
-        }
         //TO-DO verify the desired item and quantity is added to cart
     });
 })

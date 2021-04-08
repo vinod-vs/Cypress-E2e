@@ -1,6 +1,6 @@
-import LoginPage from '../pageObjects/LoginPage';
-import HomePage from '../pageObjects/HomePage';
-import MyAccountPage from '../pageObjects/MyAccountPage';
+import LoginPage from '../../pageObjects/login/LoginPage';
+import HomePage from '../../pageObjects/homePage/HomePage';
+import MyAccountPage from '../../pageObjects/myAccount/MyAccountPage';
 
 const login = new LoginPage();
 const homePage = new HomePage();
@@ -19,7 +19,7 @@ Cypress.Commands.add('loginViaUi', (shopper) => {
 
   homePage.getMyAccount().contains('My Account')
 
-  cy.url().should('eq', Cypress.config().baseUrl)
+  cy.url().should('not.include', '/securelogin')
 })
 
 Cypress.Commands.add('logoutViaUi', (shopper) => {

@@ -17,7 +17,7 @@ class HomePage {
     }
 
     getCartAmount() {
-        cy.get('.headerCheckout-orderAmount')
+        return cy.get('.headerCheckout-orderAmount')
     }
 }
 

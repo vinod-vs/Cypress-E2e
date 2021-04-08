@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import shoppers from '../../fixtures/b2cShoppers.json'
-import '../../support/ui/login/login'
+import '../../support/ui/commands/login/login'
 
 describe.skip('Perform Login via UI', () => {
   before(() => {
