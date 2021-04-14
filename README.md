@@ -44,7 +44,7 @@ More info can be found at the [standard js docs](https://standardjs.com/)
 
 # Framework structure
 * integration -> All tests go here under the respective feature folders uiTests and apiTests sub folders.
-* fixtures -> All tests go here under the respective feature folders uiTests and apiTests sub folders.
+* fixtures -> All test data go here under the respective feature folders uiTests and apiTests sub folders.
 * support -> All support files like cypress commands, pageObjects etc go here under the respective feature folder.
     * subfolder featureName/api/commands -> All api related cypress commands of the feature go here.
     * subfolder featureName/ui/commands -> All ui related cypress commands of the feature go here.

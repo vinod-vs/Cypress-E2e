@@ -7,7 +7,7 @@ const sideCartPage = new SideCartPage()
 const searchResultsPage = new SearchResultsPage()
 
 Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
-  let firstTime = false
+  let sideCartAlreadyClosed = false
   const items = test.items
   items.forEach(item => {
     cy.log('Adding item: ' + item.stockCode + ', of quantity: ' + item.quantity + ' to cart.')
@@ -26,11 +26,11 @@ Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
     // Adding item once
     cy.get('.cartControls-addCart').click()
     // Side cart is opened when first item is added. To close it, force click on the search box again
-    if (firstTime == false) {
+    if (sideCartAlreadyClosed == false) {
       cy.wait(500)
       sideCartPage.getCloseSideCartButton().click()
       cy.wait(500)
-      firstTime = true
+      sideCartAlreadyClosed = true
     }
 
     // Adding remaining quantity

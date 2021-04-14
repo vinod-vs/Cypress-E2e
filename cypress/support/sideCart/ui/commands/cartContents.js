@@ -1,11 +1,3 @@
-import HomePage from '../../../homePage/ui/pageObjects/HomePage'
-import SideCartPage from '../pageObjects/SideCartPage'
-import SearchResultsPage from '../../../search/ui/pageObjects/SearchResultsPage'
-
-const homePage = new HomePage()
-const sideCartPage = new SideCartPage()
-const searchResultsPage = new SearchResultsPage()
-
 Cypress.Commands.add('verifyCartContent', (test) => {
   const items = test.items
   const noOfItems = test.items.length
@@ -17,7 +9,8 @@ Cypress.Commands.add('verifyCartContent', (test) => {
     const expectedAmount = item.pricePerItem * item.quantity
     const actualAmount = item.totalOnUI
     cy.log('expectedAmount: ' + expectedAmount)
-    cy.log('actualAmount: ' + item.totalOnUI)
+    cy.log('actualAmount: ' + actualAmount)
+    //TO-DO enhance to add amount and quantity validations
     index++
   })
 })
