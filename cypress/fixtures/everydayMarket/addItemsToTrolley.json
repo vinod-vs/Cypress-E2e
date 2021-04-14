@@ -1,22 +1,42 @@
 {
-    "Test1": [
+    "WowPlusEMOrderTest1": {
+      "totalWowAmount": "",
+      "totalWowShippingFee": "",
+      "totalEMAmount": "",
+      "totalEMShippingFee": "",
+      "items": [
         {
-            "StockCode": "1073741884",
-            "Quantity": "2"
+          "stockCode": "1073741884",
+          "quantity": "2",
+          "pricePerItem": "",
+          "totalOnUI": ""
         },
         {
-            "StockCode": "793315",
-            "Quantity": "10"
+          "stockCode": "793315",
+          "quantity": "10",
+          "pricePerItem": "",
+          "totalOnUI": ""
         }
-    ],
-    "Test2": [
+      ]
+    },
+    "WowPlusEMOrderTest2": {
+      "totalWowAmount": "",
+      "totalWowShippingFee": "",
+      "totalEMAmount": "",
+      "totalEMShippingFee": "",
+      "items": [
         {
-            "StockCode": "1073741886",
-            "Quantity": "1"
+          "stockCode": "1073741886",
+          "quantity": "1",
+          "pricePerItem": "",
+          "totalOnUI": ""
         },
         {
-            "StockCode": "1073741885",
-            "Quantity": "2"
+          "stockCode": "1073741885",
+          "quantity": "2",
+          "pricePerItem": "",
+          "totalOnUI": ""
         }
-    ]
-}
+      ]
+    }
+  }
