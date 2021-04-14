@@ -1,0 +1,16 @@
+[
+    {
+        "emAccount1": {
+            "email": "rjagadish+uat1@woolworths.com.au",
+            "password": "testing123",
+            "shopperId": "123456"
+        }
+    },
+    {
+        "emAccount2": {
+            "email": "rjagadish+uat1@woolworths.com.au",
+            "password": "testing123",
+            "shopperId": "123456"
+        }
+    }
+]

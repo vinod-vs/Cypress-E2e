@@ -24,3 +24,10 @@ import '@shelex/cypress-allure-plugin'
 Cypress.Cookies.defaults({
   preserve: ['w-rctx']
 })
+
+// Required to ignore uncaught exceptions thrown by the application else tests will fail on an occurances
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false
+})

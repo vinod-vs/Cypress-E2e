@@ -41,7 +41,16 @@ All PRs will start a build that runs existing and new CI tests as well as coding
 We are using standard js as our coding standards, any code that doesn't follow these rules will fail the build.
 To quickly fix code guideline errors run: `npx standard --fix` this will automatically make style adjustments to the repo. 
 More info can be found at the [standard js docs](https://standardjs.com/)
- 
+
+# Framework structure
+* integration -> All tests go here under the respective feature folders uiTests and apiTests sub folders.
+* fixtures -> All test data go here under the respective feature folders uiTests and apiTests sub folders.
+* support -> All support files like cypress commands, pageObjects etc go here under the respective feature folder.
+    * subfolder featureName/api/commands -> All api related cypress commands of the feature go here.
+    * subfolder featureName/ui/commands -> All ui related cypress commands of the feature go here.
+    * subfolder featureName/ui/pageObjects -> All ui related pageObjects of the feature go here.
+* support/utilities -> All useful/reusuable utilities can be placed here. 
+
 # ToDo:
 1. ~~Running test with multiple set of data and iterate through it.~~
 2. Executing tests in parallel and get the test report consolidated. - Ara
