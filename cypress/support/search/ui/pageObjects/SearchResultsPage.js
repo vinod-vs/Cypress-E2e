@@ -1,12 +1,11 @@
 class SearchResultsPage {
-
-    getIncreaseQuantityButton() {
+  getIncreaseQuantityButton () {
     return cy.get('.iconAct-Add_Plus')
-    }
+  }
 
-    getProductPrice() {
-        return cy.get('.price')
-    }
+  getProductPrice () {
+    return cy.get('.price')
+  }
 }
 
-export default SearchResultsPage;
+export default SearchResultsPage

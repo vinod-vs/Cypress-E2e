@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 
-import shopper from '../../../fixtures/login.json'
-import listName from '../../../fixtures/listName.json'
-import searchBody from '../../../fixtures/productSearch.json'
-import listItemBody from '../../../fixtures/addItemToList.json'
-import createdListId from '../../../fixtures/listId.json'
+import shopper from '../../../fixtures/login/login.json'
+import listName from '../../../fixtures/lists/listName.json'
+import searchBody from '../../../fixtures/search/productSearch.json'
+import listItemBody from '../../../fixtures/lists/addItemToList.json'
+import createdListId from '../../../fixtures/lists/listId.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/lists/api/commands/addList'
 import '../../../support/lists/api/commands/deleteList'

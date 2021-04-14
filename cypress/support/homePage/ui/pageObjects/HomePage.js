@@ -1,24 +1,23 @@
 class HomePage {
-
-    getMyAccount() {
+  getMyAccount () {
     return cy.get('#header-panel a.coreHeader-signupButton')
-    }
+  }
 
-    getMyAccount() {
-        return cy.get('#header-panel a.coreHeader-signupButton')
-        }
+  getMyAccount () {
+    return cy.get('#header-panel a.coreHeader-signupButton')
+  }
 
-    getSearchHeader() {
-        return cy.get('#headerSearch')
-    }
+  getSearchHeader () {
+    return cy.get('#headerSearch')
+  }
 
-    getClearSearchHeader() {
-        return cy.get('.headerSearch-actionButton')
-    }
+  getClearSearchHeader () {
+    return cy.get('.headerSearch-actionButton')
+  }
 
-    getCartAmount() {
-        return cy.get('.headerCheckout-orderAmount')
-    }
+  getCartAmount () {
+    return cy.get('.headerCheckout-orderAmount')
+  }
 }
 
-export default HomePage;
+export default HomePage

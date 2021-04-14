@@ -1,10 +1,10 @@
-import LoginPage from '../../../support/login/ui/pageObjects/LoginPage';
-import HomePage from '../../../support/homePage/ui/pageObjects/HomePage';
-import MyAccountPage from '../../../support/myAccount/ui/pageObjects/MyAccountPage';
+import LoginPage from '../../../support/login/ui/pageObjects/LoginPage'
+import HomePage from '../../../support/homePage/ui/pageObjects/HomePage'
+import MyAccountPage from '../../../support/myAccount/ui/pageObjects/MyAccountPage'
 
-const login = new LoginPage();
-const homePage = new HomePage();
-const myAccountPage = new MyAccountPage();
+const login = new LoginPage()
+const homePage = new HomePage()
+const myAccountPage = new MyAccountPage()
 
 Cypress.Commands.add('loginViaUi', (shopper) => {
   cy.visit('shop/securelogin')

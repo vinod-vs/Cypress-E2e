@@ -8,47 +8,44 @@ import '../../../support/sideCart/ui/commands/clearTrolley'
 import '../../../support/sideCart/ui/commands/cartContents'
 import '../../../support/search/ui/commands/searchAndAddProduct'
 import '../../../support/checkout/ui/commands/checkout'
-import '../../../support/confirmation/ui/commands/confirmation'
+import '../../../support/orderConfirmation/ui/commands/orderConfirmation'
 import '../../../support/utilities/ui/utility'
 
 describe('Place an test order using paypal', () => {
+  // pre-requisite to clear all cookies before login
+  before(() => {
+    cy.clearCookies({ domain: null })
+    cy.clearLocalStorage({ domain: null })
+  })
+  it('Place an test order using paypal', () => {
+    // Login
+    cy.loginViaUi(shoppers[0].emAccount1)
 
-    //pre-requisite to clear all cookies before login
-    before(() => {
-        cy.clearCookies({ domain: null })
-        cy.clearLocalStorage({ domain: null })
-    })
-    it('Place an test order using paypal', () => {
+    // Clear cart if required
+    cy.clearTrolley()
 
-        //Login 
-        cy.loginViaUi(shoppers[0].emAccount1)
+    // Search and add the products
+    cy.searchAndAddProductsToCart(tests.WowPlusEMOrderTest1)
 
-        //Clear cart if required
-        cy.clearTrolley()
+    // View Cart
+    cy.viewCart()
 
-        //Search and add the products
-        cy.searchAndAddProductsToCart(tests.WowPlusEMOrderTest1)
+    // Verify cart contents as as expected
+    cy.verifyCartContent(tests.WowPlusEMOrderTest1)
 
-        //View Cart
-        cy.viewCart()
+    // Go to checkout page
+    cy.clickCheckout()
 
-        //Verify cart contents as as expected
-        cy.verifyCartContent(tests.WowPlusEMOrderTest1)
+    // Select third delivery slot
+    cy.selectAnyDeliveryTimeSlot()
 
-        //Go to checkout page
-        cy.clickCheckout()
+    // Click save details for items
+    cy.saveItemsReviewDetails()
 
-        //Select third delivery slot
-        cy.selectAnyDeliveryTimeSlot()
+    // Click place order
+    cy.clickPlaceOrder()
 
-        //Click save details for items
-        cy.saveItemsReviewDetails()
-
-        //Click place order
-        cy.clickPlaceOrder()
-
-        //Verify order confirmation page
-        cy.verifyOrderConfirmation()
-
-    })
+    // Verify order confirmation page
+    cy.verifyOrderConfirmation()
+  })
 })

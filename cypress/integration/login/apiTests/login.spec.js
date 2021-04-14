@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import shoppers from '../../../fixtures/b2cShoppers.json'
+import shoppers from '../../../fixtures/login/b2cShoppers.json'
 import '../../../support/login/api/commands/login'
 
 describe('Perform Login via API', () => {

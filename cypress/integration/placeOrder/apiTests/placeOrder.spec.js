@@ -1,14 +1,14 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shopper from '../../../fixtures/login.json'
-import searchBody from '../../../fixtures/productSearch.json'
-import addressSearchBody from '../../../fixtures/addressSearch.json'
-import addItemsBody from '../../../fixtures/addItemsToTrolley.json'
-import creditCardPayment from '../../../fixtures/creditcardPayment.json'
-import digitalPayment from '../../../fixtures/digitalPayment.json'
-import creditcardSessionHeader from '../../../fixtures/creditcardSessionHeader.json'
-import confirmOrderParameter from '../../../fixtures/confirmOrderParameter.json'
+import shopper from '../../../fixtures/login/login.json'
+import searchBody from '../../../fixtures/search/productSearch.json'
+import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
+import addItemsBody from '../../../fixtures/sideCart/addItemsToTrolley.json'
+import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
+import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
+import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
+import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'

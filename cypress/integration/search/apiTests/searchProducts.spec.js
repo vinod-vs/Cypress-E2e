@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-import shoppers from '../../../fixtures/b2cShoppers.json'
-import searchBody from '../../../fixtures/productSearch.json'
+import shoppers from '../../../fixtures/login/b2cShoppers.json'
+import searchBody from '../../../fixtures/search/productSearch.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 

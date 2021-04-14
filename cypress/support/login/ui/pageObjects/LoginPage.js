@@ -1,16 +1,15 @@
 class LoginPage {
-
-  getEmailAddress() {
+  getEmailAddress () {
     return cy.get('#loginForm-Email')
   }
 
-  getPassword() {
+  getPassword () {
     return cy.get('#loginForm-Password')
   }
 
-  getLoginButton() {
+  getLoginButton () {
     return cy.get('.primary-legacy')
   }
 }
 
-export default LoginPage;
+export default LoginPage
