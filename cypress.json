@@ -37,5 +37,7 @@
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
         "configFile": "reporterConfig.json"
-    }
+    },
+    "oneSecondWait": 1000,
+    "halfSecondWait": 1000
 }

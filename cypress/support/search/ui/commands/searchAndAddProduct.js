@@ -27,9 +27,9 @@ Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
     cy.get('.cartControls-addCart').click()
     // Side cart is opened when first item is added. To close it, force click on the search box again
     if (sideCartAlreadyClosed == false) {
-      cy.wait(500)
+      cy.wait(Cypress.config('halfSecondWait'))
       sideCartPage.getCloseSideCartButton().click()
-      cy.wait(500)
+      cy.wait(Cypress.config('halfSecondWait'))
       sideCartAlreadyClosed = true
     }
 
@@ -37,7 +37,7 @@ Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
     let i
     for (i = 1; i < item.quantity; i++) {
       searchResultsPage.getIncreaseQuantityButton().eq(0).click()
-      cy.wait(500)
+      cy.wait(Cypress.config('halfSecondWait'))
     }
 
     // Verify the right quantity is added
@@ -45,11 +45,11 @@ Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
       const quantity = quantityElement.text()
       cy.log('Quantity added: ' + quantity)
     })
-    cy.wait(1000)
+    cy.wait(Cypress.config('oneSecondWait'))
 
     // Clear search
     homePage.getClearSearchHeader().click()
-    cy.wait(1000)
+    cy.wait(Cypress.config('oneSecondWait'))
 
     // TO-DO verify the desired item and quantity is added to cart
   })

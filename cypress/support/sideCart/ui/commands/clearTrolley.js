@@ -18,9 +18,9 @@ Cypress.Commands.add('clearTrolley', (shopper) => {
       cy.log('Cart has some items.  Cart Value: ' + cartAmount + '. Removing them.')
       sideCartPage.getViewCartButton().click()
       sideCartPage.getClearEntireCartLink().click()
-      cy.wait(1000)
+      cy.wait(Cypress.config('oneSecondWait'))
       sideCartPage.getConfirmClearCartLink().click()
-      cy.wait(1000)
+      cy.wait(Cypress.config('oneSecondWait'))
 
       // Verify the cart is empty
       cy.verifyEmptyCart()
@@ -34,7 +34,7 @@ Cypress.Commands.add('clearTrolley', (shopper) => {
 Cypress.Commands.add('viewCart', () => {
   // Click on View Cart button to Open the cart
   sideCartPage.getViewCartButton().click()
-  cy.wait(1000)
+  cy.wait(Cypress.config('oneSecondWait'))
 
   // Verify the cart is open
   sideCartPage.getCheckoutButton().should('be.visible')
@@ -43,7 +43,7 @@ Cypress.Commands.add('viewCart', () => {
 Cypress.Commands.add('closeCart', () => {
   // Click Close cart
   sideCartPage.getCloseSideCartButton().click()
-  cy.wait(1000)
+  cy.wait(Cypress.config('oneSecondWait'))
 
   // Verify the cart is closed
   homePage.getCartAmount().should('be.visible')
@@ -53,7 +53,7 @@ Cypress.Commands.add('clickCheckout', () => {
   // Click on Checkout button on the opened side cart
   sideCartPage.getCheckoutButton().click()
   cy.url().should('include', '/checkout')
-  cy.wait(1000)
+  cy.wait(Cypress.config('oneSecondWait'))
 
   // Verify checkout page is open
   checkoutPage.getPaymentInstructionsFrame().should('be.visible')
