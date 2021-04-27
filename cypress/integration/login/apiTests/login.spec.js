@@ -9,10 +9,6 @@ describe('Perform Login via API', () => {
     cy.clearLocalStorage({ domain: null })
   })
 
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('w-rctx', 'akaalb_uatsite', 'akavpau_uatsite', 'INGRESSCOOKIE', 'uat-wow-auth-token', 'wow-auth-token')
-  })
-
   shoppers.forEach((shopper) => {
     it('Login as ' + shopper.email, () => {
       cy.loginViaApi(shopper).then((response) => {

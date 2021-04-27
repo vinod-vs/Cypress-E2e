@@ -3,10 +3,6 @@ class HomePage {
     return cy.get('#header-panel a.coreHeader-signupButton')
   }
 
-  getMyAccount () {
-    return cy.get('#header-panel a.coreHeader-signupButton')
-  }
-
   getSearchHeader () {
     return cy.get('#headerSearch')
   }

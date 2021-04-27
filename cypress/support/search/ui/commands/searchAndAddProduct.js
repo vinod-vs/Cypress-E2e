@@ -26,7 +26,7 @@ Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
     // Adding item once
     cy.get('.cartControls-addCart').click()
     // Side cart is opened when first item is added. To close it, force click on the search box again
-    if (sideCartAlreadyClosed == false) {
+    if (sideCartAlreadyClosed === false) {
       cy.wait(Cypress.config('halfSecondWait'))
       sideCartPage.getCloseSideCartButton().click()
       cy.wait(Cypress.config('halfSecondWait'))
