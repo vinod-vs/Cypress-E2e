@@ -5,5 +5,9 @@
     {
         "email": "myb2ccustomer@yopmail.com",
         "password": "test1234"
+    },
+    {
+        "email": "pk+biz@woolworths.com.au",
+        "password": "test123"
     }
 ]

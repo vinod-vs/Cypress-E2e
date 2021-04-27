@@ -9,9 +9,13 @@ describe('Perform Login via API', () => {
     cy.clearLocalStorage({ domain: null })
   })
 
-  shoppers.forEach((shopper) => {
-    it('Login as ' + shopper.email, () => {
-      cy.loginViaApi(shopper).then((response) => {
+  Cypress._.times(3, (n) => {
+    it('Login as ' + shoppers[n].email, {
+      retries: {
+        runMode: 1
+      }
+    }, () => {
+      cy.loginViaApi(shoppers[n]).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
 
         cy.getCookie('w-rctx').should('exist')

@@ -10,7 +10,7 @@ Cypress.Commands.add('verifyCartContent', (test) => {
     const actualAmount = item.totalOnUI
     cy.log('expectedAmount: ' + expectedAmount)
     cy.log('actualAmount: ' + actualAmount)
-    //TO-DO enhance to add amount and quantity validations
+    // TO-DO enhance to add amount and quantity validations
     index++
   })
 })
