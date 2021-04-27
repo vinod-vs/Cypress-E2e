@@ -66,7 +66,7 @@ describe('Place an Order using Credit Card', () => {
       expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
     })
 
-    searchBody.SearchTerm = 'Cake'
+    searchBody.SearchTerm = 'coffee'
 
     cy.productSearch(searchBody).then((response) => {
       expect(response.SearchResultsCount).to.be.greaterThan(0)
