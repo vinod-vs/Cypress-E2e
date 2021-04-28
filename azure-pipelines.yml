@@ -134,7 +134,8 @@ steps:
         }]}' https://hooks.slack.com/services/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
 
 
-   - powershell: |
+   - powershell: 
+      |
       $minLastUpdatedDate = Get-Date (Get-Date).AddDays(-1) -Format s
       $maxLastUpdatedDate = Get-Date -Format s
       $queryString = "runTitle=WOWE2EAPI-$(Build.BuildNumber)&minLastUpdatedDate=$minLastUpdatedDate&maxLastUpdatedDate=$maxLastUpdatedDate&buildIds=$(Build.BuildId)&api-version=5.0-preview.2&`$top=1";
