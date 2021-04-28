@@ -1,42 +1,58 @@
 {
-    "WowPlusEMOrderTest1": {
-      "totalWowAmount": "",
-      "totalWowShippingFee": "",
-      "totalEMAmount": "",
-      "totalEMShippingFee": "",
-      "items": [
-        {
-          "stockCode": "1073741884",
-          "quantity": "2",
-          "pricePerItem": "",
-          "totalOnUI": ""
-        },
-        {
-          "stockCode": "793315",
-          "quantity": "10",
-          "pricePerItem": "",
-          "totalOnUI": ""
-        }
-      ]
-    },
-    "WowPlusEMOrderTest2": {
-      "totalWowAmount": "",
-      "totalWowShippingFee": "",
-      "totalEMAmount": "",
-      "totalEMShippingFee": "",
-      "items": [
-        {
-          "stockCode": "1073741886",
-          "quantity": "1",
-          "pricePerItem": "",
-          "totalOnUI": ""
-        },
-        {
-          "stockCode": "1073741885",
-          "quantity": "2",
-          "pricePerItem": "",
-          "totalOnUI": ""
-        }
-      ]
+  "WowPlusEMOrderTest1": {
+    "totalWowAmount": "",
+    "totalWowShippingFee": "",
+    "totalEMAmount": "",
+    "totalEMShippingFee": "",
+    "reusableBagsFee": "",
+    "orderTotal": "",
+    "items": [
+      {
+        "stockCode": "1073741884",
+        "quantity": "2",
+        "pricePerItem": "",
+        "totalOnUI": "",
+        "isEMProduct": "true"
+      },
+      {
+        "stockCode": "42605",
+        "quantity": "5",
+        "pricePerItem": "",
+        "totalOnUI": "",
+        "isEMProduct": "false"
+      }
+    ],
+    "payment": {
+      "creditCard": {
+        "creditCardNumber": "5353181800226466",
+        "creditCardExpMonth": "08",
+        "creditCardExpYear": "22",
+        "creditCardCVV": "488"
+      }
     }
+  },
+  "WowPlusEMOrderTest2": {
+    "totalWowAmount": "",
+    "totalWowShippingFee": "",
+    "totalEMAmount": "",
+    "totalEMShippingFee": "",
+    "reusableBagsFee": "",
+    "orderTotal": "",
+    "items": [
+      {
+        "stockCode": "1073741886",
+        "quantity": "1",
+        "pricePerItem": "",
+        "totalOnUI": "",
+        "isEMProduct": "true"
+      },
+      {
+        "stockCode": "1073741885",
+        "quantity": "2",
+        "pricePerItem": "",
+        "totalOnUI": "",
+        "isEMProduct": "false"
+      }
+    ]
   }
+}

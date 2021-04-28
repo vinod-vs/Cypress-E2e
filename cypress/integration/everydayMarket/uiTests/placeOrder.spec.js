@@ -9,9 +9,14 @@ import '../../../support/sideCart/ui/commands/cartContents'
 import '../../../support/search/ui/commands/searchAndAddProduct'
 import '../../../support/checkout/ui/commands/checkout'
 import '../../../support/orderConfirmation/ui/commands/orderConfirmation'
+import '../../../support/payment/ui/commands/creditCardPayment'
 import '../../../support/utilities/ui/utility'
 
-describe('Place an test order using paypal', () => {
+import CheckoutPage from '../../../support/checkout/ui/pageObjects/CheckoutPage'
+const checkoutPage = new CheckoutPage()
+
+
+describe('Place an test order with WOW and MP items', () => {
   // pre-requisite to clear all cookies before login
   before(() => {
     cy.clearCookies({ domain: null })
@@ -19,7 +24,7 @@ describe('Place an test order using paypal', () => {
   })
   it('Place an test order using paypal', () => {
     // Login
-    cy.loginViaUi(shoppers[0].emAccount1)
+    cy.loginViaUi(shoppers.emAccount2)
 
     // Clear cart if required
     cy.clearTrolley()
@@ -41,6 +46,60 @@ describe('Place an test order using paypal', () => {
 
     // Click save details for items
     cy.saveItemsReviewDetails()
+
+    //Get shipping fees from UI
+    cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
+
+    //Get Resuable bags amount
+    cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
+
+    //Verify the Item Quantity And the Amounts
+    cy.verifyAmounts(tests.WowPlusEMOrderTest1)
+
+    // Click place order
+    cy.clickPlaceOrder()
+
+    // Verify order confirmation page
+    cy.verifyOrderConfirmation()
+  })
+
+  it('Place an test order using credit card', () => {
+    // Login
+    cy.loginViaUi(shoppers.emAccount2)
+
+    // Clear cart if required
+    cy.clearTrolley()
+
+    // Search and add the products
+    cy.searchAndAddProductsToCart(tests.WowPlusEMOrderTest1)
+
+    // View Cart
+    cy.viewCart()
+
+    // Verify cart contents as as expected
+    cy.verifyCartContent(tests.WowPlusEMOrderTest1)
+
+    // Go to checkout page
+    cy.clickCheckout()
+
+    // Select third delivery slot
+    cy.selectAnyDeliveryTimeSlot()
+
+    // Click save details for items
+    cy.saveItemsReviewDetails()
+
+    //Get shipping fees from UI
+    cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
+
+    //Get Resuable bags amount
+    cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
+
+
+    //Verify the Item Quantity And the Amounts
+    cy.verifyAmounts(tests.WowPlusEMOrderTest1)
+
+    //Fill credit card details
+    cy.fillCreditCardPaymentDetails(tests.WowPlusEMOrderTest1.payment.creditCard)
 
     // Click place order
     cy.clickPlaceOrder()
