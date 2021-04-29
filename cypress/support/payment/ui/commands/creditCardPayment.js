@@ -9,8 +9,8 @@ const creditCardPage = new CreditCardPage()
 Cypress.Commands.add('fillCreditCardPaymentDetails', (creditCard) => {
     // Fill credit card details
     // Expand the credit card payment section if required
-    cy.checkIfElementExists(creditCardPage.getCreditCardSectionCollapsedLocatorString()).then((returnedValue) => {
-        if (returnedValue == true) {
+    cy.checkIfElementExists(creditCardPage.getCreditCardSectionCollapsedLocatorString()).then((isCreditCardSectionNotCollapsed) => {
+        if (isCreditCardSectionNotCollapsed == true) {
             creditCardPage.getCreditCardSectionCollapsed().click()
             cy.wait(Cypress.config('oneSecondWait'))
         }

@@ -51,41 +51,41 @@ Cypress.Commands.add('clickPlaceOrder', () => {
   cy.wait(Cypress.config('oneSecondWait'))
 })
 
-Cypress.Commands.add('getShippingFeesFromUI', (test) => {
+Cypress.Commands.add('getShippingFeesFromUI', (testData) => {
 
-  cy.checkIfElementExists(checkoutPage.getGroceriesDeliverySaleFeeLocatorString()).then((returnedValue) => {
-    if (returnedValue == true) {
-      cy.getTextFromElement(checkoutPage.getGroceriesDeliverySaleFeeLocatorString()).then((returnedValue) => {
-        let value = String(returnedValue).split('$')[1]
-        test.totalWowShippingFee = value
+  cy.checkIfElementExists(checkoutPage.getGroceriesDeliverySaleFeeLocatorString()).then((isSaleDeliveryFeePresent) => {
+    if (isSaleDeliveryFeePresent == true) {
+      cy.getTextFromElement(checkoutPage.getGroceriesDeliverySaleFeeLocatorString()).then((saleDeliveryFee) => {
+        let value = String(saleDeliveryFee).split('$')[1]
+        testData.totalWowShippingFee = value
         cy.log('Groceries sale shipping fees: ' + value)
       })
     } else {
-      cy.getTextFromElement(checkoutPage.getGroceriesDeliveryFeeLocatorString()).then((returnedValue) => {
-        let value = String(returnedValue).split('$')[1]
-        test.totalWowShippingFee = value
+      cy.getTextFromElement(checkoutPage.getGroceriesDeliveryFeeLocatorString()).then((regularDeliveryFee) => {
+        let value = String(regularDeliveryFee).split('$')[1]
+        testData.totalWowShippingFee = value
         cy.log('Groceries normal shipping fees: ' + value)
       })
     }
   })
 
-  cy.checkIfElementExists(checkoutPage.getEMDeliveryFeeLocatorString()).then((returnedValue) => {
-    if (returnedValue == true) {
-      cy.getTextFromElement(checkoutPage.getEMDeliveryFeeLocatorString()).then((returnedValue) => {
-        let value = String(returnedValue).split('$')[1]
-        test.totalEMShippingFee = value
+  cy.checkIfElementExists(checkoutPage.getEMDeliveryFeeLocatorString()).then((isEMDeliveryFeePresent) => {
+    if (isEMDeliveryFeePresent == true) {
+      cy.getTextFromElement(checkoutPage.getEMDeliveryFeeLocatorString()).then((eMDeliveryFee) => {
+        let value = String(eMDeliveryFee).split('$')[1]
+        testData.totalEMShippingFee = value
         cy.log('EM shipping fees: ' + value)
       })
     }
   })
 })
 
-Cypress.Commands.add('verifyAmounts', (test) => {
+Cypress.Commands.add('verifyAmounts', (testData) => {
 
   //Calculate the toal amounts of WOW and EM
-  const items = test.items
-  var wowTotalAmount = new Number(0)
-  var emTotalAmount = new Number(0)
+  const items = testData.items
+  let wowTotalAmount = new Number(0)
+  let emTotalAmount = new Number(0)
   items.forEach(item => {
     if (item.isEMProduct == 'true') {
       emTotalAmount = Number(emTotalAmount) + Number(item.quantity) * Number(item.pricePerItem)
@@ -93,32 +93,32 @@ Cypress.Commands.add('verifyAmounts', (test) => {
       wowTotalAmount = Number(wowTotalAmount) + Number(item.quantity) * Number(item.pricePerItem)
     }
   })
-  test.wowTotalAmount = wowTotalAmount
-  test.emTotalAmount = emTotalAmount
-  cy.log('EM TotalAmount: ' + test.emTotalAmount + ', WOW TotalAmount: ' + test.wowTotalAmount)
+  testData.wowTotalAmount = wowTotalAmount
+  testData.emTotalAmount = emTotalAmount
+  cy.log('EM TotalAmount: ' + testData.emTotalAmount + ', WOW TotalAmount: ' + testData.wowTotalAmount)
 
   //Calculate order total 
-  var totalAmount = new Number(0)
-  totalAmount = Number(test.wowTotalAmount) + Number(test.totalWowShippingFee) + Number(test.emTotalAmount) + Number(test.totalEMShippingFee) + Number(test.reusableBagsFee)
-  test.orderTotal = totalAmount
-  cy.log('Order Total: ' + test.orderTotal)
+  let totalAmount = new Number(0)
+  totalAmount = Number(testData.wowTotalAmount) + Number(testData.totalWowShippingFee) + Number(testData.emTotalAmount) + Number(testData.totalEMShippingFee) + Number(testData.reusableBagsFee)
+  testData.orderTotal = totalAmount
+  cy.log('Order Total: ' + testData.orderTotal)
 
   //verify the amounts and shipping fees
-  checkoutPage.getWoolworthsItemsShippingFee().should('include.text', test.totalWowShippingFee)
-  checkoutPage.getWoolworthsItemsSubtotal().should('include.text', test.wowTotalAmount)
-  checkoutPage.getMarketItemsShippingFee().should('include.text', test.totalEMShippingFee)
-  checkoutPage.getMarketItemsSubtotal().should('include.text', test.emTotalAmount)
-  checkoutPage.getReusableBagsFee().should('include.text', test.reusableBagsFee)
+  checkoutPage.getWoolworthsItemsShippingFee().should('include.text', testData.totalWowShippingFee)
+  checkoutPage.getWoolworthsItemsSubtotal().should('include.text', testData.wowTotalAmount)
+  checkoutPage.getMarketItemsShippingFee().should('include.text', testData.totalEMShippingFee)
+  checkoutPage.getMarketItemsSubtotal().should('include.text', testData.emTotalAmount)
+  checkoutPage.getReusableBagsFee().should('include.text', testData.reusableBagsFee)
   //checkoutPage.getTotalOrderAmount().should('include.text', test.orderTotal)
-  checkoutPage.getTotalOrderAmount().should('include.text', Number(test.wowTotalAmount) + Number(test.totalWowShippingFee) + Number(test.emTotalAmount) + Number(test.totalEMShippingFee) + Number(test.reusableBagsFee))
+  checkoutPage.getTotalOrderAmount().should('include.text', Number(testData.wowTotalAmount) + Number(testData.totalWowShippingFee) + Number(testData.emTotalAmount) + Number(testData.totalEMShippingFee) + Number(testData.reusableBagsFee))
 })
 
-Cypress.Commands.add('getResuableBagsAmount', (test) => {
+Cypress.Commands.add('getResuableBagsAmount', (testData) => {
 
-  var reusableBagsFeeVar = new Number(0)
+  let reusableBagsFeeVar = new Number(0)
   cy.get(checkoutPage.getReusableBagsFeeLocatorString()).then(function (textElement) {
-    reusableBagsFeeVar = Number(String(textElement.text()).split('$')[1])
-    test.reusableBagsFee = Number(reusableBagsFeeVar)
-    cy.log('ReusableBagsFee: ' + test.reusableBagsFee)
+    reusableBagsFeeVar = Number(textElement.text().toString().split('$')[1])
+    testData.reusableBagsFee = Number(reusableBagsFeeVar)
+    cy.log('ReusableBagsFee: ' + testData.reusableBagsFee)
   })
 })
