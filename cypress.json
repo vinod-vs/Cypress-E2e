@@ -26,6 +26,7 @@
     "viewportHeight": 1080,
     "viewportWidth": 1536,
     "defaultCommandTimeout":30000,
+    "chromeWebSecurity": false,
     "pageLoadTimeout":60000,
     "video": false,
     "videosFolder": "cypress/videos",
@@ -38,6 +39,7 @@
     "reporterOptions": {
         "configFile": "reporterConfig.json"
     },
+    "fiveSecondWait": 5000,
     "oneSecondWait": 1000,
     "halfSecondWait": 1000
 }

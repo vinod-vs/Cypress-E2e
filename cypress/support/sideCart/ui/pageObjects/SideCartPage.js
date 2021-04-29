@@ -3,6 +3,10 @@ class SideCartPage {
     return cy.get('.close-button > .iconAct-Close_Cancel')
   }
 
+  getCloseSideCartButtonLocatorString () {
+    return '.close-button > .iconAct-Close_Cancel'
+  }
+
   getViewCartButton () {
     return cy.get('.headerCheckout-orderHeader button')
   }
