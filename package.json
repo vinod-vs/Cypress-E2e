@@ -7,9 +7,8 @@
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "cypress:spec": "cypress run --spec",
-        "pretest": "npx standard",
+        "pretest": "npx standard || true",
         "test": "cypress run",
-        "posttest": "npm run allure:generate",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
         "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
@@ -19,8 +18,10 @@
     "devDependencies": {
         "@shelex/cypress-allure-plugin": "^2.3.5",
         "allure-commandline": "^2.13.8",
-        "cypress": "^6.5.0",
+        "cypress": "^7.1.0",
+        "cypress-iframe": "^1.0.1",
         "cypress-multi-reporters": "^1.4.0",
+        "faker": "^5.5.2",
         "mocha-junit-reporter": "^2.0.0",
         "mochawesome": "^6.2.2",
         "mochawesome-merge": "^4.2.0",

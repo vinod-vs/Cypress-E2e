@@ -4,7 +4,7 @@
         "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
         "uat": "https://uatsite.woolworths.com.au/",
         "prod": "https://woolworths.com.au/",
-        "b2cLoginEndpoint": "apis/ui/login/loginwithcredential",
+        "b2cLoginEndpoint": "apis/ui/login/LoginWithCredential",
         "productSearchEndpoint": "apis/ui/Search/products",
         "addressSearchEndpoint": "apis/ui/address/search",
         "addressAutoEndpoint": "apis/ui/address/auto",
@@ -17,11 +17,17 @@
         "creditCardPaymentEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
         "digitalPaymentEndpoint": "apis/ui/Checkout/DigitalPay/Payment",
         "confirmOrderEndpoint": "apis/ui/Checkout/ConfirmOrder",
+        "addNewListEndPoint": "apis/ui/mylists/add",
+        "deleteListEndPoint": "apis/ui/mylists/deleteList/",
+        "myListsEndPoint": "apis/ui/mylists/",
         "allure": true,
         "allureResultsPath": "cypress/allure-results"
     },
     "viewportHeight": 1080,
-    "viewportWidth": 1440,
+    "viewportWidth": 1536,
+    "defaultCommandTimeout":30000,
+    "chromeWebSecurity": false,
+    "pageLoadTimeout":60000,
     "video": false,
     "videosFolder": "cypress/videos",
     "videoCompression": 32,
@@ -32,5 +38,8 @@
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
         "configFile": "reporterConfig.json"
-    }
+    },
+    "fiveSecondWait": 5000,
+    "oneSecondWait": 1000,
+    "halfSecondWait": 1000
 }
