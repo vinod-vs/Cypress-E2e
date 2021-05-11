@@ -16,4 +16,3 @@ Cypress.Commands.add('verifyOrderConfirmation', () => {
   return orderDetails
   // TO-DO verify the items and amount on order confirmation page
 })
-

@@ -1,6 +1,6 @@
 Cypress.Commands.add('loginb2c', (creds = {}) => {
   cy.request({
-    url: Cypress.env('b2cLoginEndpoint'),
+    url: Cypress.env('loginEndpoint'),
     method: 'POST',
     body: {
       email: creds.b2c.email,

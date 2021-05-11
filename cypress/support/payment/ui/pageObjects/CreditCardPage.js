@@ -1,55 +1,55 @@
 class CreditCardPage {
-    getCreditCardSectionExpanded() {
-        return cy.get('.creditCards-section > wow-digital-pay-toggle-instrument-type-button.ng-star-inserted > .toggle-button')
-    }
+  getCreditCardSectionExpanded () {
+    return cy.get('.creditCards-section > wow-digital-pay-toggle-instrument-type-button.ng-star-inserted > .toggle-button')
+  }
 
-    getCreditCardSectionCollapsed() {
-        return cy.get('.creditCards-section > .ng-star-inserted > .toggle-button')
-    }
+  getCreditCardSectionCollapsed () {
+    return cy.get('.creditCards-section > .ng-star-inserted > .toggle-button')
+  }
 
-    getCreditCardSectionExpandedLocatorString() {
-        return '.creditCards-section > wow-digital-pay-toggle-instrument-type-button.ng-star-inserted > .toggle-button'
-    }
+  getCreditCardSectionExpandedLocatorString () {
+    return '.creditCards-section > wow-digital-pay-toggle-instrument-type-button.ng-star-inserted > .toggle-button'
+  }
 
-    getCreditCardSectionCollapsedLocatorString() {
-        return '.creditCards-section > .ng-star-inserted > .toggle-button'
-    }
+  getCreditCardSectionCollapsedLocatorString () {
+    return '.creditCards-section > .ng-star-inserted > .toggle-button'
+  }
 
-    getCreditCardNumber() {
-        return cy.get('#card_number')
-    }
+  getCreditCardNumber () {
+    return cy.get('#card_number')
+  }
 
-    getCreditCardNumberLocatorString() {
-        return '#card_number'
-    }
+  getCreditCardNumberLocatorString () {
+    return '#card_number'
+  }
 
-    getCreditCardExpMonth() {
-        return cy.get('#expiry_month')
-    }
-    getCreditCardExpMonthLocatorString() {
-        return '#expiry_month'
-    }
+  getCreditCardExpMonth () {
+    return cy.get('#expiry_month')
+  }
 
-    getCreditCardExpYear() {
-        return cy.get('#exp_year')
-    }
+  getCreditCardExpMonthLocatorString () {
+    return '#expiry_month'
+  }
 
-    getCreditCardExpYearLocatorString() {
-        return '#exp_year'
-    }
+  getCreditCardExpYear () {
+    return cy.get('#exp_year')
+  }
 
-    getCreditCardCVV() {
-        return cy.get('#cvv_csv')
-    }
+  getCreditCardExpYearLocatorString () {
+    return '#exp_year'
+  }
 
-    getCreditCardCVVLocatorString() {
-        return '#cvv_csv'
-    }
+  getCreditCardCVV () {
+    return cy.get('#cvv_csv')
+  }
 
-    getCreditCardIframeLocatorString() {
-        return '.creditCardAdd-form > iframe'
-    }
-    
+  getCreditCardCVVLocatorString () {
+    return '#cvv_csv'
+  }
+
+  getCreditCardIframeLocatorString () {
+    return '.creditCardAdd-form > iframe'
+  }
 }
 
 export default CreditCardPage

@@ -1,9 +1,21 @@
 Cypress.Commands.add('loginViaApi', (shopper) => {
-  cy.request('/').then((response) => {
-    expect(response.status).to.eq(200)
-  })
+  if (shopper.platform === 'B2C') {
+    cy.request('/').then((response) => {
+      expect(response.status).to.eq(200)
+    })
 
-  cy.request('POST', Cypress.env('b2cLoginEndpoint'), shopper).then((response) => {
-    return response.body
-  })
+    cy.request('POST', Cypress.env('loginEndpoint'), shopper).then((response) => {
+      return response.body
+    })
+  } else if (shopper.platform === 'B2B') {
+    cy.request(Cypress.env('b2bUat')).then((response) => {
+      expect(response.status).to.eq(200)
+    })
+
+    cy.request('POST', Cypress.env('b2bUat') + Cypress.env('loginEndpoint'), shopper).then((response) => {
+      return response.body
+    })
+  } else {
+    cy.log('Invalid application platform!')
+  }
 })
