@@ -1,14 +1,14 @@
 /// <reference types="Cypress" />
 
 const TestFilter = (definedTags, runTest) => {
-    if (Cypress.env('TEST_TAGS')) {
-        const tags = Cypress.env('TEST_TAGS').split('/')
-        const isFound = definedTags.some((definedTag) => tags.includes(definedTag))
+  if (Cypress.env('tags')) {
+    const tags = Cypress.env('tags').split('/')
+    const isFound = definedTags.some((definedTag) => tags.includes(definedTag))
 
-        if (isFound) {
-            runTest()
-        }
+    if (isFound) {
+      runTest()
     }
+  }
 }
 
 export default TestFilter

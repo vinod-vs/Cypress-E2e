@@ -51,7 +51,7 @@ steps:
     displayName: "Install Node.js"
   - script: |
       npm install
-      npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }} --env TEST_TAGS=${{ parameters.tags }}
+      npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }} --env tags=${{ parameters.tags }}
       npm run allure:generate
     displayName: "Npm install and test"
 

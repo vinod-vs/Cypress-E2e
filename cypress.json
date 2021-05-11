@@ -24,7 +24,8 @@
         "deleteListEndPoint": "apis/ui/mylists/deleteList/",
         "myListsEndPoint": "apis/ui/mylists/",
         "allure": true,
-        "allureResultsPath": "cypress/allure-results"
+        "allureResultsPath": "cypress/allure-results",
+        "tags": "API/UI"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,
