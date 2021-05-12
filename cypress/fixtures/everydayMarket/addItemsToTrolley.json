@@ -6,25 +6,32 @@
     "totalEMShippingFee": "",
     "reusableBagsFee": "",
     "orderTotal": "",
+    "orderDiscount": "",    
     "items": [
       {
-        "stockCode": "1073741884",
+        "stockCode": "1073741949",
         "quantity": "2",
         "pricePerItem": "",
+        "promoPrice": "",
+        "hasPromo": "false",
+        "promoSavings": "",
         "totalOnUI": "",
         "isEMProduct": "true"
       },
       {
-        "stockCode": "42605",
+        "stockCode": "84552",
         "quantity": "5",
         "pricePerItem": "",
+        "promoPrice": "",
+        "hasPromo": "false",
+        "promoSavings": "",
         "totalOnUI": "",
         "isEMProduct": "false"
       }
     ],
     "payment": {
       "creditCard": {
-        "creditCardNumber": "5353181800226466",
+        "creditCardNumber": "4242424242424242",
         "creditCardExpMonth": "08",
         "creditCardExpYear": "22",
         "creditCardCVV": "488"
@@ -38,11 +45,15 @@
     "totalEMShippingFee": "",
     "reusableBagsFee": "",
     "orderTotal": "",
+    "orderDiscount": "",
     "items": [
       {
         "stockCode": "1073741886",
         "quantity": "1",
         "pricePerItem": "",
+        "promoPrice": "",
+        "hasPromo": "false",
+        "promoSavings": "",
         "totalOnUI": "",
         "isEMProduct": "true"
       },
@@ -50,6 +61,9 @@
         "stockCode": "1073741885",
         "quantity": "2",
         "pricePerItem": "",
+        "promoPrice": "",
+        "hasPromo": "false",
+        "promoSavings": "",
         "totalOnUI": "",
         "isEMProduct": "false"
       }

@@ -21,7 +21,13 @@
         "deleteListEndPoint": "apis/ui/mylists/deleteList/",
         "myListsEndPoint": "apis/ui/mylists/",
         "allure": true,
-        "allureResultsPath": "cypress/allure-results"
+        "allureResultsPath": "cypress/allure-results",
+        "ordersApiEndpoint": "https://marketk8saae.uat.wx-d.net/order-api/",
+        "ordersApiEventsEndpoint": "api/v1/events",
+        "ordersApiReturnsEndpoint": "api/v1/returns",
+        "ordersApiByInvoiceIdEndpoint": "api/v1/orders",
+        "ordersApiByShopperIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders",
+        "ordersApiByShopperIdAndTraderOrderIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders/ORDER_ID"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,
@@ -41,5 +47,6 @@
     },
     "fiveSecondWait": 5000,
     "oneSecondWait": 1000,
+    "twoSecondWait": 2000,
     "halfSecondWait": 1000
 }

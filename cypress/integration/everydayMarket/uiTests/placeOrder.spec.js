@@ -42,7 +42,7 @@ describe('Place an test order with WOW and MP items', () => {
     cy.clickCheckout()
 
     // Select third delivery slot
-    cy.selectAnyDeliveryTimeSlot()
+    cy.selectAnyAvailableDeliveryTimeSlotAndSave()
 
     // Click save details for items
     cy.saveItemsReviewDetails()
@@ -50,11 +50,17 @@ describe('Place an test order with WOW and MP items', () => {
     //Get shipping fees from UI
     cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
 
+    //Get any order discounts
+    cy.getDiscountAmountIfAny(tests.WowPlusEMOrderTest1)
+
     //Get Resuable bags amount
     cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
 
     //Verify the Item Quantity And the Amounts
     cy.verifyAmounts(tests.WowPlusEMOrderTest1)
+
+    //Select paypal
+    cy.selectPayPalPaymentMode()
 
     // Click place order
     cy.clickPlaceOrder()
@@ -83,7 +89,7 @@ describe('Place an test order with WOW and MP items', () => {
     cy.clickCheckout()
 
     // Select third delivery slot
-    cy.selectAnyDeliveryTimeSlot()
+    cy.selectAnyAvailableDeliveryTimeSlotAndSave()
 
     // Click save details for items
     cy.saveItemsReviewDetails()
@@ -91,9 +97,11 @@ describe('Place an test order with WOW and MP items', () => {
     //Get shipping fees from UI
     cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
 
+    //Get any order discounts
+     cy.getDiscountAmountIfAny(tests.WowPlusEMOrderTest1)
+
     //Get Resuable bags amount
     cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
-
 
     //Verify the Item Quantity And the Amounts
     cy.verifyAmounts(tests.WowPlusEMOrderTest1)
