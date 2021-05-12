@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shopper from '../../../fixtures/login/b2bLogin.json'
+import shopper from '../../../fixtures/login/b2cLogin.json'
 import searchBody from '../../../fixtures/search/productSearch.json'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import addItemsBody from '../../../fixtures/sideCart/addItemsToTrolley.json'
@@ -68,7 +68,7 @@ TestFilter(['API'], () => {
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
-      searchBody.SearchTerm = 'coffee'
+      searchBody.SearchTerm = 'cake'
 
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -76,7 +76,7 @@ TestFilter(['API'], () => {
         let x
 
         for (x in response.Products) {
-          if (response.Products[x].Products[0].Price !== null) {
+          if (response.Products[x].Products[0].Price !== null && response.Products[x].Products[0].IsInStock === true) {
             productStockCode = response.Products[x].Products[0].Stockcode
 
             break
