@@ -74,17 +74,16 @@ Cypress.Commands.add('clickPlaceOrder', () => {
 })
 
 Cypress.Commands.add('getShippingFeesFromUI', (testData) => {
-
   cy.checkIfElementExists(checkoutPage.getGroceriesDeliverySaleFeeLocatorString()).then((isSaleDeliveryFeePresent) => {
-    if (isSaleDeliveryFeePresent == true) {
+    if (isSaleDeliveryFeePresent === true) {
       cy.getTextFromElement(checkoutPage.getGroceriesDeliverySaleFeeLocatorString()).then((saleDeliveryFee) => {
-        let value = String(saleDeliveryFee).split('$')[1]
+        const value = String(saleDeliveryFee).split('$')[1]
         testData.totalWowShippingFee = value
         cy.log('Groceries sale shipping fees: ' + value)
       })
     } else {
       cy.getTextFromElement(checkoutPage.getGroceriesDeliveryFeeLocatorString()).then((regularDeliveryFee) => {
-        let value = String(regularDeliveryFee).split('$')[1]
+        const value = String(regularDeliveryFee).split('$')[1]
         testData.totalWowShippingFee = value
         cy.log('Groceries normal shipping fees: ' + value)
       })
@@ -92,9 +91,9 @@ Cypress.Commands.add('getShippingFeesFromUI', (testData) => {
   })
 
   cy.checkIfElementExists(checkoutPage.getEMDeliveryFeeLocatorString()).then((isEMDeliveryFeePresent) => {
-    if (isEMDeliveryFeePresent == true) {
+    if (isEMDeliveryFeePresent === true) {
       cy.getTextFromElement(checkoutPage.getEMDeliveryFeeLocatorString()).then((eMDeliveryFee) => {
-        let value = String(eMDeliveryFee).split('$')[1]
+        const value = String(eMDeliveryFee).split('$')[1]
         testData.totalEMShippingFee = value
         cy.log('EM shipping fees: ' + value)
       })
@@ -103,8 +102,7 @@ Cypress.Commands.add('getShippingFeesFromUI', (testData) => {
 })
 
 Cypress.Commands.add('verifyAmounts', (testData) => {
-
-  //Calculate the toal amounts of WOW and EM
+  // Calculate the toal amounts of WOW and EM
   const items = testData.items
   var wowTotalAmount = new Number(0)
   var emTotalAmount = new Number(0)
@@ -137,7 +135,6 @@ Cypress.Commands.add('verifyAmounts', (testData) => {
 })
 
 Cypress.Commands.add('getResuableBagsAmount', (testData) => {
-
   let reusableBagsFeeVar = new Number(0)
   cy.get(checkoutPage.getReusableBagsFeeLocatorString()).then(function (textElement) {
     reusableBagsFeeVar = textElement.text().toString().split('$')[1]

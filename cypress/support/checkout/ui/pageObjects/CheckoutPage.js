@@ -26,7 +26,7 @@ class CheckoutPage {
   getDeliveryTimeLocatorString() {
     return ':nth-child(A) > .time-slot-list > :nth-child(B) > .time-slot'
   }
-  
+
   getDeliveryOrPickupSavedConfirmationElement() {
     return cy.get('#checkout-fulfilmentPanel > .panel > .ng-trigger > .panel-actions > .panel-actions-change-button')
   }
@@ -102,7 +102,7 @@ class CheckoutPage {
   getReusableBagsFee() {
     return cy.get('span:contains("Reusable bags") +')
   }
-  
+
   getMarketItemsSubtotalLocatorString() {
     return '#checkout-market-items-subtotal > .payment-amount'
   }

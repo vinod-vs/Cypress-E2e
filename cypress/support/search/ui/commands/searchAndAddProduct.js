@@ -7,7 +7,6 @@ const sideCartPage = new SideCartPage()
 const searchResultsPage = new SearchResultsPage()
 
 Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
-
   const items = test.items
   items.forEach(item => {
     cy.log('Adding item: ' + item.stockCode + ', of quantity: ' + item.quantity + ' to cart.')
@@ -26,9 +25,9 @@ Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
     // Adding item once
     cy.get('.cartControls-addCart').click()
     cy.wait(Cypress.config('halfSecondWait'))
-    // Side cart is opened when first item is added. Close it if opened. 
+    // Side cart is opened when first item is added. Close it if opened.
     cy.checkIfElementExists(sideCartPage.getCloseSideCartButtonLocatorString()).then((returnedValue) => {
-      if (returnedValue == true) {
+      if (returnedValue === true) {
         cy.wait(Cypress.config('halfSecondWait'))
         sideCartPage.getCloseSideCartButton().click()
         cy.wait(Cypress.config('halfSecondWait'))

@@ -29,6 +29,15 @@ parameters:
   - firefox
   - electron
 
+- name: tags
+  displayName: Test Tags
+  type: string
+  default: API/UI
+  values:
+  - API/UI
+  - API
+  - UI 
+
 trigger:
   - main
 
@@ -42,7 +51,7 @@ steps:
     displayName: "Install Node.js"
   - script: |
       npm install
-      npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }}
+      npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }} --env tags=${{ parameters.tags }}
       npm run allure:generate
     displayName: "Npm install and test"
 

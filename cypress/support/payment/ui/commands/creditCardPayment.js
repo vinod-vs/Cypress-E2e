@@ -1,31 +1,15 @@
 /// <reference types="Cypress" />
 /// <reference types="cypress-iframe" />
 import 'cypress-iframe'
-require('cypress-iframe');
 import CreditCardPage from '../pageObjects/CreditCardPage'
-import PayPalPage from '../pageObjects/PayPalPage'
 
 const creditCardPage = new CreditCardPage()
-const payPalPage = new PayPalPage()
 
-Cypress.Commands.add('selectPayPalPaymentMode', (creditCard) => {
-
-    cy.checkIfElementExists(payPalPage.getPayPalSelectionStatusLocatorString()).then((paypalAlreadySelected) => {
-        if (paypalAlreadySelected == false) {
-            cy.log('Paypal not selected. Selecting now.')
-            cy.get(payPalPage.getPayPalSelectionLocatorString()).click()
-            cy.wait(Cypress.config('oneSecondWait'))
-            cy.get(payPalPage.getPayPalSelectedLocatorString()).should('be.visible')
-        } else {
-            cy.log('Paypal already selected.')
-        }
-    })
-})
 Cypress.Commands.add('fillCreditCardPaymentDetails', (creditCard) => {
     // Fill credit card details
     // Expand the credit card payment section if required
     cy.checkIfElementExists(creditCardPage.getCreditCardSectionCollapsedLocatorString()).then((isCreditCardSectionNotCollapsed) => {
-        if (isCreditCardSectionNotCollapsed == true) {
+        if (isCreditCardSectionNotCollapsed === true) {
             creditCardPage.getCreditCardSectionCollapsed().click()
             cy.wait(Cypress.config('oneSecondWait'))
         }
@@ -59,4 +43,3 @@ Cypress.Commands.add('fillCreditCardPaymentDetails', (creditCard) => {
         }
     })
 })
-
