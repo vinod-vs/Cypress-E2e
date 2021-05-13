@@ -4,7 +4,7 @@ class SearchResultsPage {
   }
 
   getProductPrice () {
-    return cy.get('.price')
+    return cy.get('.price.price--large.ng-star-inserted')
   }
 }
 

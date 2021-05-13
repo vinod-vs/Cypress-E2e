@@ -1,0 +1,21 @@
+{
+    "from": {
+      "street1": "U 52 1 Mcdonald St",
+      "state": "NSW",
+      "postCode": "2011",
+      "suburb": "POTTS POINT NSW",
+      "name": "customer",
+      "phone": "0411022918"
+    },
+    "lineItems": [
+      {
+        "stockCode": 1073741883,
+        "quantity": 1,
+        "amount": 75.50,
+        "reason": "Automation - change of mind"
+      }
+    ],
+    "invoiceId": "EM0007977",
+    "orderReference": "92JWX-1G9DQY",
+    "createdBy": "Trader"
+  }

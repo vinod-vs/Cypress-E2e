@@ -15,6 +15,7 @@ Cypress.Commands.add('searchAndAddProductsToCart', (test) => {
     homePage.getSearchHeader().type(item.stockCode).type('{enter}')
 
     // Capture the item price
+    cy.wait(Cypress.config('oneSecondWait'))
     searchResultsPage.getProductPrice().then(function (amountElement) {
       const amount = amountElement.text()
       item.pricePerItem = amount.split('$')[1]

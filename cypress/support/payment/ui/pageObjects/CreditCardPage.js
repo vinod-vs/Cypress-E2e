@@ -50,6 +50,14 @@ class CreditCardPage {
   getCreditCardIframeLocatorString () {
     return '.creditCardAdd-form > iframe'
   }
+
+  getCreditCardCVVIframeLocatorString () {
+    return '.cvv-iframe'
+  }
+
+  getCreditCardDetailAlreadySavedLocatorString () {
+    return '.creditCardItem-content'
+  }
 }
 
 export default CreditCardPage

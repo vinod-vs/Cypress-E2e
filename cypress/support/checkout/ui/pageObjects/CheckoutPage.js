@@ -23,10 +23,6 @@ class CheckoutPage {
     return '.dates-container-inner > :nth-child(X)'
   }
 
-  getDeliveryTimeLocatorString () {
-    return ':nth-child(A) > .time-slot-list > :nth-child(B) > .time-slot'
-  }
-
   getDeliveryOrPickupSavedConfirmationElement () {
     return cy.get('#checkout-fulfilmentPanel > .panel > .ng-trigger > .panel-actions > .panel-actions-change-button')
   }
@@ -52,7 +48,7 @@ class CheckoutPage {
   }
 
   getGroceriesDeliveryFee () {
-    return cy.get(':nth-child(2) > .auto_delivery-fee-summary')
+    return cy.get('span:contains("Service Fee") +')
   }
 
   getGroceriesDeliveryNormalFeeLocatorString () {
@@ -64,11 +60,11 @@ class CheckoutPage {
   }
 
   getGroceriesDeliveryFeeLocatorString () {
-    return ':nth-child(2) > .auto_delivery-fee-summary'
+    return 'span:contains("Service Fee") +'
   }
 
   getEMDeliveryFeeLocatorString () {
-    return ':nth-child(3) > .auto_delivery-fee-summary'
+    return 'span:contains("Delivery Fee") +'
   }
 
   getWoolworthsItemsSubtotalLocatorString () {
@@ -80,19 +76,27 @@ class CheckoutPage {
   }
 
   getWoolworthsItemsShippingFeeLocatorString () {
-    return ':nth-child(3) > .payment-amount'
+    return 'span:contains("Service Fee") +'
   }
 
   getWoolworthsItemsShippingFee () {
-    return cy.get(':nth-child(3) > .payment-amount')
+    return cy.get('span:contains("Service Fee") +')
+  }
+
+  getOrderDiscountLocatorString () {
+    return 'span:contains("Order Discount") +'
+  }
+
+  getOrderDiscount () {
+    return cy.get('span:contains("Order Discount") +')
   }
 
   getReusableBagsFeeLocatorString () {
-    return ':nth-child(2) > .payment-amount'
+    return 'span:contains("Reusable bags") +'
   }
 
   getReusableBagsFee () {
-    return cy.get(':nth-child(2) > .payment-amount')
+    return cy.get('span:contains("Reusable bags") +')
   }
 
   getMarketItemsSubtotalLocatorString () {
@@ -112,11 +116,27 @@ class CheckoutPage {
   }
 
   getTotalOrderAmountLocatorString () {
-    return ':nth-child(8) > .payment-amount'
+    return 'span:contains("Total") +'
   }
 
   getTotalOrderAmount () {
-    return cy.get(':nth-child(8) > .payment-amount')
+    return cy.get('span:contains("Total") +')
+  }
+
+  getDeliveryDayLocatorString () {
+    return '.day.ng-star-inserted[aria-disabled=\'false\']'
+  }
+
+  getDeliveryInfoLocatorString () {
+    return '.day-info'
+  }
+
+  getDeliveryTimeLocatorString () {
+    return '.time-slot.false.ng-star-inserted[aria-disabled=\'false\']'
+  }
+
+  getDeliveryTimeSpanLocatorString () {
+    return '.time-span'
   }
 }
 
