@@ -49,14 +49,17 @@ TestFilter(['UI'], () => {
       // Click save details for items
       cy.saveItemsReviewDetails()
 
+      //Get shipping fees from UI
+      cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
+
       //Get any order discounts
       cy.getDiscountAmountIfAny(tests.WowPlusEMOrderTest1)
 
       //Get Resuable bags amount
       cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
 
-      // Get Resuable bags amount
-      cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
+      //Verify the Item Quantity And the Amounts
+      cy.verifyAmounts(tests.WowPlusEMOrderTest1)
 
       //Select paypal
       cy.selectPayPalPaymentMode()
@@ -92,6 +95,9 @@ TestFilter(['UI'], () => {
 
       // Click save details for items
       cy.saveItemsReviewDetails()
+
+      // Get shipping fees from UI
+      cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
 
       //Get any order discounts
       cy.getDiscountAmountIfAny(tests.WowPlusEMOrderTest1)
