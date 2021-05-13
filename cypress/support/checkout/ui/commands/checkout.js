@@ -4,28 +4,25 @@ import '../../../utilities/ui/utility'
 const checkoutPage = new CheckoutPage()
 
 Cypress.Commands.add('selectAnyAvailableDeliveryTimeSlotAndSave', () => {
-
-  //Need to wait for the delivery slots to be visible
+  // Need to wait for the delivery slots to be visible
   cy.wait(Cypress.config('twoSecondWait'))
   cy.checkIfElementExists(checkoutPage.getDeliveryDayLocatorString()).then((deliverySlotsPresent) => {
-    //cy.log(deliverySlotAlreadySelected)
-    //if (deliverySlotAlreadySelected == false) {
+    // cy.log(deliverySlotAlreadySelected)
+    // if (deliverySlotAlreadySelected == false) {
     cy.log('DeliverySlotsPresent: ' + deliverySlotsPresent)
-    if (deliverySlotsPresent == true) {
+    if (deliverySlotsPresent === true) {
       cy.log('Delivery slots not already selected. Selecting now.')
       cy.wait(Cypress.config('oneSecondWait'))
 
-      //Find an available day from all days
+      // Find an available day from all days
       cy.get(checkoutPage.getDeliveryDayLocatorString()).each((day, index, $list) => {
-
         cy.log('Selecting the available date : ' + day.text())
         cy.wrap(day).find(checkoutPage.getDeliveryInfoLocatorString()).click()
         cy.wait(Cypress.config('twoSecondWait'))
         cy.wrap(day).should('have.class', 'selected')
 
-        //Find an available time slot from all time slots
+        // Find an available time slot from all time slots
         cy.get(checkoutPage.getDeliveryTimeLocatorString()).each((time, index, $list) => {
-
           cy.log('Selecting the available time slot : ' + time.text())
           cy.wrap(time).find(checkoutPage.getDeliveryTimeSpanLocatorString()).click()
           cy.wait(Cypress.config('twoSecondWait'))
@@ -37,9 +34,9 @@ Cypress.Commands.add('selectAnyAvailableDeliveryTimeSlotAndSave', () => {
           cy.wait(Cypress.config('oneSecondWait'))
           cy.saveGroceriesDeliveryTimeDetails()
           cy.wait(Cypress.config('oneSecondWait'))
-          return false;
+          return false
         })
-        return false;
+        return false
       })
     }
   })
@@ -104,10 +101,10 @@ Cypress.Commands.add('getShippingFeesFromUI', (testData) => {
 Cypress.Commands.add('verifyAmounts', (testData) => {
   // Calculate the toal amounts of WOW and EM
   const items = testData.items
-  var wowTotalAmount = new Number(0)
-  var emTotalAmount = new Number(0)
+  let wowTotalAmount = new Number(0)
+  let emTotalAmount = new Number(0)
   items.forEach(item => {
-    if (item.isEMProduct == 'true') {
+    if (item.isEMProduct === 'true') {
       emTotalAmount = Number(emTotalAmount) + Number(item.quantity) * Number(item.pricePerItem) - Number(item.promoPrice)
     } else {
       wowTotalAmount = Number(wowTotalAmount) + Number(item.quantity) * Number(item.pricePerItem) - Number(item.promoPrice)
@@ -117,21 +114,21 @@ Cypress.Commands.add('verifyAmounts', (testData) => {
   testData.emTotalAmount = Number(emTotalAmount.toFixed(2))
   cy.log('EM TotalAmount: ' + Number(testData.emTotalAmount) + ', WOW TotalAmount: ' + Number(testData.wowTotalAmount))
 
-  //Calculate order total 
-  var totalAmount = new Number(0)
+  // Calculate order total
+  let totalAmount = new Number(0)
   totalAmount = Number(testData.wowTotalAmount) + Number(testData.totalWowShippingFee) + Number(testData.emTotalAmount) + Number(testData.totalEMShippingFee) + Number(testData.reusableBagsFee) - Number(testData.orderDiscount)
   testData.orderTotal = Number(totalAmount.toFixed(2))
   cy.log('Order Total: ' + Number(testData.orderTotal))
 
   cy.log(JSON.stringify(testData))
-  //verify the amounts and shipping fees
+  // verify the amounts and shipping fees
   checkoutPage.getWoolworthsItemsShippingFee().should('include.text', testData.totalWowShippingFee)
   checkoutPage.getWoolworthsItemsSubtotal().should('include.text', testData.wowTotalAmount)
   checkoutPage.getMarketItemsShippingFee().should('include.text', testData.totalEMShippingFee)
   checkoutPage.getMarketItemsSubtotal().should('include.text', testData.emTotalAmount)
   checkoutPage.getReusableBagsFee().should('include.text', testData.reusableBagsFee)
   checkoutPage.getTotalOrderAmount().should('include.text', testData.orderTotal)
-  //checkoutPage.getTotalOrderAmount().should('include.text', Number(testData.wowTotalAmount) + Number(testData.totalWowShippingFee) + Number(testData.emTotalAmount) + Number(testData.totalEMShippingFee) + Number(testData.reusableBagsFee))
+  // checkoutPage.getTotalOrderAmount().should('include.text', Number(testData.wowTotalAmount) + Number(testData.totalWowShippingFee) + Number(testData.emTotalAmount) + Number(testData.totalEMShippingFee) + Number(testData.reusableBagsFee))
 })
 
 Cypress.Commands.add('getResuableBagsAmount', (testData) => {
@@ -144,11 +141,10 @@ Cypress.Commands.add('getResuableBagsAmount', (testData) => {
 })
 
 Cypress.Commands.add('getDiscountAmountIfAny', (testData) => {
-
   cy.checkIfElementExists(checkoutPage.getOrderDiscountLocatorString()).then((isOrderDiscountPresent) => {
-    if (isOrderDiscountPresent == true) {
+    if (isOrderDiscountPresent === true) {
       cy.getTextFromElement(checkoutPage.getOrderDiscountLocatorString()).then((orderDiscount) => {
-        let value = String(orderDiscount).split('$')[1]
+        const value = String(orderDiscount).split('$')[1]
         testData.orderDiscount = value
         cy.log('Order Discount was present: ' + value)
       })

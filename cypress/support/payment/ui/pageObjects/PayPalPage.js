@@ -1,15 +1,15 @@
 class PayPalPage {
-    getPayPalSelectionStatusLocatorString() {
-        return '.paypal-list-item > .digitalPayListItem.digitalPayListItem--selectable.digitalPayListItem--selected'
-    }
+  getPayPalSelectionStatusLocatorString () {
+    return '.paypal-list-item > .digitalPayListItem.digitalPayListItem--selectable.digitalPayListItem--selected'
+  }
 
-    getPayPalSelectionLocatorString() {
-        return '.paypal-list-item > .digitalPayListItem.digitalPayListItem--selectable'
-    }
+  getPayPalSelectionLocatorString () {
+    return '.paypal-list-item > .digitalPayListItem.digitalPayListItem--selectable'
+  }
 
-    getPayPalSelectedLocatorString() {
-        return '.paypal-list-item > .digitalPayListItem.digitalPayListItem--selectable.digitalPayListItem--selected'
-    }    
+  getPayPalSelectedLocatorString () {
+    return '.paypal-list-item > .digitalPayListItem.digitalPayListItem--selectable.digitalPayListItem--selected'
+  }
 }
 
 export default PayPalPage

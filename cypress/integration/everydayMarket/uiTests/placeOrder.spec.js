@@ -3,7 +3,6 @@
 import 'cypress-iframe'
 import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
 import tests from '../../../fixtures/everydayMarket/addItemsToTrolley.json'
-import CheckoutPage from '../../../support/checkout/ui/pageObjects/CheckoutPage'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/ui/commands/login'
 import '../../../support/sideCart/ui/commands/clearTrolley'
@@ -14,8 +13,6 @@ import '../../../support/orderConfirmation/ui/commands/orderConfirmation'
 import '../../../support/payment/ui/commands/creditCardPayment'
 import '../../../support/payment/ui/commands/payPalPayment'
 import '../../../support/utilities/ui/utility'
-
-const checkoutPage = new CheckoutPage()
 
 TestFilter(['UI'], () => {
   describe('[UI] Place an order with WOW and MP items', () => {
@@ -49,19 +46,19 @@ TestFilter(['UI'], () => {
       // Click save details for items
       cy.saveItemsReviewDetails()
 
-      //Get shipping fees from UI
+      // Get shipping fees from UI
       cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
 
-      //Get any order discounts
+      // Get any order discounts
       cy.getDiscountAmountIfAny(tests.WowPlusEMOrderTest1)
 
-      //Get Resuable bags amount
+      // Get Resuable bags amount
       cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
 
-      //Verify the Item Quantity And the Amounts
+      // Verify the Item Quantity And the Amounts
       cy.verifyAmounts(tests.WowPlusEMOrderTest1)
 
-      //Select paypal
+      // Select paypal
       cy.selectPayPalPaymentMode()
 
       // Click place order
@@ -99,13 +96,13 @@ TestFilter(['UI'], () => {
       // Get shipping fees from UI
       cy.getShippingFeesFromUI(tests.WowPlusEMOrderTest1)
 
-      //Get any order discounts
+      // Get any order discounts
       cy.getDiscountAmountIfAny(tests.WowPlusEMOrderTest1)
 
-      //Get Resuable bags amount
+      // Get Resuable bags amount
       cy.getResuableBagsAmount(tests.WowPlusEMOrderTest1)
 
-      //Verify the Item Quantity And the Amounts
+      // Verify the Item Quantity And the Amounts
       cy.verifyAmounts(tests.WowPlusEMOrderTest1)
 
       // Fill credit card details
