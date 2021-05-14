@@ -1,5 +1,9 @@
 Cypress.Commands.add('addItemToList', (listId, listItemBody) => {
-  cy.request('POST', Cypress.env('myListsEndPoint') + listId + '/Items', listItemBody).then((response) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('myListsEndPoint') + listId + '/Items',
+    body: listItemBody
+  }).then((response) => {
     return response
   })
 })

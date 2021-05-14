@@ -16,6 +16,7 @@
     "author": "Test Automation Atom|Autobots Chapter",
     "license": "ISC",
     "devDependencies": {
+        "@bahmutov/cy-api": "^1.5.0",
         "@shelex/cypress-allure-plugin": "^2.3.5",
         "allure-commandline": "^2.13.8",
         "cypress": "^7.3.0",

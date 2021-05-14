@@ -51,6 +51,26 @@ More info can be found at the [standard js docs](https://standardjs.com/)
     * subfolder featureName/ui/pageObjects -> All ui related pageObjects of the feature go here.
 * support/utilities -> All useful/reusuable utilities can be placed here. 
 
+# For having request and response written in the test runner, please follow the steps in your API tests
+* Use cy.api() instead of cy.request() in your custome commands js files.
+* The structure of the request should be like this:
+    cy.api({
+      method: 'POST',
+      url: Cypress.env('loginEndpoint'),
+      body: shopper
+    }).then((response) => {
+      return response.body
+    })
+
+# For having TAGS in your test suite, please use the steps below:
+* Write the test suite within this:
+    TestFilter(['API'], () => {
+        describe('[API] Place a delivery order in B2C platform using Credit Card', () => {}
+    }
+Here "API" is the tag for this test suite mentioned inside the 'TestFilter'.
+* For running the tests with tags, use the CLI parameter like this:
+    --env tags=API/UI (this example will run test suits having 'API' or 'UI' tags)
+    
 # ToDo:
 1. ~~Running test with multiple set of data and iterate through it.~~
 2. Executing tests in parallel and get the test report consolidated. - Ara
