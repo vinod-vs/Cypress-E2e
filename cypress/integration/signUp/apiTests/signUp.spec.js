@@ -24,6 +24,9 @@ TestFilter(['API'], () => {
        
     // Signing Up as a new User
         it('Should sign up with a new user' , () => {
+
+            cy.logOutViaApi()
+            
             cy.signUpViaApi(signUpDetails).then((response) => {
                 expect(response.status).to.eq(200)
                 expect(response.body).to.have.property('Success', true)
