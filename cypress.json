@@ -55,6 +55,5 @@
   "fiveSecondWait": 5000,
   "oneSecondWait": 1000,
   "twoSecondWait": 2000,
-  "halfSecondWait": 1000,
-  "projectId": "1zyeae"
+  "halfSecondWait": 1000
 }
