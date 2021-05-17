@@ -19,7 +19,7 @@ TestFilter(['API'], () => {
         signUpDetails.firstName = faker.name.firstName()
         signUpDetails.lastName = faker.name.lastName()
         signUpDetails.EmailAddress = faker.internet.email()
-        signUpDetails.password = faker.internet.password(8)
+        signUpDetails.password = faker.internet.password(7)
         signUpDetails.MobilePhone = faker.phone.phoneNumber('04########')
        
     // Signing Up as a new User
