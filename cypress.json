@@ -23,6 +23,7 @@
         "addNewListEndPoint": "apis/ui/mylists/add",
         "deleteListEndPoint": "apis/ui/mylists/deleteList/",
         "myListsEndPoint": "apis/ui/mylists/",
+        "cancelOrderEndPoint": "apis/ui/order/cancel",
         "allure": true,
         "allureResultsPath": "cypress/allure-results",
         "ordersApiEndpoint": "https://marketk8saae.uat.wx-d.net/order-api/",
