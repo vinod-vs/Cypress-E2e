@@ -48,7 +48,7 @@ class CheckoutPage {
   }
 
   getGroceriesDeliveryFee () {
-    return cy.get('span:contains("Service Fee") +')
+    return cy.get('span:contains("Service fee") +')
   }
 
   getGroceriesDeliveryNormalFeeLocatorString () {
@@ -60,11 +60,11 @@ class CheckoutPage {
   }
 
   getGroceriesDeliveryFeeLocatorString () {
-    return 'span:contains("Service Fee") +'
+    return 'span:contains("Service fee") +'
   }
 
   getEMDeliveryFeeLocatorString () {
-    return 'span:contains("Delivery Fee") +'
+    return 'span:contains("Delivery fee") +'
   }
 
   getWoolworthsItemsSubtotalLocatorString () {
@@ -76,19 +76,19 @@ class CheckoutPage {
   }
 
   getWoolworthsItemsShippingFeeLocatorString () {
-    return 'span:contains("Service Fee") +'
+    return 'span:contains("Service fee") +'
   }
 
   getWoolworthsItemsShippingFee () {
-    return cy.get('span:contains("Service Fee") +')
+    return cy.get('span:contains("Service fee") +')
   }
 
   getOrderDiscountLocatorString () {
-    return 'span:contains("Order Discount") +'
+    return 'span:contains("Order discount") +'
   }
 
   getOrderDiscount () {
-    return cy.get('span:contains("Order Discount") +')
+    return cy.get('span:contains("Order discount") +')
   }
 
   getReusableBagsFeeLocatorString () {

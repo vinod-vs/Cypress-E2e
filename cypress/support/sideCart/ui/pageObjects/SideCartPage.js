@@ -16,7 +16,7 @@ class SideCartPage {
   }
 
   getConfirmClearCartLink () {
-    return cy.get('.primary')
+    return cy.get('shared-button[ervalue="Clear cart click"]')
   }
 
   getCheckoutButton () {

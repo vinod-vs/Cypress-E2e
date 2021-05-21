@@ -7,6 +7,7 @@ Cypress.Commands.add('verifyCartContent', (test) => {
     // Verify the item price (pricePerItem * quantity) or promo price
     // Get promo value if any
     cy.log('index: ' + Number(noOfItems - index))
+    cy.log(JSON.stringify(test))
     // If promotion is applied
     const priceLocator = ':nth-child(' + (noOfItems - index) + ') > .cart-item > .cart-item-product > .cart-item-details > .cart-item-cart-controls-wrapper > .cart-item-cart-controls-price > .cart-item-prices-container > shared-price > .price'
     const promoLocator = ':nth-child(' + (noOfItems - index) + ') > .cart-item > .cart-item-message > div > div.cartItemMessage-content > span:contains("You\'ve saved")'
