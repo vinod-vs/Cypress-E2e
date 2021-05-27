@@ -27,3 +27,14 @@ Cypress.Commands.add('loginViaApi', (shopper) => {
     cy.log('Invalid application platform!')
   }
 })
+
+Cypress.Commands.add('logOutViaApi',()  => {
+    cy.api({
+      method: 'POST',
+      url: Cypress.env('logoutEndpoint'),
+    }).then((response) => {
+      return response;
+    })
+  })
+    
+

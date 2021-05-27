@@ -1,0 +1,13 @@
+{
+  "lastName":"",
+  "firstName":"",
+  "emailAddress":"",
+  "password":"",
+  "agreeToTsAndCs":true,
+  "idLikeToReceiveSmsTextsAboutProductsServicesAndPromotions":false,
+  "idLikeToReceiveEmailsAboutProductsAndServices":false,
+  "idLikeToBeSentTheCatalogue":false,
+  "dateOfBirth":"07/09/1885",
+  "mobilePhone":"",
+  "typeOfDeliveryMethod":"DecideLater"
+}
