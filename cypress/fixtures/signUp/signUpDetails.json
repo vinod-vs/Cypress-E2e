@@ -1,13 +1,13 @@
 {
   "lastName":"",
   "firstName":"",
-  "EmailAddress":"",
+  "emailAddress":"",
   "password":"",
-  "AgreeToTsAndCs":true,
-  "IdLikeToReceiveSmsTextsAboutProductsServicesAndPromotions":false,
-  "IdLikeToReceiveEmailsAboutProductsAndServices":false,
-  "IdLikeToBeSentTheCatalogue":false,
-  "DateOfBirth":"07/09/1885",
-  "MobilePhone":"",
-  "TypeOfDeliveryMethod":"DecideLater"
+  "agreeToTsAndCs":true,
+  "idLikeToReceiveSmsTextsAboutProductsServicesAndPromotions":false,
+  "idLikeToReceiveEmailsAboutProductsAndServices":false,
+  "idLikeToBeSentTheCatalogue":false,
+  "dateOfBirth":"07/09/1885",
+  "mobilePhone":"",
+  "typeOfDeliveryMethod":"DecideLater"
 }
