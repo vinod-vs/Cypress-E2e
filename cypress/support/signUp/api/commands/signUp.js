@@ -1,4 +1,4 @@
-Cypress.Commands.add('signUpViaApi' , (userInfo) => {
+Cypress.Commands.add('signUpViaApi', (userInfo) => {
   cy.api({ url: '/' }).then((response) => {
     expect(response.status).to.eq(200)
   })

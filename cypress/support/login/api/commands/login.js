@@ -28,13 +28,11 @@ Cypress.Commands.add('loginViaApi', (shopper) => {
   }
 })
 
-Cypress.Commands.add('logOutViaApi',()  => {
-    cy.api({
-      method: 'POST',
-      url: Cypress.env('logoutEndpoint'),
-    }).then((response) => {
-      return response;
-    })
+Cypress.Commands.add('logOutViaApi', () => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('logoutEndpoint')
+  }).then((response) => {
+    return response
   })
-    
-
+})

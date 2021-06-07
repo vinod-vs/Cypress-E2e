@@ -2,11 +2,13 @@
     "emAccount1": {
       "email": "rjagadish+uat1@woolworths.com.au",
       "password": "testing123",
-      "shopperId": "8387512"
+      "shopperId": "8387512",
+      "platform": "B2C"
     },
     "emAccount2": {
       "email": "rjagadish+auto1@woolworths.com.au",
       "password": "testing123",
-      "shopperId": "8409758"
+      "shopperId": "8409758",
+      "platform": "B2C"
     }
   }

@@ -15,23 +15,21 @@ import '../../../support/orders/api/commands/cancelOrder'
 
 TestFilter(['API'], () => {
   describe('[API] Cancel placed order for B2C customer', () => {
-      beforeEach(() => {
-          cy.clearCookies({ domain: null })
-          cy.clearLocalStorage({ domain: null})          
-      })
-
-      it('Place an order for B2C customer, then cancel the order', () => {
-            const orderPlaced = new createOrder();
-            orderPlaced.placeOrderForB2CUser (shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
-                digitalPayment,confirmOrderParameter)
-                .then((response) => {
-                    const orderId= response.Order.OrderId;                       
-                    cy.cancelOrder(orderId).then((response) => {
-                        expect(response.status).to.eq(200)
-                    })                                                                                                      
-                })            
-        })
-             
+    beforeEach(() => {
+      cy.clearCookies({ domain: null })
+      cy.clearLocalStorage({ domain: null })
     })
- 
+
+    it('Place an order for B2C customer, then cancel the order', () => {
+      const orderPlaced = new createOrder()
+      orderPlaced.placeOrderForB2CUser(shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
+        digitalPayment, confirmOrderParameter)
+        .then((response) => {
+          const orderId = response.Order.OrderId
+          cy.cancelOrder(orderId).then((response) => {
+            expect(response.status).to.eq(200)
+          })
+        })
+    })
+  })
 })

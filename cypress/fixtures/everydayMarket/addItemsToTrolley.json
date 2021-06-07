@@ -10,6 +10,8 @@
     "items": [
       {
         "stockCode": "1073741832",
+        "searchTerm": "bucket",
+        "title": "",
         "quantity": "2",
         "pricePerItem": "",
         "promoPrice": "",
@@ -20,7 +22,9 @@
       },
       {
         "stockCode": "84552",
-        "quantity": "5",
+        "searchTerm": "bucket",
+        "title": "",
+        "quantity": "10",
         "pricePerItem": "",
         "promoPrice": "",
         "hasPromo": "false",
@@ -49,6 +53,8 @@
     "items": [
       {
         "stockCode": "1073741949",
+        "searchTerm": "bucket",
+        "title": "",
         "quantity": "1",
         "pricePerItem": "",
         "promoPrice": "",
@@ -59,6 +65,8 @@
       },
       {
         "stockCode": "1073741885",
+        "searchTerm": "bucket",
+        "title": "",
         "quantity": "2",
         "pricePerItem": "",
         "promoPrice": "",

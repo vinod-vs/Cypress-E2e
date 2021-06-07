@@ -9,13 +9,13 @@
     },
     "lineItems": [
       {
-        "stockCode": 1073741883,
+        "stockCode": 1073741832,
         "quantity": 1,
-        "amount": 75.50,
+        "amount": 36,
         "reason": "Automation - change of mind"
       }
     ],
-    "invoiceId": "EM0007977",
-    "orderReference": "92JWX-1G9DQY",
+    "invoiceId": "EM0009813",
+    "orderReference": "9391J-1J26QP",
     "createdBy": "Trader"
   }

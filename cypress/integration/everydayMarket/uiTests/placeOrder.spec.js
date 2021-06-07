@@ -1,5 +1,6 @@
 /// <reference types="Cypress" />
 /// <reference types="cypress-iframe" />
+/// <reference types="cypress-xpath" />
 import 'cypress-iframe'
 import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
 import tests from '../../../fixtures/everydayMarket/addItemsToTrolley.json'
@@ -29,7 +30,7 @@ TestFilter(['UI'], () => {
       cy.clearTrolley()
 
       // Search and add the products
-      cy.searchAndAddProductsToCart(tests.WowPlusEMOrderTest1)
+      cy.searchAndAddProductsToCartBySearchTerm(tests.WowPlusEMOrderTest1)
 
       // View Cart
       cy.viewCart()
@@ -76,7 +77,7 @@ TestFilter(['UI'], () => {
       cy.clearTrolley()
 
       // Search and add the products
-      cy.searchAndAddProductsToCart(tests.WowPlusEMOrderTest1)
+      cy.searchAndAddProductsToCartBySearchTerm(tests.WowPlusEMOrderTest1)
 
       // View Cart
       cy.viewCart()
