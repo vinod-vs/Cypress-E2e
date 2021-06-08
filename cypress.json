@@ -34,6 +34,7 @@
     "ordersApiByInvoiceIdEndpoint": "api/v1/orders",
     "ordersApiByShopperIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders",
     "ordersApiByShopperIdAndTraderOrderIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders/ORDER_ID",
+    "cancelOrderEndPoint": "apis/ui/order/cancel",
     "tags": "API/UI"
   },
   "viewportHeight": 1080,
