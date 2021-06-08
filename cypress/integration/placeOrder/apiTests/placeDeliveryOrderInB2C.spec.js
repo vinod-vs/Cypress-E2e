@@ -21,6 +21,8 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 
 let productStockCode
+let productPrice
+let supplyLimit
 
 TestFilter(['API'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
@@ -68,7 +70,7 @@ TestFilter(['API'], () => {
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
-      searchBody.SearchTerm = 'cake'
+      searchBody.SearchTerm = 'Tuna'
 
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -76,21 +78,64 @@ TestFilter(['API'], () => {
         let x
 
         for (x in response.Products) {
-          if (response.Products[x].Products[0].Price !== null && response.Products[x].Products[0].IsInStock === true) {
+          if (response.Products[x].Products[0].Price !== null &&
+                        response.Products[x].Products[0].IsInStock === true &&
+                        response.Products[x].Products[0].ProductRestrictionMessage === null &&
+                        response.Products[x].Products[0].ProductWarningMessage === null) {
             productStockCode = response.Products[x].Products[0].Stockcode
+
+            productPrice = response.Products[x].Products[0].InstorePrice
+
+            supplyLimit = response.Products[x].Products[0].SupplyLimit
 
             break
           }
         }
+
         addItemsBody.StockCode = productStockCode
 
-        addItemsBody.Quantity = 10
+        if (productPrice >= 3 && supplyLimit >= 10) {
+          addItemsBody.Quantity = 10
+        } else if (productPrice < 3 && supplyLimit >= 30) {
+          addItemsBody.Quantity = 30
+        }
       })
 
       cy.addItemsToTrolley(addItemsBody).then((response) => {
-        expect(response.TotalTrolleyItemQuantity).to.be.eqls(10)
+        expect(response.TotalTrolleyItemQuantity).to.be.eqls(addItemsBody.Quantity)
 
         expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
+
+        cy.wrap(response.Totals.WoolworthsSubTotal).as('cartSubTotal')
+      })
+
+      cy.get('@cartSubTotal').then(cartSubTotal => {
+        if (cartSubTotal < 30) {
+          searchBody.SearchTerm = 'Bread Rolls'
+
+          cy.productSearch(searchBody).then((response) => {
+            expect(response.SearchResultsCount).to.be.greaterThan(0)
+
+            let x
+
+            for (x in response.Products) {
+              if (response.Products[x].Products[0].Price !== null && response.Products[x].Products[0].IsInStock === true) {
+                productStockCode = response.Products[x].Products[0].Stockcode
+
+                productPrice = response.Products[x].Products[0].InstorePrice
+
+                break
+              }
+            }
+            addItemsBody.StockCode = productStockCode
+
+            if (productPrice >= 3) {
+              addItemsBody.Quantity = 10
+            } else {
+              addItemsBody.Quantity = 30
+            }
+          })
+        }
       })
 
       cy.navigateToCheckout().then((response) => {

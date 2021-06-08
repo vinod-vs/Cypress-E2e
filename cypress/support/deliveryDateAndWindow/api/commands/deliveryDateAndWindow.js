@@ -6,15 +6,24 @@ let timeSlotId
 let windowDate
 
 Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
-  cy.request('POST', Cypress.env('addressSearchEndpoint'), suburb).then((response) => {
-    addressId = response.body.Response[0].Id
-
-    return response.body
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('addressSearchEndpoint'),
+    body: suburb
   })
+    .then((response) => {
+      addressId = response.body.Response[0].Id
+
+      return response.body
+    })
 })
 
 Cypress.Commands.add('addDeliveryAddress', () => {
-  cy.request('POST', Cypress.env('addressAutoEndpoint'), { AddressId: addressId }).then((response) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('addressAutoEndpoint'),
+    body: { AddressId: addressId }
+  }).then((response) => {
     deliveryAddressId = response.body.Address.AddressId
 
     deliveryAreaId = response.body.Address.AreaId
@@ -35,7 +44,10 @@ Cypress.Commands.add('deliveryTimeSlot', () => {
 
   const queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&')
 
-  cy.request('GET', Cypress.env('timeSlotsEndpoint') + '?' + queryString).then((response) => {
+  cy.api({
+    method: 'GET',
+    url: Cypress.env('timeSlotsEndpoint') + '?' + queryString
+  }).then((response) => {
     timeSlotId = response.body[2].Times[1].Id
 
     windowDate = response.body[2].Date
@@ -45,7 +57,11 @@ Cypress.Commands.add('deliveryTimeSlot', () => {
 })
 
 Cypress.Commands.add('fulfilment', () => {
-  cy.request('POST', Cypress.env('fulfilmentEndpoint'), { AddressId: deliveryAddressId, FulfilmentMethod: 'Courier', TimeSlotId: timeSlotId, windowDate: windowDate }).then((response) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('fulfilmentEndpoint'),
+    body: { AddressId: deliveryAddressId, FulfilmentMethod: 'Courier', TimeSlotId: timeSlotId, windowDate: windowDate }
+  }).then((response) => {
     return response.body
   })
 })
