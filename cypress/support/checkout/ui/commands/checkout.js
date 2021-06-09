@@ -77,22 +77,28 @@ Cypress.Commands.add('getShippingFeesFromUI', (testData) => {
         const value = String(saleDeliveryFee).split('$')[1]
         testData.totalWowShippingFee = value
         cy.log('Groceries sale shipping fees: ' + value)
+        expect(value).to.not.be.null
+        expect(value).to.not.be.empty
       })
     } else {
       cy.getTextFromElement(checkoutPage.getGroceriesDeliveryFeeLocatorString()).then((regularDeliveryFee) => {
         const value = String(regularDeliveryFee).split('$')[1]
         testData.totalWowShippingFee = value
         cy.log('Groceries normal shipping fees: ' + value)
+        expect(value).to.not.be.null
+        expect(value).to.not.be.empty
       })
     }
   })
 
-  cy.checkIfElementExists(checkoutPage.getEMDeliveryFeeLocatorString()).then((isEMDeliveryFeePresent) => {
+  cy.checkIfElementExists(checkoutPage.getEMDeliveryFeeLocatorString1()).then((isEMDeliveryFeePresent) => {
     if (isEMDeliveryFeePresent === true) {
-      cy.getTextFromElement(checkoutPage.getEMDeliveryFeeLocatorString()).then((eMDeliveryFee) => {
+      cy.getTextFromElement(checkoutPage.getEMDeliveryFeeLocatorString1()).then((eMDeliveryFee) => {
         const value = String(eMDeliveryFee).split('$')[1]
         testData.totalEMShippingFee = value
         cy.log('EM shipping fees: ' + value)
+        expect(value).to.not.be.null
+        expect(value).to.not.be.empty
       })
     }
   })
