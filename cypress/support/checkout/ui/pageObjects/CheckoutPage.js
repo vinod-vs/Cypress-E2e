@@ -48,7 +48,7 @@ class CheckoutPage {
   }
 
   getGroceriesDeliveryFee () {
-    return cy.get('span:contains("Service fee") +')
+    return cy.get('span:contains("Service ") +')
   }
 
   getGroceriesDeliveryNormalFeeLocatorString () {
@@ -60,11 +60,15 @@ class CheckoutPage {
   }
 
   getGroceriesDeliveryFeeLocatorString () {
-    return 'span:contains("Service fee") +'
+    return 'span:contains("Service ") +'
   }
 
   getEMDeliveryFeeLocatorString () {
     return 'span:contains("Delivery fee") +'
+  }
+
+  getEMDeliveryFeeLocatorString1 () {
+    return '#checkout-market-items-delivery-fee > .payment-amount'
   }
 
   getWoolworthsItemsSubtotalLocatorString () {
