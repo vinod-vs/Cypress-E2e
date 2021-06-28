@@ -70,7 +70,7 @@ TestFilter(['API'], () => {
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
-      searchBody.SearchTerm = 'Tuna'
+      searchBody.SearchTerm = 'Fish'
 
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)

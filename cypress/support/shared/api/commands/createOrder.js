@@ -8,7 +8,7 @@ import '../../../checkout/api/commands/confirmOrder'
 import '../../../payment/api/commands/creditcard'
 import '../../../payment/api/commands/digitalPayment'
 
-export default class createOrder {
+export default class CreateOrder {
   placeOrderForB2CUser (shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
     digitalPayment, confirmOrderParameter) {
     let productStockCode
@@ -46,8 +46,7 @@ export default class createOrder {
                             cy.digitalPay(digitalPayment).then((response) => {
                               confirmOrderParameter.placedOrderId = response.PlacedOrderId
                             }).then(() => {
-                              cy.confirmOrder(confirmOrderParameter).then((response) => {
-                              })
+                              cy.confirmOrder(confirmOrderParameter).then((response) => {})
                             })
                           })
                         })
