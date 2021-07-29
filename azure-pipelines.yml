@@ -38,6 +38,14 @@ parameters:
   - API
   - UI 
 
+- name: fileConfig
+  displayName: Config File Name
+  type: string
+  default: b2c
+  values:
+  - b2c
+  - b2b
+
 trigger:
   - main
 

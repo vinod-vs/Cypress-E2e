@@ -1,0 +1,8 @@
+{
+    "baseUrl": "https://uat-atwork.woolworths.com.au/",
+    "env": {
+        "b2bDev": "https://dev-business.woolworths.com.au/",
+        "b2bUat": "https://uat-atwork.woolworths.com.au/",
+        "b2bProd": "https://atwork.woolworths.com.au/"
+    }
+}

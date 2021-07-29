@@ -71,6 +71,11 @@ Here "API" is the tag for this test suite mentioned inside the 'TestFilter'.
 * For running the tests with tags, use the CLI parameter like this:
     --env tags=API/UI (this example will run test suits having 'API' or 'UI' tags)
     
+# For dynamically modifying configuration values and environment variables from your plugins file (https://docs.cypress.io/api/plugins/configuration-api#Usage)
+* Create a new configuration file under "../cypress/config-files" folder
+* For running the tests use environment variable like this:
+    --env fileConfig=b2b
+
 # ToDo:
 1. ~~Running test with multiple set of data and iterate through it.~~
 2. Executing tests in parallel and get the test report consolidated. - Ara

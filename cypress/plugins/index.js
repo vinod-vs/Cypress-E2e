@@ -12,7 +12,19 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
+const fs = require('fs-extra')
+const path = require('path')
 const allureWriter = require('@shelex/cypress-allure-plugin/writer')
+
+function getConfigurationByFile (file) {
+  const pathToConfigFile = path.resolve(
+    '..',
+    'WOW-E2E-API-AUTOMATION/cypress/config-files',
+        `${file}.json`
+  )
+
+  return fs.readJson(pathToConfigFile)
+}
 
 /**
  * @type {Cypress.PluginConfig}
@@ -22,5 +34,7 @@ module.exports = (on, config) => {
   // `config` is the resolved Cypress config
   allureWriter(on, config)
 
-  return config
+  const file = config.env.fileConfig || 'b2c'
+
+  return getConfigurationByFile(file)
 }
