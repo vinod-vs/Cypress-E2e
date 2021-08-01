@@ -8,17 +8,6 @@ variables:
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 parameters:
-- name: baseUrl
-  displayName: Base URL
-  type: string
-  default: https://uatsite.woolworths.com.au/
-  values:
-  - https://uatsite.woolworths.com.au/
-  - https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/
-  - https://woolworths.com.au/
-  - https://stagingsite.woolworths.com.au
-  - https://preprodsite.woolworths.com.au
-
 - name: browser
   displayName: Browser
   type: string
@@ -35,6 +24,7 @@ parameters:
   default: API/UI
   values:
   - API/UI
+  - B2B-API
   - API
   - UI 
 
@@ -59,7 +49,7 @@ steps:
     displayName: "Install Node.js"
   - script: |
       npm install
-      npm test -- --config baseUrl=${{ parameters.baseUrl }} --browser ${{ parameters.browser }} --env tags=${{ parameters.tags }}
+      npm test -- --config --env tags=${{ parameters.tags }},fileConfig=${{ parameters.fileConfig }} --browser ${{ parameters.browser }}
       npm run allure:generate
     displayName: "Npm install and test"
 

@@ -22,7 +22,7 @@ let productStockCode
 let productPrice
 let supplyLimit
 
-TestFilter(['API'], () => {
+TestFilter(['B2B-API'], () => {
   describe('[API] Place a delivery order in B2B platform using Openpay', () => {
     before(() => {
       cy.clearCookies({ domain: null })

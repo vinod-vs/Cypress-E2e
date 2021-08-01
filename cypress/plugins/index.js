@@ -18,8 +18,8 @@ const allureWriter = require('@shelex/cypress-allure-plugin/writer')
 
 function getConfigurationByFile (file) {
   const pathToConfigFile = path.resolve(
-    '..',
-    'WOW-E2E-API-AUTOMATION/cypress/config-files',
+    '',
+    'cypress/config-files',
         `${file}.json`
   )
 

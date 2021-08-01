@@ -183,6 +183,7 @@ function verifyEventDetails (response, orderId, orderReference, mpInvoiceId, sho
   expect(response.data[1].domainEvent).to.be.equal('MarketOrderPlaced')
   expect(response.data[1].payload).to.not.be.null
 }
+
 function verifyOrderDetails (response, orderId, orderReference, mpInvoiceId, shopperId, quantity, stockCode) {
   // Order details
   expect(response.orderId).to.equal(Number(orderId))
