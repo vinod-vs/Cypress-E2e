@@ -3,6 +3,7 @@
     "env": {
         "b2bDev": "https://dev-business.woolworths.com.au/",
         "b2bUat": "https://uat-atwork.woolworths.com.au/",
-        "b2bProd": "https://atwork.woolworths.com.au/"
+        "b2bProd": "https://atwork.woolworths.com.au/",
+        "purchaseOrderCodeEndpoint": "apis/ui/b2b/trolley/setpurchaseordercode"
     }
 }

@@ -7,6 +7,7 @@ import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import addItemsBody from '../../../fixtures/sideCart/addItemsToTrolley.json'
 import openPayPayment from '../../../fixtures/payment/openPayPayment.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
+import purchaseOrderCode from '../../../fixtures/payment/purchaseOrderCode'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
@@ -17,19 +18,20 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/payment/api/commands/setPurchaseOrderCode'
 
 let productStockCode
 let productPrice
 let supplyLimit
 
 TestFilter(['B2B-API'], () => {
-  describe('[API] Place a delivery order in B2B platform using Openpay', () => {
+  describe('[API] Place a delivery order on Woolworths at Work website using Openpay', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('Should place an order using credit card', () => {
+    it('Should place an order on Woolworths at Work website using OpenPay as payment option', () => {
       cy.loginViaApi(shopper).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
@@ -140,6 +142,10 @@ TestFilter(['B2B-API'], () => {
         expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
 
         openPayPayment.openpayAmount = response.Model.Order.BalanceToPay
+      })
+
+      cy.setPurchaseOrderCode(purchaseOrderCode).then((response) => {
+        expect(response.status).to.eq(200)
       })
 
       cy.openPayDigitalPay(openPayPayment).then((response) => {
