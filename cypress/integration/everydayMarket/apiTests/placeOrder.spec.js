@@ -23,7 +23,7 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/everydayMarket/api/commands/orderApi'
 
-TestFilter(['API'], () => {
+TestFilter(['B2C-API'], () => {
   describe('[API] Place an order with WOW and MP items', () => {
     before(() => {
       cy.clearCookies({ domain: null })

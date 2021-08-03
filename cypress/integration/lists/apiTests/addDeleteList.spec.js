@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
-import shopper from '../../../fixtures/login/b2cLogin.json'
+import b2cShopper from '../../../fixtures/login/b2cLogin.json'
+import b2bShopper from '../../../fixtures/login/b2bLogin.json'
 import listName from '../../../fixtures/lists/listName.json'
 import searchBody from '../../../fixtures/search/productSearch.json'
 import listItemBody from '../../../fixtures/lists/addItemToList.json'
@@ -23,9 +24,15 @@ TestFilter(['API'], () => {
     })
 
     it('Should create a new list, add items in the list and delete the list', () => {
-      cy.loginViaApi(shopper).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
-      })
+      if (Cypress.env('fileConfig') === 'b2c') {
+        cy.loginViaApi(b2cShopper).then((response) => {
+          expect(response).to.have.property('LoginResult', 'Success')
+        })
+      } else if (Cypress.env('fileConfig') === 'b2b') {
+        cy.loginViaApi(b2bShopper).then((response) => {
+          expect(response).to.have.property('LoginResult', 'Success')
+        })
+      }
 
       listName.Name = faker.commerce.productName()
 

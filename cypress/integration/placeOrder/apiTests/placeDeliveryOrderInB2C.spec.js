@@ -24,7 +24,7 @@ let productStockCode
 let productPrice
 let supplyLimit
 
-TestFilter(['API'], () => {
+TestFilter(['B2C-API'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })

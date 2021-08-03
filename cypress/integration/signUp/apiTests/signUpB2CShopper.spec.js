@@ -7,13 +7,12 @@ import '../../../support/login/api/commands/login'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['API'], () => {
+TestFilter(['B2C-API'], () => {
   describe('[API] Signup as a new user', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-    // Using faker to add ramdom values for the user
 
     signUpDetails.firstName = faker.name.firstName()
     signUpDetails.lastName = faker.name.lastName()
