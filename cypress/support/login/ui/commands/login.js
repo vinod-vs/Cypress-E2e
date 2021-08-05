@@ -7,7 +7,10 @@ const homePage = new HomePage()
 const myAccountPage = new MyAccountPage()
 
 Cypress.Commands.add('loginViaUi', (shopper) => {
-  cy.visit('shop/securelogin')
+  
+  let url = ( shopper.platform === 'B2B') ? Cypress.env('b2bUat') + 'shop/securelogin' : 'shop/securelogin'
+
+  cy.visit(url)
 
   cy.url().should('include', '/securelogin')
 
@@ -15,9 +18,11 @@ Cypress.Commands.add('loginViaUi', (shopper) => {
 
   login.getPassword().type(shopper.password)
 
-  login.getLoginButton().click()
-
-  homePage.getMyAccount().contains('My Account')
+  login.getLoginButton().contains('Login').click()
+  
+  if(shopper.platform === 'B2C') {
+    homePage.getMyAccount().contains('My Account')
+  }
 
   cy.url().should('not.include', '/securelogin')
 })
