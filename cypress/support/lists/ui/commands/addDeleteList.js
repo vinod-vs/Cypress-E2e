@@ -17,12 +17,19 @@ Cypress.Commands.add('searchAndAddProductToNewList', (listName) => {
     .invoke('text').as('ProductName')
  
   searchResultsPage.getSaveToListButton().first().click()
+
   searchResultsPage.getCreateANewListButton().click()
+
   searchResultsPage.getNewListNameTextInput().type(listName)
+
   searchResultsPage.getCreateNewListActionButton().click()
+
   searchResultsPage.getTheListnameCheckBox(listName).should('be.checked')
+
   searchResultsPage.getProductSaveToNewListButton().click()
+
   searchResultsPage.getProductSavedNotification().should('be.visible')
+  
   searchResultsPage.getProductSavedNotification().find('a').should('contain.text',listName)
 })
 

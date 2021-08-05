@@ -18,7 +18,8 @@ Cypress.Commands.add('loginViaUi', (shopper) => {
 
   login.getPassword().type(shopper.password)
 
-  login.getLoginButton().contains('Login').click()
+  login.getLoginButton().click()
+  //login.getLoginButton().contains('Login').click()
   
   if(shopper.platform === 'B2C') {
     homePage.getMyAccount().contains('My Account')
