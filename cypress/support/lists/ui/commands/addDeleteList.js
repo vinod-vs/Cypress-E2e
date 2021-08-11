@@ -33,7 +33,7 @@ Cypress.Commands.add('searchAndAddProductToNewList', (listName) => {
   searchResultsPage.getProductSavedNotification().find('a').should('contain.text',listName)
 })
 
-Cypress.Commands.add('VerifyProductInList', (listName) => {
+Cypress.Commands.add('verifyProductInList', (listName) => {
     
   homePage.getListsLink().click()
 
