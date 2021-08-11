@@ -27,7 +27,7 @@ TestFilter(['UI'], () => {
       cy.searchAndAddProductToNewList(listName)
 
       // Verify that the list has been created and it has the product added
-      cy.VerifyProductInList(listName)
+      cy.verifyProductInList(listName)
       
       // Delete the list
       cy.deleteList(listName)
