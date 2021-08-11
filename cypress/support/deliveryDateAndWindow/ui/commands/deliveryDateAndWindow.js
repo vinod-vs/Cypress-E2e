@@ -1,22 +1,21 @@
 import DeliveryDateAndWindowPage from '../pageObjects/DeliveryDateAndWindowPage'
-import listInput from '../../../../fixtures/lists/listUITest.json'
 
 const deliveryDateAndWindowPage = new DeliveryDateAndWindowPage()
 
-Cypress.Commands.add('selectDeliveryDateAndWindow', () => {
+Cypress.Commands.add('selectDeliveryDateAndWindow', (trading_acc_address) => {
   deliveryDateAndWindowPage.getChangeTradingAccountLink().click()
 
   deliveryDateAndWindowPage.getSelectTradingAccount().click()
 
   deliveryDateAndWindowPage.getSelectOneOftheTradingAccounts().click()
 
-  deliveryDateAndWindowPage.getSelectTradingAccount().should('have.value', listInput.trading_acc_address)
+  deliveryDateAndWindowPage.getSelectTradingAccount().should('have.value', trading_acc_address)
 
-  deliveryDateAndWindowPage.getSaveAndContinueButton().click() 
+  deliveryDateAndWindowPage.getSaveAndContinueButton().click()
 
-  deliveryDateAndWindowPage.getSelectDate()  
+  deliveryDateAndWindowPage.getSelectDate()
 
-  deliveryDateAndWindowPage.getthefirsttimeslot().check({force: true})
-  
+  deliveryDateAndWindowPage.getthefirsttimeslot().check({ force: true })
+
   deliveryDateAndWindowPage.getContinueShoppingButton().click()
 })

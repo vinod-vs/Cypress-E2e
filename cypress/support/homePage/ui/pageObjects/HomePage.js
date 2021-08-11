@@ -15,9 +15,8 @@ class HomePage {
     return cy.get('.headerCheckout-orderAmount')
   }
 
-  getListsLink() {
+  getListsLink () {
     return cy.get('a.coreHeaderNav-link[href="/shop/mylists"]')
-
   }
 }
 

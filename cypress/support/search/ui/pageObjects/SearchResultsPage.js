@@ -31,37 +31,37 @@ class SearchResultsPage {
     return '#search-content .product-grid > div:nth-child(INDEX) .shelfProductTile-descriptionLink'
   }
 
-  getSaveToListButton() {
+  getSaveToListButton () {
     return cy.get('button.productSaveToList-buttonLink')
   }
 
-  getCreateANewListButton() {
+  getCreateANewListButton () {
     return cy.get('button.productSaveToList-actionItems-createList')
   }
 
-  getNewListNameTextInput() {
+  getNewListNameTextInput () {
     return cy.get('#productSaveToList-input')
   }
 
-  getCreateNewListActionButton() {
+  getCreateNewListActionButton () {
     return cy.get('button.productSaveToList-actionItems-createButton')
   }
 
-  getTheListnameCheckBox(listName) {
-    return cy.get("input[name='"+ listName + "']")
+  getTheListnameCheckBox (listName) {
+    return cy.get("input[name='" + listName + "']")
   }
 
-  getProductSaveToNewListButton() {
+  getProductSaveToNewListButton () {
     return cy.get('button.productSaveToList-actionItems-saveButton')
   }
 
-  getProductTitle() {
+  getProductTitle () {
     return cy.get('shared-product-tile')
   }
-  getProductSavedNotification() {
-    return cy.get('shared-toast')
-  } 
 
+  getProductSavedNotification () {
+    return cy.get('shared-toast')
+  }
 }
 
 export default SearchResultsPage

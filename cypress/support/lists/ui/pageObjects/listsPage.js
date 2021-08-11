@@ -1,24 +1,27 @@
 class ListsPage {
-  gettheList(listName) {
+  gettheList (listName) {
     return cy.get('shared-list-item').find('h3').contains(listName)
   }
 
-  getListHeader() {
+  getListHeader () {
     return cy.get('h2.savedListDetail-header')
   }
 
-  getProductInList() {
+  getLayoutButtons () {
+    return cy.get('input.listLayoutToggle-button')
+  }
+
+  getProductInList () {
     return cy.get('shared-product-list-item').find('a h2')
   }
- 
-  getDeleteButtonOfList(listName) {
+
+  getDeleteButtonOfList (listName) {
     return cy.get('button[aria-label= "Delete list named ' + listName + '"]')
   }
 
-  getDeleteButtonOnConfirmationModal() {
+  getDeleteButtonOnConfirmationModal () {
     return cy.get('button.deleteListModal-button').contains('Delete')
   }
-
 }
 
 export default ListsPage

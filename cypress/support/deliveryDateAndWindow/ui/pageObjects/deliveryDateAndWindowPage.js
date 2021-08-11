@@ -1,32 +1,31 @@
 class DeliveryDateAndWindowPage {
-  getChangeTradingAccountLink() {
+  getChangeTradingAccountLink () {
     return cy.get('button.selected-fulfilment-method--editButton')
   }
 
   getSelectTradingAccount () {
     return cy.get('#deliveryAddressSelector')
   }
-    
+
   getSelectOneOftheTradingAccounts () {
     return cy.get('#deliveryAddressSelector-option2')
   }
 
-  getSaveAndContinueButton() {
+  getSaveAndContinueButton () {
     return cy.get('button.shopper-action span')
   }
-    
-  getSelectDate() {
+
+  getSelectDate () {
     return cy.get('select.day-dropdown').select('2: Object')
   }
 
-  getthefirsttimeslot() {
+  getthefirsttimeslot () {
     return cy.get('input.wowRadio').first()
   }
 
-  getContinueShoppingButton() {
+  getContinueShoppingButton () {
     return cy.get('button.shopper-action').contains('Continue shopping')
   }
-  
 }
 
 export default DeliveryDateAndWindowPage
