@@ -34,7 +34,14 @@
         "ordersApiByInvoiceIdEndpoint": "api/v1/orders",
         "ordersApiByShopperIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders",
         "ordersApiByShopperIdAndTraderOrderIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders/ORDER_ID",
+        "marketplacerApiEndpoint": "https://woolworths.test-fresh.marketplacer.com/",
+        "marketplacerFullDispatchInvoiceEndpoint": "api/v2/client/invoices/INVOICE_ID/sent",
+        "marketplacerPartialDispatchInvoiceEndpoint": "api/v2/client/invoices/INVOICE_ID/shipments",
+        "marketplacerPetCultureAPIKey": "8cd814760b888f23b7cd0e1c91976618",
+        "marketplacerBigWTestAPIKey": "568cdb1aea9781bd7bfd34ae394c2cec",
         "cancelOrderEndPoint": "apis/ui/order/cancel",
+        "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
+        "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",
         "tags": "API/UI"
     },
     "viewportHeight": 1080,
@@ -53,6 +60,7 @@
     "reporterOptions": {
         "configFile": "reporterConfig.json"
     },
+    "tenSecondWait": 10000,
     "fiveSecondWait": 5000,
     "oneSecondWait": 1000,
     "twoSecondWait": 2000,

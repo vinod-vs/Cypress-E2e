@@ -22,8 +22,9 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/everydayMarket/api/commands/orderApi'
+import '../../../support/everydayMarket/api/commands/marketplacer'
 
-TestFilter(['B2C-API'], () => {
+TestFilter(['API'], () => {
   describe('[API] Place an order with WOW and MP items', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -31,6 +32,14 @@ TestFilter(['B2C-API'], () => {
     })
 
     it('Place an order using credit card', () => {
+
+      let addressId
+      let deliveryAddressId
+      let deliveryAreaId
+      let deliverySuburbId
+      let timeSlotId
+      let windowDate
+
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
@@ -38,23 +47,62 @@ TestFilter(['B2C-API'], () => {
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
         expect(response.Response[0].Id).to.not.be.empty
         expect(response.Response[0].Id).to.not.be.null
-      })
+        addressId = response.Response[0].Id
+        cy.log('addressId: ' + addressId)
 
-      cy.addDeliveryAddress().then((response) => {
-        expect(response.Address.AddressId).to.greaterThan(0)
-        expect(response.Address.AddressId).to.not.be.null
-        expect(response.Address.AreaId).to.greaterThan(0)
-        expect(response.Address.AreaId).to.not.be.null
-        expect(response.Address.SuburbId).to.greaterThan(0)
-        expect(response.Address.SuburbId).to.not.be.null
-      })
+        cy.addDeliveryAddressForAddressId(addressId).then((response) => {
+          expect(response.Address.AddressId).to.greaterThan(0)
+          expect(response.Address.AddressId).to.not.be.null
+          expect(response.Address.AreaId).to.greaterThan(0)
+          expect(response.Address.AreaId).to.not.be.null
+          expect(response.Address.SuburbId).to.greaterThan(0)
+          expect(response.Address.SuburbId).to.not.be.null
+          deliveryAddressId = response.Address.AddressId
+          deliveryAreaId = response.Address.AreaId
+          deliverySuburbId = response.Address.SuburbId
+          cy.log('deliveryAddressId: ' + deliveryAddressId + ", deliveryAreaId: " + deliveryAreaId + ", deliverySuburbId: " + deliverySuburbId)
 
-      cy.deliveryTimeSlot().then((response) => {
-        expect(response).to.have.length.greaterThan(0)
-      })
+          cy.deliveryTimeSlotForAddress(deliveryAddressId, deliveryAreaId, deliverySuburbId).then((response) => {
+            expect(response).to.have.length.greaterThan(0)
+    
+            let x, y
+            for (x in response) {
+              let found = false
+              if (response[x].Available === true) {
+                cy.log(response[x].AbsoluteDateText + " AVAILABLE FOR DELIVERY")
+                let y
+                for (y in response[x].Times) {
+                  if (response[x].Times[y].Available === true &&
+                    response[x].Times[y].IsReserved === false &&
+                    response[x].Times[y].IsExpress === false &&
+                    response[x].Times[y].IsKeptOpenForRewardsPlus === false &&
+                    response[x].Times[y].EligibleForDeliverySaver === false &&
+                    response[x].Times[y].IsCrowdSourced === false &&
+                    response[x].Times[y].IsExclusive === false &&
+                    response[x].Times[y].IsEcoWindow === false) {
+                    timeSlotId = response[x].Times[y].Id
+                    windowDate = response[x].Date
+                    cy.log(response[x].Times[y].TimeWindow + " IS A REGULAR AVAILABLE SLOT")
+                    found = true
+                    break
+                  } else {
+                    cy.log(response[x].Times[y].TimeWindow + " IS A REGULAR NON-AVAILABLE SLOT")
+                  }
+                }
+              } else {
+                cy.log(response[x].AbsoluteDateText + " NOT AVAILABLE FOR DELIVERY")
+              }
+              if(found === true)
+              break
+            }
+            cy.log('deliveryTimeSlotForAddress: timeSlotId: ' + timeSlotId + ", windowDate: " + windowDate)
 
-      cy.fulfilment().then((response) => {
-        expect(response).to.have.property('IsSuccessful', true)
+            cy.fulfilmentWithSpecificDeliveryDateAndTime(deliveryAddressId, timeSlotId, windowDate).then((response) => {
+              expect(response).to.have.property('IsSuccessful', true)
+              expect(response).to.have.property('IsNonServiced', false)
+            })
+          })            
+        })        
       })
 
       cy.clearTrolley().then((response) => {
@@ -62,11 +110,13 @@ TestFilter(['B2C-API'], () => {
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
-      const searchTerm = 'bucket'
+      const searchTerm = 'treats'
       let wowStockCode = 0
-      const wowQuantity = 10
+      let wowQuantity = 0
       let mpStockCode = 0
-      const mpQuantity = 1
+      const mpQuantity = 2
+      const minWowOrderThreshold = 50
+      const bufferWowQuantity = 5
       searchBody.SearchTerm = searchTerm
 
       cy.productSearch(searchBody).then((response) => {
@@ -75,11 +125,18 @@ TestFilter(['B2C-API'], () => {
         let x
         for (x in response.Products) {
           if (response.Products[x].Products[0].Price !== null &&
-                        response.Products[x].Products[0].IsInStock === true &&
-                        response.Products[x].Products[0].IsMarketProduct === false &&
-                        response.Products[x].Products[0].SupplyLimit >= wowQuantity) {
+            response.Products[x].Products[0].IsInStock === true &&
+            response.Products[x].Products[0].IsMarketProduct === false &&
+            response.Products[x].Products[0].SupplyLimit >= 50) {
+            wowQuantity = minWowOrderThreshold/response.Products[x].Products[0].Price
+            wowQuantity = Math.floor(wowQuantity) + bufferWowQuantity
+            cy.log("Calculated wowQuantity: " + wowQuantity)
+          if (response.Products[x].Products[0].Price !== null &&
+            response.Products[x].Products[0].IsInStock === true &&
+            response.Products[x].Products[0].IsMarketProduct === false &&
+            response.Products[x].Products[0].SupplyLimit >= wowQuantity) {
             wowStockCode = response.Products[x].Products[0].Stockcode
-            cy.log('WOWProduct: ' + wowStockCode + ' , SupplyLimit: ' + response.Products[x].Products[0].SupplyLimit)
+            cy.log('WOWProduct: ' + wowStockCode + ' , SupplyLimit: ' + response.Products[x].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[x].Products[0].Price + ' , Quantity: ' + wowQuantity)
             addItemsBodyWow.StockCode = wowStockCode
             addItemsBodyWow.Quantity = wowQuantity
 
@@ -92,16 +149,17 @@ TestFilter(['B2C-API'], () => {
             break
           }
         }
+        }
 
         cy.wait(Cypress.config('twoSecondWait'))
 
         for (x in response.Products) {
           if (response.Products[x].Products[0].Price !== null &&
-                        response.Products[x].Products[0].IsInStock === true &&
-                        response.Products[x].Products[0].IsMarketProduct === true &&
-                        response.Products[x].Products[0].SupplyLimit >= mpQuantity) {
+            response.Products[x].Products[0].IsInStock === true &&
+            response.Products[x].Products[0].IsMarketProduct === true &&
+            response.Products[x].Products[0].SupplyLimit >= mpQuantity) {
             mpStockCode = response.Products[x].Products[0].Stockcode
-            cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[x].Products[0].SupplyLimit)
+            cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[x].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[x].Products[0].Price + ' , Quantity: ' + mpQuantity)
             addItemsBodyMp.StockCode = mpStockCode
             addItemsBodyMp.Quantity = mpQuantity
 
@@ -114,6 +172,8 @@ TestFilter(['B2C-API'], () => {
             break
           }
         }
+        expect(wowStockCode).to.be.greaterThan(0)
+        expect(mpStockCode).to.be.greaterThan(0)        
       })
 
       cy.navigateToCheckout().then((response) => {
@@ -149,7 +209,7 @@ TestFilter(['B2C-API'], () => {
         cy.log('This is the order id: ' + response.Order.OrderId)
         cy.log('This is the order ref: ' + response.Order.OrderReference)
 
-        cy.wait(Cypress.config('twoSecondWait'))
+        cy.wait(Cypress.config('tenSecondWait')*3)
         cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
           mpInvoiceId = response.invoices[0].legacyIdFormatted
           cy.log('This is the MPInvoice Id: ' + mpInvoiceId)
@@ -169,7 +229,7 @@ TestFilter(['B2C-API'], () => {
   })
 })
 
-function verifyEventDetails (response, orderId, orderReference, mpInvoiceId, shopperId, quantity, stockCode) {
+function verifyEventDetails(response, orderId, orderReference, mpInvoiceId, shopperId, quantity, stockCode) {
   // Verify OrderPlaced event contents
   expect(response.data[0].orderId).to.equal(Number(orderId))
   expect(response.data[0].orderReference).to.be.equal(orderReference)
@@ -183,13 +243,12 @@ function verifyEventDetails (response, orderId, orderReference, mpInvoiceId, sho
   expect(response.data[1].domainEvent).to.be.equal('MarketOrderPlaced')
   expect(response.data[1].payload).to.not.be.null
 }
-
-function verifyOrderDetails (response, orderId, orderReference, mpInvoiceId, shopperId, quantity, stockCode) {
+function verifyOrderDetails(response, orderId, orderReference, mpInvoiceId, shopperId, quantity, stockCode) {
   // Order details
   expect(response.orderId).to.equal(Number(orderId))
   expect(response.orderReference).to.be.equal(orderReference)
   expect(response.shopperId).to.be.equal(Number(shopperId))
-  expect(response.orderStatus).to.be.equal('InProgress')
+  expect(response.orderStatus).to.be.equal('Placed')
   expect(response.thirdPartyOrderId).to.not.be.null
   expect(response.thirdPartyName).to.be.equal('Marketplacer')
   expect(response.createdTimeStampUtc).to.not.be.null
@@ -216,5 +275,5 @@ function verifyOrderDetails (response, orderId, orderReference, mpInvoiceId, sho
   expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(quantity))
   expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
   expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
-  // expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
+  //expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
 }
