@@ -44,7 +44,7 @@ TestFilter(['API'], () => {
         createdListId.listId = response.ListId
       })
 
-      searchBody.SearchTerm = 'A2 Milk'
+      searchBody.SearchTerm = 'Milk'
 
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)
