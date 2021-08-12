@@ -8,7 +8,7 @@ class LoginPage {
   }
 
   getLoginButton () {
-    return cy.get('.primary-legacy')
+    return cy.get('.primary-legacy').contains('Login')
   }
 }
 
