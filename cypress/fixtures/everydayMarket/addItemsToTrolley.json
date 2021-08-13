@@ -6,7 +6,12 @@
     "totalEMShippingFee": "",
     "reusableBagsFee": "",
     "orderTotal": "",
-    "orderDiscount": "",    
+    "orderDiscount": "",
+    "deliveryDateText": "",
+    "deliveryTimeText": "",
+    "address":{
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+              },
     "items": [
       {
         "stockCode": "1073741832",
@@ -22,7 +27,7 @@
       },
       {
         "stockCode": "84552",
-        "searchTerm": "treats",
+        "searchTerm": "bread",
         "title": "",
         "quantity": "10",
         "pricePerItem": "",
