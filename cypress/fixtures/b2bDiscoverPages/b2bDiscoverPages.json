@@ -1,0 +1,29 @@
+[{
+        "PageName": "Delivery",
+        "EndPointName": "deliveryDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Delivery Now",
+        "EndPointName": "deliveryNowDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Pick up & Direct to boot",
+        "EndPointName": "pickupAndDtbDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Shop with lists",
+        "EndPointName": "shopWithListsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Online pricing and payments",
+        "EndPointName": "onlinePricingDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Bulk orders",
+        "EndPointName": "bulkOrdersDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "FAQs",
+        "EndPointName": "faqDiscoverPageEndPoint"
+    }
+]

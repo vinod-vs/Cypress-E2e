@@ -26,6 +26,7 @@ parameters:
   - API/UI
   - B2C-API
   - B2B-API
+  - B2B-UI
   - API
   - UI 
 
@@ -54,7 +55,7 @@ stages:
             displayName: "Run B2B Tests"
           - script: |
               npm install
-              npm test -- --env tags=B2B-API/API,fileConfig=b2b --browser ${{ parameters.browser }}
+              npm test -- --env tags=B2B-API/B2B-UI/API,fileConfig=b2b --browser ${{ parameters.browser }}
               npm run allure:generate
             displayName: "Npm install and test"
 

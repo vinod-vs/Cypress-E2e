@@ -1,10 +1,10 @@
 import LoginPage from '../pageObjects/LoginPage'
 import HomePage from '../../../homePage/ui/pageObjects/HomePage'
-import MyAccountPage from '../../../myAccount/ui/pageObjects/MyAccountPage'
+import DeliveryDateAndWindowPage from '../../../deliveryDateAndWindow/ui/pageObjects/deliveryDateAndWindowPage'
 
 const login = new LoginPage()
 const homePage = new HomePage()
-const myAccountPage = new MyAccountPage()
+const deliveryDateAndWindowPage = new DeliveryDateAndWindowPage()
 
 Cypress.Commands.add('loginViaUi', (shopper) => {
   cy.visit('shop/securelogin')
@@ -17,15 +17,13 @@ Cypress.Commands.add('loginViaUi', (shopper) => {
 
   login.getLoginButton().click()
 
-  homePage.getMyAccount().contains('My Account')
+  if (shopper.platform === 'B2C') {
+    homePage.getMyAccount().contains('My Account')
+  } else if (shopper.platform === 'B2B') {
+    deliveryDateAndWindowPage.getChangeTradingAccountLink().should('be.visible')
+  } else {
+    expect(shopper.platform).to.be.oneOf(['B2B', 'B2C'])
+  }
 
   cy.url().should('not.include', '/securelogin')
-})
-
-Cypress.Commands.add('logoutViaUi', (shopper) => {
-  homePage.getMyAccount().contains('My Account').click()
-
-  myAccountPage.getLogout().contains('Logout').click()
-
-  cy.url().should('eq', Cypress.config().baseUrl)
 })

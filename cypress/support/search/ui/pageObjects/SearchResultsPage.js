@@ -34,6 +34,38 @@ class SearchResultsPage {
   getItemTitleLocatorString () {
     return '#search-content .product-grid > div:nth-child(INDEX) .shelfProductTile-descriptionLink'
   }
+
+  getSaveToListButton () {
+    return cy.get('button.productSaveToList-buttonLink')
+  }
+
+  getCreateANewListButton () {
+    return cy.get('button.productSaveToList-actionItems-createList')
+  }
+
+  getNewListNameTextInput () {
+    return cy.get('#productSaveToList-input')
+  }
+
+  getCreateNewListActionButton () {
+    return cy.get('button.productSaveToList-actionItems-createButton')
+  }
+
+  getTheListnameCheckBox (listName) {
+    return cy.get("input[name='" + listName + "']")
+  }
+
+  getProductSaveToNewListButton () {
+    return cy.get('button.productSaveToList-actionItems-saveButton')
+  }
+
+  getProductTitle () {
+    return cy.get('shared-product-tile')
+  }
+
+  getProductSavedNotification () {
+    return cy.get('shared-toast')
+  }
 }
 
 export default SearchResultsPage
