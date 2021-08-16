@@ -8,28 +8,40 @@
       "carrier": "Australia Post",
       "trackingNumber": "Automation:12345",
       "sellerName": "Pet Culture",
-
+      "deliveryAddressId": "",
+      "deliveryAreaId": "",
+      "deliverySuburbId": "",
+      "timeSlotId": "",
+      "windowDate": "",
+      "deliveryDateText": "",
+      "deliveryTimeText": "",
+      "wowTotal": 0,
+      "edmTotal": 0,
+      "totalQuantity": 0,
+      "totalWowQuantity": 0,
+      "totalEdmQuantity": 0,
+      "address":{
+        "search": "407-419 Elizabeth St, SURRY HILLS"
+                },            
+    
       "totalEMShippingFee": "",
       "reusableBagsFee": "",
       "orderTotal": "",
       "orderDiscount": "",
-      "deliveryDateText": "",
-      "deliveryTimeText": "",
-      "address":{
-        "search": "407-419 Elizabeth St, SURRY HILLS"
-                },
       "items": [
         {
           "stockCode": "",
-          "quantity": "",
+          "quantity": 2,
           "pricePerItem": "",
           "isEMProduct": "true"
         },
         {
             "stockCode": "",
-            "quantity": "",
+            "quantity": 0,
             "pricePerItem": "",
-            "isEMProduct": "true"  
+            "isEMProduct": "false",
+            "minWowOrderThreshold": 50,
+            "bufferWowQuantity": 5      
         }
       ],
       "payment": {

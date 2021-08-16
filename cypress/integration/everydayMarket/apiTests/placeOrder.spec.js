@@ -3,8 +3,6 @@
 
 import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
 import searchBody from '../../../fixtures/search/productSearch.json'
-import addItemsBodyWow from '../../../fixtures/sideCart/addItemsToTrolley.json'
-import addItemsBodyMp from '../../../fixtures/sideCart/addItemsToTrolley1.json'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
@@ -21,7 +19,7 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
-import '../../../support/everydayMarket/api/commands/marketplacer'
+import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 
 TestFilter(['API'], () => {
@@ -33,75 +31,14 @@ TestFilter(['API'], () => {
 
     it('RP-5039 | EM | MPer | Full dispatch Everyday Market order via Marketplacer', () => {
 
-      let addressId
-      let deliveryAddressId
-      let deliveryAreaId
-      let deliverySuburbId
-      let timeSlotId
-      let windowDate
-
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
 
-      cy.searchDeliveryAddress(tests.WowPlusEMOrderTest1.address).then((response) => {
-        expect(response.Response[0].Id).to.not.be.empty
-        expect(response.Response[0].Id).to.not.be.null
-        addressId = response.Response[0].Id
-        cy.log('addressId: ' + addressId)
-
-        cy.addDeliveryAddressForAddressId(addressId).then((response) => {
-          expect(response.Address.AddressId).to.greaterThan(0)
-          expect(response.Address.AddressId).to.not.be.null
-          expect(response.Address.AreaId).to.greaterThan(0)
-          expect(response.Address.AreaId).to.not.be.null
-          expect(response.Address.SuburbId).to.greaterThan(0)
-          expect(response.Address.SuburbId).to.not.be.null
-          deliveryAddressId = response.Address.AddressId
-          deliveryAreaId = response.Address.AreaId
-          deliverySuburbId = response.Address.SuburbId
-          cy.log('deliveryAddressId: ' + deliveryAddressId + ", deliveryAreaId: " + deliveryAreaId + ", deliverySuburbId: " + deliverySuburbId)
-
-          cy.deliveryTimeSlotForAddress(deliveryAddressId, deliveryAreaId, deliverySuburbId).then((response) => {
-            expect(response).to.have.length.greaterThan(0)
-
-            let x, y
-            for (x in response) {
-              let found = false
-              if (response[x].Available === true) {
-                cy.log(response[x].AbsoluteDateText + " AVAILABLE FOR DELIVERY")
-                let y
-                for (y in response[x].Times) {
-                  if (response[x].Times[y].Available === true &&
-                    response[x].Times[y].IsReserved === false &&
-                    response[x].Times[y].IsExpress === false &&
-                    response[x].Times[y].IsKeptOpenForRewardsPlus === false &&
-                    response[x].Times[y].EligibleForDeliverySaver === false &&
-                    response[x].Times[y].IsCrowdSourced === false &&
-                    response[x].Times[y].IsExclusive === false &&
-                    response[x].Times[y].IsEcoWindow === false) {
-                    timeSlotId = response[x].Times[y].Id
-                    windowDate = response[x].Date
-                    cy.log(response[x].Times[y].TimeWindow + " IS A REGULAR AVAILABLE SLOT")
-                    found = true
-                    break
-                  } else {
-                    cy.log(response[x].Times[y].TimeWindow + " IS A REGULAR NON-AVAILABLE SLOT")
-                  }
-                }
-              } else {
-                cy.log(response[x].AbsoluteDateText + " NOT AVAILABLE FOR DELIVERY")
-              }
-              if (found === true)
-                break
-            }
-            cy.log('deliveryTimeSlotForAddress: timeSlotId: ' + timeSlotId + ", windowDate: " + windowDate)
-
-            cy.fulfilmentWithSpecificDeliveryDateAndTime(deliveryAddressId, timeSlotId, windowDate).then((response) => {
-              expect(response).to.have.property('IsSuccessful', true)
-              expect(response).to.have.property('IsNonServiced', false)
-            })
-          })
+      cy.getRegularDeliveryTimeSlot(tests.WowPlusEMOrderTest1).then((response) => {
+        cy.fulfilmentWithSpecificDeliveryDateAndTime(tests.WowPlusEMOrderTest1.deliveryAddressId, tests.WowPlusEMOrderTest1.timeSlotId, tests.WowPlusEMOrderTest1.windowDate).then((response) => {
+          expect(response).to.have.property('IsSuccessful', true)
+          expect(response).to.have.property('IsNonServiced', false)
         })
       })
 
@@ -110,77 +47,11 @@ TestFilter(['API'], () => {
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
-      let wowStockCode = 0
-      let wowQuantity = 0
-      let mpStockCode = 0
-      const mpQuantity = 2
-      const minWowOrderThreshold = 50
-      const bufferWowQuantity = 5
       searchBody.SearchTerm = tests.WowPlusEMOrderTest1.searchTerm
-
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)
 
-        let x
-        for (x in response.Products) {
-          if (response.Products[x].Products[0].Price !== null &&
-            response.Products[x].Products[0].IsInStock === true &&
-            response.Products[x].Products[0].IsMarketProduct === false &&
-            response.Products[x].Products[0].SupplyLimit >= 50) {
-            wowQuantity = minWowOrderThreshold / response.Products[x].Products[0].Price
-            wowQuantity = Math.floor(wowQuantity) + bufferWowQuantity
-            cy.log("Calculated wowQuantity: " + wowQuantity)
-            if (response.Products[x].Products[0].Price !== null &&
-              response.Products[x].Products[0].IsInStock === true &&
-              response.Products[x].Products[0].IsMarketProduct === false &&
-              response.Products[x].Products[0].SupplyLimit >= wowQuantity) {
-              wowStockCode = response.Products[x].Products[0].Stockcode
-              cy.log('WOWProduct: ' + wowStockCode + ' , SupplyLimit: ' + response.Products[x].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[x].Products[0].Price + ' , Quantity: ' + wowQuantity)
-              addItemsBodyWow.StockCode = wowStockCode
-              addItemsBodyWow.Quantity = wowQuantity
-              tests.WowPlusEMOrderTest1.items[0].stockCode = wowStockCode
-              tests.WowPlusEMOrderTest1.items[0].quantity = wowQuantity
-              tests.WowPlusEMOrderTest1.items[0].isEMProduct = "false"
-              tests.WowPlusEMOrderTest1.items[0].pricePerItem = response.Products[x].Products[0].Price
-
-              cy.log('Adding WOW Item to Cart. Stockcode: ' + wowStockCode + ' , of quantity: ' + wowQuantity)
-              cy.addItemsToTrolley(addItemsBodyWow).then((response) => {
-                expect(response.TotalTrolleyItemQuantity).to.be.eqls(wowQuantity)
-                expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
-                expect(response.Totals.MarketSubTotal).to.be.equal(0)
-              })
-              break
-            }
-          }
-        }
-
-        cy.wait(Cypress.config('twoSecondWait'))
-        for (x in response.Products) {
-          if (response.Products[x].Products[0].Price !== null &&
-            response.Products[x].Products[0].IsInStock === true &&
-            response.Products[x].Products[0].IsMarketProduct === true &&
-            response.Products[x].Products[0].SupplyLimit >= mpQuantity) {
-            mpStockCode = response.Products[x].Products[0].Stockcode
-            cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[x].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[x].Products[0].Price + ' , Quantity: ' + mpQuantity)
-            addItemsBodyMp.StockCode = mpStockCode
-            addItemsBodyMp.Quantity = mpQuantity
-            tests.WowPlusEMOrderTest1.items[1].stockCode = mpStockCode
-            tests.WowPlusEMOrderTest1.items[1].quantity = mpQuantity
-            tests.WowPlusEMOrderTest1.items[1].isEMProduct = "true"
-            tests.WowPlusEMOrderTest1.items[1].pricePerItem = response.Products[x].Products[0].Price
-
-
-            cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
-            cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
-              expect(response.TotalTrolleyItemQuantity).to.be.eqls(mpQuantity + wowQuantity)
-              expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
-              expect(response.Totals.MarketSubTotal).to.be.greaterThan(0)
-            })
-            break
-          }
-        }
-        expect(wowStockCode).to.be.greaterThan(0)
-        expect(mpStockCode).to.be.greaterThan(0)
+        cy.getTestProductFromProductSearchResponse(response, tests.WowPlusEMOrderTest1)
       })
 
       cy.navigateToCheckout().then((response) => {
@@ -271,8 +142,8 @@ TestFilter(['API'], () => {
               // Line item details
               expect(response.invoices[0].lineItems[0].lineItemId).to.not.be.null
               expect(response.invoices[0].lineItems[0].legacyId).to.not.be.null
-              expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[1].stockCode))
-              expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[1].quantity))
+              expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[0].stockCode))
+              expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[0].quantity))
               expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
               expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
               //Shipments
@@ -284,18 +155,24 @@ TestFilter(['API'], () => {
               expect(response.invoices[0].shipments[0].dispatchedAtUtc).to.not.be.null
               expect(response.invoices[0].shipments[0].shippedItems.length).to.be.equal(1)
               expect(response.invoices[0].shipments[0].shippedItems[0].variantId).to.be.equal(response.invoices[0].lineItems[0].variantId)
-              expect(response.invoices[0].shipments[0].shippedItems[0].stockCode).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[1].stockCode))
-              expect(response.invoices[0].shipments[0].shippedItems[0].quantity).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[1].quantity))
+              expect(response.invoices[0].shipments[0].shippedItems[0].stockCode).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[0].stockCode))
+              expect(response.invoices[0].shipments[0].shippedItems[0].quantity).to.be.equal(Number(tests.WowPlusEMOrderTest1.items[0].quantity))
 
               cy.wait(Cypress.config('twoSecondWait'))
               cy.events(shopperId, orderId, orderReference).then((response) => {
-                //Verify there are only 3 events. New event after dispatch is MarketOrderShipmentCreate
-                expect(response.data).to.have.length(3)
+                expect(response.data).to.have.length(4)
+                //Verify there are only 4 events. New event after dispatch is MarketOrderShipmentCreate
                 expect(response.data[2].orderId).to.equal(Number(tests.WowPlusEMOrderTest1.orderId))
                 expect(response.data[2].orderReference).to.be.equal(tests.WowPlusEMOrderTest1.orderReference)
                 expect(response.data[2].shopperId).to.be.equal(Number(shopperId))
                 expect(response.data[2].domainEvent).to.be.equal('MarketOrderShipmentCreate')
                 expect(response.data[2].payload).to.not.be.null
+                //Verify there are only 4 events. New event after dispatch is "MarketOrderDispatched"
+                expect(response.data[3].orderId).to.equal(Number(tests.WowPlusEMOrderTest1.orderId))
+                expect(response.data[3].orderReference).to.be.equal(tests.WowPlusEMOrderTest1.orderReference)
+                expect(response.data[3].shopperId).to.be.equal(Number(shopperId))
+                expect(response.data[3].domainEvent).to.be.equal('MarketOrderDispatched')
+                expect(response.data[3].payload).to.not.be.null
               })
             })
           })
@@ -350,8 +227,8 @@ function verifyOrderDetails(response, testData, shopperId) {
   // Line item details
   expect(response.invoices[0].lineItems[0].lineItemId).to.not.be.null
   expect(response.invoices[0].lineItems[0].legacyId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[1].stockCode))
-  expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[1].quantity))
+  expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
+  expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
   expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
   expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
   //expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
