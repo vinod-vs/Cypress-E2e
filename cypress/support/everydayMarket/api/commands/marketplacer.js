@@ -1,76 +1,73 @@
 Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTrackingnumber, postageCarrier, sellerName) => {
-    const apiKey = getApiKeyForSeller(sellerName)
-    const endPoint = String(Cypress.env('marketplacerFullDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
-    const requestBody = {
-        "data": {
-            "type": "invoices",
-            "attributes": {
-                "postage_tracking": postageTrackingnumber,
-                "postage_carrier": postageCarrier
-            }
-        }
+  const apiKey = getApiKeyForSeller(sellerName)
+  const endPoint = String(Cypress.env('marketplacerFullDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
+  const requestBody = {
+    data: {
+      type: 'invoices',
+      attributes: {
+        postage_tracking: postageTrackingnumber,
+        postage_carrier: postageCarrier
+      }
     }
-    cy.request({
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/vnd.api+json',
-        },
-        auth: {
-            bearer: apiKey
-        },
-        url: Cypress.env('marketplacerApiEndpoint') + endPoint,
-        body: requestBody
-    }).then((response) => {
-        return response.body
-    })
+  }
+  cy.request({
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/vnd.api+json'
+    },
+    auth: {
+      bearer: apiKey
+    },
+    url: Cypress.env('marketplacerApiEndpoint') + endPoint,
+    body: requestBody
+  }).then((response) => {
+    return response.body
+  })
 })
 
 const getApiKeyForSeller = (sellerName) => {
-    if (sellerName === "Pet Culture")
-        return Cypress.env('marketplacerPetCultureAPIKey')
-    else if (sellerName === "BigWTest")
-        return Cypress.env('marketplacerBigWTestAPIKey')
+  if (sellerName === 'Pet Culture') { return Cypress.env('marketplacerPetCultureAPIKey') } else if (sellerName === 'BigWTest') { return Cypress.env('marketplacerBigWTestAPIKey') }
 }
 
 Cypress.Commands.add('partialDispatchOfLineItemsInInvoice', (decodedInvoiceId, decodedLineItemId, quantity, postageTrackingnumber, postageCarrier, sellerName) => {
-    const apiKey = getApiKeyForSeller(sellerName)
-    const requestBody = {
-        "data": {
-            "type": "shipments",
-            "attributes": {
-                "shipment_tracking_number": postageTrackingnumber,
-                "shipment_carrier": postageCarrier,
-                "line_items_ids": [
-                    decodedLineItemId
-                ],
-                "shipped_items": [
-                    {
-                        "line_item_id": decodedLineItemId,
-                        "quantity": quantity
-                    }
-                ]
-            }
-        }
+  const apiKey = getApiKeyForSeller(sellerName)
+  const requestBody = {
+    data: {
+      type: 'shipments',
+      attributes: {
+        shipment_tracking_number: postageTrackingnumber,
+        shipment_carrier: postageCarrier,
+        line_items_ids: [
+          decodedLineItemId
+        ],
+        shipped_items: [
+          {
+            line_item_id: decodedLineItemId,
+            quantity: quantity
+          }
+        ]
+      }
     }
+  }
 
-    const endPoint = String(Cypress.env('marketplacerPartialDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
-    cy.request({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/vnd.api+json'
-        },
-        auth: {
-            bearer: apiKey
-        },
-        url: Cypress.env('marketplacerApiEndpoint') + endPoint,
-        body: requestBody
-    }).then((response) => {
-        return response.body
-    })
+  const endPoint = String(Cypress.env('marketplacerPartialDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
+  cy.request({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/vnd.api+json'
+    },
+    auth: {
+      bearer: apiKey
+    },
+    url: Cypress.env('marketplacerApiEndpoint') + endPoint,
+    body: requestBody
+  }).then((response) => {
+    return response.body
+  })
 })
 
 Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId) => {
-    let mutation = String(`mutation{
+  let mutation = String(`mutation{
         refundRequestCreate(input: 
           {
             invoiceId: "ENCODED_INVOICE_ID",
@@ -95,30 +92,29 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
             messages
           }
         }
-      }`).replace('ENCODED_INVOICE_ID', encodedInvoiceId);
-    mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
+      }`).replace('ENCODED_INVOICE_ID', encodedInvoiceId)
+  mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
 
-    cy.request({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        auth: {
-            bearer: Cypress.env('marketplacerGQLApiKey'),
+  cy.request({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: {
+      bearer: Cypress.env('marketplacerGQLApiKey')
 
-        },
-        url: Cypress.env('marketplacerGQLEndpoint'),
-        body: {
-            query: mutation
-        }
-    }).then((response) => {
-        return response.body
-    })
+    },
+    url: Cypress.env('marketplacerGQLEndpoint'),
+    body: {
+      query: mutation
+    }
+  }).then((response) => {
+    return response.body
+  })
 })
 
-
 Cypress.Commands.add('refundRequestReturn', (encodedRefundRequestId) => {
-    let mutation = String(`mutation{
+  const mutation = String(`mutation{
         refundRequestReturn(input: {
           refundRequestId: "ENCODED_REFUND_REQUEST_ID"
           notes: [{
@@ -142,29 +138,28 @@ Cypress.Commands.add('refundRequestReturn', (encodedRefundRequestId) => {
             messages
           }
         }
-      }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId);
+      }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId)
 
-    cy.request({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        auth: {
-            bearer: Cypress.env('marketplacerGQLApiKey'),
+  cy.request({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: {
+      bearer: Cypress.env('marketplacerGQLApiKey')
 
-        },
-        url: Cypress.env('marketplacerGQLEndpoint'),
-        body: {
-            query: mutation
-        }
-    }).then((response) => {
-        return response.body
-    })
+    },
+    url: Cypress.env('marketplacerGQLEndpoint'),
+    body: {
+      query: mutation
+    }
+  }).then((response) => {
+    return response.body
+  })
 })
 
-
 Cypress.Commands.add('refundRequestRefund', (encodedRefundRequestId, refundAmountCents) => {
-    let mutation = String(`mutation{
+  let mutation = String(`mutation{
         refundRequestRefund(input: {
           refundRequestId: "ENCODED_REFUND_REQUEST_ID"
           cashAmountCents: REFUND_AMOUNT_IN_CENTS
@@ -188,23 +183,23 @@ Cypress.Commands.add('refundRequestRefund', (encodedRefundRequestId, refundAmoun
             messages
           }
         }
-      }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId);
-      mutation = String(mutation).replace('REFUND_AMOUNT_IN_CENTS', refundAmountCents)
+      }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId)
+  mutation = String(mutation).replace('REFUND_AMOUNT_IN_CENTS', refundAmountCents)
 
-    cy.request({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        auth: {
-            bearer: Cypress.env('marketplacerGQLApiKey'),
+  cy.request({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: {
+      bearer: Cypress.env('marketplacerGQLApiKey')
 
-        },
-        url: Cypress.env('marketplacerGQLEndpoint'),
-        body: {
-            query: mutation
-        }
-    }).then((response) => {        
-        return response.body
-    })
+    },
+    url: Cypress.env('marketplacerGQLEndpoint'),
+    body: {
+      query: mutation
+    }
+  }).then((response) => {
+    return response.body
+  })
 })

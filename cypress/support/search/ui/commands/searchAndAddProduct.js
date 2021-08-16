@@ -111,7 +111,7 @@ Cypress.Commands.add('getItemPrice', (itemIndexOrPositionOnSearchResultsPage, it
 })
 
 Cypress.Commands.add('increaseItemQuantity', (itemIndexOrPositionOnSearchResultsPage, itemToAdd) => {
-  const increaseQuantityLocator = searchResultsPage.getIncreaseQuantityButtonByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+  // const increaseQuantityLocator = searchResultsPage.getIncreaseQuantityButtonByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
   const quantityInputFieldLocator = searchResultsPage.getQuantityInputFieldByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
 
   if (itemToAdd.quantity > 1) {
