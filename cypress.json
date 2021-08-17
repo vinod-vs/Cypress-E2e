@@ -8,7 +8,7 @@
         "b2bDev": "https://dev-business.woolworths.com.au/",
         "b2bUat": "https://uat-atwork.woolworths.com.au/",
         "b2bProd": "https://atwork.woolworths.com.au/",
-        "loginEndpoint": "apis/ui/login/LoginWithCredential",
+        "loginEndpoint": "apis/ui/login/loginwithcredential",
         "logoutEndpoint": "apis/ui/Logout",
         "signUpEndpoint": "apis/ui/signup",
         "productSearchEndpoint": "apis/ui/Search/products",

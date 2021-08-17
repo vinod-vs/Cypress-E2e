@@ -1,6 +1,6 @@
 import HomePage from '../../../homePage/ui/pageObjects/HomePage'
 import SearchResultsPage from '../../../search/ui/pageObjects/SearchResultsPage'
-import ListsPage from '../pageObjects/listsPage'
+import ListsPage from '../pageObjects/ListsPage'
 
 const homePage = new HomePage()
 const searchResultsPage = new SearchResultsPage()
