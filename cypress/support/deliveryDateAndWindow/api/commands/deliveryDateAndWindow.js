@@ -34,6 +34,16 @@ Cypress.Commands.add('addDeliveryAddress', () => {
   })
 })
 
+Cypress.Commands.add('addDeliveryAddressForAddressId', (requiredAddressId) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('addressAutoEndpoint'),
+    body: { AddressId: requiredAddressId }
+  }).then((response) => {
+    return response.body
+  })
+})
+
 Cypress.Commands.add('deliveryTimeSlot', () => {
   const queryParams = {
     addressId: deliveryAddressId,
@@ -56,7 +66,35 @@ Cypress.Commands.add('deliveryTimeSlot', () => {
   })
 })
 
+Cypress.Commands.add('deliveryTimeSlotForAddress', (deliveryAddressId, deliveryAreaId, deliverySuburbId) => {
+  const queryParams = {
+    addressId: deliveryAddressId,
+    areaId: deliveryAreaId,
+    suburbId: deliverySuburbId,
+    fulfilmentMethod: 'Courier'
+  }
+
+  const queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&')
+
+  cy.api({
+    method: 'GET',
+    url: Cypress.env('timeSlotsEndpoint') + '?' + queryString
+  }).then((response) => {
+    return response.body
+  })
+})
+
 Cypress.Commands.add('fulfilment', () => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('fulfilmentEndpoint'),
+    body: { AddressId: deliveryAddressId, FulfilmentMethod: 'Courier', TimeSlotId: timeSlotId, windowDate: windowDate }
+  }).then((response) => {
+    return response.body
+  })
+})
+
+Cypress.Commands.add('fulfilmentWithSpecificDeliveryDateAndTime', (deliveryAddressId, timeSlotId, windowDate) => {
   cy.api({
     method: 'POST',
     url: Cypress.env('fulfilmentEndpoint'),

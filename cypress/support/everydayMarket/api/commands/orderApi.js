@@ -29,6 +29,7 @@ Cypress.Commands.add('ordersApiByShopperIdAndTraderOrderId', (shopperId, traderO
 
   cy.request({
     method: 'GET',
+    retryOnStatusCodeFailure: true,
     url: Cypress.env('ordersApiEndpoint') + endPoint
   }).then((response) => {
     return response.body

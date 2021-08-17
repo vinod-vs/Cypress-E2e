@@ -15,6 +15,10 @@ class SearchResultsPage {
     return '#search-content .product-grid > div:nth-child(INDEX) .cartControls-incrementButton'
   }
 
+  getQuantityInputFieldByItemLocatorString () {
+    return '#search-content .product-grid > div:nth-child(INDEX) .cartControls-quantityInput'
+  }
+
   getAddToCartByItemLocatorString () {
     return '#search-content .product-grid > div:nth-child(INDEX) .cartControls-addCart'
   }

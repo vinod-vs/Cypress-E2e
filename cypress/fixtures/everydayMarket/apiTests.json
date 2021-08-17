@@ -1,0 +1,56 @@
+{
+    "WowPlusEMOrderTest1": {
+      "orderId": "",
+      "orderReference": "",
+      "edmInvoiceId": "",
+      "edmOrderId": "",
+      "searchTerm": "treats",
+      "carrier": "Australia Post",
+      "trackingNumber": "Automation:12345",
+      "sellerName": "Pet Culture",
+      "deliveryAddressId": "",
+      "deliveryAreaId": "",
+      "deliverySuburbId": "",
+      "timeSlotId": "",
+      "windowDate": "",
+      "deliveryDateText": "",
+      "deliveryTimeText": "",
+      "wowTotal": 0,
+      "edmTotal": 0,
+      "totalQuantity": 0,
+      "totalWowQuantity": 0,
+      "totalEdmQuantity": 0,
+      "address":{
+        "search": "407-419 Elizabeth St, SURRY HILLS"
+                },            
+    
+      "totalEMShippingFee": "",
+      "reusableBagsFee": "",
+      "orderTotal": "",
+      "orderDiscount": "",
+      "items": [
+        {
+          "stockCode": "",
+          "quantity": 2,
+          "pricePerItem": "",
+          "isEMProduct": "true"
+        },
+        {
+            "stockCode": "",
+            "quantity": 0,
+            "pricePerItem": "",
+            "isEMProduct": "false",
+            "minWowOrderThreshold": 50,
+            "bufferWowQuantity": 5      
+        }
+      ],
+      "payment": {
+        "creditCard": {
+          "creditCardNumber": "4242424242424242",
+          "creditCardExpMonth": "08",
+          "creditCardExpYear": "22",
+          "creditCardCVV": "488"
+        }
+      }
+    }
+  }

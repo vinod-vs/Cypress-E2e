@@ -16,13 +16,13 @@ import '../../../support/payment/ui/commands/payPalPayment'
 import '../../../support/utilities/ui/utility'
 
 TestFilter(['UI'], () => {
-  describe('[UI] Place an order with WOW and MP items', () => {
+  describe.skip('[UI] Place an order with WOW and MP items', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-    it('Place an order using paypal', () => {
+    it.skip('Place an order using paypal', () => {
       // Login
       cy.loginViaUi(shoppers.emAccount2)
 
@@ -69,7 +69,7 @@ TestFilter(['UI'], () => {
       cy.verifyOrderConfirmation()
     })
 
-    it('Place an order using credit card', () => {
+    it.skip('Place an order using credit card', () => {
       // Login
       cy.loginViaUi(shoppers.emAccount2)
 
