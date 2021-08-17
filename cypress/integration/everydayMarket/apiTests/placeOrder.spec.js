@@ -22,7 +22,7 @@ import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 
-TestFilter(['API'], () => {
+TestFilter(['B2C-API'], () => {
   describe('[API] RP-5039 | EM | MPer | Full dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -195,6 +195,7 @@ function verifyEventDetails (response, testData, shopperId) {
   // Verify there are only 2 events
   expect(response.data).to.have.length(2)
 }
+
 function verifyOrderDetails (response, testData, shopperId) {
   // Order details
   expect(response.orderId).to.equal(Number(testData.orderId))

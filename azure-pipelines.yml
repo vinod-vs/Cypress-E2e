@@ -11,7 +11,7 @@ parameters:
 - name: browser
   displayName: Browser
   type: string
-  default: chrome
+  default: electron
   values:
   - chrome
   - edge
@@ -55,7 +55,7 @@ stages:
             displayName: "Run B2C Tests"
           - script: |
               npm install
-              npm test -- --env tags=B2C-API/API/UI,fileConfig=b2c --browser ${{ parameters.browser }}
+              npm test -- --env tags=B2C-API/API/B2C-UI,fileConfig=b2c --browser ${{ parameters.browser }}
               npm run allure:generate
             displayName: "Npm install and test"
 
