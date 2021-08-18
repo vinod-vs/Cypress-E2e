@@ -40,6 +40,7 @@
         "marketplacerPetCultureAPIKey": "8cd814760b888f23b7cd0e1c91976618",
         "marketplacerBigWTestAPIKey": "568cdb1aea9781bd7bfd34ae394c2cec",
         "cancelOrderEndPoint": "apis/ui/order/cancel",
+        "amendOrderEndPoint": "apis/ui/order/amend",
         "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
         "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",
         "tags": "API/UI"
