@@ -23,7 +23,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from './common'
 
-TestFilter(['API'], () => {
+TestFilter(['B2C-API'], () => {
   describe('[API] RP-5039 | EM | MPer | Full dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -209,5 +209,5 @@ function verifyOrderDetails (response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
   expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
   expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
+  //expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
 }
