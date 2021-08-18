@@ -1,5 +1,6 @@
 {
-    "baseUrl": "https://uatsite.woolworths.com.au/",
+  "supportFile": "cypress/support/index.js",  
+  "baseUrl": "https://adminuatsite.woolworths.com.au/",
     "env": {
         "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
         "dev4": "https://dev4site.woolworths.com.au/",
@@ -13,6 +14,7 @@
         "signUpEndpoint": "apis/ui/signup",
         "productSearchEndpoint": "apis/ui/Search/products",
         "addressSearchEndpoint": "apis/ui/address/search",
+        "pickupSearchEndpoint": "apis/ui/PickupStores/Search",
         "addressAutoEndpoint": "apis/ui/address/auto",
         "timeSlotsEndpoint": "apis/ui/Timeslots",
         "fulfilmentEndpoint": "apis/ui/Fulfilment",

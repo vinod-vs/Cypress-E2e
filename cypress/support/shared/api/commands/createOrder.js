@@ -7,12 +7,13 @@ import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../payment/api/commands/creditcard'
 import '../../../payment/api/commands/digitalPayment'
+//import '../../support/utilities/general/stringManipulation'
 
 export default class CreateOrder {
   placeOrderForB2CUser (shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
     digitalPayment, confirmOrderParameter) {
     let productStockCode
-    searchBody.SearchTerm = 'cake'
+    searchBody.SearchTerm = 'kitchen'
     return cy.loginViaApi(shopper)
       .then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
@@ -20,23 +21,28 @@ export default class CreateOrder {
         return cy.searchDeliveryAddress(addressSearchBody).then(() => {
           cy.addDeliveryAddress().then(() => {
             cy.deliveryTimeSlot().then(() => {
-              cy.fulfilment().then(() => {
+              cy.deliveryFulfilment().then(() => {
                 cy.clearTrolley().then(() => {
                   return cy.productSearch(searchBody).then((response) => {
                     let x
 
                     for (x in response.Products) {
-                      if (response.Products[x].Products[0].Price !== null && response.Products[x].Products[0].IsInStock === true) {
+                      if (response.Products[x].Products[0].Price !== null &&
+                        response.Products[x].Products[0].IsInStock === true &&
+                        response.Products[x].Products[0].ProductRestrictionMessage === null &&
+                        response.Products[x].Products[0].ProductWarningMessage === null)
+            
                         productStockCode = response.Products[x].Products[0].Stockcode
-                        break
                       }
-                    }
+                    
                     addItemsBody.StockCode = productStockCode
                     addItemsBody.Quantity = 10
                   }).then(() => {
-                    return cy.addItemsToTrolley(addItemsBody).then(() => {
+                    return cy.addItemsToTrolley(addItemsBody).then((response) => {
+                      expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
                       cy.navigateToCheckout().then((response) => {
                         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
+                        cy.log('Balance to pay"')
                         cy.navigatingToCreditCardIframe().then((response) => {
                           creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
                         }).then(() => {
@@ -45,6 +51,7 @@ export default class CreateOrder {
                           }).then(() => {
                             cy.digitalPay(digitalPayment).then((response) => {
                               confirmOrderParameter.placedOrderId = response.PlacedOrderId
+                              expect(response.PlacedOrderId).to.not.be.null
                             }).then(() => {
                               cy.confirmOrder(confirmOrderParameter).then((response) => {})
                             })

@@ -25,9 +25,9 @@ TestFilter(['B2C-API'], () => {
       orderPlaced.placeOrderForB2CUser(shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
         digitalPayment, confirmOrderParameter)
         .then((response) => {
-          const orderId = response.Order.OrderId
+          const orderId = response.Order.OrderId          
           cy.cancelOrder(orderId).then((response) => {
-            expect(response.status).to.eq(200)
+            expect(response.status).to.eq(200) 
           })
         })
     })
