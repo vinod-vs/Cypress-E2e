@@ -1,5 +1,5 @@
 {
-    "WowPlusEMOrderTest1": {
+    "VerifyFullyDispatchedEDMOrder": {
       "orderId": "",
       "orderReference": "",
       "edmInvoiceId": "",
@@ -24,7 +24,7 @@
         "search": "407-419 Elizabeth St, SURRY HILLS"
                 },            
     
-      "totalEMShippingFee": "",
+      "totalEDMShippingFee": "",
       "reusableBagsFee": "",
       "orderTotal": "",
       "orderDiscount": "",
@@ -33,13 +33,13 @@
           "stockCode": "",
           "quantity": 2,
           "pricePerItem": "",
-          "isEMProduct": "true"
+          "isEDMProduct": "true"
         },
         {
             "stockCode": "",
             "quantity": 0,
             "pricePerItem": "",
-            "isEMProduct": "false",
+            "isEDMProduct": "false",
             "minWowOrderThreshold": 50,
             "bufferWowQuantity": 5      
         }
