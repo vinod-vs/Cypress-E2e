@@ -21,8 +21,4 @@ export function verifyCommonOrderDetails (response, testData, shopperId) {
   expect(response.shippingPdfLink).to.not.be.null
   expect(response.shippingAmount).to.not.be.null
   expect(response.invoices.length).to.be.equal(1)
-
-  // Seller details
-  expect(response.invoices[0].seller.sellerId).to.not.be.null
-  expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
 }

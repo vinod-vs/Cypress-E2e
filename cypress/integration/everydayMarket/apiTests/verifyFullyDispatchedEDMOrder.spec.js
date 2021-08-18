@@ -117,6 +117,9 @@ TestFilter(['API'], () => {
             cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
+              // Seller details
+              expect(response.invoices[0].seller.sellerId).to.not.be.null
+              expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
               // Invoice details
               expect(response.invoices[0].invoiceStatus).to.be.equal('SENT')
               expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
@@ -173,6 +176,11 @@ TestFilter(['API'], () => {
 function verifyOrderDetails (response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
+
+  // Seller details
+  expect(response.invoices[0].seller.sellerId).to.not.be.null
+  expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+
   // Invoice details
   expect(response.invoices[0].invoiceStatus).to.be.equal('PAID')
   expect(response.invoices[0].wowId).to.not.be.null
