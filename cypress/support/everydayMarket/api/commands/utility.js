@@ -89,7 +89,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
   let edmTotal = new Number(0)
   items.forEach(item => {
     let x
-    if (item.isEMProduct === 'false') {
+    if (item.isEDMProduct === 'false') {
       let wowStockCode = 0
       let wowQuantity = 0
       const minWowOrderThreshold = item.minWowOrderThreshold
@@ -136,7 +136,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
       expect(wowStockCode).to.be.greaterThan(0)
     }
     let y
-    if (item.isEMProduct === 'true') {
+    if (item.isEDMProduct === 'true') {
       let mpStockCode = 0
       const mpQuantity = item.quantity
       for (y in response.Products) {
