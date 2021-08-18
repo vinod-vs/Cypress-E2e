@@ -209,5 +209,5 @@ function verifyOrderDetails (response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
   expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
   expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
-  //expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
+  // expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
 }

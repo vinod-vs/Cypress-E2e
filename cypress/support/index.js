@@ -14,13 +14,13 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+import '@shelex/cypress-allure-plugin'
+import '@bahmutov/cy-api/support'
+
 const customCommands = require('./commands.js')
 module.exports = {
   commands: customCommands
 }
-
-import '@shelex/cypress-allure-plugin'
-import '@bahmutov/cy-api/support'
 
 require('cypress-xpath')
 

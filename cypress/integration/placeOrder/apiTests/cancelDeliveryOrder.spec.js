@@ -10,7 +10,7 @@ import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
-import CreateOrder from '../../../support/shared/api/commands/createOrder'
+import CreateB2CDeliveryOrderPaidViaCreditCard from '../../../support/shared/api/commands/createOrder'
 import '../../../support/orders/api/commands/cancelOrder'
 
 TestFilter(['B2C-API'], () => {
@@ -21,13 +21,13 @@ TestFilter(['B2C-API'], () => {
     })
 
     it('Place an order for B2C customer, then cancel the order', () => {
-      const orderPlaced = new CreateOrder()
+      const orderPlaced = new CreateB2CDeliveryOrderPaidViaCreditCard()
       orderPlaced.placeOrderForB2CUser(shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
         digitalPayment, confirmOrderParameter)
         .then((response) => {
-          const orderId = response.Order.OrderId          
+          const orderId = response.Order.OrderId
           cy.cancelOrder(orderId).then((response) => {
-            expect(response.status).to.eq(200) 
+            expect(response.status).to.eq(200)
           })
         })
     })

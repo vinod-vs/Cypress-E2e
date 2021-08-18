@@ -15,23 +15,24 @@ Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
     url: Cypress.env('addressSearchEndpoint'),
     body: suburb
   }).then((response) => {
-      addressId = response.body.Response[0].Id
+    addressId = response.body.Response[0].Id
 
-      return response.body
-    })
+    return response.body
+  })
 })
 
 Cypress.Commands.add('searchPickupDTBStores', (postCode, storeType) => {
   cy.api({
     method: 'GET',
     url: Cypress.env('pickupSearchEndpoint'),
-    qs: { postcode: postCode, fulfilmentMethods: storeType } })
-  .then((response) => {
-    addressId = response.body[0].AddressId
-    fulfilmentAreaId = response.body[0].AreaId
+    qs: { postcode: postCode, fulfilmentMethods: storeType }
+  })
+    .then((response) => {
+      addressId = response.body[0].AddressId
+      fulfilmentAreaId = response.body[0].AreaId
 
-    return response.body
-   })
+      return response.body
+    })
 })
 
 Cypress.Commands.add('addDeliveryAddress', () => {
@@ -69,7 +70,7 @@ Cypress.Commands.add('deliveryTimeSlot', () => {
   }
 
   cy.buildQueryString(timeSlotParams).then((queryString) => {
-    return selectTimeSlot(queryString);
+    return selectTimeSlot(queryString)
   })
 })
 
@@ -77,9 +78,9 @@ Cypress.Commands.add('pickupTimeSlot', () => {
   timeSlotParams = {
     areaId: fulfilmentAreaId,
     fulfilmentMethod: 'Pickup',
-    getMergedResults: false  
+    getMergedResults: false
   }
-  
+
   cy.buildQueryString(timeSlotParams).then((queryString) => {
     return selectTimeSlot(queryString)
   })
@@ -89,49 +90,46 @@ Cypress.Commands.add('directToBootTimeSlot', () => {
   timeSlotParams = {
     areaId: fulfilmentAreaId,
     fulfilmentMethod: 'DriveUp',
-    getMergedResults: false  
+    getMergedResults: false
   }
 
   cy.buildQueryString(timeSlotParams).then((queryString) => {
-    return selectTimeSlot(queryString);
+    return selectTimeSlot(queryString)
   })
 })
 
-function selectTimeSlot(queryString) {
+function selectTimeSlot (queryString) {
   cy.api({
     method: 'GET',
     url: Cypress.env('timeSlotsEndpoint') + queryString
   }).then((response) => {
-
     let x, y
     outer:
     for (x in response.body) {
-      
       if (response.body[x].Available === true) {
-      
         for (y in response.body[x].Times) {
           if (response.body[x].Times[y].Available === true && response.body[x].Times[y].IsExpress === false) {
             timeSlotId = response.body[x].Times[y].Id
 
             windowDate = response.body[x].Date
 
-            break outer;
-          } 
+            break outer
+          }
         }
       }
     }
-    
+
     return response.body
   })
 }
 
-function postFulfilment(fulfilmentRequest) {
+function postFulfilment (fulfilmentRequest) {
   cy.api({
     method: 'POST',
     url: Cypress.env('fulfilmentEndpoint'),
     body: fulfilmentRequest
   }).then((response) => {
-    return response.body  
+    return response.body
   })
 }
 
@@ -154,38 +152,35 @@ Cypress.Commands.add('deliveryTimeSlotForAddress', (deliveryAddressId, deliveryA
 })
 
 Cypress.Commands.add('deliveryFulfilment', () => {
-
   fulfilmentRequest = {
     AddressId: deliveryAddressId,
-    FulfilmentMethod: 'Courier', 
-    TimeSlotId: timeSlotId, 
+    FulfilmentMethod: 'Courier',
+    TimeSlotId: timeSlotId,
     windowDate: windowDate
   }
-  
-  return postFulfilment(fulfilmentRequest) 
+
+  return postFulfilment(fulfilmentRequest)
 })
 
 Cypress.Commands.add('pickupFulfilment', () => {
-
   fulfilmentRequest = {
     AddressId: addressId,
     FulfilmentMethod: 'Pickup',
-    TimeSlotId: timeSlotId, 
+    TimeSlotId: timeSlotId,
     windowDate: windowDate
   }
-  
+
   return postFulfilment(fulfilmentRequest)
 })
 
 Cypress.Commands.add('directToBootFulfilment', () => {
-
   fulfilmentRequest = {
     AddressId: addressId,
     FulfilmentMethod: 'DriveUp',
-    TimeSlotId: timeSlotId, 
+    TimeSlotId: timeSlotId,
     windowDate: windowDate
   }
-  
+
   return postFulfilment(fulfilmentRequest)
 })
 

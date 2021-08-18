@@ -7,9 +7,8 @@ import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../payment/api/commands/creditcard'
 import '../../../payment/api/commands/digitalPayment'
-//import '../../support/utilities/general/stringManipulation'
 
-export default class CreateOrder {
+export default class CreateB2CDeliveryOrderPaidViaCreditCard {
   placeOrderForB2CUser (shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
     digitalPayment, confirmOrderParameter) {
     let productStockCode
@@ -28,13 +27,11 @@ export default class CreateOrder {
 
                     for (x in response.Products) {
                       if (response.Products[x].Products[0].Price !== null &&
-                        response.Products[x].Products[0].IsInStock === true &&
-                        response.Products[x].Products[0].ProductRestrictionMessage === null &&
-                        response.Products[x].Products[0].ProductWarningMessage === null)
-            
-                        productStockCode = response.Products[x].Products[0].Stockcode
-                      }
-                    
+                                                response.Products[x].Products[0].IsInStock === true &&
+                                                response.Products[x].Products[0].ProductRestrictionMessage === null &&
+                                                response.Products[x].Products[0].ProductWarningMessage === null) { productStockCode = response.Products[x].Products[0].Stockcode }
+                    }
+
                     addItemsBody.StockCode = productStockCode
                     addItemsBody.Quantity = 10
                   }).then(() => {

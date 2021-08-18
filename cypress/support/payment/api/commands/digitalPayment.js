@@ -4,7 +4,7 @@ Cypress.Commands.add('digitalPay', (digitalPayment) => {
     url: Cypress.env('digitalPaymentEndpoint'),
     body: digitalPayment
   }).then((response) => {
-    return response.body  
+    return response.body
   })
 })
 

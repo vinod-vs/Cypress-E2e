@@ -9,7 +9,7 @@ import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
-import CreateOrder from '../../../support/shared/api/commands/createOrder'
+import CreateB2CDeliveryOrderPaidViaCreditCard from '../../../support/shared/api/commands/createOrder'
 import '../../../support/orders/api/commands/cancelOrder'
 
 TestFilter(['B2B-API'], () => {
@@ -20,7 +20,7 @@ TestFilter(['B2B-API'], () => {
     })
 
     it('Place an order for B2B customer, then amend the order', () => {
-      const orderPlaced = new CreateOrder()
+      const orderPlaced = new CreateB2CDeliveryOrderPaidViaCreditCard()
       orderPlaced.placeOrderForB2BUser(b2bShopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
         digitalPayment, confirmOrderParameter)
         .then((response) => {
