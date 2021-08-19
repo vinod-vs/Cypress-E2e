@@ -66,7 +66,8 @@ Cypress.Commands.add('partialDispatchOfLineItemsInInvoice', (decodedInvoiceId, d
   })
 })
 
-Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId) => {
+Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineItemId, quantity) => {
+  let encodedRefundRequestId
   let mutation = String(`mutation{
         refundRequestCreate(input: 
           {
@@ -74,7 +75,7 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
             lineItems: {
               lineItemId: "ENCODED_LINEITEM_ID"
               reason: "Automation Reason: I don't want this"
-              quantity: 1
+              quantity: QUANTITY
             }
             notes: [{
               note: "Automation refundRequestCreate note: I don't want this"
@@ -94,6 +95,98 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
         }
       }`).replace('ENCODED_INVOICE_ID', encodedInvoiceId)
   mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
+  mutation = String(mutation).replace('QUANTITY', quantity)
+
+  cy.request({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: {
+      bearer: Cypress.env('marketplacerGQLApiKey')
+
+    },
+    url: Cypress.env('marketplacerGQLEndpoint'),
+    body: {
+      query: mutation
+    }
+  }).then((response) => {
+    encodedRefundRequestId = response.body.data.refundRequestCreate.refundRequest.id
+    cy.log('encodedRefundRequestId: ' + encodedRefundRequestId)
+    const mutation = String(`mutation{
+      refundRequestReturn(input: {
+        refundRequestId: "ENCODED_REFUND_REQUEST_ID"
+        notes: [{
+          note: "Automation refundRequestReturn note: I don't want this"
+        }]
+        returnedConsignments:[{
+          sourceUrl: "https://en.wikipedia.org/wiki/Receipt#/media/File:US-BEP-Receipt_for_currency_(23_July_1915).jpg"
+        }
+          
+        ]
+      })
+      {
+        refundRequest{
+          id
+          status
+          cashAmountCents
+          refundAmountCents
+          cashAmountFormatted
+        }errors{
+          field
+          messages
+        }
+      }
+    }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId)
+
+    cy.request({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      auth: {
+        bearer: Cypress.env('marketplacerGQLApiKey')
+
+      },
+      url: Cypress.env('marketplacerGQLEndpoint'),
+      body: {
+        query: mutation
+      }
+    }).then((response) => {
+      return response.body
+    })
+  })
+})
+
+Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId, quantity) => {
+  let mutation = String(`mutation{
+        refundRequestCreate(input: 
+          {
+            invoiceId: "ENCODED_INVOICE_ID",
+            lineItems: {
+              lineItemId: "ENCODED_LINEITEM_ID"
+              reason: "Automation Reason: I don't want this"
+              quantity: QUANTITY
+            }
+            notes: [{
+              note: "Automation refundRequestCreate note: I don't want this"
+            }]
+          })
+        {
+          refundRequest{
+            id
+            status
+            cashAmountCents
+            refundAmountCents
+            cashAmountFormatted
+          }errors{
+            field
+            messages
+          }
+        }
+      }`).replace('ENCODED_INVOICE_ID', encodedInvoiceId)
+  mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
+  mutation = String(mutation).replace('QUANTITY', quantity)
 
   cy.request({
     method: 'POST',

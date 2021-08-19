@@ -25,6 +25,8 @@ parameters:
   values:
   - API/UI
   - B2C-API
+  - EDM-API
+  - EDM-UI
   - B2B-API
   - B2B-UI
   - API
