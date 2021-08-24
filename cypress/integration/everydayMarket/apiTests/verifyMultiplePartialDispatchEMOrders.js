@@ -116,7 +116,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
           // Dispatch partial order with a unique tracking id
-          trackingId1 = generateRandomString()
+
+          trackingId1 = lib.generateRandomString()
           cy.log('First Tracking Id :' + trackingId1)
           cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, lineItemLegacyId, 1, trackingId1, testData.carrier, testData.sellerName).then((response) => {
             cy.log('Partial Dispatch Response 1: ' + JSON.stringify(response))
@@ -130,7 +131,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
           // Dispatch another partial order with a unique tracking id
-          trackingId2 = generateRandomString()
+          trackingId2 = lib.generateRandomString()
           cy.log('Second Tracking Id :' + trackingId2)
           cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, lineItemLegacyId, 1, trackingId2, testData.carrier, testData.sellerName).then((response) => {
             cy.log('Partial Dispatch Response 2: ' + JSON.stringify(response))
@@ -186,13 +187,3 @@ function verifyOrderDetails (response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
   // expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
 }
-
-function generateRandomString(){
-    var randomStr = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  
-    for (var i = 0; i < 10; i++)
-    randomStr += possible.charAt(Math.floor(Math.random() * possible.length));
-  
-    return randomStr;
-  }
