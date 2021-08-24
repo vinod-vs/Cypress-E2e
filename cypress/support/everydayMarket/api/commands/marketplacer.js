@@ -35,7 +35,6 @@ const getApiKeyForSeller = (sellerName) => {
       Single item dispatch
       const data1 = [{line_item_id: 32422, quantity: 1}]
       cy.partialDispatchOfLineItemsInInvoice(27208, data1, "123456", "Australia Post", "Pet Culture")
-      
       Multiple items dispatch
       const data2 = [{line_item_id: 32423, quantity: 1}, {line_item_id: 32424, quantity: 1}]
       cy.partialDispatchOfLineItemsInInvoice(27208, data2, "123456", "Australia Post", "Pet Culture")
@@ -46,13 +45,6 @@ Cypress.Commands.add('partialDispatchOfLineItemsInInvoice', (decodedInvoiceId, d
   const requestBody = partialDispatchOfLineItemsInInvoice
   requestBody.data.attributes.shipment_tracking_number = postageTrackingnumber
   requestBody.data.attributes.shipment_carrier = postageCarrier
-  let lineItemIdsArray = []
-  for (let x in decodedLineAndquantityDetails) {
-    cy.log(decodedLineAndquantityDetails[x])
-    cy.log(decodedLineAndquantityDetails[x].line_item_id)
-    lineItemIdsArray.push(decodedLineAndquantityDetails[x].line_item_id)
-  }
-  requestBody.data.attributes.line_items_ids = lineItemIdsArray
   requestBody.data.attributes.shipped_items = decodedLineAndquantityDetails
   const endPoint = String(Cypress.env('marketplacerPartialDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
   cy.api({
