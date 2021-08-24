@@ -128,7 +128,6 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
             cy.addItemsToTrolley(addItemsBodyWow).then((response) => {
               expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(totalQuantity))
               expect(response.Totals.WoolworthsSubTotal).to.be.equal(Number(wowTotal))
-              // expect(response.Totals.MarketSubTotal).to.be.equal(Number(edmTotal))
             })
             break
           }
@@ -157,8 +156,6 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
           cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
           cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
             expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(item.quantity))
-            // expect(response.Totals.WoolworthsSubTotal).to.be.equal(Number(wowTotal))
-            // expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
             expect(response.Totals.MarketSubTotal).to.be.equal(Number(edmTotal))
           })
           break

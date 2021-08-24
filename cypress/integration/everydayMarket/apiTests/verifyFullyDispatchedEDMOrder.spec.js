@@ -195,8 +195,11 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               // Verify the reward points are credited to customers card after EDM dispatch
               cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
                 testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-                cy.log('Testdata JSON: ' + JSON.stringify(testData))
                 const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
+                cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                cy.log('EDM Total: ' + testData.edmTotal)
+                cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+                cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints + ' , OR: ' + Number(Number(expectedRewardsPoints)+1))
                 expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
                 // Rewards has a logic of rouding to an even number if odd
                 // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
