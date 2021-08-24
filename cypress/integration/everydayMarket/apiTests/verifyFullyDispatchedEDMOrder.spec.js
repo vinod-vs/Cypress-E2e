@@ -39,12 +39,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       let edmInvoiceId
       const shopperId = shoppers.emAccount2.shopperId
 
-      // Get customers current reward points balance
-      cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
-        expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-        testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
-      })
-
       // Login
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
@@ -126,6 +120,12 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.events(shopperId, orderId, orderReference).then((response) => {
             lib.verifyEventDetails(response, 0, 'OrderPlaced', 2, testData, shopperId)
             lib.verifyEventDetails(response, 1, 'MarketOrderPlaced', 2, testData, shopperId)
+          })
+
+          // Get customers current reward points balance before dispatch
+          cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
           })
 
           // Dispatch the complete order from MP and verify the events and order statuses
@@ -210,7 +210,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
   })
 })
 
-function verifyOrderDetails (response, testData, shopperId) {
+function verifyOrderDetails(response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 
