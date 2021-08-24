@@ -62,7 +62,8 @@ Cypress.Commands.add('getRegularDeliveryTimeSlot', (testData) => {
                 testData.windowDate = windowDate
                 testData.deliveryDateText = response[x].AbsoluteDateText
                 testData.deliveryTimeText = response[x].Times[y].TimeWindow
-                cy.log('deliveryDateText: ' + testData.deliveryDateText + ' , deliveryTimeText: ' + testData.deliveryTimeText)
+                testData.wowDeliveryCharges = response[x].Times[y].SalePrice
+                cy.log('deliveryDateText: ' + testData.deliveryDateText + ' , deliveryTimeText: ' + testData.deliveryTimeText + ' , wowDeliveryCharges: ' + testData.wowDeliveryCharges)
                 break
               } else {
                 cy.log(response[x].Times[y].TimeWindow + ' IS A REGULAR NON-AVAILABLE SLOT')
@@ -127,7 +128,6 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
             cy.addItemsToTrolley(addItemsBodyWow).then((response) => {
               expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(totalQuantity))
               expect(response.Totals.WoolworthsSubTotal).to.be.equal(Number(wowTotal))
-              // expect(response.Totals.MarketSubTotal).to.be.equal(Number(edmTotal))
             })
             break
           }
@@ -156,8 +156,6 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
           cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
           cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
             expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(item.quantity))
-            // expect(response.Totals.WoolworthsSubTotal).to.be.equal(Number(wowTotal))
-            // expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
             expect(response.Totals.MarketSubTotal).to.be.equal(Number(edmTotal))
           })
           break
