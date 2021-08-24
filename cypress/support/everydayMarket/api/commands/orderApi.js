@@ -3,22 +3,6 @@
 /// <reference types="cypress" />
 /// <reference types="@bahmutov/cy-api" />
 
-Cypress.Commands.add('ordersByInvoice', (invoiceNumber) => {
-  const queryParams = {
-    invoiceId: invoiceNumber
-  }
-
-  const queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&')
-
-  cy.api({
-    method: 'GET',
-    url: Cypress.env('ordersApiEndpoint') + Cypress.env('ordersApiByInvoiceIdEndpoint') + '?' + queryString
-  }).then((response) => {
-    expect(response.status).to.eq(200)
-    return response.body
-  })
-})
-
 Cypress.Commands.add('ordersByShopperId', (shopperId) => {
   const endPoint = String(Cypress.env('ordersApiByShopperIdEndpoint')).replace('SHOPPER_ID', shopperId)
 

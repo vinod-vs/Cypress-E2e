@@ -106,14 +106,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           testData.edmOrderId = edmOrderId
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
-
           // Verify the projection details
           verifyOrderDetails(response, testData, shopperId)
-
-          // Invoke the orders by invoice api and verify the projection content
-          cy.ordersByInvoice(edmOrderId).then((response) => {
-            verifyOrderDetails(response, testData, shopperId)
-          })
 
           // Invoke the events api and verify the content
           cy.wait(Cypress.config('twoSecondWait'))
