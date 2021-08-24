@@ -1,3 +1,8 @@
+/* eslint-disable no-unused-expressions */
+// cypress/integration/my-spec.js
+/// <reference types="cypress" />
+/// <reference types="@bahmutov/cy-api" />
+
 Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTrackingnumber, postageCarrier, sellerName) => {
   const apiKey = getApiKeyForSeller(sellerName)
   const endPoint = String(Cypress.env('marketplacerFullDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
@@ -10,7 +15,7 @@ Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTracking
       }
     }
   }
-  cy.request({
+  cy.api({
     method: 'PUT',
     headers: {
       'Content-Type': 'application/vnd.api+json'
@@ -21,6 +26,7 @@ Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTracking
     url: Cypress.env('marketplacerApiEndpoint') + endPoint,
     body: requestBody
   }).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })
@@ -51,7 +57,7 @@ Cypress.Commands.add('partialDispatchOfLineItemsInInvoice', (decodedInvoiceId, d
   }
 
   const endPoint = String(Cypress.env('marketplacerPartialDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
-  cy.request({
+  cy.api({
     method: 'POST',
     headers: {
       'Content-Type': 'application/vnd.api+json'
@@ -62,6 +68,7 @@ Cypress.Commands.add('partialDispatchOfLineItemsInInvoice', (decodedInvoiceId, d
     url: Cypress.env('marketplacerApiEndpoint') + endPoint,
     body: requestBody
   }).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })
@@ -97,7 +104,7 @@ Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineIt
   mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
   mutation = String(mutation).replace('QUANTITY', quantity)
 
-  cy.request({
+  cy.api({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -111,6 +118,7 @@ Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineIt
       query: mutation
     }
   }).then((response) => {
+    expect(response.status).to.eq(200)
     encodedRefundRequestId = response.body.data.refundRequestCreate.refundRequest.id
     cy.log('encodedRefundRequestId: ' + encodedRefundRequestId)
     const mutation = String(`mutation{
@@ -139,7 +147,7 @@ Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineIt
       }
     }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId)
 
-    cy.request({
+    cy.api({
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -153,6 +161,7 @@ Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineIt
         query: mutation
       }
     }).then((response) => {
+      expect(response.status).to.eq(200)
       return response.body
     })
   })
@@ -188,7 +197,7 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
   mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
   mutation = String(mutation).replace('QUANTITY', quantity)
 
-  cy.request({
+  cy.api({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -202,6 +211,7 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
       query: mutation
     }
   }).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })
@@ -233,7 +243,7 @@ Cypress.Commands.add('refundRequestReturn', (encodedRefundRequestId) => {
         }
       }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId)
 
-  cy.request({
+  cy.api({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -247,6 +257,7 @@ Cypress.Commands.add('refundRequestReturn', (encodedRefundRequestId) => {
       query: mutation
     }
   }).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })
@@ -279,7 +290,7 @@ Cypress.Commands.add('refundRequestRefund', (encodedRefundRequestId, refundAmoun
       }`).replace('ENCODED_REFUND_REQUEST_ID', encodedRefundRequestId)
   mutation = String(mutation).replace('REFUND_AMOUNT_IN_CENTS', refundAmountCents)
 
-  cy.request({
+  cy.api({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -293,6 +304,7 @@ Cypress.Commands.add('refundRequestRefund', (encodedRefundRequestId, refundAmoun
       query: mutation
     }
   }).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })

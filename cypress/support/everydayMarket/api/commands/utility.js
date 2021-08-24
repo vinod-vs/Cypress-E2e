@@ -62,7 +62,8 @@ Cypress.Commands.add('getRegularDeliveryTimeSlot', (testData) => {
                 testData.windowDate = windowDate
                 testData.deliveryDateText = response[x].AbsoluteDateText
                 testData.deliveryTimeText = response[x].Times[y].TimeWindow
-                cy.log('deliveryDateText: ' + testData.deliveryDateText + ' , deliveryTimeText: ' + testData.deliveryTimeText)
+                testData.wowDeliveryCharges = response[x].Times[y].SalePrice
+                cy.log('deliveryDateText: ' + testData.deliveryDateText + ' , deliveryTimeText: ' + testData.deliveryTimeText + ' , wowDeliveryCharges: ' + testData.wowDeliveryCharges)
                 break
               } else {
                 cy.log(response[x].Times[y].TimeWindow + ' IS A REGULAR NON-AVAILABLE SLOT')

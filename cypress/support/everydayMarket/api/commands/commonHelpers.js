@@ -1,3 +1,8 @@
+/* eslint-disable no-unused-expressions */
+// cypress/integration/my-spec.js
+/// <reference types="cypress" />
+/// <reference types="@bahmutov/cy-api" />
+
 export function verifyEventDetails (response, expectedEventIndex, expectedEventName, expectedTotalEventsLength, testData, shopperId) {
   // Verify the event contents
   expect(response.data[expectedEventIndex].orderId).to.equal(Number(testData.orderId))
@@ -21,4 +26,15 @@ export function verifyCommonOrderDetails (response, testData, shopperId) {
   expect(response.shippingPdfLink).to.not.be.null
   expect(response.shippingAmount).to.not.be.null
   expect(response.invoices.length).to.be.equal(1)
+}
+
+export function verifyOrderTotals (testData, confirmOrderResponse) {
+  testData.edmDeliveryCharges = confirmOrderResponse.Order.MarketDeliveryFee.toString()
+  testData.packagingFee = confirmOrderResponse.Order.PackagingFee.toString()
+  cy.log('Testdata JSON: ' + JSON.stringify(testData))
+  cy.log('ExpectedTotalIncludingGst: ' + Number(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges)))
+  expect(confirmOrderResponse.Order.WoolworthsSubtotal).to.be.equal(Number(testData.wowTotal))
+  expect(confirmOrderResponse.Order.MarketSubtotal).to.be.equal(Number(testData.edmTotal))
+  expect(confirmOrderResponse.Order.Subtotal).to.be.equal(Number(testData.edmTotal) + Number(testData.wowTotal))
+  expect(confirmOrderResponse.Order.TotalIncludingGst).to.be.equal(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges))
 }
