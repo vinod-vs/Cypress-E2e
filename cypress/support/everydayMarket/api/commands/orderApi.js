@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-expressions */
-// cypress/integration/my-spec.js
 /// <reference types="cypress" />
-/// <reference types="@bahmutov/cy-api" />
 
 Cypress.Commands.add('ordersByShopperId', (shopperId) => {
   const endPoint = String(Cypress.env('ordersApiByShopperIdEndpoint')).replace('SHOPPER_ID', shopperId)

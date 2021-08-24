@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-expressions */
-// cypress/integration/my-spec.js
 /// <reference types="cypress" />
-/// <reference types="@bahmutov/cy-api" />
 
 Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTrackingnumber, postageCarrier, sellerName) => {
   const apiKey = getApiKeyForSeller(sellerName)

@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-expressions */
-// cypress/integration/my-spec.js
 /// <reference types="cypress" />
-/// <reference types="@bahmutov/cy-api" />
 
 export function verifyEventDetails (response, expectedEventIndex, expectedEventName, expectedTotalEventsLength, testData, shopperId) {
   // Verify the event contents
