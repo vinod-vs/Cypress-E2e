@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/// <reference types="cypress" />
-
 export function verifyEventDetails (response, expectedEventIndex, expectedEventName, expectedTotalEventsLength, testData, shopperId) {
   // Verify the event contents
   expect(response.data[expectedEventIndex].orderId).to.equal(Number(testData.orderId))
