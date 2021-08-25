@@ -7,6 +7,7 @@ import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../payment/api/commands/creditcard'
 import '../../../payment/api/commands/digitalPayment'
+import { windowType } from '../../../fixtures/checkout/windowCategory.js'
 
 export default class CreateB2CDeliveryOrderPaidViaCreditCard {
   placeOrderForB2CUser (shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
@@ -19,8 +20,8 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
       }).then(() => {
         return cy.searchDeliveryAddress(addressSearchBody).then(() => {
           cy.addDeliveryAddress().then(() => {
-            cy.deliveryTimeSlot().then(() => {
-              cy.deliveryFulfilment().then(() => {
+            cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then(() => {
+              cy.completeFulfilmentViaApi().then(() => {
                 cy.clearTrolley().then(() => {
                   return cy.productSearch(searchBody).then((response) => {
                     let x
