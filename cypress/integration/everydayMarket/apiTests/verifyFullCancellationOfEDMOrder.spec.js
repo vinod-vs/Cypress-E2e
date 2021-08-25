@@ -17,13 +17,14 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/rewards/api/commands/rewards'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['B2C-API', 'EDM-API'], () => {
+TestFilter(['B2C-API1', 'EDM-API'], () => {
   describe('[API] RP-902 | EM | MPer | Full cancellation of Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -32,51 +33,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
     it('RP-902 | EM | MPer | Full cancellation of Everyday Market order via Marketplacer', () => {
       const testData = tests.VerifyFullyCancellationOfEDMOrder
-
-      cy.loginViaApi(shoppers.emAccount2).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
-      })
-
-      cy.getRegularDeliveryTimeSlot(testData).then((response) => {
-        cy.fulfilmentWithSpecificDeliveryDateAndTime(testData.deliveryAddressId, testData.timeSlotId, testData.windowDate).then((response) => {
-          expect(response).to.have.property('IsSuccessful', true)
-          expect(response).to.have.property('IsNonServiced', false)
-        })
-      })
-
-      cy.clearTrolley().then((response) => {
-        expect(response).to.have.property('TrolleyItemCount', 0)
-        expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
-      })
-
-      searchBody.SearchTerm = testData.searchTerm
-      cy.productSearch(searchBody).then((response) => {
-        expect(response.SearchResultsCount).to.be.greaterThan(0)
-
-        cy.getTestProductFromProductSearchResponse(response, testData)
-      })
-
-      cy.navigateToCheckout().then((response) => {
-        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-        digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
-      })
-
-      cy.navigatingToCreditCardIframe().then((response) => {
-        expect(response).to.have.property('Success', true)
-        creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
-      })
-
-      cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
-        expect(response.status.responseText).to.be.eqls('ACCEPTED')
-        digitalPayment.payments[0].paymentInstrumentId = response.itemId
-      })
-
-      cy.digitalPay(digitalPayment).then((response) => {
-        expect(response.TransactionReceipt).to.not.be.null
-        expect(response.PlacedOrderId).to.not.be.null
-        confirmOrderParameter.placedOrderId = response.PlacedOrderId
-      })
-
       let orderId
       let orderReference
       let edmOrderId
@@ -84,6 +40,54 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       let encodedEdmInvoiceId
       let encodedEdmLineitemId
       const shopperId = shoppers.emAccount2.shopperId
+
+      // Login
+      cy.loginViaApi(shoppers.emAccount2).then((response) => {
+        expect(response).to.have.property('LoginResult', 'Success')
+      })
+
+      // Select a regular delivery slot
+      cy.getRegularDeliveryTimeSlot(testData).then((response) => {
+        cy.fulfilmentWithSpecificDeliveryDateAndTime(testData.deliveryAddressId, testData.timeSlotId, testData.windowDate).then((response) => {
+          expect(response).to.have.property('IsSuccessful', true)
+          expect(response).to.have.property('IsNonServiced', false)
+        })
+      })
+
+      // clear the trolley before placing an order
+      cy.clearTrolley().then((response) => {
+        expect(response).to.have.property('TrolleyItemCount', 0)
+        expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
+      })
+
+      // Search for the desired products and add them to cart
+      searchBody.SearchTerm = testData.searchTerm
+      cy.productSearch(searchBody).then((response) => {
+        expect(response.SearchResultsCount).to.be.greaterThan(0)
+
+        cy.getTestProductFromProductSearchResponse(response, testData)
+      })
+
+      // Checkout, make a CC payment and place the order
+      cy.navigateToCheckout().then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+        digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
+      })
+      cy.navigatingToCreditCardIframe().then((response) => {
+        expect(response).to.have.property('Success', true)
+        creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
+      })
+      cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
+        expect(response.status.responseText).to.be.eqls('ACCEPTED')
+        digitalPayment.payments[0].paymentInstrumentId = response.itemId
+      })
+      cy.digitalPay(digitalPayment).then((response) => {
+        expect(response.TransactionReceipt).to.not.be.null
+        expect(response.PlacedOrderId).to.not.be.null
+        confirmOrderParameter.placedOrderId = response.PlacedOrderId
+      })
+
+      // Confirm the orders or place the order
       cy.wait(Cypress.config('fiveSecondWait'))
       cy.confirmOrder(confirmOrderParameter).then((response) => {
         expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
@@ -93,6 +97,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         testData.orderReference = orderReference
         cy.log('This is the order id: ' + response.Order.OrderId + ', Order ref: ' + response.Order.OrderReference)
 
+        // Verify the order totals are as expected
+        lib.verifyOrderTotals(testData, response)
+
+        // Invoke the order api and verify the projection content
         cy.wait(Cypress.config('tenSecondWait') * 3)
         cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
@@ -104,24 +112,29 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           testData.edmInvoiceId = edmInvoiceId
           testData.encodedEdmInvoiceId = encodedEdmInvoiceId
           testData.encodedEdmLineitemId = encodedEdmLineitemId
-
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId + ' , MP InvoiceId'+encodedEdmInvoiceId + 
           ' , MPencodedEdmLineitemId '+encodedEdmLineitemId )
-          cy.log('Testdata JSON: ' + JSON.stringify(testData))
+          // Verify the projection details
           verifyOrderDetails(response, testData, shopperId)
 
-          cy.ordersByInvoice(edmOrderId).then((response) => {
-            verifyOrderDetails(response, testData, shopperId)
-          })
-
+          // Invoke the events api and verify the content
           cy.wait(Cypress.config('twoSecondWait'))
           cy.events(shopperId, orderId, orderReference).then((response) => {
             lib.verifyEventDetails(response, 0, 'OrderPlaced', 2, testData, shopperId)
             lib.verifyEventDetails(response, 1, 'MarketOrderPlaced', 2, testData, shopperId)
           })
 
-          cy.cancelLineItemInInvoice(testData.edmInvoiceId, testData.encodedLineItemId, testData.quantity).then((response) =>  {
+          // Get customers current reward points balance before dispatch
+          cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+          })
+
+          // Seller cancells all the EM items and verify the events and order statuses
+          cy.cancelLineItemInInvoice(testData.encodedEdmInvoiceId, testData.encodedLineItemId, testData.quantity).then((response) => {
             cy.wait(Cypress.config('tenSecondWait') * 3)
+
+            // After Seller cancellation, Invoke the order api and verify the projection content is updated acordingly
             cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
@@ -129,17 +142,17 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].seller.sellerId).to.not.be.null
               expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
               // Invoice details
-              expect(response.invoices[0].invoiceStatus).to.be.equal('SENT')
-              expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
+              expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
+              expect(response.invoices[0].wowStatus).to.be.equal('Placed')
               expect(response.invoices[0].wowId).to.not.be.null
-              expect(response.invoices[0].shipments.length).to.be.equal(1)
+              expect(response.invoices[0].shipments.length).to.be.equal(0)
               expect(response.invoices[0].lineItems.length).to.be.equal(1)
               expect(response.invoices[0].legacyId).to.not.be.null
               expect(response.invoices[0].legacyIdFormatted).to.not.be.null
               expect(response.invoices[0].invoiceTotal).to.be.greaterThan(0)
               expect(response.invoices[0].updatedTimeStampUtc).to.not.be.null
-              expect(response.invoices[0].refunds.length).to.be.equal(0)
-              expect(response.invoices[0].orderTrackingStatus).to.be.equal('Shipped')
+              expect(response.invoices[0].refunds.length).to.be.equal(1)
+              expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
               expect(response.invoices[0].pdfLink).to.not.be.null
               expect(response.invoices[0].legacyIdFormatted).to.be.equal(testData.edmOrderId)
               // Line item details
@@ -149,41 +162,61 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
               expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
               expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
-              expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(Number(testData.items[0].quantity))
+              expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
               expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
               expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
               expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
-              expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
-              // Shipments
-              expect(response.invoices[0].shipments.length).to.be.equal(1)
-              expect(response.invoices[0].shipments[0].carrier).to.be.equal(testData.carrier)
-              expect(response.invoices[0].shipments[0].shipmentItemId).to.not.be.null
-              expect(response.invoices[0].shipments[0].trackingLink).to.not.be.null
-              expect(response.invoices[0].shipments[0].trackingNumber).to.be.equal(testData.trackingNumber)
-              expect(response.invoices[0].shipments[0].dispatchedAtUtc).to.not.be.null
-              expect(response.invoices[0].shipments[0].shippedItems.length).to.be.equal(1)
-              expect(response.invoices[0].shipments[0].shippedItems[0].variantId).to.be.equal(response.invoices[0].lineItems[0].variantId)
-              expect(response.invoices[0].shipments[0].shippedItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
-              expect(response.invoices[0].shipments[0].shippedItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+              expect(response.invoices[0].lineItems[0].status).to.be.equal('REFUNDED')
+              expect(response.invoices[0].lineItems[0].salePrice).to.be.equal(response.invoices[0].refunds[0].refundAmount)
+              expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
+              // expect(response.invoices[0].lineItems[0].statusFull).to.be.null
+              // Shipments Details for line items
+              expect(response.invoices[0].shipments.length).to.be.equal(0)
+              // Rewards Details for line items
+              expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
+              expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+              expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
+              // Refund 
+              expect(response.invoices[0].refunds[0].status).to.be.equal('Refunded')
+              expect(response.invoices[0].refunds[0].refundAmount).to.be.greaterThan(0)
+              expect(response.invoices[0].refunds[0].totalAmount).to.be.greaterThan(0)
+              expect(response.invoices[0].refunds[0].recoveredAmount).to.be.greaterThan(0)
+              expect(response.invoices[0].refunds[0].refundedUtc).to.not.be.null
+              expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal("ADMIN")             
+              // Refund Notes verification
+              expect(invoices[0].refunds[0].notes[0].id).to.not.be.null
+              expect(invoices[0].refunds[0].notes[0].note).to.be.equal("Automation refundRequestCreate note: I don't want this")
+              expect(invoices[0].refunds[0].notes[0].timestamp).to.not.be.null
+              expect(invoices[0].refunds[0].notes[1].id).to.not.be.null
+              expect(invoices[0].refunds[0].notes[1].note).to.be.equal("Automation refundRequestReturn note: I don't want this")
+              expect(invoices[0].refunds[0].notes[1].timestamp).to.not.be.null
+              expect(invoices[0].refunds[0].notes[2].id).to.not.be.null
+              expect(invoices[0].refunds[0].notes[2].note).to.be.equal("Auto-refund cancellation")
+              expect(invoices[0].refunds[0].notes[2].timestamp).to.not.be.null
+              // Refund refundItems verification
+              expect(invoices[0].refunds[0].refundItems[0].reason).equal("Automation Reason: I don't want this")
+              expect(invoices[0].refunds[0].refundItems[0].quantity).equal(Number(testData.items[0].quantity))
+              expect(invoices[0].refunds[0].refundItems[0].amount).to.be.greaterThan(0)
+              
 
-              cy.wait(Cypress.config('twoSecondWait'))
-              cy.events(shopperId, orderId, orderReference).then((response) => {
-                // Verify there are only 4 events. New event after dispatch is MarketOrderShipmentCreate
-                lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 4, testData, shopperId)
-                // Verify there are only 4 events. New event after dispatch is "MarketOrderDispatched"
-                lib.verifyEventDetails(response, 3, 'MarketOrderDispatched', 4, testData, shopperId)
-              })
+              // After seller cancellation, Invoke the events api and verify the events are updated acordingly
+              // cy.wait(Cypress.config('twoSecondWait'))
+              // cy.events(shopperId, orderId, orderReference).then((response) => {
+              //   // Verify there are only 5 events. New event after seller cancellattion 
+              //   lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 5, testData, shopperId)
+              //   // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
+
+              // })
+
             })
           })
-
-
         })
       })
     })
   })
 })
 
-function verifyOrderDetails (response, testData, shopperId) {
+function verifyOrderDetails(response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 
@@ -220,4 +253,8 @@ function verifyOrderDetails (response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
   expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
   // expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
+  // Rewards Details
+  expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
+  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+  expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }
