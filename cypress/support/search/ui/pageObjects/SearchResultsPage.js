@@ -62,6 +62,14 @@ class SearchResultsPage {
   getProductSavedNotification () {
     return cy.get('shared-toast')
   }
+
+  getFeedBackFormLocatorString () {
+    return '.modal-live-form'
+  }
+
+  getFeedBackFromCloseButtonString () {
+    return '.button.cancel-btn'
+  }
 }
 
 export default SearchResultsPage

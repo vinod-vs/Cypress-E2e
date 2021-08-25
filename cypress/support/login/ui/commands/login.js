@@ -20,7 +20,7 @@ Cypress.Commands.add('loginViaUi', (shopper) => {
   if (shopper.platform === 'B2C') {
     homePage.getMyAccount().contains('My Account')
   } else if (shopper.platform === 'B2B') {
-    deliveryDateAndWindowPage.getChangeTradingAccountLink().should('be.visible')
+    deliveryDateAndWindowPage.getWowfulfilmentMethodContainer().should('be.visible')
   } else {
     expect(shopper.platform).to.be.oneOf(['B2B', 'B2C'])
   }
