@@ -45,6 +45,8 @@
         "amendOrderEndPoint": "apis/ui/order/amend",
         "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
         "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",
+        "rpgEndpoint": "https://test.api-wr.com/",
+        "rpgQueryEndpoint": "wx/v1/loyalty/partners/cards/query",
         "tags": "API/UI"
     },
     "viewportHeight": 1080,

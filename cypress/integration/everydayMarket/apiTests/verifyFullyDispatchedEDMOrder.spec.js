@@ -17,6 +17,7 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/rewards/api/commands/rewards'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
@@ -32,11 +33,18 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
     it('RP-5039 | EM | MPer | Full dispatch Everyday Market order via Marketplacer', () => {
       const testData = tests.VerifyFullyDispatchedEDMOrder
+      let orderId
+      let orderReference
+      let edmOrderId
+      let edmInvoiceId
+      const shopperId = shoppers.emAccount2.shopperId
 
+      // Login
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
 
+      // Select a regular delivery slot
       cy.getRegularDeliveryTimeSlot(testData).then((response) => {
         cy.fulfilmentWithSpecificDeliveryDateAndTime(testData.deliveryAddressId, testData.timeSlotId, testData.windowDate).then((response) => {
           expect(response).to.have.property('IsSuccessful', true)
@@ -44,11 +52,13 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         })
       })
 
+      // clear the trolley before placing an order
       cy.clearTrolley().then((response) => {
         expect(response).to.have.property('TrolleyItemCount', 0)
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
+      // Search for the desired products and add them to cart
       searchBody.SearchTerm = testData.searchTerm
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -56,32 +66,26 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         cy.getTestProductFromProductSearchResponse(response, testData)
       })
 
+      // Checkout, make a CC payment and place the order
       cy.navigateToCheckout().then((response) => {
         expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })
-
       cy.navigatingToCreditCardIframe().then((response) => {
         expect(response).to.have.property('Success', true)
         creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
       })
-
       cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
         digitalPayment.payments[0].paymentInstrumentId = response.itemId
       })
-
       cy.digitalPay(digitalPayment).then((response) => {
         expect(response.TransactionReceipt).to.not.be.null
         expect(response.PlacedOrderId).to.not.be.null
         confirmOrderParameter.placedOrderId = response.PlacedOrderId
       })
 
-      let orderId
-      let orderReference
-      let edmOrderId
-      let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
+      // Confirm the orders or place the order
       cy.wait(Cypress.config('fiveSecondWait'))
       cy.confirmOrder(confirmOrderParameter).then((response) => {
         expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
@@ -91,6 +95,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         testData.orderReference = orderReference
         cy.log('This is the order id: ' + response.Order.OrderId + ', Order ref: ' + response.Order.OrderReference)
 
+        // Verify the order totals are as expected
+        lib.verifyOrderTotals(testData, response)
+
+        // Invoke the order api and verify the projection content
         cy.wait(Cypress.config('tenSecondWait') * 3)
         cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
@@ -98,22 +106,27 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           testData.edmOrderId = edmOrderId
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
-          cy.log('Testdata JSON: ' + JSON.stringify(testData))
+          // Verify the projection details
           verifyOrderDetails(response, testData, shopperId)
 
-          cy.ordersByInvoice(edmOrderId).then((response) => {
-            verifyOrderDetails(response, testData, shopperId)
-          })
-
+          // Invoke the events api and verify the content
           cy.wait(Cypress.config('twoSecondWait'))
           cy.events(shopperId, orderId, orderReference).then((response) => {
             lib.verifyEventDetails(response, 0, 'OrderPlaced', 2, testData, shopperId)
             lib.verifyEventDetails(response, 1, 'MarketOrderPlaced', 2, testData, shopperId)
           })
 
+          // Get customers current reward points balance before dispatch
+          cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+          })
+
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.sellerName).then((response) => {
             cy.wait(Cypress.config('tenSecondWait') * 3)
+
+            // After dispatch, Invoke the order api and verify the projection content is updated acordingly
             cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
@@ -157,13 +170,34 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].shipments[0].shippedItems[0].variantId).to.be.equal(response.invoices[0].lineItems[0].variantId)
               expect(response.invoices[0].shipments[0].shippedItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
               expect(response.invoices[0].shipments[0].shippedItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+              // Rewards Details
+              expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
+              expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+              expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 
+              // After dispatch, Invoke the events api and verify the events are updated acordingly
               cy.wait(Cypress.config('twoSecondWait'))
               cy.events(shopperId, orderId, orderReference).then((response) => {
-                // Verify there are only 4 events. New event after dispatch is MarketOrderShipmentCreate
-                lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 4, testData, shopperId)
-                // Verify there are only 4 events. New event after dispatch is "MarketOrderDispatched"
-                lib.verifyEventDetails(response, 3, 'MarketOrderDispatched', 4, testData, shopperId)
+                // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
+                lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 5, testData, shopperId)
+                // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
+                lib.verifyEventDetails(response, 3, 'MarketOrderDispatched', 5, testData, shopperId)
+                // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
+                lib.verifyEventDetails(response, 4, 'MarketRewardsCredited', 5, testData, shopperId)
+              })
+
+              // Verify the reward points are credited to customers card after EDM dispatch
+              cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+                testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
+                const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
+                cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                cy.log('EDM Total: ' + testData.edmTotal)
+                cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+                cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints + ' , OR: ' + Number(Number(expectedRewardsPoints)+1))
+                expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+                // Rewards has a logic of rouding to an even number if odd
+                // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
+                expect(response.queryCardDetailsResp.pointBalance).to.be.within(expectedRewardsPoints, Number(expectedRewardsPoints) + 1)
               })
             })
           })
@@ -173,7 +207,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
   })
 })
 
-function verifyOrderDetails (response, testData, shopperId) {
+function verifyOrderDetails(response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 
@@ -210,4 +244,8 @@ function verifyOrderDetails (response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
   expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
   // expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
+  // Rewards Details
+  expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
+  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+  expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }
