@@ -12,6 +12,7 @@ Cypress.Commands.add('selectDeliveryDateAndWindow', (trading_acc_address) => {
       deliveryDateAndWindowPage.getChangeTradingAccountLink().click()
     }
   })
+  
   deliveryDateAndWindowPage.getSelectTradingAccount().click()
 
   deliveryDateAndWindowPage.getSelectOneOftheTradingAccounts().click()
