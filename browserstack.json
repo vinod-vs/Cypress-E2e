@@ -15,7 +15,8 @@
     "run_settings": {
         "cypress_config_file": "./cypress.json",
         "project_name": "WOW-E2E-Automation",
-        "build_name": "Build no. 1",
+        "build_name": "WOW-E2E-Automation-Build",
+        "parallels": "5",
         "exclude": [],
         "npm_dependencies": {
             "@bahmutov/cy-api": "^1.5.0",
