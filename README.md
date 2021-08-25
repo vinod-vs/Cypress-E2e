@@ -52,7 +52,7 @@ More info can be found at the [standard js docs](https://standardjs.com/)
 * support/utilities -> All useful/reusuable utilities can be placed here. 
 
 # For having request and response written in the test runner, please follow the steps in your API tests (https://github.com/bahmutov/cy-api)
-* Use cy.api() instead of cy.request() in your custome commands js files.
+* Use cy.api() instead of cy.request() in your custom commands js files.
 * The structure of the request should be like this:
     cy.api({
       method: 'POST',

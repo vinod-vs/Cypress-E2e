@@ -8,7 +8,7 @@ class SideCartPage {
   }
 
   getViewCartButton () {
-    return cy.get('.headerCheckout-orderHeader button')
+    return cy.get('button[class*="headerCheckout-orderHeader"]')
   }
 
   getClearEntireCartLink () {

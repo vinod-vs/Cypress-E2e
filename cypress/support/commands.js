@@ -8,3 +8,7 @@ Cypress.Commands.add('loginb2c', (creds = {}) => {
     }
   })
 })
+
+Cypress.Commands.add('buildQueryString', (queryString) => {
+  return cy.wrap('?' + Object.keys(queryString).map(key => key + '=' + queryString[key]).join('&'))
+})

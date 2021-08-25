@@ -111,13 +111,23 @@ Cypress.Commands.add('getItemPrice', (itemIndexOrPositionOnSearchResultsPage, it
 })
 
 Cypress.Commands.add('increaseItemQuantity', (itemIndexOrPositionOnSearchResultsPage, itemToAdd) => {
-  const increaseQuantityLocator = searchResultsPage.getIncreaseQuantityButtonByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
-  let j
-  for (j = 1; j < itemToAdd.quantity; j++) {
-    cy.log('Increasing Item quantity: ' + j)
-    cy.get(increaseQuantityLocator).click()
+  // const increaseQuantityLocator = searchResultsPage.getIncreaseQuantityButtonByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+  const quantityInputFieldLocator = searchResultsPage.getQuantityInputFieldByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+
+  if (itemToAdd.quantity > 1) {
+    cy.log('Increasing Item quantity by ' + itemToAdd.quantity)
+    cy.get(quantityInputFieldLocator).clear()
+    cy.wait(Cypress.config('halfSecondWait'))
+    cy.get(quantityInputFieldLocator).type(itemToAdd.quantity)
     cy.wait(Cypress.config('halfSecondWait'))
   }
+
+  // let j
+  // for (j = 1; j < itemToAdd.quantity; j++) {
+  //   cy.log('Increasing Item quantity: ' + j)
+  //   cy.get(increaseQuantityLocator).click()
+  //   cy.wait(Cypress.config('halfSecondWait'))
+  // }
 })
 
 const findAndAddProduct = (itemToAdd) => {

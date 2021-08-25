@@ -10,6 +10,7 @@ import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import TestFilter from '../../../support/TestFilter'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
@@ -19,6 +20,7 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+
 
 let productStockCode
 let productPrice
@@ -56,11 +58,11 @@ TestFilter(['B2B-API'], () => {
         expect(response.Address.SuburbId).to.not.be.null
       })
 
-      cy.deliveryTimeSlot().then((response) => {
-        expect(response).to.have.length.greaterThan(0)
+      cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then((response) => {
+        expect(response.Id).to.greaterThan(0)
       })
 
-      cy.fulfilment().then((response) => {
+      cy.completeFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 

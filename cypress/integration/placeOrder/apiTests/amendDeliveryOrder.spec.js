@@ -1,8 +1,7 @@
 /// <reference types="cypress" />
-/* eslint-disable no-unused-expressions */
 
 import TestFilter from '../../../support/TestFilter'
-import shopper from '../../../fixtures/login/b2cLogin.json'
+import b2bShopper from '../../../fixtures/login/b2bLogin.json'
 import searchBody from '../../../fixtures/search/productSearch.json'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import addItemsBody from '../../../fixtures/sideCart/addItemsToTrolley.json'
@@ -13,20 +12,20 @@ import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOr
 import CreateB2CDeliveryOrderPaidViaCreditCard from '../../../support/shared/api/commands/createOrder'
 import '../../../support/orders/api/commands/cancelOrder'
 
-TestFilter(['B2C-API'], () => {
-  describe('[API] Cancel placed order for B2C customer', () => {
+TestFilter(['B2B-API'], () => {
+  describe.skip('[API] Amend placed order for B2B customer', () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('Place an order for B2C customer, then cancel the order', () => {
+    it('Place an order for B2B customer, then amend the order', () => {
       const orderPlaced = new CreateB2CDeliveryOrderPaidViaCreditCard()
-      orderPlaced.placeOrderForB2CUser(shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
+      orderPlaced.placeOrderForB2BUser(b2bShopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
         digitalPayment, confirmOrderParameter)
         .then((response) => {
           const orderId = response.Order.OrderId
-          cy.cancelOrder(orderId).then((response) => {
+          cy.amendOrder(orderId).then((response) => {
             expect(response.status).to.eq(200)
           })
         })

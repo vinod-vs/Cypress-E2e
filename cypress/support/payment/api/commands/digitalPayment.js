@@ -1,5 +1,9 @@
 Cypress.Commands.add('digitalPay', (digitalPayment) => {
-  cy.request('POST', Cypress.env('digitalPaymentEndpoint'), digitalPayment).then((response) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('digitalPaymentEndpoint'),
+    body: digitalPayment
+  }).then((response) => {
     return response.body
   })
 })

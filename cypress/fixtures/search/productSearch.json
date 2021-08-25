@@ -2,7 +2,7 @@
     "Filters": [],
     "IsSpecial": false,
     "PageNumber": 1,
-    "PageSize": 36,
+    "PageSize": 50,
     "SearchTerm": "",
-    "SortType": "TraderRelevance"
+    "SortType": "Name"
 }

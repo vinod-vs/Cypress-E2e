@@ -3,7 +3,7 @@ import '../../../utilities/ui/utility'
 
 const deliveryDateAndWindowPage = new DeliveryDateAndWindowPage()
 
-Cypress.Commands.add('selectDeliveryDateAndWindow', (trading_acc_address) => {
+Cypress.Commands.add('selectDeliveryDateAndWindow', (tradingAccAddress) => {
   // Wait for the FMS page to load before checking whether shopping Preferences is saved
   cy.wait(Cypress.config('twoSecondWait'))
 
@@ -17,7 +17,7 @@ Cypress.Commands.add('selectDeliveryDateAndWindow', (trading_acc_address) => {
 
   deliveryDateAndWindowPage.getSelectOneOftheTradingAccounts().click()
 
-  deliveryDateAndWindowPage.getSelectTradingAccount().should('have.value', trading_acc_address)
+  deliveryDateAndWindowPage.getSelectTradingAccount().should('have.value', tradingAccAddress)
 
   deliveryDateAndWindowPage.getSaveAndContinueButton().click()
 
