@@ -8,7 +8,7 @@ import '../../../support/logout/api/commands/logout'
 import '../../../support/utilities/ui/utility'
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['API','B2C-API'], () => {
+TestFilter(['B2C-API'], () => {
   describe('[API] Signup as a new user', () => {
     before(() => {
       cy.clearCookies({ domain: null })

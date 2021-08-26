@@ -1,5 +1,5 @@
 {
-    "PersonalPlans":[
+    "personalPlans":[
         {
             "PlanId": 9,
             "ServiceType": "DeliverySaver",
@@ -16,7 +16,7 @@
             "SubscriberType":"personal"
         }
     ],
-    "SeniorPlans":[
+    "seniorPlans":[
         {
             "PlanId": 43,
             "ServiceType": "DeliverySaver",

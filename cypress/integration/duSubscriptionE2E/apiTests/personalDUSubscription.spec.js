@@ -5,16 +5,15 @@ import ccDetails from '../../../fixtures/duSubscription/duCreditCardDetails.json
 import payAndSubscribe from '../../../fixtures/duSubscription/payAndSubscribe.json'
 import availablePlans from '../../../fixtures/duSubscription/availablePlansB2C.json'
 import loginDetails from '../../../fixtures/duSubscription/login.json'
+import searchAddress from '../../../fixtures/search/addressSearch.json'
+import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/api/commands/signUp'
 import '../../../support/login/api/commands/login'
+import '../../../support/address/api/commands/address'
+import '../../../support/payment/api/commands/creditcard'
 import '../../../support/duSubscription/api/commands/checkPlanEligibility'
 import '../../../support/duSubscription/api/commands/checkExistingPlan'
-import '../../../support/duSubscription/api/commands/initCreditCard'
-import '../../../support/duSubscription/api/commands/searchBillingAddress'
-import '../../../support/duSubscription/api/commands/setBillingAddress'
-import '../../../support/duSubscription/api/commands/subscriptionCCPayment'
-import '../../../support/duSubscription/api/commands/validateBillingAddress'
 import '../../../support/duSubscription/api/commands/payAndSubscribe'
 import '../../../support/logout/api/commands/logout'
 import '../../../support/utilities/ui/utility'
@@ -29,7 +28,7 @@ TestFilter(['API'], () => {
     })
     // Using faker to add ramdom values for the user
 
-    availablePlans.PersonalPlans.forEach((plan) => {
+    availablePlans.personalPlans.forEach((plan) => {
       it(`Should subscribe for a new delivery unlimited plan ${plan.Name} for ${plan.SubscriberType}`, () => {
         signUpDetails.firstName = faker.name.firstName()
         signUpDetails.lastName = faker.name.lastName()
@@ -81,9 +80,9 @@ TestFilter(['API'], () => {
             expect(response.body.Errors[0].ErrorMessage).to.contain('Could not find a subscriber for tenant WOOLWORTHSONLINE and externalId '+shopperId)
           })
           //Search billing address
-          cy.searchBillingAddressViaApi().then((response)=>{
+          cy.searchBillingAddressViaApi(searchAddress.billingAddress).then((response)=>{
             expect(response.status).to.eq(200)
-            expect(response.body.Response[0].Text).to.eq(Cypress.env('billingAddress'))
+            expect(response.body.Response[0].Text).to.eq(searchAddress.billingAddress)
             const billingAddrID = response.body.Response[0].Id
             //set autobilling address
             cy.setBillingAddressViaApi(billingAddrID).then((response)=>{
@@ -98,19 +97,17 @@ TestFilter(['API'], () => {
             })
           })
   
-          cy.initCreditCardViaApi().then((response)=>{
-            expect(response.status).to.eq(200)
-            expect(response.body).to.have.property('Success', true)
-            expect(response.body.IframeUrl).to.contain(Cypress.env("iframeURL"))
-            const iframeURL = response.body.IframeUrl
-            const iframeToken = iframeURL.split("/").pop()
-            cy.subscriptionCCPaymentViaApi(ccDetails, iframeToken).then((response)=>{
-              expect(response.status).to.eq(200)
-              expect(response.body.status).to.have.property('responseText', 'ACCEPTED')
-              expect(response.body.status).to.have.property('responseCode', '00')
+          cy.navigatingToCreditCardIframe().then((response)=>{
+            expect(response).to.have.property('Success', true)
+            expect(response.IframeUrl).to.contain(Cypress.env("creditCardPaymentEndpoint").split('/')[2])
+            const iframeURL = response.IframeUrl
+            creditcardSessionHeader.creditcardSessionId = iframeURL.split("/").pop()
+            cy.creditcardPayment(ccDetails.visa, creditcardSessionHeader).then((response)=>{
+              expect(response.status).to.have.property('responseText', 'ACCEPTED')
+              expect(response.status).to.have.property('responseCode', '00')
               //expect(response.body.status).to.have.property('esResponse', null)
               payAndSubscribe.planId = plan.PlanId
-              payAndSubscribe.paymentInstrumentId = response.body.paymentInstrument.itemId
+              payAndSubscribe.paymentInstrumentId = response.paymentInstrument.itemId
               cy.payAndSubscribeViaApi(payAndSubscribe).then((response)=>{
                 expect(response.status).to.eq(200)
                 expect(response.body.Subscription).to.have.property('PlanId',plan.PlanId)

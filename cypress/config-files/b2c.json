@@ -8,13 +8,7 @@
         "uat": "https://uatsite.woolworths.com.au/",
         "subscriptionPlanEligibilityEndpoint": "api/v3/ui/deliverysaver/eligibility",
         "existingSubscriptionPlanEndpoint": "api/v3/ui/deliverysaver/subscription",
-        "searchBillingAddressEndpoint": "apis/ui/address/search",
-        "billingAddress": "Unit 403  15b Albert Street, NORTH PARRAMATTA  NSW  2151",
         "setBillingAddressEndpoint": "apis/ui/address/autobilling",
-        "validateBillingAddressEndpoint": "apis/ui/address",
-        "initCreditCardEndpoint":"apis/ui/Checkout/DigitalPay/InitializeCreditCardIframe",
-        "iframeURL":"https://iframe.nonprod.payments.woolworths.com.au/",
-        "iframeURLEndpoint":"tokenisation/creditcard",
         "payAndSubscribeEndpoint":"api/v3/ui/deliverysaver/subscription",
         "testDataFilePath":"cypress/duSubscriptionTestData"
     }
