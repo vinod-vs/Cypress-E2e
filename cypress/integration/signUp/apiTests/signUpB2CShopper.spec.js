@@ -4,10 +4,11 @@ import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/api/commands/signUp'
 import '../../../support/login/api/commands/login'
-
+import '../../../support/logout/api/commands/logout'
+import '../../../support/utilities/ui/utility'
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['B2C-API'], () => {
+TestFilter(['API','B2C-API'], () => {
   describe('[API] Signup as a new user', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -17,13 +18,14 @@ TestFilter(['B2C-API'], () => {
     signUpDetails.firstName = faker.name.firstName()
     signUpDetails.lastName = faker.name.lastName()
     signUpDetails.EmailAddress = faker.internet.email()
-    signUpDetails.password = faker.internet.password(7)
     signUpDetails.MobilePhone = faker.phone.phoneNumber('04########')
 
     // Signing Up as a new User
     it('Should sign up with a new user', () => {
       cy.logOutViaApi()
-
+      cy.getDOB('personal').then((value)=> {
+        signUpDetails.dateOfBirth = value
+      })
       cy.signUpViaApi(signUpDetails).then((response) => {
         expect(response.status).to.eq(200)
         expect(response.body).to.have.property('Success', true)
