@@ -1,0 +1,9 @@
+{
+    "data": {
+        "type": "invoices",
+        "attributes": {
+            "postage_tracking": "1234567890",
+            "postage_carrier": "Australia Post"
+        }
+    }
+}
