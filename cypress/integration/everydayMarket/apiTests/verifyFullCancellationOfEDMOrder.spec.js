@@ -24,7 +24,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['B2C-API1', 'EDM-API'], () => {
+TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-902 | EM | MPer | Full cancellation of Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -106,14 +106,13 @@ TestFilter(['B2C-API1', 'EDM-API'], () => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
           encodedEdmInvoiceId = response.invoices[0].invoiceId
-          encodedEdmLineitemId = invoices[0].lineItems[0].lineItemId
-
+          encodedEdmLineitemId = response.invoices[0].lineItems[0].lineItemId
           testData.edmOrderId = edmOrderId
           testData.edmInvoiceId = edmInvoiceId
+        
           testData.encodedEdmInvoiceId = encodedEdmInvoiceId
           testData.encodedEdmLineitemId = encodedEdmLineitemId
-          cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId + ' , MP InvoiceId'+encodedEdmInvoiceId + 
-          ' , MPencodedEdmLineitemId '+encodedEdmLineitemId )
+          cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId + ' , MP InvoiceId: '+ encodedEdmInvoiceId + ' , MPencodedEdmLineitemId: '+ encodedEdmLineitemId )
           // Verify the projection details
           verifyOrderDetails(response, testData, shopperId)
 
@@ -131,7 +130,7 @@ TestFilter(['B2C-API1', 'EDM-API'], () => {
           })
 
           // Seller cancells all the EM items and verify the events and order statuses
-          cy.cancelLineItemInInvoice(testData.encodedEdmInvoiceId, testData.encodedLineItemId, testData.quantity).then((response) => {
+          cy.cancelLineItemInInvoice(encodedEdmInvoiceId, encodedEdmLineitemId, testData.items[0].quantity).then((response) => {
             cy.wait(Cypress.config('tenSecondWait') * 3)
 
             // After Seller cancellation, Invoke the order api and verify the projection content is updated acordingly
@@ -143,7 +142,7 @@ TestFilter(['B2C-API1', 'EDM-API'], () => {
               expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
               // Invoice details
               expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
-              expect(response.invoices[0].wowStatus).to.be.equal('Placed')
+              expect(response.invoices[0].wowStatus).to.be.equal('SellerCancelled')
               expect(response.invoices[0].wowId).to.not.be.null
               expect(response.invoices[0].shipments.length).to.be.equal(0)
               expect(response.invoices[0].lineItems.length).to.be.equal(1)
@@ -166,8 +165,7 @@ TestFilter(['B2C-API1', 'EDM-API'], () => {
               expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
               expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
               expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
-              expect(response.invoices[0].lineItems[0].status).to.be.equal('REFUNDED')
-              expect(response.invoices[0].lineItems[0].salePrice).to.be.equal(response.invoices[0].refunds[0].refundAmount)
+              expect(response.invoices[0].lineItems[0].status).to.be.equal('REFUNDED')            
               expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
               // expect(response.invoices[0].lineItems[0].statusFull).to.be.null
               // Shipments Details for line items
@@ -182,31 +180,32 @@ TestFilter(['B2C-API1', 'EDM-API'], () => {
               expect(response.invoices[0].refunds[0].totalAmount).to.be.greaterThan(0)
               expect(response.invoices[0].refunds[0].recoveredAmount).to.be.greaterThan(0)
               expect(response.invoices[0].refunds[0].refundedUtc).to.not.be.null
-              expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal("ADMIN")             
+              expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal("ADMIN")       
+              expect(response.invoices[0].refunds[0].refundAmount).to.be.equal(response.invoices[0].invoiceTotal)      
               // Refund Notes verification
-              expect(invoices[0].refunds[0].notes[0].id).to.not.be.null
-              expect(invoices[0].refunds[0].notes[0].note).to.be.equal("Automation refundRequestCreate note: I don't want this")
-              expect(invoices[0].refunds[0].notes[0].timestamp).to.not.be.null
-              expect(invoices[0].refunds[0].notes[1].id).to.not.be.null
-              expect(invoices[0].refunds[0].notes[1].note).to.be.equal("Automation refundRequestReturn note: I don't want this")
-              expect(invoices[0].refunds[0].notes[1].timestamp).to.not.be.null
-              expect(invoices[0].refunds[0].notes[2].id).to.not.be.null
-              expect(invoices[0].refunds[0].notes[2].note).to.be.equal("Auto-refund cancellation")
-              expect(invoices[0].refunds[0].notes[2].timestamp).to.not.be.null
+              expect(response.invoices[0].refunds[0].notes[0].id).to.not.be.null
+              expect(response.invoices[0].refunds[0].notes[0].note).to.be.equal("Automation refundRequestCreate note: I don't want this")
+              expect(response.invoices[0].refunds[0].notes[0].timestamp).to.not.be.null
+              expect(response.invoices[0].refunds[0].notes[1].id).to.not.be.null
+              expect(response.invoices[0].refunds[0].notes[1].note).to.be.equal("Automation refundRequestReturn note: I don't want this")
+              expect(response.invoices[0].refunds[0].notes[1].timestamp).to.not.be.null
+              expect(response.invoices[0].refunds[0].notes[2].id).to.not.be.null
+              expect(response.invoices[0].refunds[0].notes[2].note).to.be.equal("Auto-refund cancellation")
+              expect(response.invoices[0].refunds[0].notes[2].timestamp).to.not.be.null
               // Refund refundItems verification
-              expect(invoices[0].refunds[0].refundItems[0].reason).equal("Automation Reason: I don't want this")
-              expect(invoices[0].refunds[0].refundItems[0].quantity).equal(Number(testData.items[0].quantity))
-              expect(invoices[0].refunds[0].refundItems[0].amount).to.be.greaterThan(0)
+              expect(response.invoices[0].refunds[0].refundItems[0].reason).equal("Automation Reason: I don't want this")
+              expect(response.invoices[0].refunds[0].refundItems[0].quantity).equal(Number(testData.items[0].quantity))
+              expect(response.invoices[0].refunds[0].refundItems[0].amount).to.be.greaterThan(0)
               
 
-              // After seller cancellation, Invoke the events api and verify the events are updated acordingly
-              // cy.wait(Cypress.config('twoSecondWait'))
-              // cy.events(shopperId, orderId, orderReference).then((response) => {
-              //   // Verify there are only 5 events. New event after seller cancellattion 
-              //   lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 5, testData, shopperId)
-              //   // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
+             // After seller cancellation, Invoke the events api and verify the events are updated acordingly
+              cy.wait(Cypress.config('twoSecondWait'))
+              cy.events(shopperId, orderId, orderReference).then((response) => {
+                // Verify there are only 5 events. New event after seller cancellattion 
+                lib.verifyEventDetails(response, 3, 'RefundRequestUpdate', 7, testData, shopperId)
+                lib.verifyEventDetails(response, 4, 'RefundRequestUpdate', 7, testData, shopperId)              
 
-              // })
+              })
 
             })
           })

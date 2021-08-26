@@ -71,9 +71,9 @@ Cypress.Commands.add('partialDispatchOfLineItemsInInvoice', (decodedInvoiceId, d
   })
 })
 
-Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineItemId, quantity) => {
+Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineItemId, quantity) => { 
   let encodedRefundRequestId
-  let mutation = String(`mutation{
+  let mutation =  String(`mutation{
         refundRequestCreate(input: 
           {
             invoiceId: "ENCODED_INVOICE_ID",
@@ -117,6 +117,8 @@ Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineIt
     }
   }).then((response) => {
     expect(response.status).to.eq(200)
+
+    expect(response.body.data.refundRequestCreate.refundRequest.status).to.equals("AWAITING")
     encodedRefundRequestId = response.body.data.refundRequestCreate.refundRequest.id
     cy.log('encodedRefundRequestId: ' + encodedRefundRequestId)
     const mutation = String(`mutation{
@@ -160,6 +162,7 @@ Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineIt
       }
     }).then((response) => {
       expect(response.status).to.eq(200)
+      expect(response.body.data.refundRequestReturn.refundRequest.status).to.equals("RETURNED")
       return response.body
     })
   })
