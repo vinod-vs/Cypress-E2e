@@ -127,12 +127,11 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
           })
           // Dispatch partial order with a unique tracking id
-
           trackingId1 = lib.generateRandomString()
-          
           cy.log('First Tracking Id :' + trackingId1)
           //start
-          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, lineItemLegacyId, 1, trackingId1, testData.carrier, testData.sellerName).then((response) => {
+          const data1 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
+          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data1, trackingId1, testData.carrier, testData.sellerName).then((response) => {
             cy.log('Partial Dispatch Response 1: ' + JSON.stringify(response))
             partialDispatchNumber = 1
             expect(response.data.attributes.shipment_tracking_number).to.be.equal(trackingId1)
@@ -148,7 +147,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
           trackingId2 = lib.generateRandomString()
           cy.log('Second Tracking Id :' + trackingId2)
-          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, lineItemLegacyId, 1, trackingId2, testData.carrier, testData.sellerName).then((response) => {
+          const data2 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
+          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data2, trackingId2, testData.carrier, testData.sellerName).then((response) => {
             cy.log('Partial Dispatch Response 2: ' + JSON.stringify(response))
             partialDispatchNumber = 2
             expect(response.data.attributes.shipment_tracking_number).to.be.equal(trackingId2)
