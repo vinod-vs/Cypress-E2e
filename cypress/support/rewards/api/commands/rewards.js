@@ -1,27 +1,17 @@
 // cypress/integration/my-spec.js
 /// <reference types="@bahmutov/cy-api" />
+import queryRequest from '../../../../fixtures/rewards/query.json'
 
 Cypress.Commands.add('getRewardsCardDetails', (partnerId, siteId, posId, loyaltySiteType, cardNo) => {
-  let requestBody = `{
-        "queryCardDetailsReq": {
-            "partnerId": PARTNERID,
-            "siteId": SITEID,
-            "posId": POSID,
-            "loyaltySiteType": "LOYALTY_SITE_TYPE",
-            "transDateTime": "TRANS_DATE_TIME",
-            "transId": TRANSID,
-            "uniqueTransId": "UNIQUE_TRAN_ID",
-            "cardNo": CARD_NO
-        }
-    }`
-  requestBody = String(requestBody).replace('PARTNERID', Number(partnerId))
-  requestBody = String(requestBody).replace('SITEID', Number(siteId))
-  requestBody = String(requestBody).replace('POSID', Number(posId))
-  requestBody = String(requestBody).replace('LOYALTY_SITE_TYPE', loyaltySiteType)
-  requestBody = String(requestBody).replace('TRANS_DATE_TIME', (new Date()).toJSON())
-  requestBody = String(requestBody).replace('TRANSID', Number(Math.floor(Math.random() * 1000)))
-  requestBody = String(requestBody).replace('UNIQUE_TRAN_ID', Date.now())
-  requestBody = String(requestBody).replace('CARD_NO', Number(cardNo))
+  let requestBody = queryRequest
+  requestBody.queryCardDetailsReq.partnerId = Number(partnerId)
+  requestBody.queryCardDetailsReq.siteId = Number(siteId)
+  requestBody.queryCardDetailsReq.posId = Number(posId)
+  requestBody.queryCardDetailsReq.loyaltySiteType = String(loyaltySiteType)
+  requestBody.queryCardDetailsReq.transDateTime = (new Date()).toJSON()
+  requestBody.queryCardDetailsReq.transId = Number(Math.floor(Math.random() * 1000))
+  requestBody.queryCardDetailsReq.uniqueTransId = String(Date.now())
+  requestBody.queryCardDetailsReq.cardNo = Number(cardNo)
 
   cy.api({
     method: 'POST',
