@@ -4,7 +4,8 @@
 import shopper from '../../../fixtures/login/b2cLogin.json'
 import searchBody from '../../../fixtures/search/productSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
-import fulfilmentType from '../../../fixtures/checkout/fulfilmentType.json'
+import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
@@ -30,15 +31,15 @@ TestFilter(['B2C-API'], () => {
     it('Should place a Direct to boot order using credit card', () => {
       cy.loginViaApi(shopper)
 
-      cy.searchPickupDTBStores(storeSearchBody.postCode, fulfilmentType.directToBoot).then((response) => {
-        expect(response[0].AddressId).to.not.be.null
+      cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response) => {
+          expect(response[0].AddressId).to.not.be.null
       })
+ 
+      cy.getFulfilmentWindowViaApi(windowType.directToBoot).then((response) => {
+        expect(response.Id).to.be.greaterThan(0)
+      }) 
 
-      cy.directToBootTimeSlot().then((response) => {
-        expect(response).to.have.length.greaterThan(0)
-      })
-
-      cy.directToBootFulfilment().then((response) => {
+      cy.completeFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 
@@ -90,5 +91,6 @@ TestFilter(['B2C-API'], () => {
         cy.log('This is the order id: ' + response.Order.OrderId)
       })
     })
-  })
+  })   
 })
+  

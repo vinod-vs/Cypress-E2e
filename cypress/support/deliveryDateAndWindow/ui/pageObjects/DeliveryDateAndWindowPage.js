@@ -1,4 +1,12 @@
 class DeliveryDateAndWindowPage {
+  getWowfulfilmentMethodContainer () {
+    return cy.get('wow-fulfilment-method-selector-container')
+  }
+
+  getTodaysShoppingPreferenceLocatorString () {
+    return 'h3.selected-fulfilment-method--subHeading'
+  }
+
   getChangeTradingAccountLink () {
     return cy.get('button.selected-fulfilment-method--editButton')
   }

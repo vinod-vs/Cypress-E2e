@@ -10,6 +10,7 @@ import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import TestFilter from '../../../support/TestFilter'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
@@ -35,13 +36,13 @@ TestFilter(['B2C-API'], () => {
       cy.loginViaApi(shopper).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
-
+    
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
         expect(response.Response[0].Id).to.not.be.empty
 
         expect(response.Response[0].Id).to.not.be.null
-      })
-
+      }) 
+      
       cy.addDeliveryAddress().then((response) => {
         expect(response.Address.AddressId).to.greaterThan(0)
 
@@ -55,12 +56,12 @@ TestFilter(['B2C-API'], () => {
 
         expect(response.Address.SuburbId).to.not.be.null
       })
+           
+      cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then((response) => {
+        expect(response.Id).to.greaterThan(0)
+      }) 
 
-      cy.deliveryTimeSlot().then((response) => {
-        expect(response).to.have.length.greaterThan(0)
-      })
-
-      cy.deliveryFulfilment().then((response) => {
+      cy.completeFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 
