@@ -193,7 +193,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 cy.log('Testdata JSON: ' + JSON.stringify(testData))
                 cy.log('EDM Total: ' + testData.edmTotal)
                 cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints + ' , OR: ' + Number(Number(expectedRewardsPoints)+1))
+                cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints + ' , OR: ' + Number(Number(expectedRewardsPoints) + 1))
                 expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
                 // Rewards has a logic of rouding to an even number if odd
                 // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
