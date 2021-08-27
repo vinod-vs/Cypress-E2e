@@ -60,7 +60,7 @@
         }
       }
     },
-    "VerifyFullyCancellationOfEDMOrder": {
+    "VerifyFullCancellationOfEDMOrder": {
       "orderId": "",
       "orderReference": "",
       "edmInvoiceId": "",
