@@ -129,10 +129,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           // Dispatch partial order with a unique tracking id
           trackingId1 = lib.generateRandomString()
           cy.log('First Tracking Id :' + trackingId1)
-          //start
           const data1 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
           cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data1, trackingId1, testData.carrier, testData.sellerName).then((response) => {
-            cy.log('Partial Dispatch Response 1: ' + JSON.stringify(response))
             partialDispatchNumber = 1
             expect(response.data.attributes.shipment_tracking_number).to.be.equal(trackingId1)
             expect(response.data.attributes.shipment_carrier).to.be.equal(testData.carrier)
@@ -149,7 +147,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.log('Second Tracking Id :' + trackingId2)
           const data2 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
           cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data2, trackingId2, testData.carrier, testData.sellerName).then((response) => {
-            cy.log('Partial Dispatch Response 2: ' + JSON.stringify(response))
             partialDispatchNumber = 2
             expect(response.data.attributes.shipment_tracking_number).to.be.equal(trackingId2)
             expect(response.data.attributes.shipment_carrier).to.be.equal(testData.carrier)
@@ -161,13 +158,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             // verify order projection
             verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId2, orderReference, partialDispatchNumber)
           })
-
-          // Dispatch another partial order with a unique tracking id
-
-          // end partial dispatch
-
-          // Dispatch the complete order from MP and verify the events and order statuses
-          // end
         })
       })
     })
@@ -281,8 +271,6 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
     expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
     expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
     expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
-    //expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(Number(testData.items[0].quantity))
-
     expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
     expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
     expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
@@ -303,12 +291,12 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
         // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
         lib.verifyEventDetails(response, 4, 'MarketRewardsCredited', 5, testData, shopperId)
       } else {
-        // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-        lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 8, testData, shopperId)
-        // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-        lib.verifyEventDetails(response, 3, 'MarketOrderDispatched', 8, testData, shopperId)
-        // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-        lib.verifyEventDetails(response, 4, 'MarketRewardsCredited', 8, testData, shopperId)
+        // Verify there are  8 events. New event after dispatch is MarketOrderShipmentCreate
+        lib.verifyEventDetails(response, 5, 'MarketOrderShipmentCreate', 8, testData, shopperId)
+        // Verify there are  8 events. New event after dispatch is "MarketOrderDispatched"
+        lib.verifyEventDetails(response, 6, 'MarketOrderDispatched', 8, testData, shopperId)
+        // Verify there are  8 events. New event after dispatch is "MarketRewardsCredited"
+        lib.verifyEventDetails(response, 7, 'MarketRewardsCredited', 8, testData, shopperId)
       }
     })
 
@@ -323,7 +311,10 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
       expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
       // Rewards has a logic of rouding to an even number if odd
       // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
-      if (partialDispatchNumber === 2) {
+      if (partialDispatchNumber === 1) {
+        const expectedRewardsPtsPartialDispatch = expectedRewardsPoints - 10
+        expect(response.queryCardDetailsResp.pointBalance).to.be.within(expectedRewardsPtsPartialDispatch, Number(expectedRewardsPtsPartialDispatch) + 1)
+      } else {
         expect(response.queryCardDetailsResp.pointBalance).to.be.within(expectedRewardsPoints, Number(expectedRewardsPoints) + 1)
       }
     })
