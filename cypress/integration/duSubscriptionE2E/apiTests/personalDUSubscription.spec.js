@@ -5,7 +5,7 @@ import ccDetails from '../../../fixtures/duSubscription/duCreditCardDetails.json
 import payAndSubscribe from '../../../fixtures/duSubscription/payAndSubscribe.json'
 import availablePlans from '../../../fixtures/duSubscription/availablePlansB2C.json'
 import loginDetails from '../../../fixtures/duSubscription/login.json'
-import searchAddress from '../../../fixtures/search/addressSearch.json'
+import searchAddress from '../../../fixtures/checkout/addressSearch.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/api/commands/signUp'
@@ -20,7 +20,7 @@ import '../../../support/utilities/ui/utility'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['API'], () => {
+TestFilter(['B2C-API'], () => {
   describe('[API] Subscribe for a new DU personal plan', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -80,9 +80,9 @@ TestFilter(['API'], () => {
             expect(response.body.Errors[0].ErrorMessage).to.contain('Could not find a subscriber for tenant WOOLWORTHSONLINE and externalId '+shopperId)
           })
           //Search billing address
-          cy.searchBillingAddressViaApi(searchAddress.billingAddress).then((response)=>{
+          cy.searchBillingAddressViaApi(searchAddress.search).then((response)=>{
             expect(response.status).to.eq(200)
-            expect(response.body.Response[0].Text).to.eq(searchAddress.billingAddress)
+            expect(response.body.Response[0].Text).to.contain(searchAddress.search)
             const billingAddrID = response.body.Response[0].Id
             //set autobilling address
             cy.setBillingAddressViaApi(billingAddrID).then((response)=>{
