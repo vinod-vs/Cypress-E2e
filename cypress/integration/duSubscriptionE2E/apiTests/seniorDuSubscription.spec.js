@@ -10,7 +10,7 @@ import creditcardSessionHeader from '../../../fixtures/payment/creditcardSession
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/api/commands/signUp'
 import '../../../support/login/api/commands/login'
-import '../../../support/address/api/commands/address'
+import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/duSubscription/api/commands/checkPlanEligibility'
 import '../../../support/duSubscription/api/commands/checkExistingPlan'
@@ -42,8 +42,6 @@ TestFilter(['B2C-API'], () => {
         })
         cy.clearCookies({ domain: null })
         cy.clearLocalStorage({ domain: null })
-        cy.log('emailAddress is '+ signUpDetails.emailAddress)
-        cy.log('DOB is '+signUpDetails.dateOfBirth)
 
         // Signing Up as a new User
         cy.signUpViaApi(signUpDetails).then((response) => {
@@ -125,7 +123,7 @@ TestFilter(['B2C-API'], () => {
           signUpDetails.planName = plan.Name
           signUpDetails.planPrice = plan.Price
           signUpDetails.createdTime = new Date().toLocaleString()
-          cy.writeTestDataUsed(`${Cypress.env("testDataFilePath")}/seniorSubscriptionUsedData.json`,signUpDetails)     
+          cy.writeTestDataUsed(`${Cypress.env("duSubscriptionTestDataFilePath")}/seniorSubscriptionUsedData.json`,signUpDetails)     
         })          
       })
     })

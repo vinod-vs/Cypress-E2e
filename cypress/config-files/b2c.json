@@ -10,6 +10,6 @@
         "existingSubscriptionPlanEndpoint": "api/v3/ui/deliverysaver/subscription",
         "setBillingAddressEndpoint": "apis/ui/address/autobilling",
         "payAndSubscribeEndpoint":"api/v3/ui/deliverysaver/subscription",
-        "testDataFilePath":"cypress/duSubscriptionTestData"
+        "duSubscriptionTestDataFilePath":"cypress/duSubscriptionTestData"
     }
 }
