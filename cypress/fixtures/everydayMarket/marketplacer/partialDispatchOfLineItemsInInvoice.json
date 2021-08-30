@@ -4,9 +4,6 @@
       "attributes": {
         "shipment_tracking_number": "1234567890",
         "shipment_carrier": "Australia Post",
-        "line_items_ids": [
-          0
-        ],
         "shipped_items": [
           {
             "line_item_id": 0,
