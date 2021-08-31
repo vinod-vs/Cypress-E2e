@@ -62,7 +62,7 @@ TestFilter(['B2B-API'], () => {
         expect(response.Id).to.greaterThan(0)
       })
 
-      cy.completeFulfilmentViaApi().then((response) => {
+      cy.completeWindowFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 

@@ -21,7 +21,7 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
         return cy.searchDeliveryAddress(addressSearchBody).then(() => {
           cy.addDeliveryAddress().then(() => {
             cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then(() => {
-              cy.completeFulfilmentViaApi().then(() => {
+              cy.completeWindowFulfilmentViaApi().then(() => {
                 cy.clearTrolley().then(() => {
                   return cy.productSearch(searchBody).then((response) => {
                     let x
