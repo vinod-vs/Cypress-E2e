@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /// <reference types="cypress" />
+import '../../../utilities/api/apiUtilities'
 
 Cypress.Commands.add('ordersByShopperId', (shopperId) => {
   const endPoint = String(Cypress.env('ordersApiByShopperIdEndpoint')).replace('SHOPPER_ID', shopperId)
@@ -26,6 +27,27 @@ Cypress.Commands.add('ordersApiByShopperIdAndTraderOrderId', (shopperId, traderO
   })
 })
 
+Cypress.Commands.add(
+  'ordersApiByShopperIdAndTraderOrderIdWithRetry',
+  (shopperId, traderOrderId, retryOptions) => {
+    const endPoint = String(
+      Cypress.env('ordersApiByShopperIdAndTraderOrderIdEndpoint')
+    )
+      .replace('SHOPPER_ID', shopperId)
+      .replace('ORDER_ID', traderOrderId)
+
+    cy.retryRequest(Cypress.env('ordersApiEndpoint') + endPoint, {
+      method: 'GET',
+      retries: retryOptions.retries,
+      timeout: retryOptions.timeout,
+      function: retryOptions.function
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      return response.body
+    })
+  }
+)
+
 Cypress.Commands.add('events', (shopperId, traderOrderId, orderReference) => {
   const queryParams = {
     shopperId: shopperId,
@@ -43,6 +65,33 @@ Cypress.Commands.add('events', (shopperId, traderOrderId, orderReference) => {
     return response.body
   })
 })
+
+Cypress.Commands.add(
+  'orderEventsApiWithRetry',
+  (shopperId, traderOrderId, traderOrderReference, retryOptions) => {
+    const queryParams = {
+      shopperId: shopperId,
+      orderReference: traderOrderReference,
+      orderId: traderOrderId
+    }
+
+    const queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&')
+
+    const endPoint = String(
+      Cypress.env('ordersApiEndpoint') + Cypress.env('ordersApiEventsEndpoint') + '?' + queryString
+    )
+
+    cy.retryRequest(endPoint, {
+      method: 'GET',
+      retries: retryOptions.retries,
+      timeout: retryOptions.timeout,
+      function: retryOptions.function
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      return response.body
+    })
+  }
+)
 
 Cypress.Commands.add('returns', (returnsRequestPayload) => {
   cy.api({

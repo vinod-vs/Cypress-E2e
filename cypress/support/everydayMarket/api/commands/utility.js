@@ -3,6 +3,75 @@
 
 import addItemsBodyWow from '../../../../fixtures/sideCart/addItemsToTrolley.json'
 import addItemsBodyMp from '../../../../fixtures/sideCart/addItemsToTrolley1.json'
+import addressSearch from '../../../../fixtures/checkout/addressSearch.json'
+import { fulfilmentType } from '../../../../fixtures/checkout/fulfilmentType.js'
+import { windowType } from '../../../../fixtures/checkout/fulfilmentWindowType.js'
+import searchRequest from '../../../../fixtures/search/productSearch.json'
+import creditCardDetails from '../../../../fixtures/payment/creditcardPayment.json'
+import digitalPaymentRequest from '../../../../fixtures/payment/digitalPayment.json'
+import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
+import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
+import '../../../deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../search/api/commands/search'
+import '../../../checkout/api/commands/navigateToCheckout'
+import '../../../payment/api/commands/creditcard'
+import '../../../sideCart/api/commands/addItemsToTrolley'
+import '../../../payment/api/commands/digitalPayment'
+import '../../../checkout/api/commands/confirmOrder'
+
+Cypress.Commands.add('placeAnySingleLineItemEdmOrder', (searchTerm, quantity) => {
+  // Set fulfilment using the new /windows endpoint
+  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+
+  // Search product by overriding the SearchTerm attribute in the search body request fixture
+  cy.productSearch({ ...searchRequest, SearchTerm: searchTerm })
+    .then((searchResponse) => {
+      const edmSearchProduct = searchResponse.Products
+        // Filter search results by IsMarketProduct = true and IsAvailable = true
+        .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
+        // Pick the first result
+        .shift()
+      const edmProductStockcode = edmSearchProduct.Products[0].Stockcode
+
+      // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
+      // in the trolley request body fixture
+      cy.addItemsToTrolley({ ...addItemsBodyMp, StockCode: edmProductStockcode, Quantity: quantity })
+    })
+
+  // Place and confirm the order
+  return placeOrder()
+})
+
+function placeOrder () {
+  // Grab balance to pay to be later passed on to /payment
+  cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
+  // Grab new credit card session Id to be passed on to find Digital pay instrument Id
+  cy.navigatingToCreditCardIframe().its('IframeUrl').invoke('split', '/').its(5).as('ccSessionId')
+  // Grab Digital pay instrument Id for the test credit card set in the fixture
+  cy.get('@ccSessionId').then((ccSessionId) => {
+    cy.creditcardPayment(creditCardDetails, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId })
+      .its('itemId').as('ccInstrumentId')
+  })
+
+  cy.all(
+    cy.get('@balanceToPay'),
+    cy.get('@ccInstrumentId')
+  ).then(([amount, paymentInstrumentId]) => {
+    // Passed the value in the aliases as /payment request body
+    cy.digitalPay({
+      ...digitalPaymentRequest,
+      payments: [{
+        ...digitalPaymentRequest.payments[0],
+        amount: amount,
+        paymentInstrumentId: paymentInstrumentId
+      }]
+    }).its('PlacedOrderId').as('traderPlacedOrderId')
+  })
+
+  cy.get('@traderPlacedOrderId').then((traderPlacedOrderId) => {
+    return cy.confirmOrder({ ...confirmOrderRequest, placedOrderId: traderPlacedOrderId })
+  })
+}
 
 Cypress.Commands.add('getRegularDeliveryTimeSlot', (testData) => {
   let addressId
