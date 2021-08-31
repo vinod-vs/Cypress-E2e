@@ -22,7 +22,6 @@ Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
   }).then((response) => {
     let address = response.body.Response[0]
     deliveryAddressId = address.Id
-    //deliveryAddressId = response.body.Response[0].Id
 
     fulfilmentData.location = address.AddressText
 
@@ -42,10 +41,6 @@ Cypress.Commands.add('searchPickupDTBStores', (storeType, postCode) => {
 
     addressId = store.AddressId
     fulfilmentAreaId = store.AreaId
-    
-    /*
-    addressId = response.body[0].AddressId
-    fulfilmentAreaId = response.body[0].AreaId */
 
     fulfilmentData.location = store.AddressText
     return response.body
@@ -164,10 +159,10 @@ function getAvailableWindowsByWindowType(windowResponse, selectedWindowType) {
 
 function selectRandomWindow(windowArr) {
   selectedWindow = windowArr[Math.floor(Math.random() * windowArr.length)]
-  fulfilmentData.TimeObj = selectedWindow
   timeSlotId = selectedWindow.Id
-  cy.log('Window ID in FulfilmentData is: ' + fulfilmentData.TimeObj.Id)
 
+  fulfilmentData.window = selectedWindow
+  
   return cy.wrap(selectedWindow)
 }
 
