@@ -21,7 +21,7 @@ Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTracking
     url: Cypress.env('marketplacerApiEndpoint') + endPoint,
     body: requestBody
   }).then((response) => {
-    expect(response.status).to.eq(201)
+    expect(response.status).to.be.within(200, 201)
     return response.body
   })
 })
