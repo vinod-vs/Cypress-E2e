@@ -1,0 +1,36 @@
+{
+    "personalPlans":[
+        {
+            "PlanId": 9,
+            "ServiceType": "DeliverySaver",
+            "Name": "Any day, annual subscription",
+            "Price": 119.0,
+            "SubscriberType":"personal"
+
+        },
+        {
+            "PlanId": 10,
+            "ServiceType": "DeliverySaver",
+            "Name": "Any day, monthly subscription",
+            "Price": 15.0,
+            "SubscriberType":"personal"
+        }
+    ],
+    "seniorPlans":[
+        {
+            "PlanId": 43,
+            "ServiceType": "DeliverySaver",
+            "Name": "Any day, monthly subscription",
+            "Price": 13.5,
+            "SubscriberType":"senior"
+        },
+        {
+            "PlanId": 44,
+            "ServiceType": "DeliverySaver",
+            "Name": "Any day, annual subscription",
+            "Price": 117.0,
+            "SubscriberType":"senior"
+
+        }
+    ]
+}

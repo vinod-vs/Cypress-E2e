@@ -33,3 +33,12 @@ export function verifyOrderTotals (testData, confirmOrderResponse) {
   expect(confirmOrderResponse.Order.Subtotal).to.be.equal(Number(testData.edmTotal) + Number(testData.wowTotal))
   expect(confirmOrderResponse.Order.TotalIncludingGst).to.be.equal(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges))
 }
+
+export function generateRandomString () {
+  var randomStr = ''
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  for (var i = 0; i < 10; i++) {
+    randomStr += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return randomStr
+}

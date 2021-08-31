@@ -1,0 +1,12 @@
+{
+    "queryCardDetailsReq": {
+        "partnerId": 0,
+        "siteId": 0,
+        "posId": 0,
+        "loyaltySiteType": "",
+        "transDateTime": "",
+        "transId": 0,
+        "uniqueTransId": "",
+        "cardNo": 0
+    }
+}

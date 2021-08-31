@@ -1,0 +1,15 @@
+{
+    "data": {
+      "type": "shipments",
+      "attributes": {
+        "shipment_tracking_number": "1234567890",
+        "shipment_carrier": "Australia Post",
+        "shipped_items": [
+          {
+            "line_item_id": 0,
+            "quantity": 0
+          }
+        ]
+      }
+    }
+  }
