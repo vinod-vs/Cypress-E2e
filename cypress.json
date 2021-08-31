@@ -49,8 +49,8 @@
         "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",
         "rpgEndpoint": "https://test.api-wr.com/",
         "rpgQueryEndpoint": "wx/v1/loyalty/partners/cards/query",
-        "tags": "API/UI",
-        "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin?code=HpEM1cUoXOzjTBWdT2lM13SoeMfRQa2IrwOMnNddbQNH6aaITeCI6A==&stockcode=786815&storeno=5654"
+        "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin?",
+        "tags": "API/UI"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,
