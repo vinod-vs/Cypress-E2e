@@ -21,7 +21,7 @@ Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTracking
     url: Cypress.env('marketplacerApiEndpoint') + endPoint,
     body: requestBody
   }).then((response) => {
-    expect(response.status).to.eq(201)
+    expect(response.status).to.be.within(200, 201)
     return response.body
   })
 })
@@ -121,6 +121,7 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
   }).then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.data.refundRequestCreate.errors).to.be.null
+    expect(response.body.data.refundRequestCreate.refundRequest.status).to.equals('AWAITING')
     return response.body
   })
 })
@@ -167,6 +168,7 @@ Cypress.Commands.add('refundRequestReturn', (encodedRefundRequestId) => {
     }
   }).then((response) => {
     expect(response.status).to.eq(200)
+    expect(response.body.data.refundRequestReturn.refundRequest.status).to.equals('RETURNED')
     expect(response.body.data.refundRequestReturn.errors).to.be.null
     return response.body
   })
