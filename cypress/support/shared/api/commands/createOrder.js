@@ -1,6 +1,6 @@
 import '../../../login/api/commands/login'
 import '../../../search/api/commands/search'
-import '../../../deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../fulfilment/api/commands/fulfilment'
 import '../../../sideCart/api/commands/clearTrolley'
 import '../../../sideCart/api/commands/addItemsToTrolley'
 import '../../../checkout/api/commands/navigateToCheckout'

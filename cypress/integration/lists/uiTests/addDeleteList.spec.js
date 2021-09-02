@@ -4,7 +4,7 @@ import tradingAccount from '../../../fixtures/fulfilmentMethod/tradeAccountDetai
 import searchDetails from '../../../fixtures/search/searchTerms.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/ui/commands/login'
-import '../../../support/deliveryDateAndWindow/ui/commands/deliveryDateAndWindow'
+import '../../../support/fulfilment/ui/commands/deliveryDateAndWindow'
 import '../../../support/lists/ui/commands/addDeleteList'
 
 const faker = require('faker')
