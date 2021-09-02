@@ -29,22 +29,34 @@ Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
   })
 })
 
-Cypress.Commands.add('searchPickupDTBStores', (storeType, postCode) => {
-  selectedFulfilmentType = storeType;
-  cy.api({
-    method: 'GET',
-    url: Cypress.env('pickupSearchEndpoint'),
-    qs: { postcode: postCode, fulfilmentMethods: storeType }
-  })
-  .then((response) => {
-    let store = response.body[0]
-
-    addressId = store.AddressId
-    fulfilmentAreaId = store.AreaId
-
-    fulfilmentData.location = store.AddressText
-    return response.body
+function getSuburbPostCode(searchTerm) {
+  if (isNaN(searchTerm)) { // suburb
+    cy.locateStores(searchTerm).then((response) => {
+      return cy.wrap((response.Suburbs[0].PostCode))
     })
+  }
+  return cy.wrap(searchTerm)  // postcode
+}
+
+Cypress.Commands.add('searchPickupDTBStores', (storeType, searchTerm) => {
+  selectedFulfilmentType = storeType
+
+  getSuburbPostCode(searchTerm).then((postCode) => {
+    cy.api({
+      method: 'GET',
+      url: Cypress.env('pickupSearchEndpoint'),
+      qs: { postcode: postCode, fulfilmentMethods: storeType }
+    })
+    .then((response) => {
+      let store = response.body[0]
+  
+      addressId = store.AddressId
+      fulfilmentAreaId = store.AreaId
+  
+      fulfilmentData.location = store.AddressText
+      return response.body
+    })
+  })
 })
 
 Cypress.Commands.add('addDeliveryAddress', () => {
@@ -295,5 +307,19 @@ Cypress.Commands.add('fulfilmentWithSpecificDeliveryDateAndTime', (deliveryAddre
     body: { AddressId: deliveryAddressId, FulfilmentMethod: 'Courier', TimeSlotId: timeSlotId, windowDate: windowDate }
   }).then((response) => {
     return response.body
+  })
+})
+
+Cypress.Commands.add('locateStores', (suburb) => {
+  const locatorRequest = {
+    SearchTerm: suburb  
+  }
+  cy.buildQueryString(locatorRequest).then((queryString) => {
+    cy.api({
+      method: 'GET',
+      url: Cypress.env('storeLocatorEndpoint') + queryString 
+    }).then((response) => {
+      return response.body
+    })
   })
 })
