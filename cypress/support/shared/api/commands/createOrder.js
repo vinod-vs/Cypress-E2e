@@ -7,7 +7,7 @@ import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../payment/api/commands/creditcard'
 import '../../../payment/api/commands/digitalPayment'
-import { windowType } from '../../../fixtures/checkout/windowCategory.js'
+import { windowType } from '../../../../fixtures/checkout/fulfilmentWindowType.js'
 
 export default class CreateB2CDeliveryOrderPaidViaCreditCard {
   placeOrderForB2CUser (shopper, addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
