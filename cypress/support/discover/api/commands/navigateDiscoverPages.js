@@ -8,3 +8,15 @@ Cypress.Commands.add('navigateDiscoverPage', (endPoint) => {
     return response.body
   })
 })
+
+Cypress.Commands.add('navigateDiscoverPages', (endPoint) => {
+  cy.api({
+    method: 'GET',
+    url: Cypress.env(endPoint)
+  }).then((response) => {
+
+
+    return response.body
+  })
+})
+

@@ -1,6 +1,6 @@
 {
-  "supportFile": "cypress/support/index.js",  
-  "baseUrl": "https://adminuatsite.woolworths.com.au/",
+    "supportFile": "cypress/support/index.js",
+    "baseUrl": "https://adminuatsite.woolworths.com.au/",
     "env": {
         "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
         "dev4": "https://dev4site.woolworths.com.au/",
@@ -48,6 +48,7 @@
         "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
         "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",
         "rpgEndpoint": "https://test.api-wr.com/",
+        "navigateToDiscoverPageEndpoint": "https://uatsite.woolworths.com.au/apis/ui/inspiration/navigation",
         "rpgQueryEndpoint": "wx/v1/loyalty/partners/cards/query",
         "tags": "API/UI"
     },
