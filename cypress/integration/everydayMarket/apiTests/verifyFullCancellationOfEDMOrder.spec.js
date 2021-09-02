@@ -18,6 +18,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/rewards/api/commands/rewards'
+import '../../../support/refunds/api/commands/commands'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
@@ -174,7 +175,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             // Rewards Details for line items
             // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETREWARD')
             expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
-            expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+            expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
             expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
             // Refund 
             expect(response.invoices[0].refunds[0].id).to.not.be.null
@@ -238,6 +239,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.queryCardDetailsResp.pointBalance).to.be.equal(testData.rewardPointBefore)           
           })
 
+          //Verify the refund details
+          lib.verifyRefundDetails(testData.orderId, testData.edmTotal, testData.edmDeliveryCharges)
         })
       })
     })
@@ -283,6 +286,6 @@ function verifyOrderDetails(response, testData, shopperId) {
   // Rewards Details
   // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETREWARD')
   expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
   expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }

@@ -12,6 +12,8 @@ import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
 import '../../../support/sideCart/api/commands/clearTrolley'
+import '../../../support/invoices/api/commands/commands'
+import '../../../support/refunds/api/commands/commands'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
@@ -173,7 +175,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               // Rewards Details
               // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
               expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
-              expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+              expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
               expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 
               // After dispatch, Invoke the events api and verify the events are updated acordingly
@@ -194,12 +196,15 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 cy.log('Testdata JSON: ' + JSON.stringify(testData))
                 cy.log('EDM Total: ' + testData.edmTotal)
                 cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints + ' , OR: ' + Number(Number(expectedRewardsPoints) + 1))
+                cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
                 expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
                 // Rewards has a logic of rouding to an even number if odd
                 // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
-                expect(response.queryCardDetailsResp.pointBalance).to.be.within(expectedRewardsPoints, Number(expectedRewardsPoints) + 1)
+                expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
               })
+
+              //Verify No refund details
+              lib.verifyRefundDetails(testData.orderId, 0, 0)
             })
           })
         })
@@ -248,6 +253,6 @@ function verifyOrderDetails(response, testData, shopperId) {
   // Rewards Details
   // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
   expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
   expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }

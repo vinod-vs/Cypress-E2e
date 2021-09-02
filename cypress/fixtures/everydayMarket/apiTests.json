@@ -25,6 +25,7 @@
       "totalQuantity": 0,
       "totalWowQuantity": 0,
       "totalEdmQuantity": 0,
+      "orderTotal": 0,
       "address":{
         "search": "407-419 Elizabeth St, SURRY HILLS"
                 },                
@@ -39,13 +40,13 @@
         {
           "stockCode": "",
           "quantity": 2,
-          "pricePerItem": "",
+          "pricePerItem": 0,
           "isEDMProduct": "true"
         },
         {
             "stockCode": "",
             "quantity": 0,
-            "pricePerItem": "",
+            "pricePerItem": 0,
             "isEDMProduct": "false",
             "minWowOrderThreshold": 50,
             "bufferWowQuantity": 5      
@@ -99,13 +100,13 @@
         {
           "stockCode": "",
           "quantity": 2,
-          "pricePerItem": "",
+          "pricePerItem": 0,
           "isEDMProduct": "true"
         },
         {
             "stockCode": "",
             "quantity": 0,
-            "pricePerItem": "",
+            "pricePerItem": 0,
             "isEDMProduct": "false",
             "minWowOrderThreshold": 50,
             "bufferWowQuantity": 5      
@@ -160,13 +161,13 @@
         {
           "stockCode": "",
           "quantity": 2,
-          "pricePerItem": "",
+          "pricePerItem": 0,
           "isEDMProduct": "true"
         },
         {
             "stockCode": "",
             "quantity": 0,
-            "pricePerItem": "",
+            "pricePerItem": 0,
             "isEDMProduct": "false",
             "minWowOrderThreshold": 50,
             "bufferWowQuantity": 5      

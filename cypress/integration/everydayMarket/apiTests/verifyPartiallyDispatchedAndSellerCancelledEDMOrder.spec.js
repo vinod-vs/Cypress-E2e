@@ -13,6 +13,7 @@ import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import '../../../support/rewards/api/commands/rewards'
+import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
@@ -152,7 +153,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               },
               retries: 10,
               timeout: 5000
-            }).then((response) => {
+            }).as('cancelledOrderProjection').then((response) => {
               expect(response.invoices[0].invoiceStatus).is.equal('REFUNDED')
               expect(response.invoices[0].wowStatus).is.equal('Shipped')
               // Validate line items
@@ -206,6 +207,13 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             })
           })
       })
+
+      // //Verify the refund is only for the cancelled item and the shipping fee is not returned
+      // cy.get('@cancelledOrderProjection').then((cancelledProjection) => {
+      //   cy.log('cancelledProjection.invoices[0].invoiceTotal: ' + cancelledProjection.invoices[0].invoiceTotal)
+      //   cy.log('cancelledProjection.invoices[0].refunds[0].refundAmount: ' + cancelledProjection.invoices[0].refunds[0].refundAmount)
+      //   lib.verifyRefundDetails(req.orderId, cancelledProjection.invoices[0].refunds[0].refundAmount, 0)
+      // })
     })
   })
 })

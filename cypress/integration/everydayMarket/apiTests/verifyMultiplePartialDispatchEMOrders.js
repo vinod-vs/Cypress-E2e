@@ -18,6 +18,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/rewards/api/commands/rewards'
+import '../../../support/refunds/api/commands/commands'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
@@ -158,13 +159,16 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             // verify order projection
             verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId2, orderReference, partialDispatchNumber)
           })
+
+          //Verify NO refund details
+          lib.verifyRefundDetails(testData.orderId, 0, 0)
         })
       })
     })
   })
 })
 
-function verifyOrderDetails (response, testData, shopperId) {
+function verifyOrderDetails(response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 
@@ -204,11 +208,11 @@ function verifyOrderDetails (response, testData, shopperId) {
   // Rewards Details
   // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
   expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
   expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }
 
-function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
+function verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
   cy.wait(Cypress.config('tenSecondWait') * 3)
   cy.log('Partial Dispatch :' + partialDispatchNumber + ':: Tracking ID ::' + trackingId)
   // After dispatch, Invoke the order api and verify the projection content is updated acordingly
@@ -279,7 +283,7 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
     // Rewards Details
     // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
     expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
-    expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.be.equal(0.1)
+    expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
     expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 
     // After dispatch, Invoke the events api and verify the events are updated acordingly
@@ -309,15 +313,15 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
       cy.log('Testdata JSON: ' + JSON.stringify(testData))
       cy.log('EDM Total: ' + testData.edmTotal)
       cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-      cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints + ' , OR: ' + Number(Number(expectedRewardsPoints) + 1))
+      cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
       expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
       // Rewards has a logic of rouding to an even number if odd
       // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
       if (partialDispatchNumber === 1) {
-        const expectedRewardsPtsPartialDispatch = expectedRewardsPoints - 10
-        expect(response.queryCardDetailsResp.pointBalance).to.be.within(expectedRewardsPtsPartialDispatch, Number(expectedRewardsPtsPartialDispatch) + 1)
+        const expectedRewardsPtsPartialDispatch = expectedRewardsPoints - testData.items[0].pricePerItem
+        expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPtsPartialDispatch), Number(Math.round(expectedRewardsPtsPartialDispatch + 1)))
       } else {
-        expect(response.queryCardDetailsResp.pointBalance).to.be.within(expectedRewardsPoints, Number(expectedRewardsPoints) + 1)
+        expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)) )
       }
     })
   })
