@@ -1,7 +1,7 @@
 [
     {
-      "email": "donald.duck@yopmail.com",
-      "password": "test123",
-      "platform": "B2B"
+       "email": "donald.duck@yopmail.com",
+       "password": "test123",
+       "platform": "B2B"
     }
-]
+]         
