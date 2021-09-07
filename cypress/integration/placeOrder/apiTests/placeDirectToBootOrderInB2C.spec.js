@@ -13,7 +13,7 @@ import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOr
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
-import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../support/fulfilment/api/commands/fulfilment'
 import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/checkout/api/commands/navigateToCheckout'
@@ -39,7 +39,7 @@ TestFilter(['B2C-API'], () => {
         expect(response.Id).to.be.greaterThan(0)
       }) 
 
-      cy.completeFulfilmentViaApi().then((response) => {
+      cy.completeWindowFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 

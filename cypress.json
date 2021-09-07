@@ -15,6 +15,7 @@
         "productSearchEndpoint": "apis/ui/Search/products",
         "addressEndpoint": "/apis/ui/address",
         "addressSearchEndpoint": "apis/ui/address/search",
+        "storeLocatorEndpoint": "/apis/ui/StoreLocator/Suburbs",
         "pickupSearchEndpoint": "apis/ui/PickupStores/Search",
         "addressAutoEndpoint": "apis/ui/address/auto",
         "timeSlotsEndpoint": "apis/ui/Timeslots",

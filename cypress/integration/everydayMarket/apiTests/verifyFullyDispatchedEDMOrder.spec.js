@@ -10,7 +10,7 @@ import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOr
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
-import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../support/fulfilment/api/commands/fulfilment'
 import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/invoices/api/commands/commands'
 import '../../../support/refunds/api/commands/commands'

@@ -13,7 +13,7 @@ import TestFilter from '../../../support/TestFilter'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
-import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../support/fulfilment/api/commands/fulfilment'
 import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/checkout/api/commands/navigateToCheckout'
@@ -62,7 +62,7 @@ TestFilter(['B2B-API'], () => {
         expect(response.Id).to.greaterThan(0)
       })
 
-      cy.completeFulfilmentViaApi().then((response) => {
+      cy.completeWindowFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 
