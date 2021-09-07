@@ -9,13 +9,12 @@
     },
     "lineItems": [
       {
-        "stockCode": 1073741832,
-        "quantity": 1,
-        "amount": 36,
+        "stockCode": 0,
+        "quantity": 0,
+        "amount": 0,
         "reason": "Automation - change of mind"
       }
     ],
-    "invoiceId": "EM0009813",
-    "orderReference": "9391J-1J26QP",
-    "createdBy": "Trader"
+    "invoiceId": "",
+    "orderReference": ""
   }
