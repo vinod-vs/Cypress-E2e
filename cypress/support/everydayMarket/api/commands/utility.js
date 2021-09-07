@@ -11,7 +11,7 @@ import creditCardDetails from '../../../../fixtures/payment/creditcardPayment.js
 import digitalPaymentRequest from '../../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
-import '../../../deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../fulfilment/api/commands/fulfilment'
 import '../../../search/api/commands/search'
 import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../payment/api/commands/creditcard'
