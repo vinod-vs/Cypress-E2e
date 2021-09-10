@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /// <reference types="cypress" />
-import fullDispatchAnInvoiceRequest from '../../../../fixtures/everydayMarket/marketplacer/fullDispatchAnInvoice.json'
-import partialDispatchOfLineItemsInInvoice from '../../../../fixtures/everydayMarket/marketplacer/partialDispatchOfLineItemsInInvoice.json'
+import fullDispatchAnInvoiceRequest from '../../../../fixtures/everydaymarket/marketplacer/fullDispatchAnInvoice.json'
+import partialDispatchOfLineItemsInInvoice from '../../../../fixtures/everydaymarket/marketplacer/partialDispatchOfLineItemsInInvoice.json'
 import CustomerReturnRequest from '../../../../fixtures/everydayMarket/returns.json'
 
 Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTrackingnumber, postageCarrier, sellerName) => {
@@ -228,11 +228,7 @@ Cypress.Commands.add('customerReturn', (edmInvoiceId, orderReference, returnRequ
   const customerReturnRequestBody = CustomerReturnRequest
   customerReturnRequestBody.invoiceId = edmInvoiceId
   customerReturnRequestBody.orderReference = orderReference
-  /* customerReturnRequestBody.lineItems[0].stockCode = edmStockCode
-    customerReturnRequestBody.lineItems[0].quantity = quantityToReturn
-    customerReturnRequestBody.lineItems[0].amount = amountUnitPriceOfItemToReturn  */
   customerReturnRequestBody.lineItems = returnRequestLineItem
-
   cy.api({
     method: 'POST',
     url: Cypress.env('ordersApiEndpoint') + endPoint,
