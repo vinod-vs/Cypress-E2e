@@ -1,7 +1,7 @@
 {
     "name": "wow-e2e-api-automation",
     "version": "1.0.0",
-    "description": "E2E Automation Framework",
+    "description": "E2E API Automation Framework",
     "main": "index.js",
     "scripts": {
         "cypress:open": "cypress open",
@@ -9,8 +9,6 @@
         "cypress:spec": "cypress run --spec",
         "pretest": "npx standard || true",
         "test": "cypress run",
-        "browserstackTest": "browserstack-cypress run",
-        "browserstackGenerateReport": "browserstack-cypress generate-report",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
         "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
@@ -21,8 +19,8 @@
         "@bahmutov/cy-api": "^1.5.0",
         "@shelex/cypress-allure-plugin": "^2.3.5",
         "allure-commandline": "^2.13.8",
-        "browserstack-cypress-cli": "^1.9.0",
-        "cypress": "^8.2.0",
+        "browserstack-cypress-cli": "^1.8.1",
+        "cypress": "^8.3.0",
         "cypress-iframe": "^1.0.1",
         "cypress-multi-reporters": "^1.4.0",
         "cypress-xpath": "^1.6.2",
@@ -31,10 +29,9 @@
         "mochawesome": "^6.2.2",
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.2.0",
-        "standard": "^16.0.3",
-        "moment": "^2.29.1",
-        "junit-report-merger": "^1.0.0"
+        "standard": "^16.0.3"
     },
+    "dependencies": {},
     "standard": {
         "env": [
             "mocha"
