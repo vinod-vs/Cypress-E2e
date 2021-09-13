@@ -302,7 +302,6 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
   })
 })
 
-//shweta
 Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, testData, cupTestdata) => {
   const response = productSearchResponse
   const items = testData.items

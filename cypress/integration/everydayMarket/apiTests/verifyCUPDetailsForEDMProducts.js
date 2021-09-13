@@ -22,9 +22,6 @@ import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers
 import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP.json'
 import searchRequest from '../../../fixtures/search/productSearch.json'
 
-
-
-
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API]  MPPF-954 | EM | Verify CUP details for a product for measure type-Weight', () => {
     before(() => {
@@ -32,7 +29,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('MPPF-954 | EM | Verify CUP details for measure type-Weight G and KG', () => {
+    it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and KG', () => {
       const testData = tests.VerifyFullyDispatchedEDMOrder
       const shopperId = shoppers.emAccount2.shopperId
 
@@ -63,8 +60,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 })
 
 
-function serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdata)
-{
+function serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdata) {
   searchRequest.SearchTerm = cupTestdata.searchTerm
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -73,7 +69,7 @@ function serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdata)
     })
   })
 }
-//this function calculate based on the CUP details set and returns the calculated CUP
+
 function returnCUPprice(cupTestdata) {
 
   let productPrice
@@ -92,13 +88,13 @@ function returnCUPprice(cupTestdata) {
     expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice) / Number(cupTestdata.itemSize)
   }
   else if (cupTestdata.itemUnit != cupTestdata.comparativeUnit) {
-    expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice * adjustItemsizToComprativeSizeForDiffWeightComb(cupTestdata)) / Number(cupTestdata.itemSize)
+    expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice * adjustItemsizeToComparativeSizeForDiffWeightComb(cupTestdata)) / Number(cupTestdata.itemSize)
   }
 
   return round(expectedCupPrice);
 }
 
-function adjustItemsizToComprativeSizeForDiffWeightComb(cupTestdata) {
+function adjustItemsizeToComparativeSizeForDiffWeightComb(cupTestdata) {
   let adjustmentValue = Number(0)
   cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
   if (cupTestdata.itemUnit == "G" && cupTestdata.comparativeUnit == "KG") {
@@ -129,7 +125,7 @@ function adjustItemsizToComprativeSizeForDiffWeightComb(cupTestdata) {
   return adjustmentValue;
 }
 
-function adjustItemsizToComprativeSizeForDiffVolumeComb(cupTestdata) {
+function adjustItemsizeToComparativeSizeForDiffVolumeComb(cupTestdata) {
   let adjustmentValue = Number(0)
   cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
   if (cupTestdata.itemUnit == "ML" && cupTestdata.comparativeUnit == "L") {
@@ -160,7 +156,7 @@ function adjustItemsizToComprativeSizeForDiffVolumeComb(cupTestdata) {
   return adjustmentValue;
 }
 
-function adjustItemsizToComprativeSizeForDiffLengthComb(cupTestdata) {
+function adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata) {
   let adjustmentValue = Number(0)
   cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
   if (cupTestdata.itemUnit == "MM" && cupTestdata.comparativeUnit == "CM") {
@@ -196,7 +192,7 @@ function round(num) {
   return Math.round(m) / 100 * Math.sign(num);
 }
 
-function roundOfValue(num) {
+function roundOfDecimaltoTwoDigit(num) {
   return (Math.round(num * 100) / 100).toFixed(2);
 }
 
@@ -217,7 +213,7 @@ function verifyCupValues(cupTestdata) {
   expect(cupTestdata.cupMeasure).to.be.equal(expCUPMeasure)
   //CupString
   let roundofActualCUPprice
-  roundofActualCUPprice = roundOfValue(cupTestdata.cupPrice)
+  roundofActualCUPprice = roundOfDecimaltoTwoDigit(cupTestdata.cupPrice)
   let expCUPString = '$' + roundofActualCUPprice + ' / ' + expCUPMeasure
   cy.log('expCUPString: ' + expCUPString)
   expect(cupTestdata.cupString).to.be.equal(expCUPString)
