@@ -1,0 +1,73 @@
+{
+
+  "weightGtoKG": {
+    "searchTerm": "Calcium Ascorbate",
+    "basePrice":19.95,
+    "salePrice":15.95,
+    "cupCalcBasedOn":"salePrice",
+    "itemSize": 125,
+    "itemUnit": "G",
+    "comparativeSize": 1,
+    "comparativeUnit": "KG",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":""
+  },
+  "weightKGtokG": {
+    "searchTerm": "lamaze",
+    "basePrice":31.49,
+    "salePrice":"",
+    "cupCalcBasedOn":"basePrice",
+    "itemSize": "2",
+    "itemUnit": "sqm",
+    "comparativeSize": "3",
+    "comparativeUnit": "sqm",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":""  
+  },
+  "weightKGtoG": {
+    "searchTerm": "lamaze",
+    "basePrice":31.49,
+    "salePrice":"",
+    "cupCalcBasedOn":"basePrice",
+    "itemSize": "2",
+    "itemUnit": "sqm",
+    "comparativeSize": "3",
+    "comparativeUnit": "sqm",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":""
+    },
+  "volume": {
+    "searchTerm": "lamaze",
+    "basePrice":31.49,
+    "salePrice":"",
+    "cupCalcBasedOn":"basePrice",
+    "itemSize": "2",
+    "itemUnit": "L",
+    "comparativeSize": "3",
+    "comparativeUnit": "L",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":""
+  },
+  "area": {
+    "searchTerm": "lamaze",
+    "basePrice":31.49,
+    "salePrice":"",
+    "cupCalcBasedOn":"basePrice",
+    "itemSize": "2",
+    "itemUnit": "sqm",
+    "comparativeSize": "3",
+    "comparativeUnit": "sqm",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":""
+  }
+}
