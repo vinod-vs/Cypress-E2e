@@ -1,6 +1,6 @@
 import LoginPage from '../pageObjects/LoginPage'
 import HomePage from '../../../homePage/ui/pageObjects/HomePage'
-import DeliveryDateAndWindowPage from '../../../deliveryDateAndWindow/ui/pageObjects/DeliveryDateAndWindowPage'
+import DeliveryDateAndWindowPage from '../../../fulfilment/ui/pageObjects/DeliveryDateAndWindowPage'
 
 const login = new LoginPage()
 const homePage = new HomePage()

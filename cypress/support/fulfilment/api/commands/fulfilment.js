@@ -20,25 +20,43 @@ Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
     url: Cypress.env('addressSearchEndpoint'),
     body: suburb
   }).then((response) => {
-    deliveryAddressId = response.body.Response[0].Id
+    let address = response.body.Response[0]
+    deliveryAddressId = address.Id
+
+    fulfilmentData.location = address.AddressText
 
     return response.body
   })
 })
 
-Cypress.Commands.add('searchPickupDTBStores', (storeType, postCode) => {
-  selectedFulfilmentType = storeType;
-  cy.api({
-    method: 'GET',
-    url: Cypress.env('pickupSearchEndpoint'),
-    qs: { postcode: postCode, fulfilmentMethods: storeType }
-  })
-  .then((response) => {
-    addressId = response.body[0].AddressId
-    fulfilmentAreaId = response.body[0].AreaId
+function getSuburbPostCode(searchTerm) {
+  if (isNaN(searchTerm)) { // suburb
+    cy.locateStores(searchTerm).then((response) => {
+      return cy.wrap((response.Suburbs[0].PostCode))
+    })
+  }
+  return cy.wrap(searchTerm)  // postcode
+}
 
+Cypress.Commands.add('searchPickupDTBStores', (storeType, searchTerm) => {
+  selectedFulfilmentType = storeType
+
+  getSuburbPostCode(searchTerm).then((postCode) => {
+    cy.api({
+      method: 'GET',
+      url: Cypress.env('pickupSearchEndpoint'),
+      qs: { postcode: postCode, fulfilmentMethods: storeType }
+    })
+    .then((response) => {
+      let store = response.body[0]
+  
+      addressId = store.AddressId
+      fulfilmentAreaId = store.AreaId
+  
+      fulfilmentData.location = store.AddressText
       return response.body
     })
+  })
 })
 
 Cypress.Commands.add('addDeliveryAddress', () => {
@@ -153,10 +171,10 @@ function getAvailableWindowsByWindowType(windowResponse, selectedWindowType) {
 
 function selectRandomWindow(windowArr) {
   selectedWindow = windowArr[Math.floor(Math.random() * windowArr.length)]
-  fulfilmentData.TimeObj = selectedWindow
   timeSlotId = selectedWindow.Id
-  cy.log('Window ID in FulfilmentData is: ' + fulfilmentData.TimeObj.Id)
 
+  fulfilmentData.window = selectedWindow
+  
   return cy.wrap(selectedWindow)
 }
 
@@ -171,7 +189,8 @@ Cypress.Commands.add('setFulfilmentLocationWithoutWindow', (fulType, fulfilmentL
     case fulfilmentType.DIRECT_TO_BOOT:
       cy.searchPickupDTBStores(fulType, fulfilmentLocation)
       break;
-  } 
+  }
+  cy.completeLocationFulfilmentViaApi()
 })
 
 Cypress.Commands.add('setFulfilmentLocationWithWindow', (fulType, fulfilmentLocation, windowType) => {
@@ -186,29 +205,35 @@ Cypress.Commands.add('setFulfilmentLocationWithWindow', (fulType, fulfilmentLoca
       cy.searchPickupDTBStores(fulType, fulfilmentLocation)
       break
   }
-
   cy.getFulfilmentWindowViaApi(windowType).then(() => {
-    cy.completeFulfilmentViaApi()
+    cy.completeWindowFulfilmentViaApi()
   })
 })
 
-// RC 24/08/21: TODO: Improve this
-Cypress.Commands.add('setFulfilmentForExistingAddress', (addressText) => {
+Cypress.Commands.add('setFulfilmentWithoutWindowForExistingAddress', (addressText) => {
+  selectedFulfilmentType = fulfilmentType.DELIVERY
+
   cy.getPreviousAddressesViaApi().then((addresses) => {
-    for (let address in addresses.Address) {
+    for (const address of addresses.Address) {
       if (address.AddressText === addressText) {
         addressId = address.AddressId
         fulfilmentAreaId = address.AreaId
         deliverySuburbId = address.SuburbId
-        break
+
+        fulfilmentData.location = address.AddressText
+        break 
       }
     }
-  }).then(() => {
-    cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then(() => {
-      cy.completeFulfilmentViaApi() 
-    })
   })
+  cy.completeLocationFulfilmentViaApi()
 })
+
+Cypress.Commands.add('setFulfilmentWithWindowForExistingAddress', (addressText, windowType) => {
+  cy.setFulfilmentWithoutWindowForExistingAddress(addressText).then(() => {
+    cy.getFulfilmentWindowViaApi(windowType)
+  })
+  cy.completeWindowFulfilmentViaApi()  
+}) 
 
 Cypress.Commands.add('getFulfilmentWindowViaApi', (selectedWindowType) => {
   buildWindowRequest();
@@ -247,21 +272,32 @@ Cypress.Commands.add('deliveryTimeSlotForAddress', (deliveryAddressId, deliveryA
   })
 })
 
-Cypress.Commands.add('completeFulfilmentViaApi', () => {
-  fulfilmentRequest = {
-    AddressId: addressId,
-    FulfilmentMethod: selectedFulfilmentType,
-    TimeSlotId: timeSlotId,
-    windowDate: windowDate
-  }
-  
+function completeFulfilment(fulfilmentRequest) {
   cy.api({
     method: 'POST',
     url: Cypress.env('fulfilmentEndpoint'),
     body: fulfilmentRequest
   }).then((response) => {
     return response.body  
-  })
+  })  
+}
+
+Cypress.Commands.add('completeLocationFulfilmentViaApi', () => {
+  fulfilmentRequest = {
+    AddressId: addressId,
+    FulfilmentMethod: selectedFulfilmentType
+  }
+  return completeFulfilment(fulfilmentRequest)
+})
+
+Cypress.Commands.add('completeWindowFulfilmentViaApi', () => {
+  fulfilmentRequest = {
+    AddressId: addressId,
+    FulfilmentMethod: selectedFulfilmentType,
+    TimeSlotId: timeSlotId,
+    windowDate: windowDate
+  }
+  return completeFulfilment(fulfilmentRequest)
 })  
 
 Cypress.Commands.add('fulfilmentWithSpecificDeliveryDateAndTime', (deliveryAddressId, timeSlotId, windowDate) => {
@@ -271,5 +307,19 @@ Cypress.Commands.add('fulfilmentWithSpecificDeliveryDateAndTime', (deliveryAddre
     body: { AddressId: deliveryAddressId, FulfilmentMethod: 'Courier', TimeSlotId: timeSlotId, windowDate: windowDate }
   }).then((response) => {
     return response.body
+  })
+})
+
+Cypress.Commands.add('locateStores', (suburb) => {
+  const locatorRequest = {
+    SearchTerm: suburb  
+  }
+  cy.buildQueryString(locatorRequest).then((queryString) => {
+    cy.api({
+      method: 'GET',
+      url: Cypress.env('storeLocatorEndpoint') + queryString 
+    }).then((response) => {
+      return response.body
+    })
   })
 })

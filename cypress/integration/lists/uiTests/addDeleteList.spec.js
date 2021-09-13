@@ -1,10 +1,10 @@
 /// <reference types="Cypress" />
-import shoppers from '../../../fixtures/login/b2bShoppers.json'
+import shoppers from '../../../fixtures/lists/b2bShoppers.json'
 import tradingAccount from '../../../fixtures/fulfilmentMethod/tradeAccountDetails.json'
 import searchDetails from '../../../fixtures/search/searchTerms.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/ui/commands/login'
-import '../../../support/deliveryDateAndWindow/ui/commands/deliveryDateAndWindow'
+import '../../../support/fulfilment/ui/commands/deliveryDateAndWindow'
 import '../../../support/lists/ui/commands/addDeleteList'
 
 const faker = require('faker')
@@ -17,7 +17,7 @@ TestFilter(['B2B-UI'], () => {
     })
     it('Create a list and Delete the list', () => {
       // Login
-      cy.loginViaUi(shoppers[3])
+      cy.loginViaUi(shoppers[0])
 
       // Select Delivery date Window
       cy.selectDeliveryDateAndWindow(tradingAccount[0].trading_acc_address)

@@ -2,15 +2,10 @@
 /* eslint-disable no-unused-expressions */
 
 import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
-import searchBody from '../../../fixtures/search/productSearch.json'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
-import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
-import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
-import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
-import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../support/fulfilment/api/commands/fulfilment'
 import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/checkout/api/commands/navigateToCheckout'
@@ -44,56 +39,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       let trackingId2
       let partialDispatchNumber
 
-      // Login
-      cy.loginViaApi(shoppers.emAccount2).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
-      })
-
-      // Select a regular delivery slot
-      cy.getRegularDeliveryTimeSlot(testData).then((response) => {
-        cy.fulfilmentWithSpecificDeliveryDateAndTime(testData.deliveryAddressId, testData.timeSlotId, testData.windowDate).then((response) => {
-          expect(response).to.have.property('IsSuccessful', true)
-          expect(response).to.have.property('IsNonServiced', false)
-        })
-      })
-
-      // clear the trolley before placing an order
-      cy.clearTrolley().then((response) => {
-        expect(response).to.have.property('TrolleyItemCount', 0)
-        expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
-      })
-
-      // Search for the desired products and add them to cart
-      searchBody.SearchTerm = testData.searchTerm
-      cy.productSearch(searchBody).then((response) => {
-        expect(response.SearchResultsCount).to.be.greaterThan(0)
-
-        cy.getTestProductFromProductSearchResponse(response, testData)
-      })
-
-      // Checkout, make a CC payment and place the order
-      cy.navigateToCheckout().then((response) => {
-        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-        digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
-      })
-      cy.navigatingToCreditCardIframe().then((response) => {
-        expect(response).to.have.property('Success', true)
-        creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
-      })
-      cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
-        expect(response.status.responseText).to.be.eqls('ACCEPTED')
-        digitalPayment.payments[0].paymentInstrumentId = response.itemId
-      })
-      cy.digitalPay(digitalPayment).then((response) => {
-        expect(response.TransactionReceipt).to.not.be.null
-        expect(response.PlacedOrderId).to.not.be.null
-        confirmOrderParameter.placedOrderId = response.PlacedOrderId
-      })
-
-      // Confirm the orders or place the order
-      cy.wait(Cypress.config('fiveSecondWait'))
-      cy.confirmOrder(confirmOrderParameter).then((response) => {
-        expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
+      //Login and place the order from testdata
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
@@ -127,6 +74,11 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
           })
+
+          //Verify the MP and shipping invoices are available for the customer
+          //TO-DO Verify the invoice content
+          cy.verifyOrderInvoice(testData)
+
           // Dispatch partial order with a unique tracking id
           trackingId1 = lib.generateRandomString()
           cy.log('First Tracking Id :' + trackingId1)
@@ -144,6 +96,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId1, orderReference, partialDispatchNumber)
           })
 
+          //Verify the MP and shipping invoices are available for the customer
+          //TO-DO Verify the invoice content
+          cy.verifyOrderInvoice(testData)
+
           trackingId2 = lib.generateRandomString()
           cy.log('Second Tracking Id :' + trackingId2)
           const data2 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
@@ -159,6 +115,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             // verify order projection
             verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId2, orderReference, partialDispatchNumber)
           })
+
+          //Verify the MP and shipping invoices are available for the customer
+          //TO-DO Verify the invoice content
+          cy.verifyOrderInvoice(testData)
 
           //Verify NO refund details
           lib.verifyRefundDetails(testData.orderId, 0, 0)
@@ -321,7 +281,7 @@ function verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId, 
         const expectedRewardsPtsPartialDispatch = expectedRewardsPoints - testData.items[0].pricePerItem
         expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPtsPartialDispatch), Number(Math.round(expectedRewardsPtsPartialDispatch + 1)))
       } else {
-        expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)) )
+        expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
       }
     })
   })

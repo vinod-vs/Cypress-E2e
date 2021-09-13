@@ -85,3 +85,9 @@ Here "API" is the tag for this test suite mentioned inside the 'TestFilter'.
 6. Update readme file to include info. about using the cypress test automation project and running tests. - Amit, Kristian, Ara
 7. ~~Having custom command files for specific functional modules.~~ - Amit
 8. ~~Allure reporting implementation.~~
+
+# Setting fulfilment (type + window)
+From your test, use fulfilment fixture files (fulfilmentType.js & fulfilmentWindowType.js) to specify the fulfilment selection type (i.e. Delivery, Pick up, DTB) &
+fulfilment window type (i.e. Fleet, Delivery Now etc.)
+Call appropriate commands in 'Fulfilment' module support files. To verify API responses, you can use e.g. 'searchDeliveryAddress', 'addDeliveryAddress' & 'getFulfilmentWindowViaApi', whereas if you do no not need a response value, and just need to set fulfilment as part of a broader test, use e.g. 'setFulfilmentLocationWithWindow' (passing appropriate fulfilment selection & window types defined in the fulfilment fixture files)
+
