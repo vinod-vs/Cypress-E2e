@@ -221,7 +221,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
           item.pricePerItem = response.Products[y].Products[0].Price
           totalEdmQuantity = totalEdmQuantity + mpQuantity
           totalQuantity = totalQuantity + mpQuantity
-          edmTotal = Number(item.quantity) * Number(item.pricePerItem)
+          edmTotal = Number(item.quantity) * Number(item.pricePerItem)      
           cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
           cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
             expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(item.quantity))
@@ -237,6 +237,67 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
   testData.edmTotal = edmTotal
   testData.totalQuantity = totalQuantity
   testData.totalWowQuantity = totalWowQuantity
-  testData.totalEdmQuantity = totalEdmQuantity
-  cy.log('wowTotal: ' + wowTotal + ' , edmTotal: ' + edmTotal + ' , totalQuantity: ' + totalQuantity + ' , totalWowQuantity: ' + totalWowQuantity + ' , totalEdmQuantity: ' + totalEdmQuantity)
+  testData.totalEdmQuantity = totalEdmQuantity 
+  cy.log('wowTotal: ' + wowTotal + ' , edmTotal: ' + edmTotal + ' , totalQuantity: ' + totalQuantity + ' , totalWowQuantity: ' + totalWowQuantity + ' , totalEdmQuantity: ' + totalEdmQuantity)   
 })
+
+//shweta
+Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, testData ,cupTestdata) => {
+  const response = productSearchResponse
+  const items = testData.items
+  let totalEdmQuantity = new Number(0)
+  let edmTotal = new Number(0)
+  //CUP Details
+  let cupPrice= new Number(0)
+  let cupMeasure
+  let hasCupPrice
+  let cupString
+  items.forEach(item => {
+     let y
+    if (item.isEDMProduct === 'true') {
+      let mpStockCode = 0
+      const mpQuantity = item.quantity
+      for (y in response.Products) {
+        if (response.Products[y].Products[0].Price !== null &&
+                    response.Products[y].Products[0].IsInStock === true &&
+                    response.Products[y].Products[0].IsMarketProduct === true &&
+                    response.Products[y].Products[0].SupplyLimit >= mpQuantity) {
+          mpStockCode = response.Products[y].Products[0].Stockcode
+          cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price + ' , Quantity: ' + mpQuantity)
+          addItemsBodyMp.StockCode = mpStockCode
+          addItemsBodyMp.Quantity = mpQuantity
+          item.stockCode = mpStockCode
+          item.pricePerItem = response.Products[y].Products[0].Price
+          totalEdmQuantity = totalEdmQuantity + mpQuantity
+          edmTotal = Number(item.quantity) * Number(item.pricePerItem)
+          //CUP
+          cupPrice=response.Products[y].Products[0].CupPrice
+          cupMeasure=response.Products[y].Products[0].CupMeasure
+          hasCupPrice=response.Products[y].Products[0].HasCupPrice
+          cupString=response.Products[y].Products[0].CupString
+         
+          cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
+          cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
+            expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(item.quantity))
+            expect(response.Totals.MarketSubTotal).to.be.equal(Number(edmTotal))
+          })
+          break
+        }
+      }
+      expect(mpStockCode).to.be.greaterThan(0)
+    }
+  })
+  testData.edmTotal = edmTotal
+  testData.totalEdmQuantity = totalEdmQuantity 
+  cy.log( ' , edmTotal: ' + edmTotal +' , totalEdmQuantity: ' + totalEdmQuantity)
+   //setting cup details
+   cupTestdata.cupPrice=cupPrice
+   cupTestdata.cupMeasure=cupMeasure
+   cupTestdata.hasCupPrice=hasCupPrice
+   cupTestdata.cupString=cupString
+   cy.log('actualCupPrice: ' + cupTestdata.cupString)
+   cy.log('CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: '+ hasCupPrice +' ,CupString '+ cupString)   
+
+  })
+
+
