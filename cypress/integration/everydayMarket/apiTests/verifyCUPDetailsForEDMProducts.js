@@ -2,15 +2,10 @@
 /* eslint-disable no-unused-expressions */
 
 import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
-import searchBody from '../../../fixtures/search/productSearch.json'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
-import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
-import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
-import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
-import '../../../support/deliveryDateAndWindow/api/commands/deliveryDateAndWindow'
+import '../../../support/fulfilment/api/commands/fulfilment'
 import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/checkout/api/commands/navigateToCheckout'
@@ -24,7 +19,11 @@ import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
-import cup from '../../../fixtures/everydayMarket/searchEDMCUPItems.json'
+import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP.json'
+import searchRequest from '../../../fixtures/search/productSearch.json'
+
+
+
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API]  MPPF-954 | EM | Verify CUP details for a product for measure type-Weight', () => {
@@ -33,51 +32,47 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('MPPF-954 | EM | Verify CUP details for a product for measure type-Weight', () => {
-      const testData = tests.VerifyFullyDispatchedEDMOrder   
+    it('MPPF-954 | EM | Verify CUP details for measure type-Weight G and KG', () => {
+      const testData = tests.VerifyFullyDispatchedEDMOrder
       const shopperId = shoppers.emAccount2.shopperId
-     
-      // Login
+
+      //login 
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
 
-      // clear the trolley before placing an order
-      cy.clearTrolley().then((response) => {
-        expect(response).to.have.property('TrolleyItemCount', 0)
-        expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
-      })
+      const cupTestdataGtoKG = cup.weightGtoKG
+      serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdataGtoKG)
 
-      // Select a regular delivery slot
-      cy.getRegularDeliveryTimeSlot(testData).then((response) => {
-        cy.fulfilmentWithSpecificDeliveryDateAndTime(testData.deliveryAddressId, testData.timeSlotId, testData.windowDate).then((response) => {
-          expect(response).to.have.property('IsSuccessful', true)
-          expect(response).to.have.property('IsNonServiced', false)
-        })
-      })
-
-      //1.weight
-      // Search for the desired products and add them to cart
-      const cupTestdata = cup.weightGtoKG
-      searchBody.SearchTerm = cupTestdata.searchTerm
-      cy.productSearch(searchBody).then((response) => {
-        expect(response.SearchResultsCount).to.be.greaterThan(0)
-        cy.getEDMProductFromProductSearchResponse(response, testData, cupTestdata)
-        let expCupPrice
-        expCupPrice = returnCUPprice(cupTestdata)
-        cy.log('expectedCUPPrice: ' + expCupPrice)
-        cy.log('actualCUPPrice: ' + cupTestdata.cupString)
-        // cy.log('cupStringfinalactualCUPPrice: ' + cupStringfinal)
-        // expect(expCupPrice).to.be.equal(Number(cupTestdata.cupString))
-        // expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
-
-        //2.weight
-      })
 
     })
+    //2
+    it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and G', () => {
+      const testData = tests.VerifyFullyDispatchedEDMOrder
+      //login 
+      cy.loginViaApi(shoppers.emAccount2).then((response) => {
+        expect(response).to.have.property('LoginResult', 'Success')
+      })
+
+      const cupTestdataGtoG = cup.weightGtoG
+      serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdataGtoG)
+
+    })
+
   })
 })
 
+
+function serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdata)
+{
+  searchRequest.SearchTerm = cupTestdata.searchTerm
+  cy.productSearch(searchRequest).then((response) => {
+    expect(response.SearchResultsCount).to.be.greaterThan(0)
+    cy.getEDMProductFromProductSearchResponse(response, testData, cupTestdata).then((response) => {
+      verifyCupValues(cupTestdata)
+    })
+  })
+}
 //this function calculate based on the CUP details set and returns the calculated CUP
 function returnCUPprice(cupTestdata) {
 
@@ -90,7 +85,7 @@ function returnCUPprice(cupTestdata) {
     productPrice = Number(cupTestdata.salePrice)
   }
 
-  cy.log('productPrice:'+productPrice)
+  cy.log('productPrice:' + productPrice)
   //calculate cup price
   let expectedCupPrice = new Number(0)
   if (cupTestdata.itemUnit == cupTestdata.comparativeUnit) {
@@ -105,7 +100,7 @@ function returnCUPprice(cupTestdata) {
 
 function adjustItemsizToComprativeSizeForDiffWeightComb(cupTestdata) {
   let adjustmentValue = Number(0)
-  cy.log('itemunit: '+ cupTestdata.itemUnit  + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
+  cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
   if (cupTestdata.itemUnit == "G" && cupTestdata.comparativeUnit == "KG") {
     adjustmentValue = 1000
   }
@@ -129,14 +124,14 @@ function adjustItemsizToComprativeSizeForDiffWeightComb(cupTestdata) {
   if (cupTestdata.ItemUnit == "KG" && cupTestdata.ComparativeUnit == "MG") {
     adjustmentValue = 0.00001
   }
-  cy.log('adjustmentValue:'+adjustmentValue)
+  cy.log('adjustmentValue:' + adjustmentValue)
 
   return adjustmentValue;
 }
 
 function adjustItemsizToComprativeSizeForDiffVolumeComb(cupTestdata) {
   let adjustmentValue = Number(0)
-  cy.log('itemunit: '+ cupTestdata.itemUnit  + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
+  cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
   if (cupTestdata.itemUnit == "ML" && cupTestdata.comparativeUnit == "L") {
     adjustmentValue = 1000
   }
@@ -160,14 +155,14 @@ function adjustItemsizToComprativeSizeForDiffVolumeComb(cupTestdata) {
   if (cupTestdata.ItemUnit == "KL" && cupTestdata.ComparativeUnit == "ML") {
     adjustmentValue = 0.00001
   }
-  cy.log('adjustmentValue:'+adjustmentValue)
+  cy.log('adjustmentValue:' + adjustmentValue)
 
   return adjustmentValue;
 }
 
 function adjustItemsizToComprativeSizeForDiffLengthComb(cupTestdata) {
   let adjustmentValue = Number(0)
-  cy.log('itemunit: '+ cupTestdata.itemUnit  + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
+  cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
   if (cupTestdata.itemUnit == "MM" && cupTestdata.comparativeUnit == "CM") {
     adjustmentValue = 100
   }
@@ -191,7 +186,7 @@ function adjustItemsizToComprativeSizeForDiffLengthComb(cupTestdata) {
   if (cupTestdata.ItemUnit == "M" && cupTestdata.ComparativeUnit == "MM") {
     adjustmentValue = 0.00001
   }
-  cy.log('adjustmentValue:'+adjustmentValue)
+  cy.log('adjustmentValue:' + adjustmentValue)
 
   return adjustmentValue;
 }
@@ -199,4 +194,32 @@ function adjustItemsizToComprativeSizeForDiffLengthComb(cupTestdata) {
 function round(num) {
   var m = Number((Math.abs(num) * 100).toPrecision(15));
   return Math.round(m) / 100 * Math.sign(num);
+}
+
+function roundOfValue(num) {
+  return (Math.round(num * 100) / 100).toFixed(2);
+}
+
+function verifyCupValues(cupTestdata) {
+  let expCupPrice
+  expCupPrice = returnCUPprice(cupTestdata)
+  cy.log('expectedCUPPrice: ' + expCupPrice)
+
+  //cup price
+  expect(Number(cupTestdata.cupPrice)).to.be.equal(expCupPrice)
+  //CUPhas true
+  expect(cupTestdata.hasCupPrice).to.be.equal(true)
+  //CupMeasure
+  let expComparativeSize = cupTestdata.comparativeSize
+  let expComparativeUnit = cupTestdata.comparativeUnit
+  let expCUPMeasure = expComparativeSize + expComparativeUnit
+  cy.log('expCUPMeasure: ' + expCUPMeasure)
+  expect(cupTestdata.cupMeasure).to.be.equal(expCUPMeasure)
+  //CupString
+  let roundofActualCUPprice
+  roundofActualCUPprice = roundOfValue(cupTestdata.cupPrice)
+  let expCUPString = '$' + roundofActualCUPprice + ' / ' + expCUPMeasure
+  cy.log('expCUPString: ' + expCUPString)
+  expect(cupTestdata.cupString).to.be.equal(expCUPString)
+
 }
