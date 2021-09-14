@@ -68,9 +68,6 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
 function placeOrder() {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
-  cy.get('@balanceToPay').then((balance) => {
-    cy.log('balance to pay' + balance)
-  })
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
   cy.navigatingToCreditCardIframe().its('IframeUrl').invoke('split', '/').its(5).as('ccSessionId')
   // Grab Digital pay instrument Id for the test credit card set in the fixture

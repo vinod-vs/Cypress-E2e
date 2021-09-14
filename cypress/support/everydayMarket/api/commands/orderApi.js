@@ -49,22 +49,6 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add(
-  'ordersApiByEdmInvoiceId', (invoiceId) => {
-    const endPoint = String(Cypress.env('ordersApiByInvoiceIdEndpoint'))
-      .replace('INVOICE_ID', invoiceId)
-
-    cy.api({
-      method: 'GET',
-      retryOnStatusCodeFailure: true,
-      url: Cypress.env('ordersApiEndpoint') + endPoint
-    }).then((response) => {
-      expect(response.status).to.eq(200)
-      return response.body[0]
-    })
-  }
-)
-
-Cypress.Commands.add(
   'ordersApiByEdmInvoiceIdWithRetry', (invoiceId, retryOptions) => {
     const endPoint = String(Cypress.env('ordersApiByInvoiceIdEndpoint'))
       .replace('INVOICE_ID', invoiceId)

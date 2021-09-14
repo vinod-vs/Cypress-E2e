@@ -48,9 +48,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         // Call Market Order API and validate the data
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
           function: function (response) {
-            if (response.status !== 200) {
-              throw new Error('Still wrong status')
-            }
             if (response.body.invoices[0].wowStatus !== 'Placed') {
               throw new Error('Still not sent to Marketplacer yet')
             }
@@ -70,11 +67,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         })
 
         // Call the Market Events API and validate the data
-        cy.orderEventsApiWithRetry(req.shopperId, req.orderId, req.orderReference, {
+        cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
-            if (response.status !== 200) {
-              throw new Error('Still wrong status')
-            }
             if (response.body.pagination.total !== 2) {
               throw new Error('Events not completed yet')
             }
@@ -97,9 +91,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           .then(() => {
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
-                if (response.status !== 200) {
-                  throw new Error('Still wrong status')
-                }
                 if (response.body.invoices[0].wowStatus !== 'PartiallyShipped') {
                   throw new Error('Still not shipped yet')
                 }
@@ -121,12 +112,9 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             })
 
             // Call the Market Events API and validate the data
-            cy.orderEventsApiWithRetry(data.shopperId, data.orderId, data.orderReference, {
+            cy.orderEventsApiWithRetry(data.orderReference, {
               function: function (response) {
-                if (response.status !== 200) {
-                  throw new Error('Still wrong status')
-                }
-                if (response.body.pagination.total !== 5) {
+                if (response.body.pagination.total !== 7) {
                   throw new Error('Events not completed yet')
                 }
               },
@@ -134,8 +122,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               timeout: 2000
             }).then((response) => {
               lib.validateEvents(response, 2, 'MarketOrderShipmentCreate')
-              lib.validateEvents(response, 3, 'MarketOrderDispatched')
-              lib.validateEvents(response, 4, 'MarketRewardsCredited')
+              lib.validateEvents(response, 3, 'update')
+              lib.validateEvents(response, 4, 'MarketOrderDispatched')
+              lib.validateEvents(response, 5, 'MarketRewardsCredited')
+              lib.validateEvents(response, 6, 'update')
             })
           })
 
@@ -144,9 +134,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           .then(() => {
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
-                if (response.status !== 200) {
-                  throw new Error('Still wrong status')
-                }
                 if (response.body.invoices[0].wowStatus !== 'Shipped') {
                   throw new Error('Still not fully shipped yet')
                 }
@@ -177,23 +164,22 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].shipments[0].shippedItems[0].quantity).is.equal(dispatchQty)
             })
             // Call the Market Events API and validate the data
-            cy.orderEventsApiWithRetry(data.shopperId, data.orderId, data.orderReference, {
+            cy.orderEventsApiWithRetry(data.orderReference, {
               function: function (response) {
-                if (response.status !== 200) {
-                  throw new Error('Still wrong status')
-                }
-                if (response.body.pagination.total !== 10) {
+                if (response.body.pagination.total !== 14) {
                   throw new Error('Events not completed yet')
                 }
               },
               retries: 15,
               timeout: 2000
             }).then((response) => {
-              lib.validateEvents(response, 5, 'RefundRequestUpdate') // Returned
-              lib.validateEvents(response, 6, 'RefundRequestUpdate') // Create
-              lib.validateEvents(response, 7, 'RefundRequestUpdate') // Refunded
-              lib.validateEvents(response, 8, 'MarketOrderRefund')
-              lib.validateEvents(response, 9, 'RefundCompleted')
+              lib.validateEvents(response, 7, 'RefundRequestUpdate') // Returned
+              lib.validateEvents(response, 8, 'RefundRequestUpdate') // Create
+              lib.validateEvents(response, 9, 'RefundRequestUpdate') // Refunded
+              lib.validateEvents(response, 10, 'update')
+              lib.validateEvents(response, 11, 'MarketOrderRefund')
+              lib.validateEvents(response, 12, 'RefundCompleted')
+              lib.validateEvents(response, 13, 'update')
             })
             // Validate rewards points to ensure points get accumulated for dispatched items only
             cy.getRewardsCardDetails(rewards.partnerId, rewards.siteId, rewards.posId, rewards.loyaltySiteType, shopper.rewardsCardNumber)

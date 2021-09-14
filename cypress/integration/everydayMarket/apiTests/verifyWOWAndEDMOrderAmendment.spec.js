@@ -44,9 +44,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         // Call Market Order API and validate the data
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
           function: function (response) {
-            if (response.status !== 200) {
-              throw new Error('Still wrong status')
-            }
             if (response.body.invoices[0].wowStatus !== 'Placed') {
               throw new Error('Still not sent to Marketplacer yet')
             }
@@ -55,9 +52,26 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           timeout: 5000
         }).its('invoices').its(0).its('legacyIdFormatted').as('invoiceIds')
 
+        cy.orderEventsApiWithRetry(req.orderReference, {
+          function: function (response) {
+            if (response.body.pagination.total !== 3) {
+              throw new Error('Event not updated yet')
+            }
+          },
+          retries: 15,
+          timeout: 2000
+        })
+
         cy.get('@invoiceIds').then((invoiceIds) => {
-          cy.wait(4000)
-          cy.ordersApiByEdmInvoiceId(invoiceIds).as('orderDataBeforeAmendment')
+          cy.ordersApiByEdmInvoiceIdWithRetry(invoiceIds, {
+            function: function (response) {
+              if (response.status !== 200) {
+                throw new Error('Still wrong status')
+              }
+            },
+            retries: 10,
+            timeout: 5000
+          }).as('orderDataBeforeAmendment')
         })
 
         // Amend the WOW part of the order
@@ -68,9 +82,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           ).then(([invoiceIds, amendedOrder]) => {
             cy.ordersApiByEdmInvoiceIdWithRetry(invoiceIds, {
               function: function (response) {
-                if (response.status !== 200) {
-                  throw new Error('Still wrong status')
-                }
                 if (response.body[0].orderId !== amendedOrder.Order.OrderId) {
                   throw new Error('Data not updated yet')
                 }
@@ -83,8 +94,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           // Call the Market Events API and save the events data in an alias
           cy.orderEventsApiWithRetry(req.orderReference, {
             function: function (response) {
-              if (response.status !== 200) {
-                throw new Error('Still wrong status')
+              if (response.body.pagination.total !== 4) {
+                throw new Error('Event not updated yet')
               }
             },
             retries: 15,
@@ -104,8 +115,9 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             orderId: amendedOrder.Order.OrderId
           }).to.deep.equal(afterData)
 
-          // Validate EDM order events after amendment to have 'MarketOrderPlaced'
-          lib.validateEvents(afterEvents, 1, 'MarketOrderPlaced')
+          // Validate EDM order events after amendment to have 'update' and 'OrderPlaced' events
+          lib.validateEvents(afterEvents, 2, 'update')
+          lib.validateEvents(afterEvents, 3, 'OrderPlaced')
         })
       })
     })
