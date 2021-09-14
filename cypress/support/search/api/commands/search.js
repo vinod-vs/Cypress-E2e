@@ -16,7 +16,8 @@ Cypress.Commands.add('findAvailableNonRestrictedWowItems', (response) => {
     if (response.Products[x].Products[0].Price !== null &&
       response.Products[x].Products[0].IsInStock === true &&
       response.Products[x].Products[0].ProductRestrictionMessage === null &&
-      response.Products[x].Products[0].ProductWarningMessage === null) {
+      response.Products[x].Products[0].ProductWarningMessage === null &&
+      response.Products[x].Products[0].IsMarketProduct === false) {
       productArr.push(response.Products[x].Products[0])
     }
   }

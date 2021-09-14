@@ -16,28 +16,50 @@ import '../../../search/api/commands/search'
 import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../payment/api/commands/creditcard'
 import '../../../sideCart/api/commands/addItemsToTrolley'
+import '../../../sideCart/api/commands/clearTrolley'
 import '../../../payment/api/commands/digitalPayment'
+import '../../../payment/api/commands/zero'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../invoices/api/commands/commands'
+import '../../../fulfilment/api/commands/fulfilment'
 
 Cypress.Commands.add('placeAnySingleLineItemEdmOrder', (searchTerm, quantity) => {
   // Set fulfilment using the new /windows endpoint
   cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
 
-  // Search product by overriding the SearchTerm attribute in the search body request fixture
-  cy.productSearch({ ...searchRequest, SearchTerm: searchTerm })
-    .then((searchResponse) => {
-      const edmSearchProduct = searchResponse.Products
-        // Filter search results by IsMarketProduct = true and IsAvailable = true
-        .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
-        // Pick the first result
-        .shift()
-      const edmProductStockcode = edmSearchProduct.Products[0].Stockcode
+  // Clear trolley in case there's any item
+  cy.clearTrolley()
 
-      // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
-      // in the trolley request body fixture
-      cy.addItemsToTrolley({ ...addItemsBodyMp, StockCode: edmProductStockcode, Quantity: quantity })
-    })
+  // Add EDM items to trolley
+  cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
+
+  // Place and confirm the order
+  return placeOrder()
+})
+
+Cypress.Commands.add('placeAnySingleLineItemWowAndEdmOrder', (searchTerm, quantity) => {
+  // Set fulfilment using the new /windows endpoint
+  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+
+  // Clear trolley in case there's any item
+  cy.clearTrolley()
+
+  // Add both WOW and EDM items to trolley
+  cy.addAvailableNonRestrictedWowItemsToTrolley(searchTerm)
+  cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
+
+  // Place and confirm the order
+  return placeOrder()
+})
+
+Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
+  // Start amending the WOW portion of the order
+  cy.amendOrder(traderOrderId)
+
+  // Set fulfilment using the new /windows endpoint
+  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+
+  // TO-DO: To improve in case existing items or fulfilment window is no longer available
 
   // Place and confirm the order
   return placeOrder()
@@ -46,6 +68,9 @@ Cypress.Commands.add('placeAnySingleLineItemEdmOrder', (searchTerm, quantity) =>
 function placeOrder() {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
+  cy.get('@balanceToPay').then((balance) => {
+    cy.log('balance to pay' + balance)
+  })
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
   cy.navigatingToCreditCardIframe().its('IframeUrl').invoke('split', '/').its(5).as('ccSessionId')
   // Grab Digital pay instrument Id for the test credit card set in the fixture
@@ -58,15 +83,21 @@ function placeOrder() {
     cy.get('@balanceToPay'),
     cy.get('@ccInstrumentId')
   ).then(([amount, paymentInstrumentId]) => {
-    // Passed the value in the aliases as /payment request body
-    cy.digitalPay({
-      ...digitalPaymentRequest,
-      payments: [{
-        ...digitalPaymentRequest.payments[0],
-        amount: amount,
-        paymentInstrumentId: paymentInstrumentId
-      }]
-    }).its('PlacedOrderId').as('traderPlacedOrderId')
+    if (amount > 0) {
+      // Call digital pay endpoint to confirm the order
+      // Passed the value in the aliases as /payment request body
+      cy.digitalPay({
+        ...digitalPaymentRequest,
+        payments: [{
+          ...digitalPaymentRequest.payments[0],
+          amount: amount,
+          paymentInstrumentId: paymentInstrumentId
+        }]
+      }).its('PlacedOrderId').as('traderPlacedOrderId')
+    } else {
+      // Call zero endpoint to confirm the order
+      cy.zero().its('PlacedOrderId').as('traderPlacedOrderId')
+    }
   })
 
   cy.get('@traderPlacedOrderId').then((traderPlacedOrderId) => {
