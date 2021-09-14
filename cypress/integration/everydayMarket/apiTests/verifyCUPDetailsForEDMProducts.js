@@ -36,7 +36,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       })
 
       const cupTestdataGtoKG = cup.weightGtoKG
-      serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdataGtoKG)
+      serachForEDMproductWithCUPAndVerfiy(cupTestdataGtoKG)
     })
     //2
     it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and G', () => {
@@ -46,7 +46,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       })
 
       const cupTestdataGtoG = cup.weightGtoG
-      serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdataGtoG)
+      serachForEDMproductWithCUPAndVerfiy(cupTestdataGtoG)
     })
 
     //3
@@ -57,14 +57,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       })
 
       const cupTestdataMtoM = cup.volumeMtoM
-      serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdataMtoM)
+      serachForEDMproductWithCUPAndVerfiy(cupTestdataMtoM)
     })
 
   })
 })
 
 
-function serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdata) {
+function serachForEDMproductWithCUPAndVerfiy(cupTestdata) {
   searchRequest.SearchTerm = cupTestdata.searchTerm
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
