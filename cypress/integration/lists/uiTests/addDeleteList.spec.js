@@ -13,6 +13,7 @@ TestFilter(['B2B-UI'], () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
+      cy.clearCookie('w-rctx')
       cy.clearLocalStorage({ domain: null })
     })
     it('Create a list and Delete the list', () => {
