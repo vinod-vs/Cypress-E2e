@@ -48,6 +48,23 @@ Cypress.Commands.add(
   }
 )
 
+Cypress.Commands.add(
+  'ordersApiByEdmInvoiceIdWithRetry', (invoiceId, retryOptions) => {
+    const endPoint = String(Cypress.env('ordersApiByInvoiceIdEndpoint'))
+      .replace('INVOICE_ID', invoiceId)
+
+    cy.retryRequest(Cypress.env('ordersApiEndpoint') + endPoint, {
+      method: 'GET',
+      retries: retryOptions.retries,
+      timeout: retryOptions.timeout,
+      function: retryOptions.function
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      return response.body[0]
+    })
+  }
+)
+
 Cypress.Commands.add('events', (shopperId, traderOrderId, orderReference) => {
   const queryParams = {
     shopperId: shopperId,
@@ -68,17 +85,9 @@ Cypress.Commands.add('events', (shopperId, traderOrderId, orderReference) => {
 
 Cypress.Commands.add(
   'orderEventsApiWithRetry',
-  (shopperId, traderOrderId, traderOrderReference, retryOptions) => {
-    const queryParams = {
-      shopperId: shopperId,
-      orderReference: traderOrderReference,
-      orderId: traderOrderId
-    }
-
-    const queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&')
-
+  (traderOrderReference, retryOptions) => {
     const endPoint = String(
-      Cypress.env('ordersApiEndpoint') + Cypress.env('ordersApiEventsEndpoint') + '?' + queryString
+      Cypress.env('ordersApiEndpoint') + Cypress.env('ordersApiEventsEndpoint') + '?orderReference=' + traderOrderReference
     )
 
     cy.retryRequest(endPoint, {
