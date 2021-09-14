@@ -30,41 +30,45 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
     })
 
     it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and KG', () => {
-      const testData = tests.VerifyFullyDispatchedEDMOrder
-      const shopperId = shoppers.emAccount2.shopperId
-
       //login 
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
 
       const cupTestdataGtoKG = cup.weightGtoKG
-      serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdataGtoKG)
-
-
+      serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdataGtoKG)
     })
     //2
     it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and G', () => {
-      const testData = tests.VerifyFullyDispatchedEDMOrder
       //login 
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
 
       const cupTestdataGtoG = cup.weightGtoG
-      serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdataGtoG)
+      serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdataGtoG)
+    })
 
+    //3
+    it('MPPF-954 | EM | Verify CUP details for measure type-volume-M and M', () => {
+      //login 
+      cy.loginViaApi(shoppers.emAccount2).then((response) => {
+        expect(response).to.have.property('LoginResult', 'Success')
+      })
+
+      const cupTestdataMtoM = cup.volumeMtoM
+      serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdataMtoM)
     })
 
   })
 })
 
 
-function serachorForEDMproductWithCUPAndVerfiyCUP(testData, cupTestdata) {
+function serachorForEDMproductWithCUPAndVerfiyCUP(cupTestdata) {
   searchRequest.SearchTerm = cupTestdata.searchTerm
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
-    cy.getEDMProductFromProductSearchResponse(response, testData, cupTestdata).then((response) => {
+    cy.getEDMProductFromProductSearchResponse(response, cupTestdata).then((response) => {
       verifyCupValues(cupTestdata)
     })
   })
@@ -74,7 +78,7 @@ function returnCUPprice(cupTestdata) {
 
   let productPrice
   //find out cup prrice needs to calculated based on base price or sale price
-  if (cupTestdata.CupCalcBasedOn == "basePrice") {
+  if (cupTestdata.cupCalcBasedOn == "basePrice") {
     productPrice = Number(cupTestdata.basePrice)
   }
   else {
@@ -82,13 +86,29 @@ function returnCUPprice(cupTestdata) {
   }
 
   cy.log('productPrice:' + productPrice)
+
   //calculate cup price
   let expectedCupPrice = new Number(0)
   if (cupTestdata.itemUnit == cupTestdata.comparativeUnit) {
     expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice) / Number(cupTestdata.itemSize)
   }
   else if (cupTestdata.itemUnit != cupTestdata.comparativeUnit) {
-    expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice * adjustItemsizeToComparativeSizeForDiffWeightComb(cupTestdata)) / Number(cupTestdata.itemSize)
+
+    let adjustmentValue
+    switch (cupTestdata.measureType) {
+      case 'weight':
+        adjustmentValue = adjustItemsizeToComparativeSizeForDiffWeightComb(cupTestdata)
+        break;
+      case 'volume':
+        adjustmentValue = adjustItemsizeToComparativeSizeForDiffVolumeComb(cupTestdata)
+        break;
+      case 'length':
+        adjustmentValue = adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata)
+        break;
+      default:
+        adjustmentValue = 1
+    }
+    expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice * adjustmentValue) / Number(cupTestdata.itemSize)
   }
 
   return round(expectedCupPrice);
@@ -117,7 +137,7 @@ function adjustItemsizeToComparativeSizeForDiffWeightComb(cupTestdata) {
     adjustmentValue = 0.0001
   }
 
-  if (cupTestdata.ItemUnit == "KG" && cupTestdata.ComparativeUnit == "MG") {
+  if (cupTestdata.itemUnit == "KG" && cupTestdata.comparativeUnit == "MG") {
     adjustmentValue = 0.00001
   }
   cy.log('adjustmentValue:' + adjustmentValue)
@@ -148,7 +168,7 @@ function adjustItemsizeToComparativeSizeForDiffVolumeComb(cupTestdata) {
     adjustmentValue = 0.01
   }
 
-  if (cupTestdata.ItemUnit == "KL" && cupTestdata.ComparativeUnit == "ML") {
+  if (cupTestdata.itemUnit == "KL" && cupTestdata.comparativeUnit == "ML") {
     adjustmentValue = 0.00001
   }
   cy.log('adjustmentValue:' + adjustmentValue)
@@ -179,7 +199,7 @@ function adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata) {
     adjustmentValue = 0.0001
   }
 
-  if (cupTestdata.ItemUnit == "M" && cupTestdata.ComparativeUnit == "MM") {
+  if (cupTestdata.itemUnit == "M" && cupTestdata.comparativeUnit == "MM") {
     adjustmentValue = 0.00001
   }
   cy.log('adjustmentValue:' + adjustmentValue)
