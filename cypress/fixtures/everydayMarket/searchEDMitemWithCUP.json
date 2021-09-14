@@ -13,7 +13,8 @@
     "cupMeasure":"",
     "hasCupPrice":"true",
     "cupString":"",
-    "CupMeasure":"1KG"
+    "CupMeasure":"1KG",
+    "measureType":"weight"
   },
   "weightGtoG": {
     "searchTerm": "Giant Cypress ",
@@ -27,7 +28,8 @@
     "cupPrice":0,
     "cupMeasure":"",
     "hasCupPrice":"true",
-    "cupString":""  
+    "cupString":"" , 
+    "measureType":"weight"
   },
   "weightKGtoG": {
     "searchTerm": "lamaze",
@@ -41,9 +43,24 @@
     "cupPrice":0,
     "cupMeasure":"",
     "hasCupPrice":"true",
-    "cupString":""
+    "cupString":"",
+    "measureType":"weight"
     },
-
+    "volumeMtoM": {
+      "searchTerm": "spring mattress",
+      "basePrice":95,
+      "salePrice":"",
+      "cupCalcBasedOn":"basePrice",
+      "itemSize": "1",
+      "itemUnit": "M",
+      "comparativeSize": "10",
+      "comparativeUnit": "M",
+      "cupPrice":0,
+      "cupMeasure":"",
+      "hasCupPrice":"true",
+      "cupString":"",
+      "measureType":"volume"
+      },
   "area": {
     "searchTerm": "lamaze",
     "basePrice":31.49,
@@ -56,6 +73,7 @@
     "cupPrice":0,
     "cupMeasure":"",
     "hasCupPrice":"true",
-    "cupString":""
+    "cupString":"",
+    "measureType":"area"
   }
 }
