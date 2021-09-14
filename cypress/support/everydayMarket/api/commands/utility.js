@@ -302,38 +302,32 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
   })
 })
 
-Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, testData, cupTestdata) => {
+Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, cupTestdata) => {
   const response = productSearchResponse
-  const items = testData.items
   //CUP Details
   let cupPrice = new Number(0)
   let cupMeasure
   let hasCupPrice
   let cupString
-  items.forEach(item => {
-    let y
-    if (item.isEDMProduct === 'true') {
-      let mpStockCode = 0
-      const mpQuantity = item.quantity
-      for (y in response.Products) {
-        if (response.Products[y].Products[0].Price !== null &&
-          response.Products[y].Products[0].IsInStock === true &&
-          response.Products[y].Products[0].IsMarketProduct === true &&
-          response.Products[y].Products[0].SupplyLimit >= mpQuantity) {
-          mpStockCode = response.Products[y].Products[0].Stockcode
-          cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price + ' , Quantity: ' + mpQuantity)
-         
-          //CUP
-          cupPrice = response.Products[y].Products[0].CupPrice
-          cupMeasure = response.Products[y].Products[0].CupMeasure
-          hasCupPrice = response.Products[y].Products[0].HasCupPrice
-          cupString = response.Products[y].Products[0].CupString
-          break
-        }
-      }
-      expect(mpStockCode).to.be.greaterThan(0)
+  let y
+
+  let mpStockCode = 0
+  for (y in response.Products) {
+    if (response.Products[y].Products[0].Price !== null &&
+      response.Products[y].Products[0].IsInStock === true &&
+      response.Products[y].Products[0].IsMarketProduct === true) {
+      mpStockCode = response.Products[y].Products[0].Stockcode
+      cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
+      //CUP
+      cupPrice = response.Products[y].Products[0].CupPrice
+      cupMeasure = response.Products[y].Products[0].CupMeasure
+      hasCupPrice = response.Products[y].Products[0].HasCupPrice
+      cupString = response.Products[y].Products[0].CupString
+      break
     }
-  })
+  }
+  expect(mpStockCode).to.be.greaterThan(0)
+
   //setting cup details
   cupTestdata.cupPrice = cupPrice
   cupTestdata.cupMeasure = cupMeasure
