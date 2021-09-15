@@ -15,8 +15,7 @@
     "run_settings": {
         "cypress_config_file": "./cypress.json",
         "project_name": "WOW-E2E-Automation",
-        "build_name": "WOW-E2E-Automation-Build",
-        "parallels": "10",
+        "build_name": "Build no. 1",
         "exclude": [],
         "npm_dependencies": {
             "@bahmutov/cy-api": "^1.5.0",
@@ -27,22 +26,19 @@
             "cypress-multi-reporters": "^1.4.0",
             "cypress-xpath": "^1.6.2",
             "faker": "^5.5.2",
-            "fs-extra": "^8.1.0",
+            "fs-extra": "^10.0.0",
             "mocha-junit-reporter": "^2.0.0",
             "mochawesome": "^6.2.2",
             "mochawesome-merge": "^4.2.0",
             "mochawesome-report-generator": "^5.2.0",
-            "browserstack-cypress-cli": "^1.8.1",
-            "browserstack-local": "^1.4.8",
             "standard": "^16.0.3"
         },
         "package_config_options": {},
-        "headless": false
+        "headless": true
     },
     "connection_settings": {
         "local": true,
-        "local_config_file": "./local_testing.yml",
-        "local_identifier": "WAW_Tests"
+        "local_identifier": null
     },
     "disable_usage_reporting": false
 }
