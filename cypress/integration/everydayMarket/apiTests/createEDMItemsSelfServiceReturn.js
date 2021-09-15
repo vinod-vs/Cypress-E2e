@@ -29,12 +29,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
     })
 
     it('MPPF-962 | EM | MPer | Create Everyday Market items self service return - completely returned by the customer', () => {
-      const testData = tests.VerifyFullyDispatchedEDMOrder
+      const testData = tests.customerSelfServiceReturn
       let orderId
       let orderReference
       let edmOrderId
       let edmInvoiceId
       const shopperId = shoppers.emAccount2.shopperId
+      let encodedEdmInvoiceId
+      let encodedEdmLineitemId
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
@@ -52,12 +54,18 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
+          encodedEdmInvoiceId = response.invoices[0].invoiceId
+          encodedEdmLineitemId = response.invoices[0].lineItems[0].lineItemId
           testData.edmOrderId = edmOrderId
           testData.edmInvoiceId = edmInvoiceId
-          cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
+
+          testData.encodedEdmInvoiceId = encodedEdmInvoiceId
+          testData.encodedEdmLineitemId = encodedEdmLineitemId
+
+          cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId + ' , MPencoded InvoiceId: ' + encodedEdmInvoiceId + ' , MPencodedEdmLineitemId: ' + encodedEdmLineitemId)
+
           // Verify the projection details
           verifyOrderDetails(response, testData, shopperId)
-
           // Invoke the events api and verify the content
           cy.wait(Cypress.config('twoSecondWait'))
           cy.events(shopperId, orderId, orderReference).then((response) => {
@@ -142,6 +150,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
               // Verify the reward points are credited to customers card after EDM dispatch
               cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+                cy.wait(Cypress.config('tenSecondWait'))
                 testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
                 const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
                 cy.log('Testdata JSON: ' + JSON.stringify(testData))
@@ -150,7 +159,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
                 expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
                 // Rewards has a logic of rouding to an even number if odd
-                // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
                 expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
               })
 
@@ -161,22 +169,56 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
             })
-            // ADDING RETURN API LOGIC AS IT HAS TO BE CHAINED BECAUSE IT USES ORDERREF / EM Order Id etc..
+            cy.log('Test Data : Order quantity --' + testData.items[0].quantity + ' Encoded Invoice Id : ' + testData.encodedEdmInvoiceId + ' Encoded Line Item ' + testData.encodedEdmLineitemId + ' Encoded Edm Invoice Id ' + encodedEdmInvoiceId)
             cy.wait(Cypress.config('twoSecondWait'))
-            cy.log('Calling partialCustomerReturn Method')
-            // cy.partialCustomerReturn(edmOrderId, orderReference, 1073744438, 1, 31.49)
-            // cy.partialCustomerReturn(testData.edmOrderId, testData.orderReference, testData.items[0].stockCode, testData.items[0].quantity-1, testData.items[0].pricePerItem)
-            // WITH DATA ARRAY APPROACH AS TEMPLATE-
-            // const data1 = [{line_item_id: 32422, quantity: 1}]
-            // const returnRequestData = [{quantity: testData.items[0].quantity-1}]
             const returnRequestLineItem = [{ stockCode: testData.items[0].stockCode, quantity: testData.items[0].quantity, amount: testData.items[0].pricePerItem, reason: 'Item is faulty', weight: 12, notes: 'Customer Return from EM Test Automation_Partial_Return' }]
-            // const returnRequestMultipleLineItem = [{stockCode:testData.items[0].stockCode, quantity:testData.items[0].quantity-1, amount:testData.items[0].pricePerItem, reason:"Item is faulty", weight:1, notes:"Customer Return from EM Test Automation_Partial_Return" },
-            //                                       {stockCode:testData.items[1].stockCode, quantity:testData.items[1].quantity-1, amount:testData.items[1].pricePerItem, reason:"Change of mind", weight:2, notes:"Customer Return from EM Test Automation_Partial_Return" }]
-            // cy.partialDispatchOfLineItemsInInvoice(27208, data1, "123456", "Australia Post", "Pet Culture")
-            // cy.partialCustomerReturn(testData.edmOrderId, testData.orderReference, testData.items[0].stockCode, returnRequestData, testData.items[0].pricePerItem)
             cy.log(returnRequestLineItem)
-            cy.customerReturn(testData.edmOrderId, testData.orderReference, returnRequestLineItem)
-            cy.log('Called CustomerReturn Method Completed')
+            // Verify the customer order projection details.
+            // cy.customerReturn(testData.edmOrderId, testData.orderReference, returnRequestLineItem)
+            cy.customerReturn(testData.edmOrderId, testData.orderReference, returnRequestLineItem).then((response) => {
+              // verify order projection details
+              cy.wait(Cypress.config('tenSecondWait') * 3)
+              cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
+                expect(response.invoices[0].invoiceStatus).to.be.equal('SENT')
+                expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
+                expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+                expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
+                expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
+                expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
+                expect(response.invoices[0].refunds[0].status).to.be.equal('ReturnInitiated')
+                expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantity).to.be.equal(Number(testData.items[0].quantity))
+                expect(response.invoices[0].refunds[0].refundItems[0].lineItem.refundableQuantity).to.be.equal(0)
+                expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
+                expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+                expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
+
+                let encodedMarketRefundedId = response.invoices[0].returns[0].marketRefundId
+                cy.log('encodedMarketRefundedId :' + encodedMarketRefundedId)
+                //  verify the response status in graphQL endpoint
+                cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
+                  cy.wait(Cypress.config('tenSecondWait'))
+                  expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
+                })
+                // verify the order projection details after return from market placer
+                cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
+                  expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
+                  expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
+                  expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
+                  expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+                  expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
+                  expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
+                  expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
+                  expect(response.invoices[0].lineItems[0].status).to.be.equal('REFUNDED')
+                  expect(response.invoices[0].refunds[0].status).to.be.equal('Returned')
+                  expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal('BUYER')
+                  expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantity).to.be.equal(Number(testData.items[0].quantity))
+                  expect(response.invoices[0].refunds[0].refundItems[0].lineItem.refundableQuantity).to.be.equal(0)
+                  expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
+                  expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+                  expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
+                })
+              })
+            })
           })
         })
       })
