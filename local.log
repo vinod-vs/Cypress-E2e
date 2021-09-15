@@ -1,11 +1,11 @@
 "" 
 
-Mon Sep 20 2021 13:31:16 GMT+1000 (Australian Eastern Standard Time) -- [WARNING] Discovered proxy settings in your environment. Use the --pac-file argument to specify the absolute path to your PAC file. For more proxy options, refer to the Local Testing documentation  (https://www.browserstack.com/local-testing/binary-params).
+Mon Aug 23 2021 11:47:50 GMT+1000 (Australian Eastern Standard Time) -- [WARNING] Discovered proxy settings in your environment. Use the --pac-file argument to specify the absolute path to your PAC file. For more proxy options, refer to the Local Testing documentation  (https://www.browserstack.com/local-testing/binary-params).
 
-Mon Sep 20 2021 13:31:16 GMT+1000 (Australian Eastern Standard Time) -- You can disable this warning by using the --disable-proxy-discovery argument while using the Local binary.
+Mon Aug 23 2021 11:47:50 GMT+1000 (Australian Eastern Standard Time) -- You can disable this warning by using the --disable-proxy-discovery argument while using the Local binary.
 
-Mon Sep 20 2021 13:31:22 GMT+1000 (Australian Eastern Standard Time) -- [SUCCESS] You can now access your local server(s) in our remote browser
+Mon Aug 23 2021 11:47:53 GMT+1000 (Australian Eastern Standard Time) -- [SUCCESS] You can now access your local server(s) in our remote browser
 
-Mon Sep 20 2021 13:31:24 GMT+1000 (Australian Eastern Standard Time) -- Press Ctrl-C to exit
+Mon Aug 23 2021 11:47:55 GMT+1000 (Australian Eastern Standard Time) -- Press Ctrl-C to exit
 
 
