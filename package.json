@@ -9,7 +9,6 @@
         "cypress:spec": "cypress run --spec",
         "pretest": "npx standard || true",
         "test": "cypress run",
-        "browserstackTest": "browserstack-cypress run",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
         "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
@@ -20,19 +19,20 @@
         "@bahmutov/cy-api": "^1.5.0",
         "@shelex/cypress-allure-plugin": "^2.3.5",
         "allure-commandline": "^2.13.8",
-        "cypress": "^8.3.1",
+        "cypress": "^8.3.0",
         "cypress-iframe": "^1.0.1",
         "cypress-multi-reporters": "^1.4.0",
         "cypress-xpath": "^1.6.2",
         "faker": "^5.5.2",
-        "fs-extra": "^10.0.0",
         "mocha-junit-reporter": "^2.0.0",
         "mochawesome": "^6.2.2",
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.2.0",
         "standard": "^16.0.3"
     },
-    "dependencies": {},
+    "dependencies": {
+        "browserstack-cypress-cli": "^1.8.1"
+    },
     "standard": {
         "env": [
             "mocha"
