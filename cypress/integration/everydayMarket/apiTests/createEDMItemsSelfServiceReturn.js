@@ -196,10 +196,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 cy.log('encodedMarketRefundedId :' + encodedMarketRefundedId)
                 //  verify the response status in graphQL endpoint
                 cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
-                  cy.wait(Cypress.config('tenSecondWait'))
                   expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
                 })
                 // verify the order projection details after return from market placer
+                cy.wait(Cypress.config('tenSecondWait') * 3)
                 cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
                   expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
                   expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
