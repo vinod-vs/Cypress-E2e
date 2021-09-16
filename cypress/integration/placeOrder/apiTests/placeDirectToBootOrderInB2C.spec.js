@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-expressions */
 
 import shopper from '../../../fixtures/login/b2cLogin.json'
-import searchBody from '../../../fixtures/search/productSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
@@ -45,21 +44,7 @@ TestFilter(['B2C-API'], () => {
 
       cy.clearTrolley()
 
-      searchBody.searchTerm = 'Water'
-
-      // TODO: RC 17/08/21: Consider moving this into 1 command, e.g. 'addAvailableNonRestrictedWowItemsToTrolley'
-      cy.productSearch(searchBody).then((searchResponse) => {
-        expect(searchResponse.SearchResultsCount).to.be.greaterThan(0)
-        cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
-          cy.curateProductsForTrolley(itemResponse).then((curatedItemList) => {
-            curatedItemList.forEach((curatedItem) => {
-              cy.addItemsToTrolley(curatedItem).then((response) => {
-                expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
-              })
-            })
-          })
-        })
-      })
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Water', 60.0)
 
       cy.navigateToCheckout().then((response) => {
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
