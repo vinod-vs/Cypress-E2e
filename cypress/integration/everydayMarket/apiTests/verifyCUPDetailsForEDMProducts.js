@@ -49,16 +49,16 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       serachForEDMproductWithCUPAndVerfiy(cupTestdataGtoG)
     })
 
-    //3
-    it('MPPF-954 | EM | Verify CUP details for measure type-volume-M and M', () => {
-      //login 
-      cy.loginViaApi(shoppers.emAccount2).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
+      //3
+      it('MPPF-954 | EM | Verify CUP details for measure type-volume-ML and L', () => {
+        //login 
+        cy.loginViaApi(shoppers.emAccount2).then((response) => {
+          expect(response).to.have.property('LoginResult', 'Success')
+        })
+  
+        const cupTestdataMLtoL= cup.volumeMLtoL
+        serachForEDMproductWithCUPAndVerfiy(cupTestdataMLtoL)
       })
-
-      const cupTestdataMtoM = cup.volumeMtoM
-      serachForEDMproductWithCUPAndVerfiy(cupTestdataMtoM)
-    })
 
   })
 })
