@@ -46,7 +46,7 @@
     "cupString":"",
     "measureType":"weight"
     },
-    "volumeMtoM": {
+    "lengthMtoM": {
       "searchTerm": "spring mattress",
       "basePrice":95,
       "salePrice":"",
@@ -75,5 +75,20 @@
     "hasCupPrice":"true",
     "cupString":"",
     "measureType":"area"
-  }
+  },
+  "volumeMLtoL": {
+    "searchTerm": "Apricot Kernel Oil",
+    "basePrice":30,
+    "salePrice":"",
+    "cupCalcBasedOn":"basePrice",
+    "itemSize": "250.5",
+    "itemUnit": "ML",
+    "comparativeSize": "1",
+    "comparativeUnit": "L",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":"",
+    "measureType":"volume"
+    }
 }
