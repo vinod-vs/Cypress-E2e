@@ -228,12 +228,6 @@ Cypress.Commands.add('customerReturn', (edmInvoiceId, orderReference, returnRequ
   const customerReturnRequestBody = CustomerReturnRequest
   customerReturnRequestBody.invoiceId = edmInvoiceId
   customerReturnRequestBody.orderReference = orderReference
-<<<<<<< HEAD
-=======
-  /* customerReturnRequestBody.lineItems[0].stockCode = edmStockCode
-    customerReturnRequestBody.lineItems[0].quantity = quantityToReturn
-    customerReturnRequestBody.lineItems[0].amount = amountUnitPriceOfItemToReturn  */
->>>>>>> MPPF-962-CreateSelfServiceReturn
   customerReturnRequestBody.lineItems = returnRequestLineItem
   cy.api({
     method: 'POST',
