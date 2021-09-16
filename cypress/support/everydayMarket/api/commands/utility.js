@@ -333,6 +333,6 @@ Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchRes
   cupTestdata.cupMeasure = cupMeasure
   cupTestdata.hasCupPrice = hasCupPrice
   cupTestdata.cupString = cupString
-  cy.log('CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
+  cy.log('product: '+cupTestdata.searchTerm+' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
 
 })
