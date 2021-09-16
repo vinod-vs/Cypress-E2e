@@ -17,9 +17,8 @@ import '../../../support/refunds/api/commands/commands'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
-import tests from '../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP.json'
+// import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP2.json'
 import searchRequest from '../../../fixtures/search/productSearch.json'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
@@ -29,6 +28,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
+    //1
     it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and KG', () => {
       //login 
       cy.loginViaApi(shoppers.emAccount2).then((response) => {
@@ -49,16 +49,26 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       serachForEDMproductWithCUPAndVerfiy(cupTestdataGtoG)
     })
 
-      //3
-      it('MPPF-954 | EM | Verify CUP details for measure type-volume-ML and L', () => {
-        //login 
-        cy.loginViaApi(shoppers.emAccount2).then((response) => {
-          expect(response).to.have.property('LoginResult', 'Success')
-        })
-  
-        const cupTestdataMLtoL= cup.volumeMLtoL
-        serachForEDMproductWithCUPAndVerfiy(cupTestdataMLtoL)
+    //3
+    it('MPPF-954 | EM | Verify CUP details for measure type-volume-ML and L', () => {
+      //login 
+      cy.loginViaApi(shoppers.emAccount2).then((response) => {
+        expect(response).to.have.property('LoginResult', 'Success')
       })
+
+      const cupTestdataMLtoL = cup.volumeMLtoL
+      serachForEDMproductWithCUPAndVerfiy(cupTestdataMLtoL)
+    })
+
+    // //parameterized the test 
+    // it('MPPF-954 | EM | Verify CUP details for different measure type', () => {
+    //   cy.loginViaApi(shoppers.emAccount2).then((response) => {
+    //     expect(response).to.have.property('LoginResult', 'Success')
+    //   })
+    //   Cypress._.times(cup.length, (n) => {
+    //     serachForEDMproductWithCUPAndVerfiy(cup[n])
+    //   })
+    // })
 
   })
 })
