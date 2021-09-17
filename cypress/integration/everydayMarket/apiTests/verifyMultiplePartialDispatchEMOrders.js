@@ -21,13 +21,13 @@ import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] MPPF-903 | EM | MPer | Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
+  describe('[API] MPPF-903 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('MPPF-903 | EM | MPer | Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
+    it('MPPF-903 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
       const testData = tests.VerifyMultiplePartialDispatchedEDMOrder
       let orderId
       let orderReference
