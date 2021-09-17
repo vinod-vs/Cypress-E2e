@@ -20,6 +20,7 @@ import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
+import * as helper from '../../../support/everydayMarket/api/commands/validationHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5097 | EM | MPer | Create Everyday Market items self service return - completely returned by the customer', () => {
@@ -138,7 +139,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 
               // After dispatch, Invoke the events api and verify the events are updated acordingly
-              cy.wait(Cypress.config('twoSecondWait'))
+              cy.wait(Cypress.config('tenSecondWait'))
               cy.events(shopperId, orderId, orderReference).then((response) => {
                 // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
                 lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 5, testData, shopperId)
@@ -166,15 +167,12 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               lib.verifyRefundDetails(testData.orderId, 0, 0)
 
               // Verify the MP and shipping invoices are available for the customer
-              // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
             })
             cy.log('Test Data : Order quantity --' + testData.items[0].quantity + ' Encoded Invoice Id : ' + testData.encodedEdmInvoiceId + ' Encoded Line Item ' + testData.encodedEdmLineitemId + ' Encoded Edm Invoice Id ' + encodedEdmInvoiceId)
             cy.wait(Cypress.config('twoSecondWait'))
             const returnRequestLineItem = [{ stockCode: testData.items[0].stockCode, quantity: testData.items[0].quantity, amount: testData.items[0].pricePerItem, reason: 'Item is faulty', weight: 12, notes: 'Customer Return from EM Test Automation_Partial_Return' }]
             cy.log(returnRequestLineItem)
-            // Verify the customer order projection details.
-            // cy.customerReturn(testData.edmOrderId, testData.orderReference, returnRequestLineItem)
             cy.customerReturn(testData.edmOrderId, testData.orderReference, returnRequestLineItem).then((response) => {
               // verify order projection details
               cy.wait(Cypress.config('tenSecondWait') * 3)
@@ -191,9 +189,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
                 expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
                 expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
-
-                let encodedMarketRefundedId = response.invoices[0].returns[0].marketRefundId
-                cy.log('encodedMarketRefundedId :' + encodedMarketRefundedId)
+                const encodedMarketRefundedId = response.invoices[0].returns[0].marketRefundId
                 //  verify the response status in graphQL endpoint
                 cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
                   expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
@@ -217,6 +213,15 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
                   expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
                 })
+
+                // After dispatch, Invoke the events api and verify the events are updated acordingly
+                cy.wait(Cypress.config('tenSecondWait'))
+                cy.events(shopperId, orderId, orderReference).then((response) => {
+                  lib.verifyEventDetails(response, 5, 'MarketReturnCreated', 11, testData, shopperId)
+                  lib.verifyEventDetails(response, 8, 'RefundRequestUpdate', 11, testData, shopperId)
+                  lib.verifyEventDetails(response, 9, 'MarketOrderRefund', 11, testData, shopperId)
+                  lib.verifyEventDetails(response, 10, 'RefundCompleted', 11, testData, shopperId)
+                })
               })
             })
           })
@@ -226,7 +231,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
   })
 })
 
-function verifyOrderDetails(response, testData, shopperId) {
+function verifyOrderDetails (response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 
