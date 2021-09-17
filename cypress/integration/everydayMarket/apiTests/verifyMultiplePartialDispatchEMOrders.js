@@ -39,7 +39,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       let trackingId2
       let partialDispatchNumber
 
-      //Login and place the order from testdata
+      // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
@@ -92,8 +92,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
           })
 
-          //Verify the MP and shipping invoices are available for the customer
-          //TO-DO Verify the invoice content
+          // Verify the MP and shipping invoices are available for the customer
+          // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
 
           // Dispatch partial order with a unique tracking id
@@ -113,8 +113,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId1, orderReference, partialDispatchNumber)
           })
 
-          //Verify the MP and shipping invoices are available for the customer
-          //TO-DO Verify the invoice content
+          // Verify the MP and shipping invoices are available for the customer
+          // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
 
           trackingId2 = lib.generateRandomString()
@@ -133,11 +133,11 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId2, orderReference, partialDispatchNumber)
           })
 
-          //Verify the MP and shipping invoices are available for the customer
-          //TO-DO Verify the invoice content
+          // Verify the MP and shipping invoices are available for the customer
+          // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
 
-          //Verify NO refund details
+          // Verify NO refund details
           lib.verifyRefundDetails(testData.orderId, 0, 0)
         })
       })
@@ -145,7 +145,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
   })
 })
 
-function verifyOrderDetails(response, testData, shopperId) {
+function verifyOrderDetails (response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 
@@ -189,8 +189,7 @@ function verifyOrderDetails(response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }
 
-function verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
-
+function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
   cy.log('Partial Dispatch :' + partialDispatchNumber + ':: Tracking ID ::' + trackingId)
   // After dispatch, Invoke the order api and verify the projection content is updated acordingly
   cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {

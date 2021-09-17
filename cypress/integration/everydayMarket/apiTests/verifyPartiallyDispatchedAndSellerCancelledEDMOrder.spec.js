@@ -194,14 +194,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
       })
 
-      //TODO: Add back once the failure is fixed
+      // TODO: Add back once the failure is fixed
       // //Verify the refund is only for the cancelled item and the shipping fee is not returned
       // cy.get('@cancelledOrderProjection').then((cancelledProjection) => {
       //   cy.log('cancelledProjection.invoices[0].refunds[0].refundAmount: ' + cancelledProjection.invoices[0].refunds[0].refundAmount)
       //   lib.verifyRefundDetails(req.orderId, cancelledProjection.invoices[0].refunds[0].refundAmount, 0)
       // })
 
-      //TODO: Add invoice verifications
+      // TODO: Add invoice verifications
     })
   })
 })

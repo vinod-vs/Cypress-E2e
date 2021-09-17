@@ -109,7 +109,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.get('@orderDataAfterAmendment'),
           cy.get('@eventsAfterAmendment')
         ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {
-          // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment            
+          // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
           expect({
             ...beforeData,
             orderId: amendedOrder.Order.OrderId

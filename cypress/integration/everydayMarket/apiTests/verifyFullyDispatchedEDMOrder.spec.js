@@ -36,7 +36,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       let edmInvoiceId
       const shopperId = shoppers.emAccount2.shopperId
 
-      //Login and place the order from testdata
+      // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
@@ -69,7 +69,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           // Invoke the events api and verify the content
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
-              if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') || 
+              if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
                   !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
                 cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
@@ -82,8 +82,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
           })
 
-          //Verify the MP and shipping invoices are available for the customer
-          //TO-DO Verify the invoice content
+          // Verify the MP and shipping invoices are available for the customer
+          // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
 
           // Get customers current reward points balance before dispatch
@@ -94,7 +94,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.sellerName).then((response) => {
-
             // After dispatch, Invoke the order api and verify the projection content is updated acordingly
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
               function: function (response) {
@@ -159,7 +158,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 function: function (response) {
                   if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
                   !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited') ) {
+                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
                     cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                     throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                   }
@@ -189,11 +188,11 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
               })
 
-              //Verify No refund details
+              // Verify No refund details
               lib.verifyRefundDetails(testData.orderId, 0, 0)
 
-              //Verify the MP and shipping invoices are available for the customer
-              //TO-DO Verify the invoice content
+              // Verify the MP and shipping invoices are available for the customer
+              // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
             })
           })
@@ -203,7 +202,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
   })
 })
 
-function verifyOrderDetails(response, testData, shopperId) {
+function verifyOrderDetails (response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 

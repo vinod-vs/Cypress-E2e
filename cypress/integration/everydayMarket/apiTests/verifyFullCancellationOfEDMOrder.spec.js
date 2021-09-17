@@ -37,7 +37,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       let encodedEdmLineitemId
       const shopperId = shoppers.emAccount2.shopperId
 
-      //Login and place the order from testdata
+      // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
@@ -77,9 +77,9 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
                   !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
-                    cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
-                    throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
-                  }
+                cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
+                throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
+              }
             },
             retries: 15,
             timeout: 5000
@@ -88,8 +88,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
           })
 
-          //Verify the MP and shipping invoices are available for the customer
-          //TO-DO Verify the invoice content
+          // Verify the MP and shipping invoices are available for the customer
+          // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
 
           // Get customers current reward points balance before seller cancellation
@@ -129,9 +129,9 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
               expect(response.invoices[0].pdfLink).to.not.be.null
               expect(response.invoices[0].legacyIdFormatted).to.be.equal(testData.edmOrderId)
-              // shipments      
+              // shipments
               expect(response.invoices[0].shipments.length).to.be.equal(0)
-              // Return 
+              // Return
               expect(response.invoices[0].returns.length).to.be.equal(0)
               // Line item details
               expect(response.invoices[0].lineItems[0].wowId).to.not.be.null
@@ -153,7 +153,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
               expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
               expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
-              // Refund 
+              // Refund
               expect(response.invoices[0].refunds[0].id).to.not.be.null
               expect(response.invoices[0].refunds[0].status).to.be.equal('Refunded')
               expect(response.invoices[0].refunds[0].refundAmount).to.be.equal(Number(testData.edmTotal))
@@ -164,7 +164,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].refunds[0].createdUtc).to.not.be.null
               expect(response.invoices[0].refunds[0].updatedUtc).to.not.be.null
               expect(response.invoices[0].refunds[0].refundedUtc).to.not.be.null
-              expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal("ADMIN")
+              expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal('ADMIN')
 
               // Refund-> Notes verification
               expect(response.invoices[0].refunds[0].notes[0].id).to.not.be.null
@@ -174,7 +174,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].refunds[0].notes[1].note).to.be.equal("Automation refundRequestReturn note: I don't want this")
               expect(response.invoices[0].refunds[0].notes[1].timestamp).to.not.be.null
               expect(response.invoices[0].refunds[0].notes[2].id).to.not.be.null
-              expect(response.invoices[0].refunds[0].notes[2].note).to.be.equal("Auto-refund cancellation")
+              expect(response.invoices[0].refunds[0].notes[2].note).to.be.equal('Auto-refund cancellation')
               expect(response.invoices[0].refunds[0].notes[2].timestamp).to.not.be.null
               // Refund-> refundItems verification
               expect(response.invoices[0].refunds[0].refundItems[0].id).to.not.be.null
@@ -183,7 +183,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].refunds[0].refundItems[0].quantity).equal(Number(testData.items[0].quantity))
               expect(response.invoices[0].refunds[0].refundItems[0].amount).to.be.greaterThan(0)
               expect(response.invoices[0].refunds[0].refundItems[0].amount).to.be.equal(Number(testData.edmTotal))
-              //RefundItems ->lineitems   
+              // RefundItems ->lineitems
               expect(response.invoices[0].refunds[0].refundItems[0].lineItem.stockCode).to.be.equal(Number(testData.items[0].stockCode))
               expect(response.invoices[0].refunds[0].refundItems[0].lineItem.lineItemId).to.not.be.null
               expect(response.invoices[0].refunds[0].refundItems[0].lineItem.refundableQuantity).to.be.equal(0)
@@ -193,9 +193,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].refunds[0].refundItems[0].lineItem.totalAmount).to.be.equal(0)
               expect(response.invoices[0].refunds[0].refundItems[0].lineItem.variantId).to.not.be.null
               expect(response.invoices[0].refunds[0].refundItems[0].lineItem.variantLegacyId).to.not.be.null
-            })//verify order api projection end
-
-          })//seller cancellation end
+            })// verify order api projection end
+          })// seller cancellation end
 
           // After seller cancellation, Invoke the events api and verify the events are updated acordingly
           cy.orderEventsApiWithRetry(orderReference, {
@@ -203,14 +202,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               if (!response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
                   !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
                   !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
-                    cy.log('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
-                    throw new Error('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
-                  }
+                cy.log('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
+                throw new Error('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
+              }
             },
             retries: 15,
             timeout: 5000
           }).then((response) => {
-            // Verify there are only 7 events. New event after seller cancellattion 
+            // Verify there are only 7 events. New event after seller cancellattion
             lib.verifyEventDetails(response, 'RefundRequestUpdate', testData, shopperId, 3)
             lib.verifyEventDetails(response, 'MarketOrderRefund', testData, shopperId, 1)
             lib.verifyEventDetails(response, 'RefundCompleted', testData, shopperId, 1)
@@ -223,20 +222,19 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             expect(response.queryCardDetailsResp.pointBalance).to.be.equal(testData.rewardPointBefore)
           })
 
-          //Verify the refund details
+          // Verify the refund details
           lib.verifyRefundDetails(testData.orderId, testData.edmTotal, testData.edmDeliveryCharges)
 
-          //Verify the MP and shipping invoices are available for the customer
-          //TO-DO Verify the invoice content
+          // Verify the MP and shipping invoices are available for the customer
+          // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
-
         })
       })
     })
   })
 })
 
-function verifyOrderDetails(response, testData, shopperId) {
+function verifyOrderDetails (response, testData, shopperId) {
   // Common Order details
   lib.verifyCommonOrderDetails(response, testData, shopperId)
 
