@@ -1,10 +1,17 @@
-export function validateEvents (response, expectedEventIndex, expectedEventName) {
-  // Verify the event contents
-  expect(response.data[expectedEventIndex].domainEvent).to.be.equal(expectedEventName)
-  expect(response.data[expectedEventIndex].payload).to.not.be.null
+export function validateEvents(response, expectedEventName, expectedEventCount) {
+  cy.log('Expected Event Name: ' + expectedEventName + ' , expected count: ' + expectedEventCount)
+  const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
+  cy.log('Expected events: ' + JSON.stringify(events))
+  events.forEach(event => {
+    // Verify the event contents
+    expect(event.domainEvent).to.be.equal(expectedEventName)
+    expect(event.payload).to.not.be.null
+  })
+  // Verify there are only expectedEventCount events
+  expect(events).to.have.length(expectedEventCount)
 }
 
-export function validateOrderApiAgainstTrader (marketOrderApiData) {
+export function validateOrderApiAgainstTrader(marketOrderApiData) {
   cy.get('@confirmedTraderOrder').then((traderData) => {
     expect(marketOrderApiData.orderId).to.equal(traderData.Order.OrderId)
     expect(marketOrderApiData.orderReference).to.equal(traderData.Order.OrderReference)
