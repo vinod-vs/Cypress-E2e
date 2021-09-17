@@ -3,7 +3,6 @@
 import fullDispatchAnInvoiceRequest from '../../../../fixtures/everydayMarket/marketplacer/fullDispatchAnInvoice.json'
 import partialDispatchOfLineItemsInInvoice from '../../../../fixtures/everydayMarket/marketplacer/partialDispatchOfLineItemsInInvoice.json'
 
-
 Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTrackingnumber, postageCarrier, sellerName) => {
   const apiKey = getApiKeyForSeller(sellerName)
   const endPoint = String(Cypress.env('marketplacerFullDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)

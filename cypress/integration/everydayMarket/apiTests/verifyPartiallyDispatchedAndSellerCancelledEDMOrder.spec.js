@@ -17,13 +17,13 @@ import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] RP-5044 | EM | MPer | Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+  describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('RP-5044 | EM | MPer | Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+    it('RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
       const purchaseQty = 2
       const dispatchQty = 1
       const cancelledQty = 1
@@ -194,14 +194,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
       })
 
-      //TODO: Add back once the failure is fixed
+      // TODO: Add back once the failure is fixed
       // //Verify the refund is only for the cancelled item and the shipping fee is not returned
       // cy.get('@cancelledOrderProjection').then((cancelledProjection) => {
       //   cy.log('cancelledProjection.invoices[0].refunds[0].refundAmount: ' + cancelledProjection.invoices[0].refunds[0].refundAmount)
       //   lib.verifyRefundDetails(req.orderId, cancelledProjection.invoices[0].refunds[0].refundAmount, 0)
       // })
 
-      //TODO: Add invoice verifications
+      // TODO: Add invoice verifications
     })
   })
 })

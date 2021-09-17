@@ -65,7 +65,7 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
   return placeOrder()
 })
 
-function placeOrder() {
+function placeOrder () {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
@@ -269,7 +269,6 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
   testData.totalEdmQuantity = totalEdmQuantity
   cy.log('wowTotal: ' + wowTotal + ' , edmTotal: ' + edmTotal + ' , totalQuantity: ' + totalQuantity + ' , totalWowQuantity: ' + totalWowQuantity + ' , totalEdmQuantity: ' + totalEdmQuantity)
 })
-
 
 Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, testData) => {
   // Login
