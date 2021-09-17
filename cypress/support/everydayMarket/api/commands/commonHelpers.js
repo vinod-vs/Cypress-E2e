@@ -3,16 +3,24 @@
 import '../../../refunds/api/commands/commands'
 import '../../../invoices/api/commands/commands'
 
-export function verifyEventDetails(response, expectedEventIndex, expectedEventName, expectedTotalEventsLength, testData, shopperId) {
-  // Verify the event contents
-  expect(response.data[expectedEventIndex].orderId).to.equal(Number(testData.orderId))
-  expect(response.data[expectedEventIndex].orderReference).to.be.equal(testData.orderReference)
-  expect(response.data[expectedEventIndex].shopperId).to.be.equal(Number(shopperId))
-  expect(response.data[expectedEventIndex].domainEvent).to.be.equal(expectedEventName)
-  expect(response.data[expectedEventIndex].payload).to.not.be.null
-  // Verify there are only expectedTotalEventsLength events
-  expect(response.data).to.have.length(expectedTotalEventsLength)
+export function verifyEventDetails(response, expectedEventName, testData, shopperId, expectedEventCount) {
+  cy.log('Expected Event Name: ' + expectedEventName + ' , expected count: ' + expectedEventCount)
+  const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
+  cy.log('Expected events: ' + JSON.stringify(events))
+
+  events.forEach(event => {
+    // Verify the event contents
+    expect(event.orderId).to.equal(Number(testData.orderId))
+    expect(event.orderReference).to.be.equal(testData.orderReference)
+    expect(event.shopperId).to.be.equal(Number(shopperId))
+    expect(event.domainEvent).to.be.equal(expectedEventName)
+    expect(event.payload).to.not.be.null
+  })
+
+  // Verify there are only expectedEventCount events
+  expect(events).to.have.length(expectedEventCount)
 }
+
 
 export function verifyCommonOrderDetails(response, testData, shopperId) {
   // Order details

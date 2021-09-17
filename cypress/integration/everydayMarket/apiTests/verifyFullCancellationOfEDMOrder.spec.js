@@ -49,8 +49,16 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         lib.verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
-        cy.wait(Cypress.config('tenSecondWait') * 3)
-        cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
+        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+          function: function (response) {
+            if (response.body.invoices[0].wowStatus !== 'Placed') {
+              cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
+              throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
+            }
+          },
+          retries: 10,
+          timeout: 5000
+        }).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
           encodedEdmInvoiceId = response.invoices[0].invoiceId
@@ -65,10 +73,19 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           verifyOrderDetails(response, testData, shopperId)
 
           // Invoke the events api and verify the content
-          cy.wait(Cypress.config('twoSecondWait'))
-          cy.events(shopperId, orderId, orderReference).then((response) => {
-            lib.verifyEventDetails(response, 0, 'OrderPlaced', 2, testData, shopperId)
-            lib.verifyEventDetails(response, 1, 'MarketOrderPlaced', 2, testData, shopperId)
+          cy.orderEventsApiWithRetry(orderReference, {
+            function: function (response) {
+              if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                    cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
+                    throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
+                  }
+            },
+            retries: 15,
+            timeout: 5000
+          }).then((response) => {
+            lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
+            lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
           })
 
           //Verify the MP and shipping invoices are available for the customer
@@ -83,9 +100,17 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
           // Seller cancells all the EM items and verify the events and order statuses
           cy.cancelLineItemInInvoice(encodedEdmInvoiceId, encodedEdmLineitemId, testData.items[0].quantity).then((response) => {
-            cy.wait(Cypress.config('tenSecondWait') * 3)
             // After Seller cancellation, Invoke the order api and verify the projection content is updated acordingly for refunds
-            cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
+            cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+              function: function (response) {
+                if (response.body.invoices[0].wowStatus !== 'SellerCancelled') {
+                  cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of SellerCancelled')
+                  throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of SellerCancelled')
+                }
+              },
+              retries: 10,
+              timeout: 5000
+            }).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
               // Seller details
@@ -173,14 +198,22 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })//seller cancellation end
 
           // After seller cancellation, Invoke the events api and verify the events are updated acordingly
-          cy.wait(Cypress.config('twoSecondWait'))
-          cy.events(shopperId, orderId, orderReference).then((response) => {
+          cy.orderEventsApiWithRetry(orderReference, {
+            function: function (response) {
+              if (!response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
+                  !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
+                    cy.log('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
+                    throw new Error('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
+                  }
+            },
+            retries: 15,
+            timeout: 5000
+          }).then((response) => {
             // Verify there are only 7 events. New event after seller cancellattion 
-            lib.verifyEventDetails(response, 2, 'RefundRequestUpdate', 7, testData, shopperId)
-            lib.verifyEventDetails(response, 3, 'RefundRequestUpdate', 7, testData, shopperId)
-            lib.verifyEventDetails(response, 4, 'RefundRequestUpdate', 7, testData, shopperId)
-            lib.verifyEventDetails(response, 5, 'MarketOrderRefund', 7, testData, shopperId)
-            lib.verifyEventDetails(response, 6, 'RefundCompleted', 7, testData, shopperId)
+            lib.verifyEventDetails(response, 'RefundRequestUpdate', testData, shopperId, 3)
+            lib.verifyEventDetails(response, 'MarketOrderRefund', testData, shopperId, 1)
+            lib.verifyEventDetails(response, 'RefundCompleted', testData, shopperId, 1)
           })
 
           // Verify the reward points are not credited to customers card after seller full cancellation of EM order
