@@ -64,7 +64,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
           // Verify the projection details
-          verifyOrderDetails(response, testData, shopperId)
+          lib.verifyInitialOrderDetails(response, testData, shopperId)
 
           // Invoke the events api and verify the content
           cy.orderEventsApiWithRetry(orderReference, {
@@ -201,47 +201,3 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
     })
   })
 })
-
-function verifyOrderDetails (response, testData, shopperId) {
-  // Common Order details
-  lib.verifyCommonOrderDetails(response, testData, shopperId)
-
-  // Seller details
-  expect(response.invoices[0].seller.sellerId).to.not.be.null
-  expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
-
-  // Invoice details
-  expect(response.invoices[0].invoiceStatus).to.be.equal('PAID')
-  expect(response.invoices[0].wowId).to.not.be.null
-  expect(response.invoices[0].wowStatus).to.be.equal('Placed')
-  expect(response.invoices[0].seller.sellerId).to.not.be.null
-  expect(response.invoices[0].seller.sellerName).to.not.be.null
-  expect(response.invoices[0].shipments.length).to.be.equal(0)
-  expect(response.invoices[0].lineItems.length).to.be.equal(1)
-  expect(response.invoices[0].legacyId).to.not.be.null
-  expect(response.invoices[0].legacyIdFormatted).to.not.be.null
-  expect(response.invoices[0].invoiceTotal).to.be.greaterThan(0)
-  expect(response.invoices[0].updatedTimeStampUtc).to.not.be.null
-  expect(response.invoices[0].refunds.length).to.be.equal(0)
-  expect(response.invoices[0].orderTrackingStatus).to.be.equal('Received')
-  expect(response.invoices[0].pdfLink).to.not.be.null
-  expect(response.invoices[0].legacyIdFormatted).to.be.equal(testData.edmOrderId)
-  // Line item details
-  expect(response.invoices[0].lineItems[0].wowId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].lineItemId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].legacyId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
-  expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
-  expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
-  expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
-  expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
-  expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
-  expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
-  // expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
-  // Rewards Details
-  // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
-  expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
-  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
-  expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
-}
