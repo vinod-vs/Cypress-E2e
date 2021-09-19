@@ -10,6 +10,8 @@
         "existingSubscriptionPlanEndpoint": "api/v3/ui/deliverysaver/subscription",
         "setBillingAddressEndpoint": "apis/ui/address/autobilling",
         "payAndSubscribeEndpoint":"api/v3/ui/deliverysaver/subscription",
-        "duSubscriptionTestDataFilePath":"cypress/duSubscriptionTestData"
+        "duSubscriptionTestDataFilePath":"cypress/duSubscriptionTestData",
+        "duCancelSubscriptionEndpoint":"api/v3/ui/deliverysaver/subscription/cancel",
+        "setSystemDateEndpoint":"api/v3/ui/deliverysaver/subscription/systemdate"
     }
 }
