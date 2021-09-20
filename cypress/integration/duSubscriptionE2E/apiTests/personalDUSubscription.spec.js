@@ -34,7 +34,7 @@ TestFilter(['B2C-API'], () => {
         signUpDetails.lastName = faker.name.lastName()
         signUpDetails.emailAddress = faker.internet.email()
         signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-        cy.getDOB('personal').then((value)=> {
+        cy.getDOB('personal').then((value) => {
           signUpDetails.dateOfBirth = value
         })
         cy.logOutViaApi().then((response) => {
@@ -51,70 +51,69 @@ TestFilter(['B2C-API'], () => {
           const shopperId = response.body.ShopperId
           cy.log('This is the shopper id for the user : ' + shopperId)
 
-          //logout successfully after signing up
+          // logout successfully after signing up
           cy.logOutViaApi().then((response) => {
             expect(response.status).to.eq(200)
           })
 
-          //Login with the newly created customer
+          // Login with the newly created customer
           loginDetails.email = signUpDetails.emailAddress
           cy.loginViaApi(loginDetails).then((response) => {
             expect(response).to.have.property('LoginResult', 'Success')
-  
+
             cy.getCookie('w-rctx').should('exist')
           })
-  
-          //Test a new user is eligible for a delivery saver plan
-          cy.checkPlanEligibilityViaApi(shopperId).then((response)=>{
+
+          // Test a new user is eligible for a delivery saver plan
+          cy.checkPlanEligibilityViaApi(shopperId).then((response) => {
             expect(response.status).to.eq(200)
-            expect(response.body).to.have.property('HasActiveDeliverySaver',false)
-            expect(response.body).to.have.property('IsDeliverySaverEnabled',true)
-            expect(response.body).to.have.property('IsEligibleForDeliverySaver',true)
-            expect(response.body).to.have.property('IsBusinessAccount',false)
-          }) 
-          //Test a new user has any existing subscription plan
-          cy.checkExistingPlanViaApi(shopperId).then((response)=>{
-            expect(response.status).to.eq(200)
-            expect(response.body.Errors[0].ErrorMessage).to.contain('Could not find a subscriber for tenant WOOLWORTHSONLINE and externalId '+shopperId)
+            expect(response.body).to.have.property('HasActiveDeliverySaver', false)
+            expect(response.body).to.have.property('IsDeliverySaverEnabled', true)
+            expect(response.body).to.have.property('IsEligibleForDeliverySaver', true)
+            expect(response.body).to.have.property('IsBusinessAccount', false)
           })
-          //Search billing address
-          cy.searchBillingAddressViaApi(searchAddress.search).then((response)=>{
+          // Test a new user has any existing subscription plan
+          cy.checkExistingPlanViaApi(shopperId).then((response) => {
+            expect(response.status).to.eq(200)
+            expect(response.body.Errors[0].ErrorMessage).to.contain('Could not find a subscriber for tenant WOOLWORTHSONLINE and externalId ' + shopperId)
+          })
+          // Search billing address
+          cy.searchBillingAddressViaApi(searchAddress.search).then((response) => {
             expect(response.status).to.eq(200)
             expect(response.body.Response[0].Text).to.contain(searchAddress.search)
             const billingAddrID = response.body.Response[0].Id
-            //set autobilling address
-            cy.setBillingAddressViaApi(billingAddrID).then((response)=>{
+            // set autobilling address
+            cy.setBillingAddressViaApi(billingAddrID).then((response) => {
               expect(response.status).to.eq(200)
               const AddressId = response.body.Address.AddressId
-              //validate set autobilling address
-              cy.validateBillingAddressViaApi().then((response)=>{
-               expect(response.status).to.eq(200)
-               expect(response.body.Address[0].AddressId).to.eq(AddressId)
-  
+              // validate set autobilling address
+              cy.validateBillingAddressViaApi().then((response) => {
+                expect(response.status).to.eq(200)
+                expect(response.body.Address[0].AddressId).to.eq(AddressId)
               })
             })
           })
-  
-          cy.navigatingToCreditCardIframe().then((response)=>{
+
+          cy.navigatingToCreditCardIframe().then((response) => {
             expect(response).to.have.property('Success', true)
-            expect(response.IframeUrl).to.contain(Cypress.env("creditCardPaymentEndpoint").split('/')[2])
+            expect(response.IframeUrl).to.contain(Cypress.env('creditCardPaymentEndpoint').split('/')[2])
             const iframeURL = response.IframeUrl
-            creditcardSessionHeader.creditcardSessionId = iframeURL.split("/").pop()
-            cy.creditcardPayment(ccDetails.visa, creditcardSessionHeader).then((response)=>{
+            creditcardSessionHeader.creditcardSessionId = iframeURL.split('/').pop()
+            cy.creditcardPayment(ccDetails.visa, creditcardSessionHeader).then((response) => {
               expect(response.status).to.have.property('responseText', 'ACCEPTED')
               expect(response.status).to.have.property('responseCode', '00')
-              //expect(response.body.status).to.have.property('esResponse', null)
+              // expect(response.body.status).to.have.property('esResponse', null)
               payAndSubscribe.planId = plan.PlanId
               payAndSubscribe.paymentInstrumentId = response.paymentInstrument.itemId
-              cy.payAndSubscribeViaApi(payAndSubscribe).then((response)=>{
+              cy.payAndSubscribeViaApi(payAndSubscribe).then((response) => {
                 expect(response.status).to.eq(200)
-                expect(response.body.Subscription).to.have.property('PlanId',plan.PlanId)
-                expect(response.body.Subscription).to.have.property('ServiceType',plan.ServiceType)
-                expect(response.body.Subscription).to.have.property('Price',plan.Price)
-                expect(response.body.Plan).to.have.property('Name',plan.Name)
-                expect(response.body).to.have.property('Errors',null)
-                expect(response.body).to.have.property('HttpStatusCode','OK')
-                expect(response.body).to.have.property('ExternalId',shopperId)
+                expect(response.body.Subscription).to.have.property('PlanId', plan.PlanId)
+                expect(response.body.Subscription).to.have.property('ServiceType', plan.ServiceType)
+                expect(response.body.Subscription).to.have.property('Price', plan.Price)
+                expect(response.body.Plan).to.have.property('Name', plan.Name)
+                expect(response.body).to.have.property('Errors', null)
+                expect(response.body).to.have.property('HttpStatusCode', 'OK')
+                expect(response.body).to.have.property('ExternalId', shopperId)
               })
             })
           })
@@ -123,8 +122,8 @@ TestFilter(['B2C-API'], () => {
           signUpDetails.planName = plan.Name
           signUpDetails.planPrice = plan.Price
           signUpDetails.createdTime = new Date().toLocaleString()
-          cy.writeTestDataUsed(`${Cypress.env("duSubscriptionTestDataFilePath")}/personalSubscriptionUsedData.json`,signUpDetails)     
-        })          
+          cy.writeTestDataUsed(`${Cypress.env('duSubscriptionTestDataFilePath')}/personalSubscriptionUsedData.json`, signUpDetails)
+        })
       })
     })
   })

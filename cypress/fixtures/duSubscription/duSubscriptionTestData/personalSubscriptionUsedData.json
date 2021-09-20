@@ -324,14 +324,21 @@
     "createdTime": "8/27/2021, 1:32:45 PM"
   },
   {
+<<<<<<< HEAD:cypress/duSubscriptionTestData/personalSubscriptionUsedData.json
     "lastName": "Brown",
     "firstName": "Stephanie",
     "emailAddress": "Kai.Emmerich@hotmail.com",
+=======
+    "lastName": "Ernser",
+    "firstName": "Rose",
+    "emailAddress": "Madeline.Mckenzie@yahoo.com",
+>>>>>>> 71819c66bea0e75e2726aded7b7fe8eb915ecfa0:cypress/fixtures/duSubscription/duSubscriptionTestData/personalSubscriptionUsedData.json
     "password": "test1234",
     "agreeToTsAndCs": true,
     "idLikeToReceiveSmsTextsAboutProductsServicesAndPromotions": false,
     "idLikeToReceiveEmailsAboutProductsAndServices": false,
     "idLikeToBeSentTheCatalogue": false,
+<<<<<<< HEAD:cypress/duSubscriptionTestData/personalSubscriptionUsedData.json
     "dateOfBirth": "07/09/1986",
     "mobilePhone": "0431859265",
     "typeOfDeliveryMethod": "DecideLater",
@@ -345,11 +352,27 @@
     "lastName": "Kelly",
     "firstName": "Jayden",
     "emailAddress": "Alyssa.Fadel@hotmail.com",
+=======
+    "dateOfBirth": "04/09/1984",
+    "mobilePhone": "0442202524",
+    "typeOfDeliveryMethod": "DecideLater",
+    "shopperId": 8448433,
+    "planId": 9,
+    "planName": "Any day, annual subscription",
+    "planPrice": 119,
+    "createdTime": "9/19/2021, 2:21:19 PM"
+  },
+  {
+    "lastName": "Waters",
+    "firstName": "Evie",
+    "emailAddress": "Mason_Ross81@gmail.com",
+>>>>>>> 71819c66bea0e75e2726aded7b7fe8eb915ecfa0:cypress/fixtures/duSubscription/duSubscriptionTestData/personalSubscriptionUsedData.json
     "password": "test1234",
     "agreeToTsAndCs": true,
     "idLikeToReceiveSmsTextsAboutProductsServicesAndPromotions": false,
     "idLikeToReceiveEmailsAboutProductsAndServices": false,
     "idLikeToBeSentTheCatalogue": false,
+<<<<<<< HEAD:cypress/duSubscriptionTestData/personalSubscriptionUsedData.json
     "dateOfBirth": "02/09/1971",
     "mobilePhone": "0466907828",
     "typeOfDeliveryMethod": "DecideLater",
@@ -654,12 +677,28 @@
     "lastName": "Crooks",
     "firstName": "Cameron",
     "emailAddress": "Adam80@hotmail.com",
+=======
+    "dateOfBirth": "03/09/1989",
+    "mobilePhone": "0461933209",
+    "typeOfDeliveryMethod": "DecideLater",
+    "shopperId": 8448434,
+    "planId": 10,
+    "planName": "Any day, monthly subscription",
+    "planPrice": 15,
+    "createdTime": "9/19/2021, 2:21:46 PM"
+  },
+  {
+    "lastName": "Johns",
+    "firstName": "Daniel",
+    "emailAddress": "Hannah.Heathcote@yahoo.com",
+>>>>>>> 71819c66bea0e75e2726aded7b7fe8eb915ecfa0:cypress/fixtures/duSubscription/duSubscriptionTestData/personalSubscriptionUsedData.json
     "password": "test1234",
     "agreeToTsAndCs": true,
     "idLikeToReceiveSmsTextsAboutProductsServicesAndPromotions": false,
     "idLikeToReceiveEmailsAboutProductsAndServices": false,
     "idLikeToBeSentTheCatalogue": false,
     "dateOfBirth": "05/09/1990",
+<<<<<<< HEAD:cypress/duSubscriptionTestData/personalSubscriptionUsedData.json
     "mobilePhone": "0484092734",
     "typeOfDeliveryMethod": "DecideLater",
     "shopperId": 8448490,
@@ -768,11 +807,26 @@
     "lastName": "O'hara",
     "firstName": "Sam",
     "emailAddress": "Alex.Hamilton@gmail.com",
+=======
+    "mobilePhone": "0499287751",
+    "typeOfDeliveryMethod": "DecideLater",
+    "shopperId": 8448516,
+    "planId": 9,
+    "planName": "Any day, annual subscription",
+    "planPrice": 119,
+    "createdTime": "9/20/2021, 11:18:56 AM"
+  },
+  {
+    "lastName": "Kuhn",
+    "firstName": "Beau",
+    "emailAddress": "Maya75@hotmail.com",
+>>>>>>> 71819c66bea0e75e2726aded7b7fe8eb915ecfa0:cypress/fixtures/duSubscription/duSubscriptionTestData/personalSubscriptionUsedData.json
     "password": "test1234",
     "agreeToTsAndCs": true,
     "idLikeToReceiveSmsTextsAboutProductsServicesAndPromotions": false,
     "idLikeToReceiveEmailsAboutProductsAndServices": false,
     "idLikeToBeSentTheCatalogue": false,
+<<<<<<< HEAD:cypress/duSubscriptionTestData/personalSubscriptionUsedData.json
     "dateOfBirth": "06/09/1991",
     "mobilePhone": "0463658007",
     "typeOfDeliveryMethod": "DecideLater",
@@ -782,5 +836,15 @@
     "planPrice": 15,
     "createdTime": "9/20/2021, 9:54:06 AM",
     "status": "Subscription cancelled"
+=======
+    "dateOfBirth": "05/09/1984",
+    "mobilePhone": "0408635609",
+    "typeOfDeliveryMethod": "DecideLater",
+    "shopperId": 8448518,
+    "planId": 10,
+    "planName": "Any day, monthly subscription",
+    "planPrice": 15,
+    "createdTime": "9/20/2021, 11:19:38 AM"
+>>>>>>> 71819c66bea0e75e2726aded7b7fe8eb915ecfa0:cypress/fixtures/duSubscription/duSubscriptionTestData/personalSubscriptionUsedData.json
   }
 ]

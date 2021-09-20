@@ -21,7 +21,6 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 
-
 let productStockCode
 let productPrice
 let supplyLimit

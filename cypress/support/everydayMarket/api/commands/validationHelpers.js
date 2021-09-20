@@ -1,4 +1,4 @@
-export function validateEvents(response, expectedEventName, expectedEventCount) {
+export function validateEvents (response, expectedEventName, expectedEventCount) {
   cy.log('Expected Event Name: ' + expectedEventName + ' , expected count: ' + expectedEventCount)
   const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
   cy.log('Expected events: ' + JSON.stringify(events))
@@ -11,7 +11,7 @@ export function validateEvents(response, expectedEventName, expectedEventCount) 
   expect(events).to.have.length(expectedEventCount)
 }
 
-export function validateOrderApiAgainstTrader(marketOrderApiData) {
+export function validateOrderApiAgainstTrader (marketOrderApiData) {
   cy.get('@confirmedTraderOrder').then((traderData) => {
     expect(marketOrderApiData.orderId).to.equal(traderData.Order.OrderId)
     expect(marketOrderApiData.orderReference).to.equal(traderData.Order.OrderReference)
