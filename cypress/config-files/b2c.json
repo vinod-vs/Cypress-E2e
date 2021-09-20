@@ -10,16 +10,11 @@
         "existingSubscriptionPlanEndpoint": "api/v3/ui/deliverysaver/subscription",
         "setBillingAddressEndpoint": "apis/ui/address/autobilling",
         "payAndSubscribeEndpoint":"api/v3/ui/deliverysaver/subscription",
-<<<<<<< HEAD
-        "duSubscriptionTestDataFilePath":"cypress/duSubscriptionTestData",
         "duCancelSubscriptionEndpoint":"api/v3/ui/deliverysaver/subscription/cancel",
-        "setSystemDateEndpoint":"api/v3/ui/deliverysaver/subscription/systemdate"
-=======
+        "setSystemDateEndpoint":"api/v3/ui/deliverysaver/subscription/systemdate",
         "duSubscriptionTestDataFilePath":"cypress/fixtures/duSubscription/duSubscriptionTestData",
         "rocketUserName":"OrderServiceUser",
         "rocketPassword":"5e1ac07575224be090b46082e1bfb1f2",
         "rocketOrderURL":"https://dxk8saae.uat.wx-d.net/orders-api/Orders"
-
->>>>>>> 71819c66bea0e75e2726aded7b7fe8eb915ecfa0
     }
 }
