@@ -163,7 +163,7 @@ stages:
           - script: |
               npm install
               npm test -- --env tags=B2B-API/B2B-UI/API,fileConfig=b2b --browser ${{ parameters.browser }}
-              npm browserstack:run -- --env tags=B2B-API/API/B2B-UI,fileConfig=b2b
+              npm browserstackTest -- --env tags=B2B-API/API/B2B-UI,fileConfig=b2b
               npm run allure:generate
               browserstack-cypress run --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b"
             displayName: "Npm install and test"
