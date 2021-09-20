@@ -17,13 +17,13 @@ import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] RP-5044 | EM | MPer | Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+  describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('RP-5044 | EM | MPer | Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+    it('RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
       const purchaseQty = 2
       const dispatchQty = 1
       const cancelledQty = 1
@@ -69,15 +69,17 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         // Call the Market Events API and validate the data
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
-            if (response.body.pagination.total !== 2) {
-              throw new Error('Events not completed yet')
+            if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
+              !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+              cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
+              throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
             }
           },
           retries: 15,
           timeout: 2000
         }).then((response) => {
-          lib.validateEvents(response, 0, 'OrderPlaced')
-          lib.validateEvents(response, 1, 'MarketOrderPlaced')
+          lib.validateEvents(response, 'OrderPlaced', 1)
+          lib.validateEvents(response, 'MarketOrderPlaced', 1)
         })
 
         // Get reward points before we start dispatching/OOSing items via Marketplacer
@@ -114,18 +116,19 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             // Call the Market Events API and validate the data
             cy.orderEventsApiWithRetry(data.orderReference, {
               function: function (response) {
-                if (response.body.pagination.total !== 7) {
-                  throw new Error('Events not completed yet')
+                if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                  cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
+                  throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                 }
               },
               retries: 15,
               timeout: 2000
             }).then((response) => {
-              lib.validateEvents(response, 2, 'MarketOrderShipmentCreate')
-              lib.validateEvents(response, 3, 'update')
-              lib.validateEvents(response, 4, 'MarketOrderDispatched')
-              lib.validateEvents(response, 5, 'MarketRewardsCredited')
-              lib.validateEvents(response, 6, 'update')
+              lib.validateEvents(response, 'MarketOrderShipmentCreate', 1)
+              lib.validateEvents(response, 'MarketOrderDispatched', 1)
+              lib.validateEvents(response, 'MarketRewardsCredited', 1)
             })
           })
 
@@ -166,20 +169,19 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             // Call the Market Events API and validate the data
             cy.orderEventsApiWithRetry(data.orderReference, {
               function: function (response) {
-                if (response.body.pagination.total !== 14) {
-                  throw new Error('Events not completed yet')
+                if (!response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
+                  !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
+                  cy.log('Expected RefundRequestUpdate, RefundRequestUpdate & RefundCompleted were not present')
+                  throw new Error('Expected RefundRequestUpdate, RefundRequestUpdate & RefundCompleted were not present')
                 }
               },
               retries: 15,
               timeout: 2000
             }).then((response) => {
-              lib.validateEvents(response, 7, 'RefundRequestUpdate') // Returned
-              lib.validateEvents(response, 8, 'RefundRequestUpdate') // Create
-              lib.validateEvents(response, 9, 'RefundRequestUpdate') // Refunded
-              lib.validateEvents(response, 10, 'update')
-              lib.validateEvents(response, 11, 'MarketOrderRefund')
-              lib.validateEvents(response, 12, 'RefundCompleted')
-              lib.validateEvents(response, 13, 'update')
+              lib.validateEvents(response, 'RefundRequestUpdate', 3) // Returned, Create, Refunded
+              lib.validateEvents(response, 'MarketOrderRefund', 1)
+              lib.validateEvents(response, 'RefundCompleted', 1)
             })
             // Validate rewards points to ensure points get accumulated for dispatched items only
             cy.getRewardsCardDetails(rewards.partnerId, rewards.siteId, rewards.posId, rewards.loyaltySiteType, shopper.rewardsCardNumber)
@@ -194,14 +196,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
       })
 
-      //TODO: Add back once the failure is fixed
+      // TODO: Add back once the failure is fixed
       // //Verify the refund is only for the cancelled item and the shipping fee is not returned
       // cy.get('@cancelledOrderProjection').then((cancelledProjection) => {
       //   cy.log('cancelledProjection.invoices[0].refunds[0].refundAmount: ' + cancelledProjection.invoices[0].refunds[0].refundAmount)
       //   lib.verifyRefundDetails(req.orderId, cancelledProjection.invoices[0].refunds[0].refundAmount, 0)
       // })
 
-      //TODO: Add invoice verifications
+      // TODO: Add invoice verifications
     })
   })
 })
