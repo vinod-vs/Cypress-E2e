@@ -60,7 +60,7 @@
     "viewportWidth": 1536,
     "defaultCommandTimeout": 30000,
     "chromeWebSecurity": false,
-    "pageLoadTimeout": 100000,
+    "pageLoadTimeout": 120000,
     "video": false,
     "videosFolder": "cypress/videos",
     "videoCompression": 32,
