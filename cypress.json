@@ -52,8 +52,6 @@
         "refundsEndpoint": "apis/ui/Order/TRADER_ORDER_ID/Refunds",
         "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
         "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",
-        "marketApiRetryCount": 25,
-        "marketApiTimeout": 5000,
         "rpgEndpoint": "https://test.api-wr.com/",
         "rpgQueryEndpoint": "wx/v1/loyalty/partners/cards/query",
         "tags": "API/UI"
@@ -62,7 +60,7 @@
     "viewportWidth": 1536,
     "defaultCommandTimeout": 30000,
     "chromeWebSecurity": false,
-    "pageLoadTimeout": 100000,
+    "pageLoadTimeout": 120000,
     "video": false,
     "videosFolder": "cypress/videos",
     "videoCompression": 32,
