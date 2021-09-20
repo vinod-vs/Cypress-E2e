@@ -20,6 +20,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
+    
+    after(() => {
+      cy.clearAnyOrderAmendments()
+    })
 
     it('[API] RP-5031 EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
       const purchaseQty = 2
