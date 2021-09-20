@@ -47,6 +47,7 @@
         "marketplacerBigWTestAPIKey": "568cdb1aea9781bd7bfd34ae394c2cec",
         "cancelOrderEndPoint": "apis/ui/order/cancel",
         "amendOrderEndPoint": "apis/ui/order/amend",
+        "amendingOrderEndPoint": "/api/v3/ui/order/amending",
         "invoicesEndpoint": "api/v3/ui/invoices/search?pageNumber=PAGE_NUMBER",
         "refundsEndpoint": "apis/ui/Order/TRADER_ORDER_ID/Refunds",
         "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
