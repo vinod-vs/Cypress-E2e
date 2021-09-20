@@ -36,11 +36,11 @@ Cypress.Commands.add('cancelAmendingOrder', (traderOrderId, revertExistingAmend)
 })
 
 Cypress.Commands.add('clearAnyOrderAmendments', () => {
-  cy.getCurrentlyAmendingOrder().as('amedOrderResponse')
-  cy.get('@amedOrderResponse').then((amedOrderResponse) => {
-    if(amedOrderResponse.OrderId !== null) {
-      cy.log('Found ' + amedOrderResponse.OrderId + ' in currently amending state. Canceling its amendment now.')
-      cy.cancelAmendingOrder(amedOrderResponse.OrderId, true)
+  cy.getCurrentlyAmendingOrder().as('amendOrderResponse')
+  cy.get('@amendOrderResponse').then((amendOrderResponse) => {
+    if(amendOrderResponse.OrderId !== null) {
+      cy.log('Found ' + amendOrderResponse.OrderId + ' in currently amending state. Canceling its amendment now.')
+      cy.cancelAmendingOrder(amendOrderResponse.OrderId, true)
     } else {
       cy.log('Found no orders in currently amending state.')
     }
