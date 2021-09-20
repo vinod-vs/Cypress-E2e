@@ -59,8 +59,6 @@ stages:
               npm install
               npm test -- --env tags=B2C-API/API/B2C-UI,fileConfig=b2c --browser ${{ parameters.browser }}
               npm run allure:generate
-              npm install -g browserstack-cypress-cli
-              browserstack-cypress run --sync --env "tags=B2C-API/API/B2C-UI,fileConfig=b2c"
             displayName: "Npm install and test"
 
           - task: AzureCLI@2
@@ -164,8 +162,6 @@ stages:
           - script: |
               npm install
               npm test -- --env tags=B2B-API/B2B-UI/API,fileConfig=b2b --browser ${{ parameters.browser }}
-              npm install -g browserstack-cypress-cli
-              browserstack-cypress run --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b"
               npm run allure:generate
               npm install -g browserstack-cypress-cli
               browserstack-cypress run --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b"
