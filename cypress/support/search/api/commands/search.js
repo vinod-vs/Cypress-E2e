@@ -11,7 +11,7 @@ Cypress.Commands.add('productSearch', (searchBody) => {
 })
 
 Cypress.Commands.add('findAvailableNonRestrictedWowItems', (response) => {
-  let productArr = []
+  const productArr = []
 
   for (const x in response.Products) {
     if (response.Products[x].Products[0].Price !== null &&
@@ -26,46 +26,44 @@ Cypress.Commands.add('findAvailableNonRestrictedWowItems', (response) => {
   return productArr
 })
 
-export function getAgeRestrictedWowItems(productResponse) {
-  let productArr = []
+export function getAgeRestrictedWowItems (productResponse) {
+  const productArr = []
 
   for (const x in productResponse.Products) {
-    let product = productResponse.Products[x].Products[0]
+    const product = productResponse.Products[x].Products[0]
     if (product.IsInStock === true && product.IsAvailable === true &&
       product.IsMarketProduct === false && product.AgeRestricted === true) {
-        productArr.push(product)
+      productArr.push(product)
     }
   }
 
   return productArr
 }
 
-export function getPmRestrictedWowItems(productResponse) {
-  let productArr = []
+export function getPmRestrictedWowItems (productResponse) {
+  const productArr = []
 
   for (const x in productResponse.Products) {
-    let product = productResponse.Products[x].Products[0]
-    if (product.IsInStock === true && product.IsAvailable === true && product.IsMarketProduct === false && 
-      (product.ProductRestrictionMessage !== null && product.ProductRestrictionMessage.includes('afternoon delivery')))  {
-        productArr.push(product)
+    const product = productResponse.Products[x].Products[0]
+    if (product.IsInStock === true && product.IsAvailable === true && product.IsMarketProduct === false &&
+      (product.ProductRestrictionMessage !== null && product.ProductRestrictionMessage.includes('afternoon delivery'))) {
+      productArr.push(product)
     }
   }
 
   return productArr
 }
 
-export function getGroupLimitRestrictedWowItems(productResponse) {
-  let productArr = []
+export function getGroupLimitRestrictedWowItems (productResponse) {
+  const productArr = []
 
   for (const x in productResponse.Products) {
-    let product = productResponse.Products[x].Products[0]
+    const product = productResponse.Products[x].Products[0]
     if (product.IsInStock === true && product.IsAvailable === true &&
       product.IsMarketProduct === false && product.SupplyLimitSource === 'ProductLimit') {
-        productArr.push(product)
+      productArr.push(product)
     }
   }
 
   return productArr
 }
-
-

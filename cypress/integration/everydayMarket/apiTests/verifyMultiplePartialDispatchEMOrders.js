@@ -145,7 +145,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
   })
 })
 
-
 function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
   cy.log('Partial Dispatch :' + partialDispatchNumber + ':: Tracking ID ::' + trackingId)
   // After dispatch, Invoke the order api and verify the projection content is updated acordingly
