@@ -38,6 +38,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       const shopperId = shoppers.emAccount2.shopperId
       let encodedEdmInvoiceId
       let encodedEdmLineitemId
+      let totalMarketRefundAmount
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
@@ -51,27 +52,38 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         lib.verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
-        cy.wait(Cypress.config('tenSecondWait') * 3)
-        cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
+        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+          function: function (response) {
+            if (response.body.invoices[0].wowStatus !== 'Placed') {
+              cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
+              throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
+            }
+          },
+          retries: 10,
+          timeout: 5000
+        }).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
-          encodedEdmInvoiceId = response.invoices[0].invoiceId
-          encodedEdmLineitemId = response.invoices[0].lineItems[0].lineItemId
           testData.edmOrderId = edmOrderId
           testData.edmInvoiceId = edmInvoiceId
-
-          testData.encodedEdmInvoiceId = encodedEdmInvoiceId
-          testData.encodedEdmLineitemId = encodedEdmLineitemId
-
-          cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId + ' , MPencoded InvoiceId: ' + encodedEdmInvoiceId + ' , MPencodedEdmLineitemId: ' + encodedEdmLineitemId)
-
+          cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
           // Verify the projection details
-          verifyOrderDetails(response, testData, shopperId)
+          lib.verifyInitialOrderDetails(response, testData, shopperId)
+
           // Invoke the events api and verify the content
-          cy.wait(Cypress.config('twoSecondWait'))
-          cy.events(shopperId, orderId, orderReference).then((response) => {
-            lib.verifyEventDetails(response, 0, 'OrderPlaced', 2, testData, shopperId)
-            lib.verifyEventDetails(response, 1, 'MarketOrderPlaced', 2, testData, shopperId)
+          cy.orderEventsApiWithRetry(orderReference, {
+            function: function (response) {
+              if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
+                throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
+              }
+            },
+            retries: 15,
+            timeout: 5000
+          }).then((response) => {
+            lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
+            lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
           })
 
           // Verify the MP and shipping invoices are available for the customer
@@ -86,10 +98,17 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.sellerName).then((response) => {
-            cy.wait(Cypress.config('tenSecondWait') * 3)
-
             // After dispatch, Invoke the order api and verify the projection content is updated acordingly
-            cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
+            cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+              function: function (response) {
+                if (response.body.invoices[0].wowStatus !== 'Shipped') {
+                  cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
+                  throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
+                }
+              },
+              retries: 10,
+              timeout: 5000
+            }).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
               // Seller details
@@ -139,93 +158,135 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 
               // After dispatch, Invoke the events api and verify the events are updated acordingly
-              cy.wait(Cypress.config('tenSecondWait'))
-              cy.events(shopperId, orderId, orderReference).then((response) => {
+              cy.orderEventsApiWithRetry(orderReference, {
+                function: function (response) {
+                  if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                    cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
+                    throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
+                  }
+                },
+                retries: 15,
+                timeout: 5000
+              }).then((response) => {
                 // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                lib.verifyEventDetails(response, 2, 'MarketOrderShipmentCreate', 5, testData, shopperId)
+                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                lib.verifyEventDetails(response, 3, 'MarketOrderDispatched', 5, testData, shopperId)
+                lib.verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                lib.verifyEventDetails(response, 4, 'MarketRewardsCredited', 5, testData, shopperId)
+                lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
               })
 
-              // Verify the reward points are credited to customers card after EDM dispatch
-              cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
-                cy.wait(Cypress.config('tenSecondWait'))
-                testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-                const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
-                cy.log('Testdata JSON: ' + JSON.stringify(testData))
-                cy.log('EDM Total: ' + testData.edmTotal)
-                cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
-                expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-                // Rewards has a logic of rouding to an even number if odd
-                expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
-              })
-
-              // Verify No refund details
-              lib.verifyRefundDetails(testData.orderId, 0, 0)
 
               // Verify the MP and shipping invoices are available for the customer
+              // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
-            })
-            cy.log('Test Data : Order quantity --' + testData.items[0].quantity + ' Encoded Invoice Id : ' + testData.encodedEdmInvoiceId + ' Encoded Line Item ' + testData.encodedEdmLineitemId + ' Encoded Edm Invoice Id ' + encodedEdmInvoiceId)
-            cy.wait(Cypress.config('twoSecondWait'))
-            const returnRequestLineItem = [{ stockCode: testData.items[0].stockCode, quantity: testData.items[0].quantity, amount: testData.items[0].pricePerItem, reason: 'Item is faulty', weight: 12, notes: 'Customer Return from EM Test Automation_Partial_Return' }]
-            cy.log(returnRequestLineItem)
-            cy.customerReturn(testData.edmOrderId, testData.orderReference, returnRequestLineItem).then((response) => {
-              // verify order projection details
-              cy.wait(Cypress.config('tenSecondWait') * 3)
-              cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
-                expect(response.invoices[0].invoiceStatus).to.be.equal('SENT')
-                expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
-                expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
-                expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
-                expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
-                expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
-                expect(response.invoices[0].refunds[0].status).to.be.equal('ReturnInitiated')
-                expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantity).to.be.equal(Number(testData.items[0].quantity))
-                expect(response.invoices[0].refunds[0].refundItems[0].lineItem.refundableQuantity).to.be.equal(0)
-                expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
-                expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
-                expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
-                const encodedMarketRefundedId = response.invoices[0].returns[0].marketRefundId
-                //  verify the response status in graphQL endpoint
-                cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
-                  expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
-                })
-                // verify the order projection details after return from market placer
-                cy.wait(Cypress.config('tenSecondWait') * 3)
-                cy.ordersApiByShopperIdAndTraderOrderId(shopperId, orderId).then((response) => {
-                  expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
+
+              // Initiate customer return
+              const returnRequestLineItem = [{ stockCode: testData.items[0].stockCode, quantity: testData.items[0].quantity, amount: testData.items[0].pricePerItem, reason: 'Item is faulty', weight: 12, notes: 'Customer Return from EM Test Automation_Full_Return' }]
+              cy.log(returnRequestLineItem)
+              cy.customerReturn(testData.edmOrderId, testData.orderReference, returnRequestLineItem).then((response) => {
+                totalMarketRefundAmount = response.refundAmount
+                // Verify Order Projection details
+                cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+                  function: function (response) {
+                    if (response.body.invoices[0].refunds[0].status !== 'ReturnInitiated') {
+                      cy.log('status was ' + response.body.invoices[0].refunds[0].status + ' instead of Return Initiated')
+                      throw new Error('status was ' + response.body.invoices[0].refunds[0].status + ' instead of Return Initiated')
+                    }
+                  },
+                  retries: 10,
+                  timeout: 5000
+                }).then((response) => {
+                  expect(response.invoices[0].invoiceStatus).to.be.equal('SENT')
                   expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
-                  expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
                   expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
                   expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
                   expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
-                  expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
-                  expect(response.invoices[0].lineItems[0].status).to.be.equal('REFUNDED')
-                  expect(response.invoices[0].refunds[0].status).to.be.equal('Returned')
-                  expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal('BUYER')
+                  expect(response.invoices[0].lineItems[0].status).to.be.equal('ALLOCATED')
+                  expect(response.invoices[0].refunds[0].status).to.be.equal('ReturnInitiated')
                   expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantity).to.be.equal(Number(testData.items[0].quantity))
                   expect(response.invoices[0].refunds[0].refundItems[0].lineItem.refundableQuantity).to.be.equal(0)
                   expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
                   expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
                   expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
-                })
+                  const encodedMarketRefundedId = response.invoices[0].returns[0].marketRefundId
+                  //  verify the response status in graphQL endpoint
+                  cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
+                    expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
+                  }) // end of refund request return
+                  // Verify Order Projection details
+                  cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+                    function: function (response) {
+                      if (response.body.invoices[0].invoiceStatus !== 'REFUNDED') {
+                        cy.log('invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
+                        throw new Error('invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
+                      }
+                    },
+                    retries: 10,
+                    timeout: 5000
+                  }).then((response) => {
+                    expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
+                    expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
+                    expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
+                    expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+                    expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
+                    expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
+                    expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
+                    expect(response.invoices[0].refunds[0].status).to.be.equal('Returned')
+                    expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal('BUYER')
+                    expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantity).to.be.equal(Number(testData.items[0].quantity))
+                    expect(response.invoices[0].refunds[0].refundItems[0].lineItem.refundableQuantity).to.be.equal(0)
+                    expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
+                    expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+                    expect(response.invoices[0].returns[0].returnItems[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
 
-                // After dispatch, Invoke the events api and verify the events are updated acordingly
-                cy.wait(Cypress.config('tenSecondWait'))
-                cy.events(shopperId, orderId, orderReference).then((response) => {
-                  lib.verifyEventDetails(response, 5, 'MarketReturnCreated', 11, testData, shopperId)
-                  lib.verifyEventDetails(response, 8, 'RefundRequestUpdate', 11, testData, shopperId)
-                  lib.verifyEventDetails(response, 9, 'MarketOrderRefund', 11, testData, shopperId)
-                  lib.verifyEventDetails(response, 10, 'RefundCompleted', 11, testData, shopperId)
+                    // Verify "Total Refund Amount" after Customer Return
+                    lib.verifyRefundDetails(testData.orderId, totalMarketRefundAmount, testData.edmDeliveryCharges)
+
+                    // Verify the reward points are credited to customers card after EDM dispatch  ** move it towards end ***
+                    cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+                      testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
+                      const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
+                      cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                      cy.log('EDM Total: ' + testData.edmTotal)
+                      cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+                      cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
+                      expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+                      // Rewards has a logic of rouding to an even number if odd
+                      // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
+                      expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
+                    })
+                    // Verify the events api
+                    cy.orderEventsApiWithRetry(orderReference, {
+                      function: function (response) {
+                        if (!response.body.data.some((element) => element.domainEvent === 'MarketReturnCreated') ||
+                        !response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
+                        !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
+                        !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
+                          cy.log('Expected MarketReturnCreated, RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
+                          throw new Error('Expected MarketReturnCreated, RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
+                        }
+                      },
+                      retries: 15,
+                      timeout: 5000
+                    }).then((response) => {
+                      lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
+
+                      lib.verifyEventDetails(response, 'MarketReturnCreated', testData, shopperId, 1)
+                      lib.verifyEventDetails(response, 'RefundRequestUpdate', testData, shopperId, 1)
+                      lib.verifyEventDetails(response, 'MarketOrderRefund', testData, shopperId, 1)
+                      lib.verifyEventDetails(response, 'RefundCompleted', testData, shopperId, 1)
+                    })
+                  })
                 })
               })
             })
           })
         })
+
+      // end
       })
     })
   })
