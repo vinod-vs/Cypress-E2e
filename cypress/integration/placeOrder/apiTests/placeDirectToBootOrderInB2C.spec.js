@@ -31,12 +31,12 @@ TestFilter(['B2C-API'], () => {
       cy.loginViaApi(shopper)
 
       cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response) => {
-          expect(response[0].AddressId).to.not.be.null
+        expect(response[0].AddressId).to.not.be.null
       })
- 
+
       cy.getFulfilmentWindowViaApi(windowType.directToBoot).then((response) => {
         expect(response.Id).to.be.greaterThan(0)
-      }) 
+      })
 
       cy.completeWindowFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)
@@ -76,6 +76,5 @@ TestFilter(['B2C-API'], () => {
         cy.log('This is the order id: ' + response.Order.OrderId)
       })
     })
-  })   
+  })
 })
-  

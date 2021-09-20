@@ -26,7 +26,7 @@ Cypress.Commands.add('searchAndAddProductToNewList', (listName, searchTerm) => {
   searchResultsPage.getTheListnameCheckBox(listName).should('be.checked')
 
   searchResultsPage.getProductSaveToNewListButton().click()
-  
+
   searchResultsPage.getProductSavedNotification().should('be.visible')
 
   searchResultsPage.getProductSavedNotification().find('a').should('contain.text', listName)

@@ -1,5 +1,5 @@
 export const restrictionType = {
-  AGE: "age",
-  MORNING: "morning",
-  GROUP: "group"
+  AGE: 'age',
+  MORNING: 'morning',
+  GROUP: 'group'
 }
