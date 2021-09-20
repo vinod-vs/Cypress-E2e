@@ -20,7 +20,7 @@ import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
-import * as helper from '../../../support/everydayMarket/api/commands/validationHelpers'
+import rewards from '../../../fixtures/everydayMarket/rewards.json'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5097 | EM | MPer | Create Everyday Market items self service return - completely returned by the customer', () => {
@@ -94,6 +94,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
             expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+            cy.log('rewardPointBefore :' + testData.rewardPointBefore)
           })
 
           // Dispatch the complete order from MP and verify the events and order statuses
@@ -245,14 +246,15 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                     // Verify "Total Refund Amount" after Customer Return
                     lib.verifyRefundDetails(testData.orderId, totalMarketRefundAmount, testData.edmDeliveryCharges)
 
-                    // Verify the reward points are credited to customers card after EDM dispatch  ** move it towards end ***
+                    // Verify the reward points are credited to customers card after EDM dispatch
                     cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
                       testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
                       const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
-                      cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                      cy.log('Testdata JSON file: ' + JSON.stringify(testData))
                       cy.log('EDM Total: ' + testData.edmTotal)
                       cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
                       cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
+                      cy.log('Point Balance After :' + testData.rewardPointAfter)
                       expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
                       // Rewards has a logic of rouding to an even number if odd
                       // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
@@ -261,21 +263,15 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                     // Verify the events api
                     cy.orderEventsApiWithRetry(orderReference, {
                       function: function (response) {
-                        if (!response.body.data.some((element) => element.domainEvent === 'MarketReturnCreated') ||
-                        !response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
-                        !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
+                        if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
                         !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
-                          cy.log('Expected MarketReturnCreated, RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
-                          throw new Error('Expected MarketReturnCreated, RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
+                          cy.log('Expected MarketOrderRefund & RefundCompleted were not present')
+                          throw new Error('Expected MarketOrderRefund & RefundCompleted were not present')
                         }
                       },
-                      retries: 15,
-                      timeout: 5000
+                      retries: 18,
+                      timeout: 6000
                     }).then((response) => {
-                      lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
-
-                      lib.verifyEventDetails(response, 'MarketReturnCreated', testData, shopperId, 1)
-                      lib.verifyEventDetails(response, 'RefundRequestUpdate', testData, shopperId, 1)
                       lib.verifyEventDetails(response, 'MarketOrderRefund', testData, shopperId, 1)
                       lib.verifyEventDetails(response, 'RefundCompleted', testData, shopperId, 1)
                     })
