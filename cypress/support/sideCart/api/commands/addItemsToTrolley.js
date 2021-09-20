@@ -1,9 +1,7 @@
 import addItemsRequestBody from '../../../../fixtures/sideCart/addItemsToTrolley.json'
 import searchRequestBody from '../../../../fixtures/search/productSearch.json'
 import { restrictionType } from '../../../../fixtures/product/restrictionType.js'
-import { getPmRestrictedWowItems as pmRestrictedItems } from '../../../../support/search/api/commands/search.js'
-import { getGroupLimitRestrictedWowItems as groupLimitRetrictedItems } from '../../../../support/search/api/commands/search.js'
-import { getAgeRestrictedWowItems as ageRestrictedItems } from '../../../../support/search/api/commands/search.js'
+import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWowItems as groupLimitRetrictedItems, getAgeRestrictedWowItems as ageRestrictedItems } from '../../../../support/search/api/commands/search.js'
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
   cy.request('POST', Cypress.env('addItemsToTrolleyEndpoint'), addItemsBody).then((response) => {
@@ -23,7 +21,7 @@ Cypress.Commands.add('curateProductsForTrolley', (productArray) => {
 
     expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
     addItemsRequestBody.items = expectedTrolleyItems
-    
+
     if (totalPrice > 60.0) {
       break
     }
@@ -113,14 +111,14 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
   }
 })
 
-function getPriceLimitedItemsForTrolleyAddition(productArray, totalThreshold) {
+function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
   const trolleyArr = []
   const expectedTrolleyItems = []
   let totalPrice = 0.0
 
   for (const item of productArray) {
     totalPrice = totalPrice + item.Price
-   
+
     trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
 
     expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
@@ -134,7 +132,7 @@ function getPriceLimitedItemsForTrolleyAddition(productArray, totalThreshold) {
   return trolleyArr
 }
 
-function getCountLimitedItemsForTrolleyAddition(productArray, itemCount) {
+function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
   const expectedTrolleyItems = []
 
   if (productArray.length == 0) {
@@ -146,11 +144,11 @@ function getCountLimitedItemsForTrolleyAddition(productArray, itemCount) {
 
   for (const item of productArray) {
     trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
-    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: ''})
+    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
 
     addedToCart++
     if (addedToCart === itemCount) {
-      break;
+      break
     }
   }
   addItemsRequestBody.items = expectedTrolleyItems
