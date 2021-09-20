@@ -1,21 +1,11 @@
 "" 
 
-Wed Sep 15 2021 15:13:03 GMT+1000 (Australian Eastern Standard Time) -- [WARNING] Discovered proxy settings in your environment. Use the --pac-file argument to specify the absolute path to your PAC file. For more proxy options, refer to the Local Testing documentation  (https://www.browserstack.com/local-testing/binary-params).
+Mon Sep 20 2021 13:31:16 GMT+1000 (Australian Eastern Standard Time) -- [WARNING] Discovered proxy settings in your environment. Use the --pac-file argument to specify the absolute path to your PAC file. For more proxy options, refer to the Local Testing documentation  (https://www.browserstack.com/local-testing/binary-params).
 
-Wed Sep 15 2021 15:13:03 GMT+1000 (Australian Eastern Standard Time) -- You can disable this warning by using the --disable-proxy-discovery argument while using the Local binary.
+Mon Sep 20 2021 13:31:16 GMT+1000 (Australian Eastern Standard Time) -- You can disable this warning by using the --disable-proxy-discovery argument while using the Local binary.
 
-Wed Sep 15 2021 15:13:06 GMT+1000 (Australian Eastern Standard Time) -- [SUCCESS] You can now access your local server(s) in our remote browser
+Mon Sep 20 2021 13:31:22 GMT+1000 (Australian Eastern Standard Time) -- [SUCCESS] You can now access your local server(s) in our remote browser
 
-Wed Sep 15 2021 15:13:08 GMT+1000 (Australian Eastern Standard Time) -- Press Ctrl-C to exit
-
-
-
-Wed Sep 15 2021 15:19:19 GMT+1000 (Australian Eastern Standard Time) -- [WARNING] Discovered proxy settings in your environment. Use the --pac-file argument to specify the absolute path to your PAC file. For more proxy options, refer to the Local Testing documentation  (https://www.browserstack.com/local-testing/binary-params).
-
-Wed Sep 15 2021 15:19:19 GMT+1000 (Australian Eastern Standard Time) -- You can disable this warning by using the --disable-proxy-discovery argument while using the Local binary.
-
-Wed Sep 15 2021 15:19:22 GMT+1000 (Australian Eastern Standard Time) -- [SUCCESS] You can now access your local server(s) in our remote browser
-
-Wed Sep 15 2021 15:19:23 GMT+1000 (Australian Eastern Standard Time) -- Press Ctrl-C to exit
+Mon Sep 20 2021 13:31:24 GMT+1000 (Australian Eastern Standard Time) -- Press Ctrl-C to exit
 
 
