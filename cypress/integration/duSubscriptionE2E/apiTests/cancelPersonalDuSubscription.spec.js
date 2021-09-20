@@ -25,7 +25,7 @@ import '../../../support/utilities/ui/utility'
 const faker = require('faker/locale/en_AU')
 
 TestFilter(['B2C-API'], () => {
-  describe('[API] Subscribe for a new DU personal plan', () => {
+  describe('[API] Subscribe and cancel DU personal plan', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
