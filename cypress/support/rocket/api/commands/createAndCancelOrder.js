@@ -1,4 +1,4 @@
-Cypress.Commands.add('createOrderIDViaApi', (rocketOrderInfo) => {
+Cypress.Commands.add('createRocketOrderViaApi', (rocketOrderInfo) => {
 
     cy.api({
       method: 'POST',
@@ -18,7 +18,7 @@ Cypress.Commands.add('createOrderIDViaApi', (rocketOrderInfo) => {
   })
  
 
-Cypress.Commands.add('cancelOrderViaApi', (rocketOrderInfo, orderID) => {
+Cypress.Commands.add('cancelRocketOrderViaApi', (rocketOrderInfo, orderID) => {
 
     cy.api({
       method: 'PATCH',

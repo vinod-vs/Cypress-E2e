@@ -49,7 +49,7 @@ TestFilter(['B2C-API'], () =>{
           rocketCancelOrderInfo.deliveryDate = orderDeliveryDate          
 
         it('Should create the OrderID successfully', () => {
-            cy.createOrderIDViaApi(rocketOrderInfo).then((response)=>{
+            cy.createRocketOrderViaApi(rocketOrderInfo).then((response)=>{
                expect(response.status).to.eq(200)
                expect(response.body).to.have.property('orderStatus', 'Placed')
                expect(response.body).to.have.property('orderSource', 'UBR')
@@ -58,14 +58,14 @@ TestFilter(['B2C-API'], () =>{
                orderId = response.body.orderId
               }).then(()=>{
                 //Should create the same OrderID number for same reference number and order source
-                cy.createOrderIDViaApi(rocketOrderInfo).then((response)=>{
+                cy.createRocketOrderViaApi(rocketOrderInfo).then((response)=>{
                   expect(response.status).to.eq(200)
                   expect(response.body).to.have.property('orderId', orderId)              
                  }) 
               }).then(() =>{
                 //Should cancel the created order successfully
                 rocketCancelOrderInfo.orderId = orderId
-                cy.cancelOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
+                cy.cancelRocketOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
                   expect(response.status).to.eq(200)
                   expect(response.body).to.have.property('orderId', orderId)
                   expect(response.body).to.have.property('orderStatus', 'Cancelled')
@@ -76,7 +76,7 @@ TestFilter(['B2C-API'], () =>{
               }).then(() =>{
                 //Should not change the created and updated cancellation time for same order
                 rocketCancelOrderInfo.orderId = orderId
-                cy.cancelOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
+                cy.cancelRocketOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
                   expect(response.status).to.eq(200)
                   expect(response.body).to.have.property('orderId', orderId)
                   expect(response.body).to.have.property('orderStatus', 'Cancelled')
@@ -89,7 +89,7 @@ TestFilter(['B2C-API'], () =>{
 
         it('Should fail for order not placed', () => {
             rocketOrderInfo.status = "dispatched"
-            cy.createOrderIDViaApi(rocketOrderInfo).then((response)=>{
+            cy.createRocketOrderViaApi(rocketOrderInfo).then((response)=>{
                expect(response.status).to.eq(400)
                expect(response.body.errors[0]).to.have.property('errorType', 'OrderStatusNotPlaced')              
               })
@@ -97,7 +97,7 @@ TestFilter(['B2C-API'], () =>{
 
         it('Should fail cancellation for incorrect orderID ', () => {
             rocketCancelOrderInfo.orderId = 123
-            cy.cancelOrderViaApi(rocketCancelOrderInfo, 123 ).then((response)=>{ 
+            cy.cancelRocketOrderViaApi(rocketCancelOrderInfo, 123 ).then((response)=>{ 
              expect(response.status).to.eq(404)
              expect(response.body.errors[0]).to.have.property('errorType','OrderNotFound')
             })
