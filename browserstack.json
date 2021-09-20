@@ -41,8 +41,7 @@
     },
     "connection_settings": {
         "local": true,
-        "local_config_file": "./local_testing.yml",
-        "local_identifier": "WAW_Tests"
+        "local_config_file": "./local_testing.yml"
     },
     "disable_usage_reporting": false
 }
