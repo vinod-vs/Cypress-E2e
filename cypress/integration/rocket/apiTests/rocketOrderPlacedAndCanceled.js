@@ -25,20 +25,23 @@ TestFilter(['B2C-API'], () =>{
           let orderCancelDate = new Date(dateNow.setDate(dateNow.getDate()+2))
           let orderDeliveryEndDate = new Date(orderDeliveryDate.setDate(orderDeliveryDate.getDate()+3))
           let orderDeliveryAmendDate = moment(orderDeliveryDate).format('dddd, Do MMMM')
-          let deliveryDate= orderDeliveryDate.toISOString().substring(0, orderDeliveryDate.toISOString().indexOf("T"))
+          let deliveryDate = orderDeliveryDate.toISOString().substring(0, orderDeliveryDate.toISOString().indexOf("T"))
           rocketOrderInfo.createdDate = dateNow.toISOString()
           rocketOrderInfo.originalOrderCreatedDate = dateNow.toISOString()
           rocketOrderInfo.deliveryDate = deliveryDate
           let OrderRefRandom = faker.datatype.uuid()
-          let orderRef=OrderRefRandom.split("-").pop()
+          let orderRef = OrderRefRandom.split("-").pop()
+          let firstName = faker.name.firstName()
+          let lastName = faker.name.lastName()
+          let email = firstName + '.' + lastName + '@testwoolies.com'
           rocketOrderInfo.orderRef = orderRef
-          rocketOrderInfo.shopper.firstName = faker.name.firstName()
-          rocketOrderInfo.shopper.lastName = faker.name.lastName()
-          rocketOrderInfo.shopper.email = faker.internet.email()
+          rocketOrderInfo.shopper.firstName = firstName
+          rocketOrderInfo.shopper.lastName = lastName
+          rocketOrderInfo.shopper.email = email
           rocketOrderInfo.shopper.homePhone = faker.phone.phoneNumber('04########')
           rocketOrderInfo.shopper.mobilePhone = faker.phone.phoneNumber('04########')
           rocketOrderInfo.deliveryWindow.startTime = orderDeliveryDate.toISOString()
-          rocketOrderInfo.deliveryWindow.endTime =orderDeliveryEndDate.toISOString()
+          rocketOrderInfo.deliveryWindow.endTime = orderDeliveryEndDate.toISOString()
           rocketOrderInfo.orderReference = OrderRefRandom
           rocketOrderInfo.amendmentCutOffDay = orderDeliveryAmendDate
           rocketCancelOrderInfo.cancelledDateTime = orderCancelDate
@@ -53,15 +56,36 @@ TestFilter(['B2C-API'], () =>{
                expect(response.body).to.have.property('orderReference', OrderRefRandom)
                expect(response.body.orderId).to.be.above(0)
                orderId = response.body.orderId
-              })  
-          })
-
-        it('Should create the same OrderID number for same reference number and order source', () => {
-              cy.createOrderIDViaApi(rocketOrderInfo).then((response)=>{
-               expect(response.status).to.eq(200)
-               expect(response.body).to.have.property('orderId', orderId)              
-              })            
-          }) 
+              }).then(()=>{
+                //Should create the same OrderID number for same reference number and order source
+                cy.createOrderIDViaApi(rocketOrderInfo).then((response)=>{
+                  expect(response.status).to.eq(200)
+                  expect(response.body).to.have.property('orderId', orderId)              
+                 }) 
+              }).then(() =>{
+                //Should cancel the created order successfully
+                rocketCancelOrderInfo.orderId = orderId
+                cy.cancelOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
+                  expect(response.status).to.eq(200)
+                  expect(response.body).to.have.property('orderId', orderId)
+                  expect(response.body).to.have.property('orderStatus', 'Cancelled')
+                  expect(response.body).to.have.property('orderReference', OrderRefRandom)
+                  cancelCreatedOn = response.body.createdOn
+                  cancelLastUpdatedOn = response.body.lastUpdatedOn
+                }) 
+              }).then(() =>{
+                //Should not change the created and updated cancellation time for same order
+                rocketCancelOrderInfo.orderId = orderId
+                cy.cancelOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
+                  expect(response.status).to.eq(200)
+                  expect(response.body).to.have.property('orderId', orderId)
+                  expect(response.body).to.have.property('orderStatus', 'Cancelled')
+                  expect(response.body).to.have.property('orderReference', OrderRefRandom)
+                  expect(response.body).to.have.property('createdOn', cancelCreatedOn)
+                  expect(response.body).to.have.property('lastUpdatedOn', cancelLastUpdatedOn)
+                })
+          })   
+        })
 
         it('Should fail for order not placed', () => {
             rocketOrderInfo.status = "dispatched"
@@ -71,32 +95,6 @@ TestFilter(['B2C-API'], () =>{
               })
           })  
 
-  //if the user is able to cancel the created orderID then the orderID is successfully saved and publised
-
-        it('Should cancel the created order successfully', () => {
-            rocketCancelOrderInfo.orderId = orderId
-            cy.cancelOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
-             expect(response.status).to.eq(200)
-             expect(response.body).to.have.property('orderId', orderId)
-             expect(response.body).to.have.property('orderStatus', 'Cancelled')
-             expect(response.body).to.have.property('orderReference', OrderRefRandom)
-             cancelCreatedOn = response.body.createdOn
-             cancelLastUpdatedOn = response.body.lastUpdatedOn
-             })
-          }) 
-
-        it('Should not change the created and updated cancellation time for same order ', () => {
-            rocketCancelOrderInfo.orderId = orderId
-            cy.cancelOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
-             expect(response.status).to.eq(200)
-             expect(response.body).to.have.property('orderId', orderId)
-             expect(response.body).to.have.property('orderStatus', 'Cancelled')
-             expect(response.body).to.have.property('orderReference', OrderRefRandom)
-             expect(response.body).to.have.property('createdOn', cancelCreatedOn)
-             expect(response.body).to.have.property('lastUpdatedOn', cancelLastUpdatedOn)
-             })
-          }) 
-
         it('Should fail cancellation for incorrect orderID ', () => {
             rocketCancelOrderInfo.orderId = 123
             cy.cancelOrderViaApi(rocketCancelOrderInfo, 123 ).then((response)=>{ 
@@ -105,4 +103,4 @@ TestFilter(['B2C-API'], () =>{
             })
           })  
       })
-})
+  })

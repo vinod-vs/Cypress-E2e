@@ -10,7 +10,7 @@
         "existingSubscriptionPlanEndpoint": "api/v3/ui/deliverysaver/subscription",
         "setBillingAddressEndpoint": "apis/ui/address/autobilling",
         "payAndSubscribeEndpoint":"api/v3/ui/deliverysaver/subscription",
-        "duSubscriptionTestDataFilePath":"cypress/duSubscriptionTestData",
+        "duSubscriptionTestDataFilePath":"cypress/fixtures/duSubscription/duSubscriptionTestData",
         "rocketUserName":"OrderServiceUser",
         "rocketPassword":"5e1ac07575224be090b46082e1bfb1f2",
         "rocketOrderURL":"https://dxk8saae.uat.wx-d.net/orders-api/Orders"
