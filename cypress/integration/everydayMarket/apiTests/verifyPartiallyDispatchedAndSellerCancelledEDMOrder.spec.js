@@ -52,8 +52,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('Still not sent to Marketplacer yet')
             }
           },
-          retries: 10,
-          timeout: 5000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).as('placedMarketOrderApiData').then((response) => {
           lib.validateOrderApiAgainstTrader(response)
           expect(response.invoices[0].invoiceStatus).is.equal('PAID')
@@ -75,8 +75,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
             }
           },
-          retries: 15,
-          timeout: 2000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).then((response) => {
           lib.validateEvents(response, 'OrderPlaced', 1)
           lib.validateEvents(response, 'MarketOrderPlaced', 1)
@@ -97,8 +97,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('Still not shipped yet')
                 }
               },
-              retries: 10,
-              timeout: 5000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).then((response) => {
               expect(response.invoices[0].invoiceStatus).is.equal('PARTIALLY_SENT')
               expect(response.invoices[0].wowStatus).is.equal('PartiallyShipped')
@@ -123,8 +123,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                 }
               },
-              retries: 15,
-              timeout: 2000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).then((response) => {
               lib.validateEvents(response, 'MarketOrderShipmentCreate', 1)
               lib.validateEvents(response, 'MarketOrderDispatched', 1)
@@ -141,8 +141,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('Still not fully shipped yet')
                 }
               },
-              retries: 10,
-              timeout: 5000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).as('cancelledOrderProjection').then((response) => {
               expect(response.invoices[0].invoiceStatus).is.equal('REFUNDED')
               expect(response.invoices[0].wowStatus).is.equal('Shipped')
@@ -176,8 +176,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('Expected RefundRequestUpdate, RefundRequestUpdate & RefundCompleted were not present')
                 }
               },
-              retries: 15,
-              timeout: 2000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).then((response) => {
               lib.validateEvents(response, 'RefundRequestUpdate', 3) // Returned, Create, Refunded
               lib.validateEvents(response, 'MarketOrderRefund', 1)
