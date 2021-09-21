@@ -20,7 +20,6 @@ import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
-import rewards from '../../../fixtures/everydayMarket/rewards.json'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5097  Create Everyday Market items self service return - completely returned by the customer', () => {
@@ -36,8 +35,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       let edmOrderId
       let edmInvoiceId
       const shopperId = shoppers.emAccount2.shopperId
-      let encodedEdmInvoiceId
-      let encodedEdmLineitemId
       let totalMarketRefundAmount
 
       // Login and place the order from testdata
