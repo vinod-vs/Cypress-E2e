@@ -41,3 +41,12 @@ Cypress.Commands.add('writeTestDataUsed', (filepath, details) => {
     cy.writeFile(filepath, data)
   })
 })
+
+Cypress.Commands.add('getDateTime', () => {
+  let today = new Date()
+  let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds()+ "Z" ;
+  let currentTime = date+ "T" +time;
+  return cy.wrap(currentTime)
+})
+

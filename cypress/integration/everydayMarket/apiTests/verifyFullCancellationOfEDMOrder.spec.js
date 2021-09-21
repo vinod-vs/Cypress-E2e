@@ -56,8 +56,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
             }
           },
-          retries: 10,
-          timeout: 5000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
@@ -81,8 +81,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
             },
-            retries: 15,
-            timeout: 5000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
             lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
             lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
@@ -108,8 +108,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of SellerCancelled')
                 }
               },
-              retries: 10,
-              timeout: 5000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
@@ -206,8 +206,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 throw new Error('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
               }
             },
-            retries: 15,
-            timeout: 5000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
             // Verify there are only 7 events. New event after seller cancellattion
             lib.verifyEventDetails(response, 'RefundRequestUpdate', testData, shopperId, 3)

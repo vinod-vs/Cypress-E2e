@@ -57,8 +57,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
             }
           },
-          retries: 10,
-          timeout: 5000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
@@ -77,8 +77,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
             },
-            retries: 15,
-            timeout: 5000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
             lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
             lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
@@ -104,8 +104,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
                 }
               },
-              retries: 10,
-              timeout: 5000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
@@ -165,8 +165,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                     throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                   }
                 },
-                retries: 15,
-                timeout: 5000
+                retries: Cypress.env('marketApiRetryCount'),
+                timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
                 // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
                 lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
@@ -183,11 +183,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 cy.log('Testdata JSON: ' + JSON.stringify(testData))
                 cy.log('EDM Total: ' + testData.edmTotal)
                 cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
-                expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-                // Rewards has a logic of rouding to an even number if odd
-                // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
-                expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
+                cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
+                expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(expectedRewardsPoints)
               })
 
               // Self Service Customer Return Logic Starts below-
@@ -223,8 +220,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                       cy.log('Else-EM LineItem Status after hitting Return API was= ' + response.body.invoices[0].refunds[0].status + ' Which is same as of "ReturnInitiated" ')
                     }
                   },
-                  retries: 10,
-                  timeout: 5000
+                  retries: Cypress.env('marketApiRetryCount'),
+                  timeout: Cypress.env('marketApiTimeout')
                 }).then((orderApiProjectionResponse) => {
                   marketRefundId = orderApiProjectionResponse.invoices[0].returns[0].marketRefundId
                   cy.log('"marketRefundId" attribute value from Order Api Projection after hitting Return API was= ' + marketRefundId)
@@ -248,8 +245,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                       cy.log('Else-EM LineItem Status after hitting MP GraphQL refundRequestReturn API was= ' + response.body.invoices[0].refunds[0].status + '  Which is same as of "Returned"')
                     }
                   },
-                  retries: 10,
-                  timeout: 5000
+                  retries: Cypress.env('marketApiRetryCount'),
+                  timeout: Cypress.env('marketApiTimeout')
                 }).then((ordersApiByShopperIdAndTraderOrderIdResponse) => {
                   cy.log('"Process Return" EM LineItem Status in Order Api Projection after hitting MP GraphQL refundRequestReturn API  was= ' + ordersApiByShopperIdAndTraderOrderIdResponse.invoices[0].refunds[0].status) // Returned
                   expect(ordersApiByShopperIdAndTraderOrderIdResponse.invoices[0].refunds[0].status).to.be.equal('Returned') // This is Status on Website

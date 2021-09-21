@@ -20,7 +20,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-    
+
     after(() => {
       cy.clearAnyOrderAmendments()
     })
@@ -52,8 +52,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('Still not sent to Marketplacer yet')
             }
           },
-          retries: 10,
-          timeout: 5000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).its('invoices').its(0).its('legacyIdFormatted').as('invoiceIds')
 
         cy.orderEventsApiWithRetry(req.orderReference, {
@@ -62,8 +62,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('Event not updated yet')
             }
           },
-          retries: 15,
-          timeout: 2000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         })
 
         cy.get('@invoiceIds').then((invoiceIds) => {
@@ -73,8 +73,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 throw new Error('Still wrong status')
               }
             },
-            retries: 10,
-            timeout: 5000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).as('orderDataBeforeAmendment')
         })
 
@@ -90,8 +90,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('Data not updated yet')
                 }
               },
-              retries: 10,
-              timeout: 5000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).as('orderDataAfterAmendment')
           })
 
@@ -102,8 +102,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 throw new Error('Event not updated yet')
               }
             },
-            retries: 15,
-            timeout: 2000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).as('eventsAfterAmendment')
         })
 

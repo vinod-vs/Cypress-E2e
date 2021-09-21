@@ -63,6 +63,12 @@ export function generateRandomString () {
   return randomStr
 }
 
+export function getExpectedRewardPoints (deferredDiscountAmount, shippedItemQuantity, totalQuantity) {
+  let expectedRewardPoints = new Number(0)
+  expectedRewardPoints = Number(Math.round((deferredDiscountAmount * 200 * shippedItemQuantity) / totalQuantity))
+  return expectedRewardPoints
+}
+
 export function verifyRefundDetails (traderOrderId, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
   cy.getRefundDetails(traderOrderId).then((response) => {
     expect(response.Total).to.be.equal(Number(Number.parseFloat(Number(expectedEdmRefundTotal) + Number(expectedEdmShippingFeeRefund)).toFixed(2)))

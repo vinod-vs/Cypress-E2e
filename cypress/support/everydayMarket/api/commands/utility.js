@@ -302,7 +302,7 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
     expect(response).to.have.property('Success', true)
     creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
   })
-  cy.creditcardPayment(creditCardDetails, creditcardSessionHeader).then((response) => {
+  cy.creditcardPayment(testData.payment.creditCard, creditcardSessionHeader).then((response) => {
     expect(response.status.responseText).to.be.eqls('ACCEPTED')
     digitalPaymentRequest.payments[0].paymentInstrumentId = response.itemId
   })
