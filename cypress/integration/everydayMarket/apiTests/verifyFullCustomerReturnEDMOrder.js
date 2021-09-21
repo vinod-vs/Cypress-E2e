@@ -251,7 +251,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                       cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
                       cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
                       cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
-                      expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(Number(expectedRewardsPoints))
+                      expect(response.queryCardDetailsResp.pointBalance).to.be.within(Math.floor(expectedRewardsPoints), Number(Math.round(expectedRewardsPoints + 1)))
                     })
                     // Verify the events api
                     cy.orderEventsApiWithRetry(orderReference, {
