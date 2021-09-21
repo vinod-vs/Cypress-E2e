@@ -171,8 +171,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
                 lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
               })
-
-
               // Verify the MP and shipping invoices are available for the customer
               // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
