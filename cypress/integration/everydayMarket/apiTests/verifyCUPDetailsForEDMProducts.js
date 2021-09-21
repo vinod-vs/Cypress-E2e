@@ -18,7 +18,6 @@ import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP.json'
-// import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP2.json'
 import searchRequest from '../../../fixtures/search/productSearch.json'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
@@ -28,48 +27,16 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
-    //1
-    it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and KG', () => {
-      //login 
-      cy.loginViaApi(shoppers.emAccount2).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
+    it('MPPF-954 | EM | Verify CUP details for different measure type', () => {
+
+      cup.forEach(cupdetails => {
+        cy.log('=====VERIFYING CUP DETAILS FOR PRODUCT:'+cupdetails.searchTerm+' ========')
+        cy.loginViaApi(shoppers.emAccount2).then((response) => {
+          expect(response).to.have.property('LoginResult', 'Success')
+          serachForEDMproductWithCUPAndVerfiy(cupdetails)
+        })
       })
-
-      const cupTestdataGtoKG = cup.weightGtoKG
-      serachForEDMproductWithCUPAndVerfiy(cupTestdataGtoKG)
     })
-    //2
-    it('MPPF-954 | EM | Verify CUP details for measure type-Weight-G and G', () => {
-      //login 
-      cy.loginViaApi(shoppers.emAccount2).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
-      })
-
-      const cupTestdataGtoG = cup.weightGtoG
-      serachForEDMproductWithCUPAndVerfiy(cupTestdataGtoG)
-    })
-
-    //3
-    it('MPPF-954 | EM | Verify CUP details for measure type-volume-ML and L', () => {
-      //login 
-      cy.loginViaApi(shoppers.emAccount2).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
-      })
-
-      const cupTestdataMLtoL = cup.volumeMLtoL
-      serachForEDMproductWithCUPAndVerfiy(cupTestdataMLtoL)
-    })
-
-    // //parameterized the test 
-    // it('MPPF-954 | EM | Verify CUP details for different measure type', () => {
-    //   cy.loginViaApi(shoppers.emAccount2).then((response) => {
-    //     expect(response).to.have.property('LoginResult', 'Success')
-    //   })
-    //   Cypress._.times(cup.length, (n) => {
-    //     serachForEDMproductWithCUPAndVerfiy(cup[n])
-    //   })
-    // })
-
   })
 })
 
@@ -94,8 +61,6 @@ function returnCUPprice(cupTestdata) {
   else {
     productPrice = Number(cupTestdata.salePrice)
   }
-
-  cy.log('productPrice:' + productPrice)
 
   //calculate cup price
   let expectedCupPrice = new Number(0)
@@ -233,7 +198,7 @@ function verifyCupValues(cupTestdata) {
 
   //cup price
   expect(Number(cupTestdata.cupPrice)).to.be.equal(expCupPrice)
-  //CUPhas true
+  //hasCupPrice
   expect(cupTestdata.hasCupPrice).to.be.equal(true)
   //CupMeasure
   let expComparativeSize = cupTestdata.comparativeSize
@@ -242,9 +207,9 @@ function verifyCupValues(cupTestdata) {
   cy.log('expCUPMeasure: ' + expCUPMeasure)
   expect(cupTestdata.cupMeasure).to.be.equal(expCUPMeasure)
   //CupString
-  let roundofActualCUPprice
-  roundofActualCUPprice = roundOfDecimaltoTwoDigit(cupTestdata.cupPrice)
-  let expCUPString = '$' + roundofActualCUPprice + ' / ' + expCUPMeasure
+  let roundOfExpectedCUPprice
+  roundOfExpectedCUPprice = roundOfDecimaltoTwoDigit(expCupPrice)
+  let expCUPString = '$' + roundOfExpectedCUPprice + ' / ' + expCUPMeasure
   cy.log('expCUPString: ' + expCUPString)
   expect(cupTestdata.cupString).to.be.equal(expCUPString)
 
