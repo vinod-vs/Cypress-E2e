@@ -329,3 +329,39 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
     lib.verifyInvoiceDetails(invoice, testData)
   })
 })
+
+Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, cupTestdata) => {
+  const response = productSearchResponse
+  //CUP Details
+  let cupPrice = new Number(0)
+  let cupMeasure
+  let hasCupPrice
+  let cupString
+  let y
+
+  let mpStockCode = 0
+  for (y in response.Products) {
+    if (response.Products[y].Products[0].Price !== null &&
+      response.Products[y].Products[0].IsInStock === true &&
+      response.Products[y].Products[0].IsMarketProduct === true) {
+      mpStockCode = response.Products[y].Products[0].Stockcode
+      cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
+      //CUP
+      cupPrice = response.Products[y].Products[0].CupPrice
+      cupMeasure = response.Products[y].Products[0].CupMeasure
+      hasCupPrice = response.Products[y].Products[0].HasCupPrice
+      cupString = response.Products[y].Products[0].CupString
+      break
+    }
+  }
+  expect(mpStockCode).to.be.greaterThan(0)
+
+  //setting cup details
+  cupTestdata.cupPrice = cupPrice
+  cupTestdata.cupMeasure = cupMeasure
+  cupTestdata.hasCupPrice = hasCupPrice
+  cupTestdata.cupString = cupString
+  cy.log('product: '+cupTestdata.searchTerm+' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
+
+})
+
