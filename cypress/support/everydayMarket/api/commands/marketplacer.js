@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /// <reference types="cypress" />
-import fullDispatchAnInvoiceRequest from '../../../../fixtures/everydaymarket/marketplacer/fullDispatchAnInvoice.json'
-import partialDispatchOfLineItemsInInvoice from '../../../../fixtures/everydaymarket/marketplacer/partialDispatchOfLineItemsInInvoice.json'
+import fullDispatchAnInvoiceRequest from '../../../../fixtures/everydayMarket/marketplacer/fullDispatchAnInvoice.json'
+import partialDispatchOfLineItemsInInvoice from '../../../../fixtures/everydayMarket/marketplacer/partialDispatchOfLineItemsInInvoice.json'
 import CustomerReturnRequest from '../../../../fixtures/everydayMarket/returns.json'
 
 Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTrackingnumber, postageCarrier, sellerName) => {
