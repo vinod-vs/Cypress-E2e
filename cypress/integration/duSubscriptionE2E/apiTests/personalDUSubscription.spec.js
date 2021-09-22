@@ -110,7 +110,6 @@ TestFilter(['B2C-API'], () => {
                 expect(response.body.Subscription).to.have.property('PlanId', plan.PlanId)
                 expect(response.body.Subscription).to.have.property('ServiceType', plan.ServiceType)
                 expect(response.body.Subscription).to.have.property('Price', plan.Price)
-                expect(response.body.Plan).to.have.property('Name', plan.Name)
                 expect(response.body).to.have.property('Errors', null)
                 expect(response.body).to.have.property('HttpStatusCode', 'OK')
                 expect(response.body).to.have.property('ExternalId', shopperId)
@@ -119,7 +118,6 @@ TestFilter(['B2C-API'], () => {
           })
           signUpDetails.shopperId = shopperId
           signUpDetails.planId = plan.PlanId
-          signUpDetails.planName = plan.Name
           signUpDetails.planPrice = plan.Price
           signUpDetails.createdTime = new Date().toLocaleString()
           cy.writeTestDataUsed(`${Cypress.env('duSubscriptionTestDataFilePath')}/personalSubscriptionUsedData.json`, signUpDetails)
