@@ -57,7 +57,7 @@ jobs:
           npm install
           npm test -- --env tags=B2C-API/API/B2C-UI,fileConfig=b2c --browser ${{ parameters.browser }}
           npm run allure:generate
-          displayName: "Npm install and run B2C tests"
+        displayName: "Npm install and run B2C tests"
 
       - task: AzureCLI@2
         condition: succeededOrFailed()
