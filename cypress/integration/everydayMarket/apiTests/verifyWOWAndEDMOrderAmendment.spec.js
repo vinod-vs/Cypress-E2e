@@ -119,8 +119,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             orderId: amendedOrder.Order.OrderId
           }).to.deep.equal(afterData)
 
-          // Validate EDM order events after amendment to have 'update' and 'OrderPlaced' events
-          lib.validateEvents(afterEvents, 'OrderPlaced', 1)
+          // Validate EDM order events after amendment to have 'OrderPlaced' event
+          lib.validateEvents(afterEvents, 'OrderPlaced', 2)
         })
       })
     })

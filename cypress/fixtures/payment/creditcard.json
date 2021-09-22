@@ -1,0 +1,34 @@
+{
+  "mastercard": {
+    "aa": "5453010000095323",
+    "bb": "523",
+    "dd": "12",
+    "ee": "23",
+    "Save": false,
+    "Verify": false
+  },
+  "visa": {
+    "aa": "4242424242424242",
+    "bb": "123",
+    "dd": "12",
+    "ee": "23",
+    "Save": false,
+    "Verify": false
+  },
+  "amex": {
+    "aa": "376245698745236",
+    "bb": "1234",
+    "dd": "12",
+    "ee": "23",
+    "Save": false,
+    "Verify": false
+  },
+  "diner": {
+    "aa": "36174016540321",
+    "bb": "123",
+    "dd": "12",
+    "ee": "23",
+    "Save": false,
+    "Verify": false
+  }
+}
