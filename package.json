@@ -30,7 +30,8 @@
         "mochawesome": "^6.2.2",
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.2.0",
-        "standard": "^16.0.3"
+        "standard": "^16.0.3",
+        "browserstack-cypress-cli": "^1.9.0"
     },
     "dependencies": {},
     "standard": {
