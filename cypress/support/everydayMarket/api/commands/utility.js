@@ -7,7 +7,7 @@ import addressSearch from '../../../../fixtures/checkout/addressSearch.json'
 import { fulfilmentType } from '../../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../../fixtures/checkout/fulfilmentWindowType.js'
 import searchRequest from '../../../../fixtures/search/productSearch.json'
-import creditCardDetails from '../../../../fixtures/payment/creditcardPayment.json'
+import creditCardDetails from '../../../../fixtures/payment/creditcard.json'
 import digitalPaymentRequest from '../../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
@@ -70,27 +70,27 @@ function placeOrder () {
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
   cy.navigatingToCreditCardIframe().its('IframeUrl').invoke('split', '/').its(5).as('ccSessionId')
-  // Grab Digital pay instrument Id for the test credit card set in the fixture
-  cy.get('@ccSessionId').then((ccSessionId) => {
-    cy.creditcardPayment(creditCardDetails, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId })
-      .its('itemId').as('ccInstrumentId')
-  })
 
-  cy.all(
-    cy.get('@balanceToPay'),
-    cy.get('@ccInstrumentId')
-  ).then(([amount, paymentInstrumentId]) => {
+  cy.get('@balanceToPay').then((amount) => {
     if (amount > 0) {
+      // Grab Digital pay instrument Id for the test credit card set in the fixture
+      cy.get('@ccSessionId').then((ccSessionId) => {
+        cy.creditcardPayment(creditCardDetails.diner, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId })
+          .its('itemId').as('ccInstrumentId')
+      })
+
       // Call digital pay endpoint to confirm the order
       // Passed the value in the aliases as /payment request body
-      cy.digitalPay({
-        ...digitalPaymentRequest,
-        payments: [{
-          ...digitalPaymentRequest.payments[0],
-          amount: amount,
-          paymentInstrumentId: paymentInstrumentId
-        }]
-      }).its('PlacedOrderId').as('traderPlacedOrderId')
+      cy.get('@ccInstrumentId').then((paymentInstrumentId) => {
+        cy.digitalPay({
+          ...digitalPaymentRequest,
+          payments: [{
+            ...digitalPaymentRequest.payments[0],
+            amount: amount,
+            paymentInstrumentId: paymentInstrumentId
+          }]
+        }).its('PlacedOrderId').as('traderPlacedOrderId')
+      })
     } else {
       // Call zero endpoint to confirm the order
       cy.zero().its('PlacedOrderId').as('traderPlacedOrderId')
