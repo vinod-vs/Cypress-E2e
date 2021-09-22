@@ -57,7 +57,6 @@ jobs:
           npm install
           npm test -- --env tags=B2C-API/API/B2C-UI,fileConfig=b2c --browser ${{ parameters.browser }}
           npm run allure:generate
-          npm run browserstackTest --env "tags=B2C-API/API/B2C-UI,fileConfig=b2c"
           displayName: "Npm install and run B2C tests"
 
       - task: AzureCLI@2
@@ -160,7 +159,6 @@ jobs:
           npm install
           npm test -- --env tags=B2B-API/B2B-UI/API,fileConfig=b2b --browser ${{ parameters.browser }}
           npm run allure:generate
-          npm run browserstackTest --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b"
         displayName: "Npm install and run B2B tests"
 
       - task: AzureCLI@2
