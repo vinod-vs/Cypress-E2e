@@ -276,7 +276,7 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
     // Verify the reward points are credited to customers card after EDM dispatch
     cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
       testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-      const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
+      const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
       cy.log('Testdata JSON: ' + JSON.stringify(testData))
       cy.log('EDM Total: ' + testData.edmTotal)
       cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
@@ -285,10 +285,10 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
       // Rewards has a logic of rouding to an even number if odd
       // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
       if (partialDispatchNumber === 1) {
-        const expectedRewardsPtsPartialDispatch = expectedRewardsPoints - testData.items[0].pricePerItem
-        expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(Number(expectedRewardsPtsPartialDispatch))
+        const expectedRewardsPtsPartialDispatch = Math.floor(expectedRewardsPoints - testData.items[0].pricePerItem)
+        expect(response.queryCardDetailsResp.pointBalance).to.be.gte(Number(expectedRewardsPtsPartialDispatch))
       } else {
-        expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(Number(expectedRewardsPoints))
+        expect(response.queryCardDetailsResp.pointBalance).to.be.gte(Number(expectedRewardsPoints))
       }
     })
   })

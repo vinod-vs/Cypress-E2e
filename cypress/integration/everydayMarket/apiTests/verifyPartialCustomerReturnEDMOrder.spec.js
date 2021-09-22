@@ -179,12 +179,12 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               // Verify the reward points are credited to customers card after EDM dispatch
               cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
                 testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-                const expectedRewardsPoints = Number(testData.edmTotal) + Number(testData.rewardPointBefore)
+                const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
                 cy.log('Testdata JSON: ' + JSON.stringify(testData))
                 cy.log('EDM Total: ' + testData.edmTotal)
                 cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
                 cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
-                expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(expectedRewardsPoints)
+                expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
               })
 
               // Self Service Customer Return Logic Starts below-
