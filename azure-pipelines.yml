@@ -264,7 +264,7 @@ jobs:
           npm install
           chmod +x ./BrowserStackLocal
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests
-          npm run browserstackTest -- --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
+          npm run browserstackTest -- --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
         displayName: "Npm install and run tests on BrowserStack"
       # - task: Npm@1
