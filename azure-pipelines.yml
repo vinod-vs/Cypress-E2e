@@ -259,5 +259,5 @@ jobs:
         displayName: "Run tests on BrowserStack"
       - script: |
           npm install
-          npm run browserstackTest --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b"
+          npm run browserstackTest --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
         displayName: "Npm install and run tests on BrowserStack"
