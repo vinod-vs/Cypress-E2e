@@ -258,9 +258,13 @@ jobs:
           BrowserStackServiceEndPoint: "BrowserStack Connection"
           browserstackLocal: true
           bsLocalOptions: '{"verbose": true, "forceLocal": true}'
-      - script: |
-          npm install
-          npm run browserstackTest --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
+
+      - task: Npm@1
+        condition: succeededOrFailed()
+        inputs:
+          command: custom
+          customCommand: run browserstackTest --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
+        displayName: "Npm install and run tests on BrowserStack"
 
       - task: BrowserStackStopLocal@0
 
