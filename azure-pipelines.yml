@@ -102,7 +102,7 @@ jobs:
             echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/B2C/$(Build.BuildId)/'
             az storage blob upload-batch -d '$web/history' -s allure-report/history --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
             echo 'Uploaded history to blob storage...'
-            powerShellErrorActionPreference: "continue"
+          powerShellErrorActionPreference: "continue"
 
       - task: Bash@3
         condition: eq(variables.isMain, true)
@@ -259,5 +259,5 @@ jobs:
         displayName: "Run tests on BrowserStack"
       - script: |
           npm install
-          npm run browserstackTest --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
+          npm run browserstackTest --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
         displayName: "Npm install and run tests on BrowserStack"
