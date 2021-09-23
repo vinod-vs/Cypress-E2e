@@ -253,12 +253,12 @@ jobs:
     pool:
       name: wlx-ubuntu1804
     steps:
-      - task: BrowserStackConfig@0
-        condition: succeededOrFailed()
-        inputs:
-          BrowserStackServiceEndPoint: "BrowserStack Connection"
-          browserstackLocal: true
-          bsLocalOptions: '{"verbose": true, "forceLocal": true}'
+      # - task: BrowserStackConfig@0
+      #   condition: succeededOrFailed()
+      #   inputs:
+      #     BrowserStackServiceEndPoint: "BrowserStack Connection"
+      #     browserstackLocal: true
+      #     bsLocalOptions: '{"verbose": true, "forceLocal": true}'
 
       - script: |
           npm install
