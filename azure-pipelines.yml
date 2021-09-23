@@ -260,16 +260,22 @@ jobs:
           browserstackLocal: true
           bsLocalOptions: '{"verbose": true, "forceLocal": true}'
 
-      - task: Npm@1
-        condition: succeededOrFailed()
-        inputs:
-          command: custom
-          customCommand: run browserstackTest "--env" "tags=B2B-API/API/B2B-UI,fileConfig=b2b" "--spec" "cypress/integration/login/apiTests/login.spec.js"
+      - script: |
+          npm install
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests
+          npm run browserstackTest --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
         displayName: "Npm install and run tests on BrowserStack"
-
-      - task: BrowserStackStopLocal@0
-
-      - task: BrowserStackResults@0
+      # - task: Npm@1
+      #   condition: succeededOrFailed()
+      #   inputs:
+      #     command: custom
+      #     customCommand: run browserstackTest "--env" "tags=B2B-API/API/B2B-UI,fileConfig=b2b" "--spec" "cypress/integration/login/apiTests/login.spec.js"
+      #   displayName: "Npm install and run tests on BrowserStack"
+      # - task: BrowserStackStopLocal@0
+      #   condition: succeededOrFailed()
+      # - task: BrowserStackResults@0
+      #   condition: succeededOrFailed()
       # - task: NodeTool@0
       #   inputs:
       #     versionSpec: "14.x"
