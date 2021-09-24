@@ -150,6 +150,10 @@ export class SideCartPage {
     cy.get('.drawer').invoke('attr', 'class').should('not.contain', 'is-open')
   }
 
+  checkIfSidecartIsEmpty () {
+    this.getAllProductsNameList().should('have.lengthOf', 0)
+  }
+
   openSideCart () {
     this.getViewCartButton().click()
   }
