@@ -190,7 +190,9 @@ export class SideCartPage {
     this.getClearEntireCartLink().click()
     this.getConfirmClearCartLink().click()
   }
+  // #endregion
 
+  // #endregion - private methods
   #findItemDetailsByName (productName) {
     return this.getAllProductsNameList()
       .should('have.lengthOf.greaterThan', 0)
