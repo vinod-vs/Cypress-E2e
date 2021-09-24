@@ -283,6 +283,8 @@ jobs:
       - script: |
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
         displayName: "Stop BrowserStack local"
+
+      - task: BrowserStackResults@0
       # - task: Npm@1
       #   condition: succeededOrFailed()
       #   inputs:
