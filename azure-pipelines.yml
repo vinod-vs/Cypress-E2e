@@ -262,6 +262,7 @@ jobs:
 
       - script: |
           npm install
+          npm install -g browserstack-cypress-cli
           chmod +x ./BrowserStackLocal
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
           npm run browserstackTest -- --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
