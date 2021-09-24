@@ -1,5 +1,5 @@
 export class FMSAddressSelector {
-  // #region tabs
+  // #region - Tabs
   getTabList () {
     return cy.get('.tab-list')
   }
@@ -17,7 +17,7 @@ export class FMSAddressSelector {
   }
   // #endregion
 
-  // #region Delivery address UI elements
+  // #region - Delivery address UI elements
   getSharedTextBox () {
     return cy.get('shared-textbox')
   }
@@ -47,7 +47,7 @@ export class FMSAddressSelector {
   }
   // #endregion
 
-  // #region Pick / DTB UI elements
+  // #region - Pick / DTB UI elements
   getSearchStoreSelectorTextbox () {
     return this.getSharedTextBox().find('#pickupAddressSelector')
   }

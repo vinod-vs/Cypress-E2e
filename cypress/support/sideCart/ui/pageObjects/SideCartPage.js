@@ -1,251 +1,205 @@
-export class SideCartPage 
-{
-  //#region - General selector
-  getCloseSideCartButton() 
-  {
-    return cy.get('.close-button > .iconAct-Close_Cancel');
+export class SideCartPage {
+  // #region - General selector
+  getCloseSideCartButton () {
+    return cy.get('.close-button > .iconAct-Close_Cancel')
   }
 
-  getCloseSideCartButtonLocatorString() 
-  {
-    return '.close-button > .iconAct-Close_Cancel';
+  getCloseSideCartButtonLocatorString () {
+    return '.close-button > .iconAct-Close_Cancel'
   }
 
-  getViewCartButton() 
-  {
-    return cy.get('button.headerCheckout-orderHeader');
+  getViewCartButton () {
+    return cy.get('button.headerCheckout-orderHeader')
   }
 
-  getClearEntireCartLink() 
-  {
-    return cy.get('.product-actionsClearCart > span');
+  getClearEntireCartLink () {
+    return cy.get('.product-actionsClearCart > span')
   }
 
-  getConfirmClearCartLink() 
-  {
-    return cy.get('shared-button[ervalue="Clear cart click"]');
+  getConfirmClearCartLink () {
+    return cy.get('shared-button[ervalue="Clear cart click"]')
   }
 
-  getCheckoutButton() 
-  {
-    return cy.get('.cart-checkout-button > .button');
+  getCheckoutButton () {
+    return cy.get('.cart-checkout-button > .button')
   }
 
-  getEmptyCartImage() 
-  {
-    return cy.get('.empty-cart-image');
+  getEmptyCartImage () {
+    return cy.get('.empty-cart-image')
   }
 
-  getEmptyCartTitle() 
-  {
-    return cy.get('.empty-cart-title');
+  getEmptyCartTitle () {
+    return cy.get('.empty-cart-title')
   }
 
-  getTotalItemsAmountElemnt()
-  {
-    return cy.get('item-count-amount');
+  getTotalItemsAmountElemnt () {
+    return cy.get('item-count-amount')
   }
 
-  getTotalSavingAmountElement()
-  {
-    return cy.get('.total-savings-amount');
-  }
-    
-  getTotalRewardsPointsElement()
-  {
-    return cy.get('.cartLoyalty-pointsTotal');
+  getTotalSavingAmountElement () {
+    return cy.get('.total-savings-amount')
   }
 
-  getTotalPriceElement()
-  {
-    return cy.get('.cart-checkout-total__currency');
+  getTotalRewardsPointsElement () {
+    return cy.get('.cartLoyalty-pointsTotal')
   }
 
-  getSaveAsListButton()
-  {
-    return cy.get('.cartSaveList-button');
+  getTotalPriceElement () {
+    return cy.get('.cart-checkout-total__currency')
   }
 
-  getOrderSummaryButton()
-  {
-    return cy.get('.cart-checkout-summary__heading');
-  }
-  //#endregion
-
-  //#region - Selectors of all products 
-  getAllProductsNameList()
-  {
-    return cy.get('.cart-item-name');
+  getSaveAsListButton () {
+    return cy.get('.cartSaveList-button')
   }
 
-  getAllProductsDetailList()
-  {
-    return cy.get('.cart-item-details');
+  getOrderSummaryButton () {
+    return cy.get('.cart-checkout-summary__heading')
   }
-  //#endregion
+  // #endregion
 
-  //#region - Selectors of available products panel
-  getAvailableProductsInCartPanel()
-  {
-    return cy.get('.auto_products-in-cart');
+  // #region - Selectors of all products
+  getAllProductsNameList () {
+    return cy.get('.cart-item-name')
   }
 
-  getAvailableProductsList()
-  {
-    return this.getAvailableProductsInCartPanel().find('.cart-item-details');
+  getAllProductsDetailList () {
+    return cy.get('.cart-item-details')
+  }
+  // #endregion
+
+  // #region - Selectors of available products panel
+  getAvailableProductsInCartPanel () {
+    return cy.get('.auto_products-in-cart')
   }
 
-  getAvailableProductsNameList()
-  {
-    return this.getAvailableProductsInCartPanel().find('.cart-item-name');
+  getAvailableProductsList () {
+    return this.getAvailableProductsInCartPanel().find('.cart-item-details')
   }
 
-  getAvailableProductsDecrementButtonList()
-  {
-    return this.getAvailableProductsInCartPanel().find('.cartControls-decrementButton');
+  getAvailableProductsNameList () {
+    return this.getAvailableProductsInCartPanel().find('.cart-item-name')
   }
 
-  getAvailableProductsIncrementButtonList()
-  {
-    return this.getAvailableProductsInCartPanel().find('.cartControls-incrementButton');
+  getAvailableProductsDecrementButtonList () {
+    return this.getAvailableProductsInCartPanel().find('.cartControls-decrementButton')
   }
 
-  getAvailableProductsQuantityInputList()
-  {
-    return this.getAvailableProductsInCartPanel().find('.cartControls-quantityInput');
+  getAvailableProductsIncrementButtonList () {
+    return this.getAvailableProductsInCartPanel().find('.cartControls-incrementButton')
   }
 
-  getAvailableProductsPriceDivList()
-  {
-    return this.getAvailableProductsInCartPanel().find('.price');
+  getAvailableProductsQuantityInputList () {
+    return this.getAvailableProductsInCartPanel().find('.cartControls-quantityInput')
   }
 
-  getAvailableProductsRemoveButtonList()
-  {
-    return this.getAvailableProductsInCartPanel().find('.cart-item-remove-button');
+  getAvailableProductsPriceDivList () {
+    return this.getAvailableProductsInCartPanel().find('.price')
   }
 
-  getByMoreSaveMoreCartItemMessageSection()
-  {
-    return this.getAvailableProductsInCartPanel().find('.cartItemMessage');
-  }
-  //#endregion
-  
-  //#region - Selectors of restricted products panel
-  getRestrictedProductsNotificationPanel()
-  {
-    return cy.get('.auto_group-restricted-fulfilment-window');
+  getAvailableProductsRemoveButtonList () {
+    return this.getAvailableProductsInCartPanel().find('.cart-item-remove-button')
   }
 
-  getRestrictedProductsList()
-  {
-    return this.getRestrictedProductsNotificationPanel().find('.cart-item-details');
+  getByMoreSaveMoreCartItemMessageSection () {
+    return this.getAvailableProductsInCartPanel().find('.cartItemMessage')
+  }
+  // #endregion
+
+  // #region - Selectors of restricted products panel
+  getRestrictedProductsNotificationPanel () {
+    return cy.get('.auto_group-restricted-fulfilment-window')
   }
 
-  getRestrictedProductsNotificationParagraph()
-  {
-    return this.getRestrictedProductsNotificationPanel().find('p');
+  getRestrictedProductsList () {
+    return this.getRestrictedProductsNotificationPanel().find('.cart-item-details')
   }
 
-  getRestrictedProductsNotificationChangeDeliveryWindowLink()
-  {
-    return this.getRestrictedProductsNotificationPanel().find('button.linkButton');
-  }
-  //#endregion
-
-  //#region - Selectors of unavalialbe products panel
-  getUnavailableProductsNotificationPanel()
-  {
-    return cy.get('.auto_group-restricted-location');
+  getRestrictedProductsNotificationParagraph () {
+    return this.getRestrictedProductsNotificationPanel().find('p')
   }
 
-  getUnavailableProductsList()
-  {
-    return this.getUnavailableProductsNotificationPanel().find('.cart-item-details');
+  getRestrictedProductsNotificationChangeDeliveryWindowLink () {
+    return this.getRestrictedProductsNotificationPanel().find('button.linkButton')
+  }
+  // #endregion
+
+  // #region - Selectors of unavalialbe products panel
+  getUnavailableProductsNotificationPanel () {
+    return cy.get('.auto_group-restricted-location')
   }
 
-  getUnavailableProductsNotificationParagraph()
-  {
-    return this.getUnavailableProductsNotificationPanel().find('p.title');
+  getUnavailableProductsList () {
+    return this.getUnavailableProductsNotificationPanel().find('.cart-item-details')
   }
 
-  getUnavailableProductsNotificationRemoveItemsLink()
-  {
-    return this.getUnavailableProductsNotificationPanel().find('button.linkButton');
-  }
-  //#endregion
-
-  //#region - General actions in side cart
-  CheckIfSideCartIsOpen()
-  {
-    cy.get('.drawer').invoke('attr', 'class').should('contain', 'is-open');
+  getUnavailableProductsNotificationParagraph () {
+    return this.getUnavailableProductsNotificationPanel().find('p.title')
   }
 
-  CheckIfSideCartIsClosed()
-  {
-    cy.get('.drawer').invoke('attr', 'class').should('not.contain', 'is-open');
+  getUnavailableProductsNotificationRemoveItemsLink () {
+    return this.getUnavailableProductsNotificationPanel().find('button.linkButton')
+  }
+  // #endregion
+
+  // #region - General actions in side cart
+  CheckIfSideCartIsOpen () {
+    cy.get('.drawer').invoke('attr', 'class').should('contain', 'is-open')
   }
 
-  openSideCart()
-  {
-    this.getViewCartButton().click();
+  CheckIfSideCartIsClosed () {
+    cy.get('.drawer').invoke('attr', 'class').should('not.contain', 'is-open')
   }
 
-  closeSideCart()
-  {
-    this.getCloseSideCartButton().click();
+  openSideCart () {
+    this.getViewCartButton().click()
   }
 
-  gotoCheckout()
-  {
-    this.getCheckoutButton().click();
+  closeSideCart () {
+    this.getCloseSideCartButton().click()
   }
 
-  modifyItemQuantity(productName, expectedAmount)
-  {
+  gotoCheckout () {
+    this.getCheckoutButton().click()
+  }
+
+  modifyItemQuantity (productName, expectedAmount) {
     this.findItemDetailsByName(productName)
-        .find('.cartControls-quantityInput')
-        .clear()
-        .type(expectedAmount)
-        .should('have.value', expectedAmount);
+      .find('.cartControls-quantityInput')
+      .clear()
+      .type(expectedAmount)
+      .should('have.value', expectedAmount)
   }
 
-  removeItemByName(productName)
-  {
+  removeItemByName (productName) {
     this.findItemDetailsByName(productName)
-        .find('.cart-item-remove-button')
-        .click();
+      .find('.cart-item-remove-button')
+      .click()
   }
 
-  removeItemsByNames(productNameList)
-  {
-    for(const eachName of productNameList)
-    {
-      this.removeItemByName(eachName);
+  removeItemsByNames (productNameList) {
+    for (const eachName of productNameList) {
+      this.removeItemByName(eachName)
     }
   }
 
-  removeAllUnavailableItems()
-  {
-    this.getUnavailableProductsNotificationRemoveItemsLink().click();
+  removeAllUnavailableItems () {
+    this.getUnavailableProductsNotificationRemoveItemsLink().click()
   }
 
-  removeAllItems()
-  {
-    this.getClearEntireCartLink().click();
-    this.getConfirmClearCartLink().click();
+  removeAllItems () {
+    this.getClearEntireCartLink().click()
+    this.getConfirmClearCartLink().click()
   }
 
-  findItemDetailsByName(productName)
-  {
+  findItemDetailsByName (productName) {
     return this.getAllProductsNameList()
-                .should('have.lengthOf.greaterThan', 0)
-                .contains(productName)
-                .parents('.cart-item-details');
+      .should('have.lengthOf.greaterThan', 0)
+      .contains(productName)
+      .parents('.cart-item-details')
   }
-  //#endregion
+  // #endregion
 }
 
-export const onSideCartPage = new SideCartPage();
+export const onSideCartPage = new SideCartPage()
 
-//export default SideCartPage
+// export default SideCartPage
