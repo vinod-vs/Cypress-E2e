@@ -69,6 +69,7 @@ export class FMSAddressSelector {
     return cy.get('.shopper-action')
   }
 
+  // #region - General actions
   selectSavedAddressByKeyword (addressKeyword) {
     this.getSavedAddressesListLabel().each(addressRow => {
       const addressText = addressRow.find('label').text()
@@ -116,6 +117,7 @@ export class FMSAddressSelector {
     // we may need a libary to validate the suburb name in result list with postcode.
     this.getSearchStoreResultList().first().find('input').check({ force: true })
   }
+  // #endregion
 }
 
 export const onFMSAddressSelector = new FMSAddressSelector()

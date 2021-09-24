@@ -1,22 +1,23 @@
 export class FMSWindowSelector {
+  // #region - Selectors
   getDayDropdown () {
-    return cy.get('[class="day-dropdown ng-untouched ng-pristine ng-valid"]')
+    return cy.get('.day-dropdown')
   }
 
   getContinueShoppingButton () {
-    return cy.get('button[class="shopper-action m mobile-full-width"]')
+    return cy.get('.shopper-action')
   }
 
   getMorningTimeSlotList () {
-    return cy.get('div[class="time-slots ng-star-inserted"] > wow-time-slots-column-side-cart').eq(0).get('.time-slot-list > section > div')
+    return cy.get('wow-time-slots-column-side-cart').eq(0).get('.time-slot-list > section > div')
   }
 
   getAfternoonTimeSlotList () {
-    return cy.get('div[class="time-slots ng-star-inserted"] > wow-time-slots-column-side-cart').eq(1).get('.time-slot-list > section > div')
+    return cy.get('wow-time-slots-column-side-cart').eq(1).get('.time-slot-list > section > div')
   }
 
   getEveningTimeSlotList () {
-    return cy.get('div[class="time-slots ng-star-inserted"] > wow-time-slots-column-side-cart').eq(2).get('.time-slot-list > section > div')
+    return cy.get('wow-time-slots-column-side-cart').eq(2).get('.time-slot-list > section > div')
   }
 
   getAllTimeSlotList () {
@@ -34,23 +35,18 @@ export class FMSWindowSelector {
   selectLatestAvailableDay () {
     this.selectDayByKeyword()
   }
+  // #endregion
 
-  selectDayByKeyword (dayKeyword = 'undefined') {
-    cy.get('[class="day-dropdown ng-untouched ng-pristine ng-valid"] > option').each((dayOption, index) => {
-      if (index == 0 || dayOption.text().includes('Closed')) {
-        return true
-      }
-
-      if (!dayOption.text().includes('Closed') && (dayKeyword == 'undefined' || dayOption.text().includes(dayKeyword))) {
-        this.getDayDropdown().select(dayOption.text())
-        return false
-      } else {
-        throw new Error('Test failed. Unable to find given day: ' + dayKeyword)
-      }
+  // #region - General actions
+  selectDayByKeyword (dayKeyword) {
+    cy.get('.day-dropdown > option')
+      .contains(dayKeyword)
+      .then(dayOption => {
+        cy.wrap(dayOption).parent().select(dayOption.text())
     })
   }
 
-  selectTimeSlotByStartTimeEndTime (startTime, endTime = 'undefined') {
+  selectTimeSlotByTime (startTime, endTime = 'undefined') {
     this.#selectTimeSlotStartFromIndex(0, startTime, endTime)
   }
 
@@ -61,7 +57,9 @@ export class FMSWindowSelector {
   selectLastTimeslot () {
     this.getAllTimeSlotList().last().find('input').check({ force: true })
   }
+  // #endregion
 
+  // #region - private methods
   #selectTimeSlotStartFromIndex (index, startTime, endTime = 'undefined') {
     let found = false
 
@@ -87,6 +85,7 @@ export class FMSWindowSelector {
         })
     })
   }
+  // #endregion
 }
 
 export const onFMSWindowSelector = new FMSWindowSelector()

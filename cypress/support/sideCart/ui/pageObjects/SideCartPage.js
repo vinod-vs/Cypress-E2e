@@ -1,5 +1,5 @@
 export class SideCartPage {
-  // #region - General selector
+  // #region - General selectors
   getCloseSideCartButton () {
     return cy.get('.close-button > .iconAct-Close_Cancel')
   }
@@ -163,7 +163,7 @@ export class SideCartPage {
   }
 
   modifyItemQuantity (productName, expectedAmount) {
-    this.findItemDetailsByName(productName)
+    this.#findItemDetailsByName(productName)
       .find('.cartControls-quantityInput')
       .clear()
       .type(expectedAmount)
