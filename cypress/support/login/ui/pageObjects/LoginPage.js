@@ -1,4 +1,4 @@
-class LoginPage {
+export class LoginPage {
   getEmailAddress () {
     return cy.get('#loginForm-Email')
   }
@@ -12,4 +12,4 @@ class LoginPage {
   }
 }
 
-export default LoginPage
+export const onLoginPage = new LoginPage()

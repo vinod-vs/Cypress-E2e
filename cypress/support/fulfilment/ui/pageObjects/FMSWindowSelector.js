@@ -1,4 +1,3 @@
-
 export class FMSWindowSelector {
   getDayDropdown () {
     return cy.get('[class="day-dropdown ng-untouched ng-pristine ng-valid"]')
@@ -52,7 +51,7 @@ export class FMSWindowSelector {
   }
 
   selectTimeSlotByStartTimeEndTime (startTime, endTime = 'undefined') {
-    this.selectTimeSlotStartFromIndex(0, startTime, endTime)
+    this.#selectTimeSlotStartFromIndex(0, startTime, endTime)
   }
 
   selectFirstTimeslot () {
@@ -63,7 +62,7 @@ export class FMSWindowSelector {
     this.getAllTimeSlotList().last().find('input').check({ force: true })
   }
 
-  selectTimeSlotStartFromIndex (index, startTime, endTime = 'undefined') {
+  #selectTimeSlotStartFromIndex (index, startTime, endTime = 'undefined') {
     let found = false
 
     this.getAllTimeSlotList().its('length').then(len => {
@@ -83,7 +82,7 @@ export class FMSWindowSelector {
       })
         .then(() => {
           if (!found) {
-            this.selectTimeSlotStartFromIndex(++index, startTime, endTime)
+            this.#selectTimeSlotStartFromIndex(++index, startTime, endTime)
           }
         })
     })

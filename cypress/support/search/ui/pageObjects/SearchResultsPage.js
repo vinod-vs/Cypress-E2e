@@ -1,4 +1,4 @@
-class SearchResultsPage {
+export class SearchResultsPage {
   getIncreaseQuantityButton () {
     return cy.get('.iconAct-Add_Plus')
   }
@@ -68,4 +68,4 @@ class SearchResultsPage {
   }
 }
 
-export default SearchResultsPage
+export const onSearchResultsPage = new SearchResultsPage()

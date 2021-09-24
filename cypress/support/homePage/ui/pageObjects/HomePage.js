@@ -1,4 +1,4 @@
-class HomePage {
+export class HomePage {
   getMyAccount () {
     return cy.get('#header-panel a.coreHeader-signupButton')
   }
@@ -20,4 +20,4 @@ class HomePage {
   }
 }
 
-export default HomePage
+export const onHomePage = new HomePage()

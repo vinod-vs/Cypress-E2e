@@ -1,13 +1,9 @@
-import HomePage from '../../../homePage/ui/pageObjects/HomePage'
-import SearchResultsPage from '../../../search/ui/pageObjects/SearchResultsPage'
-import ListsPage from '../pageObjects/ListsPage'
-
-const homePage = new HomePage()
-const searchResultsPage = new SearchResultsPage()
-const listsPage = new ListsPage()
+import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
+import {onSearchResultsPage} from '../../../search/ui/pageObjects/SearchResultsPage'
+import {onListsPage} from '../pageObjects/ListsPage'
 
 Cypress.Commands.add('searchAndAddProductToNewList', (listName, searchTerm) => {
-  homePage.getSearchHeader().type(searchTerm).type('{enter}')
+  onHomePage.getSearchHeader().type(searchTerm).type('{enter}')
 
   // Save the Product name to verify in the created list later
   cy.get('shared-product-tile')
@@ -15,32 +11,32 @@ Cypress.Commands.add('searchAndAddProductToNewList', (listName, searchTerm) => {
     .find('a')
     .invoke('text').as('ProductName')
 
-  searchResultsPage.getSaveToListButton().first().click()
+  onSearchResultsPage.getSaveToListButton().first().click()
 
-  searchResultsPage.getCreateANewListButton().click()
+  onSearchResultsPage.getCreateANewListButton().click()
 
-  searchResultsPage.getNewListNameTextInput().type(listName)
+  onSearchResultsPage.getNewListNameTextInput().type(listName)
 
-  searchResultsPage.getCreateNewListActionButton().click()
+  onSearchResultsPage.getCreateNewListActionButton().click()
 
-  searchResultsPage.getTheListnameCheckBox(listName).should('be.checked')
+  onSearchResultsPage.getTheListnameCheckBox(listName).should('be.checked')
 
-  searchResultsPage.getProductSaveToNewListButton().click()
+  onSearchResultsPage.getProductSaveToNewListButton().click()
 
-  searchResultsPage.getProductSavedNotification().should('be.visible')
+  onSearchResultsPage.getProductSavedNotification().should('be.visible')
 
-  searchResultsPage.getProductSavedNotification().find('a').should('contain.text', listName)
+  onSearchResultsPage.getProductSavedNotification().find('a').should('contain.text', listName)
 })
 
 Cypress.Commands.add('verifyProductInList', (listName) => {
-  homePage.getListsLink().click()
+  onHomePage.getListsLink().click()
 
   cy.url().should('include', 'shop/mylists')
 
-  listsPage.gettheList(listName).click()
-  listsPage.getListHeader().should('contain.text', listName)
-  listsPage.getLayoutButtons().first().check({ force: true })
-  listsPage.getProductInList().invoke('text').then((ProductName) => {
+  onListsPage.gettheList(listName).click()
+  onListsPage.getListHeader().should('contain.text', listName)
+  onListsPage.getLayoutButtons().first().check({ force: true })
+  onListsPage.getProductInList().invoke('text').then((ProductName) => {
     cy.get('@ProductName').then((savedProduct) => {
       expect(ProductName).to.eq(savedProduct)
     })
@@ -48,8 +44,8 @@ Cypress.Commands.add('verifyProductInList', (listName) => {
 })
 
 Cypress.Commands.add('deleteList', (listName) => {
-  homePage.getListsLink().click()
-  listsPage.getDeleteButtonOfList(listName).click()
-  listsPage.getDeleteButtonOnConfirmationModal().click()
-  listsPage.gettheList(listName).should('not.exist')
+  onHomePage.getListsLink().click()
+  onListsPage.getDeleteButtonOfList(listName).click()
+  onListsPage.getDeleteButtonOnConfirmationModal().click()
+  onListsPage.gettheList(listName).should('not.exist')
 })

@@ -1,6 +1,6 @@
-class MyAccountPage {
+export class MyAccountPage {
   getLogout () {
     return cy.get('shared-navigation-menu a[queryparamshandling]')
   }
 }
-export default MyAccountPage
+export const onMyAccountPage = new MyAccountPage();

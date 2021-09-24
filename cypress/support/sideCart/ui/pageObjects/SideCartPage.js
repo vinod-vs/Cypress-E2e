@@ -69,7 +69,7 @@ export class SideCartPage {
 
   // #region - Selectors of available products panel
   getAvailableProductsInCartPanel () {
-    return cy.get('.auto_products-in-cart')
+    return cy.get('section[aria-label="Products in your cart"]')
   }
 
   getAvailableProductsList () {
@@ -100,7 +100,7 @@ export class SideCartPage {
     return this.getAvailableProductsInCartPanel().find('.cart-item-remove-button')
   }
 
-  getByMoreSaveMoreCartItemMessageSection () {
+  getBuyMoreSaveMoreCartItemMessageSection () {
     return this.getAvailableProductsInCartPanel().find('.cartItemMessage')
   }
   // #endregion
@@ -171,7 +171,7 @@ export class SideCartPage {
   }
 
   removeItemByName (productName) {
-    this.findItemDetailsByName(productName)
+    this.#findItemDetailsByName(productName)
       .find('.cart-item-remove-button')
       .click()
   }
@@ -191,7 +191,7 @@ export class SideCartPage {
     this.getConfirmClearCartLink().click()
   }
 
-  findItemDetailsByName (productName) {
+  #findItemDetailsByName (productName) {
     return this.getAllProductsNameList()
       .should('have.lengthOf.greaterThan', 0)
       .contains(productName)
@@ -201,5 +201,3 @@ export class SideCartPage {
 }
 
 export const onSideCartPage = new SideCartPage()
-
-// export default SideCartPage
