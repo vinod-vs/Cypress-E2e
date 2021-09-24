@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Get the build ID from the run command's output
-BUILD_ID=$(browserstack-cypress run | grep 'build id:' | rev | cut -d" " -f1 | rev)
+BUILD_ID=$(grep (\b(?:(?!BUILD_ID)\w)+\b) ./log/build_results.txt)
 
 # Or, you can read this from the log/build_results.txt file as well
 
