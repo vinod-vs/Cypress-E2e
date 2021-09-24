@@ -46,7 +46,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shopper, testData).as('placedOrderResponse')
 
-      //Verify order totals
+      // Verify order totals
       cy.get('@placedOrderResponse').then((placedOrderResponse) => {
         orderId = placedOrderResponse.Order.OrderId.toString()
         orderReference = placedOrderResponse.Order.OrderReference.toString()
@@ -93,26 +93,26 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
         })
 
-        //Amend the above created WOW order
+        // Amend the above created WOW order
         cy.amendOrder(orderId)
 
-        //Verify the order is open for amendment
+        // Verify the order is open for amendment
         cy.getCurrentlyAmendingOrder().then((currentlyAmendingOrder) => {
           expect(currentlyAmendingOrder.OrderId).to.be.equal(Number(orderId))
         })
 
-        //Verify the product search results
+        // Verify the product search results
         searchRequest.SearchTerm = testData.searchTerm
         cy.productSearch(searchRequest).as('searchProductsResponse')
         cy.get('@searchProductsResponse').then((response) => {
           expect(response.SearchResultsCount).to.be.greaterThan(0)
 
-          //Verify no EDM products are available for user to ATC
+          // Verify no EDM products are available for user to ATC
           const edmSearchProduct = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].RichDescription !== null && searchProduct.Products[0].Price !== null)
           cy.log('Product EDM Search' + JSON.stringify(edmSearchProduct))
           expect(edmSearchProduct).to.be.empty
 
-          //Verify WOW itmes are still searchable and addable to cart
+          // Verify WOW itmes are still searchable and addable to cart
           const wowSearchProduct = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].RichDescription !== null && searchProduct.Products[0].Price !== null)
           cy.log('Product WOW Search' + JSON.stringify(wowSearchProduct))
           expect(wowSearchProduct.length).to.be.greaterThan(0)

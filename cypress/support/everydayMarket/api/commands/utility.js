@@ -66,7 +66,7 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
   return placeOrder()
 })
 
-function placeOrder() {
+function placeOrder () {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
@@ -351,7 +351,7 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
 
 Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, cupTestdata) => {
   const response = productSearchResponse
-  //CUP Details
+  // CUP Details
   let cupPrice = new Number(0)
   let cupMeasure
   let hasCupPrice
@@ -365,7 +365,7 @@ Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchRes
       response.Products[y].Products[0].IsMarketProduct === true) {
       mpStockCode = response.Products[y].Products[0].Stockcode
       cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
-      //CUP
+      // CUP
       cupPrice = response.Products[y].Products[0].CupPrice
       cupMeasure = response.Products[y].Products[0].CupMeasure
       hasCupPrice = response.Products[y].Products[0].HasCupPrice
@@ -375,11 +375,10 @@ Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchRes
   }
   expect(mpStockCode).to.be.greaterThan(0)
 
-  //setting cup details
+  // setting cup details
   cupTestdata.cupPrice = cupPrice
   cupTestdata.cupMeasure = cupMeasure
   cupTestdata.hasCupPrice = hasCupPrice
   cupTestdata.cupString = cupString
   cy.log('product: ' + cupTestdata.searchTerm + ' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
-
 })
