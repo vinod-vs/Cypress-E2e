@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Get the build ID from the run command's output
-BUILD_ID=$(grep -E BUILD_ID=[a-z,A-Z,0-9]* ./log/build_results.txt | cut -b 10-50)
+BUILD_ID=$(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -b 10-50)
 
 # Or, you can read this from the log/build_results.txt file as well
 
