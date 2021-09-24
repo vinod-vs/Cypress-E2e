@@ -1,20 +1,27 @@
 {
-    "from": {
-      "street1": "U 52 1 Mcdonald St",
-      "state": "NSW",
-      "postCode": "2011",
-      "suburb": "POTTS POINT NSW",
-      "name": "customer",
-      "phone": "0411022918"
-    },
-    "lineItems": [
-      {
-        "stockCode": 0,
-        "quantity": 0,
-        "amount": 0,
-        "reason": "Automation - change of mind"
-      }
-    ],
-    "invoiceId": "",
-    "orderReference": ""
-  }
+  "invoiceId": "",
+  "orderReference": "",
+  "createdBy" : "EM_Test_Automation_Partial_Return",
+  "lineItems": 
+  [
+    {
+      "stockCode": 0,
+      "quantity": 0,
+      "amount": 0,
+      "reason": "Item is faulty",
+      "weight": 12,
+      "notes": "Customer Return from EM Test Automation_Partial_Return"
+    }
+  ],
+    "from": 
+    {
+         "name": "Anoop Singh",
+        "email": "asingh42@woolworths.com.au",
+        "phone": "0470511122",
+        "street1": "2-26 Park St",
+        "street2": "Sydney, NSW 2000",
+        "state": "NSW",
+        "postCode": "2065",
+        "suburb": "St Leonards"
+    }
+}

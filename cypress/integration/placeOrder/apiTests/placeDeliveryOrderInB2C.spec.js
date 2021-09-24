@@ -36,13 +36,13 @@ TestFilter(['B2C-API'], () => {
       cy.loginViaApi(shopper).then((response) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
- 
+
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
         expect(response.Response[0].Id).to.not.be.empty
 
         expect(response.Response[0].Id).to.not.be.null
-      }) 
-      
+      })
+
       cy.addDeliveryAddress().then((response) => {
         expect(response.Address.AddressId).to.greaterThan(0)
 
@@ -56,10 +56,10 @@ TestFilter(['B2C-API'], () => {
 
         expect(response.Address.SuburbId).to.not.be.null
       })
-        
+
       cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then((response) => {
         expect(response.Id).to.greaterThan(0)
-      }) 
+      })
 
       cy.completeWindowFulfilmentViaApi().then((response) => {
         expect(response).to.have.property('IsSuccessful', true)

@@ -3,7 +3,7 @@
 import queryRequest from '../../../../fixtures/rewards/query.json'
 
 Cypress.Commands.add('getRewardsCardDetails', (partnerId, siteId, posId, loyaltySiteType, cardNo) => {
-  let requestBody = queryRequest
+  const requestBody = queryRequest
   requestBody.queryCardDetailsReq.partnerId = Number(partnerId)
   requestBody.queryCardDetailsReq.siteId = Number(siteId)
   requestBody.queryCardDetailsReq.posId = Number(posId)

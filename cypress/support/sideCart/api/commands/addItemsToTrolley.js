@@ -1,5 +1,7 @@
-import searchRequestBody from '../../../../fixtures/search/productSearch.json'
 import addItemsRequestBody from '../../../../fixtures/sideCart/addItemsToTrolley.json'
+import searchRequestBody from '../../../../fixtures/search/productSearch.json'
+import { restrictionType } from '../../../../fixtures/product/restrictionType.js'
+import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWowItems as groupLimitRetrictedItems, getAgeRestrictedWowItems as ageRestrictedItems } from '../../../../support/search/api/commands/search.js'
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
   cy.request('POST', Cypress.env('addItemsToTrolleyEndpoint'), addItemsBody).then((response) => {
@@ -14,12 +16,11 @@ Cypress.Commands.add('curateProductsForTrolley', (productArray) => {
 
   for (const item of productArray) {
     totalPrice = totalPrice + item.Price
-    cy.log('Item Price is: ' + item.Price)
+
     trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
 
-    // TODO: RC 17/08/21: Output this to a file for later verification
     expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
-    cy.log('Total Price is: ' + totalPrice)
+    addItemsRequestBody.items = expectedTrolleyItems
 
     if (totalPrice > 60.0) {
       break
@@ -27,6 +28,19 @@ Cypress.Commands.add('curateProductsForTrolley', (productArray) => {
   }
 
   return cy.wrap(trolleyArr)
+})
+
+Cypress.Commands.add('addAvailableNonRestrictedPriceLimitedWowItemsToTrolley', (searchTerm, totalThreshold) => {
+  searchRequestBody.SearchTerm = searchTerm
+  searchRequestBody.SortType = 'PriceDesc'
+
+  cy.productSearch(searchRequestBody).then((searchResponse) => {
+    cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
+      getPriceLimitedItemsForTrolleyAddition(itemResponse, totalThreshold).forEach((item) => {
+        cy.addItemsToTrolley(item)
+      })
+    })
+  })
 })
 
 Cypress.Commands.add('addAvailableNonRestrictedWowItemsToTrolley', (searchTerm) => {
@@ -41,6 +55,106 @@ Cypress.Commands.add('addAvailableNonRestrictedWowItemsToTrolley', (searchTerm) 
     })
   })
 })
+
+Cypress.Commands.add('addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley', (searchTerm, count) => {
+  searchRequestBody.SearchTerm = searchTerm
+  searchRequestBody.SortType = 'TraderRelevance'
+
+  cy.productSearch(searchRequestBody).then((searchResponse) => {
+    cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
+      getCountLimitedItemsForTrolleyAddition(itemResponse, count).forEach((item) => {
+        cy.addItemsToTrolley(item)
+      })
+    })
+  })
+})
+
+Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) => {
+  let restrictedProducts
+
+  switch (type) {
+    case restrictionType.MORNING:
+      searchRequestBody.SearchTerm = 'Bakery'
+      searchRequestBody.SortType = 'TraderRelevance'
+
+      cy.productSearch(searchRequestBody).then((searchResponse) => {
+        restrictedProducts = pmRestrictedItems(searchResponse)
+        getCountLimitedItemsForTrolleyAddition(restrictedProducts, count).forEach((item) => {
+          cy.addItemsToTrolley(item)
+        })
+      })
+      break
+
+    case restrictionType.GROUP:
+      searchRequestBody.SearchTerm = 'Baby Formula'
+      searchRequestBody.SortType = 'TraderRelevance'
+
+      cy.productSearch(searchRequestBody).then((searchResponse) => {
+        restrictedProducts = groupLimitRetrictedItems(searchResponse)
+        getCountLimitedItemsForTrolleyAddition(restrictedProducts, count).forEach((item) => {
+          cy.addItemsToTrolley(item)
+        })
+      })
+      break
+
+    case restrictionType.AGE:
+      searchRequestBody.SearchTerm = 'Liquor'
+      searchRequestBody.SortType = 'TraderRelevance'
+
+      cy.productSearch(searchRequestBody).then((searchResponse) => {
+        restrictedProducts = ageRestrictedItems(searchResponse)
+        getCountLimitedItemsForTrolleyAddition(restrictedProducts, count).forEach((item) => {
+          cy.addItemsToTrolley(item)
+        })
+      })
+      break
+  }
+})
+
+function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
+  const trolleyArr = []
+  const expectedTrolleyItems = []
+  let totalPrice = 0.0
+
+  for (const item of productArray) {
+    totalPrice = totalPrice + item.Price
+
+    trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
+
+    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+
+    if (totalPrice > totalThreshold) {
+      break
+    }
+  }
+  addItemsRequestBody.items = expectedTrolleyItems
+
+  return trolleyArr
+}
+
+function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
+  const expectedTrolleyItems = []
+
+  if (productArray.length == 0) {
+    throw ('No products found for Count Limited Trolley Addition')
+  }
+
+  const trolleyArr = []
+  let addedToCart = 0
+
+  for (const item of productArray) {
+    trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
+    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+
+    addedToCart++
+    if (addedToCart === itemCount) {
+      break
+    }
+  }
+  addItemsRequestBody.items = expectedTrolleyItems
+
+  return trolleyArr
+}
 
 Cypress.Commands.add('addAvailableEDMItemsToTrolley', (searchTerm, quantity) => {
   // Search product by overriding the SearchTerm attribute in the search body request fixture

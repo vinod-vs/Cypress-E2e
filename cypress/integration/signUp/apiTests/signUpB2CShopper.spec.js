@@ -23,7 +23,7 @@ TestFilter(['B2C-API'], () => {
     // Signing Up as a new User
     it('Should sign up with a new user', () => {
       cy.logOutViaApi()
-      cy.getDOB('personal').then((value)=> {
+      cy.getDOB('personal').then((value) => {
         signUpDetails.dateOfBirth = value
       })
       cy.signUpViaApi(signUpDetails).then((response) => {

@@ -39,7 +39,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
   return false
 })
 
-const chainStart = Symbol();
+const chainStart = Symbol()
 cy.all = function (...commands) {
   const _ = Cypress._
   const chain = cy.wrap(null, { log: false })

@@ -1,0 +1,20 @@
+{
+    "SubscriptionFields": [
+      "Id",
+      "PlanId",
+      "ServiceType",
+      "SubscriberId",
+      "Price",
+      "StartDate",
+      "NextBillingDate",
+      "EndDate",
+      "Status",
+      "FreeTrial",
+      "WillAutoRenew",
+      "PaymentInstrumentId",
+      "CardScheme",
+      "CardSuffix",
+      "CardExpiryMonth",
+      "CardExpiryYear"
+    ]
+}

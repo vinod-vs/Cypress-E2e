@@ -15,13 +15,17 @@ import '../../../support/orders/api/commands/amendOrder'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] RP-5044 | EM | MPer | Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+  describe('[API] RP-5031 EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('RP-5044 | EM | MPer | Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+    after(() => {
+      cy.clearAnyOrderAmendments()
+    })
+
+    it('[API] RP-5031 EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
       const purchaseQty = 2
       const shopper = shoppers.emAccount2
       let req
@@ -48,8 +52,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('Still not sent to Marketplacer yet')
             }
           },
-          retries: 10,
-          timeout: 5000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).its('invoices').its(0).its('legacyIdFormatted').as('invoiceIds')
 
         cy.orderEventsApiWithRetry(req.orderReference, {
@@ -58,8 +62,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('Event not updated yet')
             }
           },
-          retries: 15,
-          timeout: 2000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         })
 
         cy.get('@invoiceIds').then((invoiceIds) => {
@@ -69,8 +73,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 throw new Error('Still wrong status')
               }
             },
-            retries: 10,
-            timeout: 5000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).as('orderDataBeforeAmendment')
         })
 
@@ -86,8 +90,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('Data not updated yet')
                 }
               },
-              retries: 10,
-              timeout: 5000
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
             }).as('orderDataAfterAmendment')
           })
 
@@ -98,8 +102,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 throw new Error('Event not updated yet')
               }
             },
-            retries: 15,
-            timeout: 2000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).as('eventsAfterAmendment')
         })
 
@@ -109,15 +113,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.get('@orderDataAfterAmendment'),
           cy.get('@eventsAfterAmendment')
         ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {
-          // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment            
+          // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
           expect({
             ...beforeData,
             orderId: amendedOrder.Order.OrderId
           }).to.deep.equal(afterData)
 
-          // Validate EDM order events after amendment to have 'update' and 'OrderPlaced' events
-          lib.validateEvents(afterEvents, 2, 'update')
-          lib.validateEvents(afterEvents, 3, 'OrderPlaced')
+          // Validate EDM order events after amendment to have 'OrderPlaced' event
+          lib.validateEvents(afterEvents, 'OrderPlaced', 2)
         })
       })
     })

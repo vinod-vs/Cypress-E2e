@@ -1,185 +1,255 @@
 {
-    "VerifyFullyDispatchedEDMOrder": {
-      "orderId": "",
-      "orderReference": "",
-      "edmInvoiceId": "",
-      "edmOrderId": "",
-      "searchTerm": "treats",
-      "carrier": "Australia Post",
-      "trackingNumber": "Automation:12345",
-      "sellerName": "Pet Culture",
-      "deliveryAddressId": "",
-      "deliveryAreaId": "",
-      "deliverySuburbId": "",
-      "timeSlotId": "",
-      "windowDate": "",
-      "deliveryDateText": "",
-      "deliveryTimeText": "",
-      "wowDeliveryCharges": 0,
-      "edmDeliveryCharges": 0,
-      "rewardPointBefore": 0,
-      "rewardPointAfter": 0,
-      "edmTotal": 0,
-      "wowTotal": 0,
-      "packagingFee": "",
-      "totalQuantity": 0,
-      "totalWowQuantity": 0,
-      "totalEdmQuantity": 0,
-      "orderTotal": 0,
-      "address":{
-        "search": "407-419 Elizabeth St, SURRY HILLS"
-                },                
-      "rewards":{
-        "partnerId": 20,
-        "siteId": 1,
-        "posId": 1,
-        "loyaltySiteType": "E",
-        "cardNo": 9355125316613
-      },
-      "items": [
-        {
-          "stockCode": "",
-          "quantity": 2,
-          "pricePerItem": 0,
-          "isEDMProduct": "true"
-        },
-        {
-            "stockCode": "",
-            "quantity": 0,
-            "pricePerItem": 0,
-            "isEDMProduct": "false",
-            "minWowOrderThreshold": 50,
-            "bufferWowQuantity": 5      
-        }
-      ],
-      "payment": {
-        "creditCard": {
-          "creditCardNumber": "4242424242424242",
-          "creditCardExpMonth": "08",
-          "creditCardExpYear": "22",
-          "creditCardCVV": "488"
-        }
-      }
+  "VerifyFullyDispatchedEDMOrder": {
+    "orderId": "",
+    "orderReference": "",
+    "edmInvoiceId": "",
+    "edmOrderId": "",
+    "searchTerm": "treats",
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:12345",
+    "sellerName": "Pet Culture",
+    "deliveryAddressId": "",
+    "deliveryAreaId": "",
+    "deliverySuburbId": "",
+    "timeSlotId": "",
+    "windowDate": "",
+    "deliveryDateText": "",
+    "deliveryTimeText": "",
+    "wowDeliveryCharges": 0,
+    "edmDeliveryCharges": 0,
+    "rewardPointBefore": 0,
+    "rewardPointAfter": 0,
+    "edmTotal": 0,
+    "wowTotal": 0,
+    "packagingFee": "",
+    "totalQuantity": 0,
+    "totalWowQuantity": 0,
+    "totalEdmQuantity": 0,
+    "orderTotal": 0,
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
     },
-    "VerifyMultiplePartialDispatchedEDMOrder": {
-      "orderId": "",
-      "orderReference": "",
-      "edmInvoiceId": "",
-      "edmOrderId": "",
-      "searchTerm": "treats",
-      "carrier": "Australia Post",
-      "trackingNumber": "Automation:123456",
-      "sellerName": "Pet Culture",
-      "deliveryAddressId": "",
-      "deliveryAreaId": "",
-      "deliverySuburbId": "",
-      "timeSlotId": "",
-      "windowDate": "",
-      "deliveryDateText": "",
-      "deliveryTimeText": "",
-      "wowTotal": 0,
-      "edmTotal": 0,
-      "totalQuantity": 0,
-      "totalWowQuantity": 0,
-      "totalEdmQuantity": 0,
-      "address":{
-        "search": "407-419 Elizabeth St, SURRY HILLS"
-                },            
-      "rewards":{
-        "partnerId": 20,
-        "siteId": 1,
-        "posId": 1,
-        "loyaltySiteType": "E",
-        "cardNo": 9355125316613
-      },    
-      "totalEDMShippingFee": "",
-      "reusableBagsFee": "",
-      "orderTotal": "",
-      "orderDiscount": "",
-      "items": [
-        {
-          "stockCode": "",
-          "quantity": 2,
-          "pricePerItem": 0,
-          "isEDMProduct": "true"
-        },
-        {
-            "stockCode": "",
-            "quantity": 0,
-            "pricePerItem": 0,
-            "isEDMProduct": "false",
-            "minWowOrderThreshold": 50,
-            "bufferWowQuantity": 5      
-        }
-      ],
-      "payment": {
-        "creditCard": {
-          "creditCardNumber": "4242424242424242",
-          "creditCardExpMonth": "08",
-          "creditCardExpYear": "22",
-          "creditCardCVV": "488"
-        }
-      }
+    "rewards": {
+      "partnerId": 20,
+      "siteId": 1,
+      "posId": 1,
+      "loyaltySiteType": "E",
+      "cardNo": 9355125316613
     },
-    "VerifyFullCancellationOfEDMOrder": {
-      "orderId": "",
-      "orderReference": "",
-      "edmInvoiceId": "",
-      "edmOrderId": "",
-      "searchTerm": "treats",
-      "carrier": "Australia Post",
-      "trackingNumber": "Automation:12345",
-      "sellerName": "Pet Culture",
-      "deliveryAddressId": "",
-      "deliveryAreaId": "",
-      "deliverySuburbId": "",
-      "timeSlotId": "",
-      "windowDate": "",
-      "deliveryDateText": "",
-      "deliveryTimeText": "",
-      "wowDeliveryCharges": 0,
-      "edmDeliveryCharges": 0,
-      "rewardPointBefore": 0,
-      "rewardPointAfter": 0,
-      "edmTotal": 0,
-      "wowTotal": 0,
-      "packagingFee": "",
-      "totalQuantity": 0,
-      "totalWowQuantity": 0,
-      "totalEdmQuantity": 0,
-      "address":{
-        "search": "407-419 Elizabeth St, SURRY HILLS"
-                },                
-      "rewards":{
-        "partnerId": 20,
-        "siteId": 1,
-        "posId": 1,
-        "loyaltySiteType": "E",
-        "cardNo": 9355125316613
+    "items": [
+      {
+        "stockCode": "",
+        "quantity": 2,
+        "pricePerItem": 0,
+        "isEDMProduct": "true"
       },
-      "items": [
-        {
-          "stockCode": "",
-          "quantity": 2,
-          "pricePerItem": 0,
-          "isEDMProduct": "true"
-        },
-        {
-            "stockCode": "",
-            "quantity": 0,
-            "pricePerItem": 0,
-            "isEDMProduct": "false",
-            "minWowOrderThreshold": 50,
-            "bufferWowQuantity": 5      
-        }
-      ],
-      "payment": {
-        "creditCard": {
-          "creditCardNumber": "4242424242424242",
-          "creditCardExpMonth": "08",
-          "creditCardExpYear": "22",
-          "creditCardCVV": "488"
-        }
+      {
+        "stockCode": "",
+        "quantity": 0,
+        "pricePerItem": 0,
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "payment": {
+      "creditCard": {
+        "aa": "4940521800534554",
+        "bb": "234",
+        "dd": "11",
+        "ee": "22",
+        "Save": false,
+        "Verify": false
+      }
+    }
+  },
+  "VerifyMultiplePartialDispatchedEDMOrder": {
+    "orderId": "",
+    "orderReference": "",
+    "edmInvoiceId": "",
+    "edmOrderId": "",
+    "searchTerm": "treats",
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:123456",
+    "sellerName": "Pet Culture",
+    "deliveryAddressId": "",
+    "deliveryAreaId": "",
+    "deliverySuburbId": "",
+    "timeSlotId": "",
+    "windowDate": "",
+    "deliveryDateText": "",
+    "deliveryTimeText": "",
+    "wowTotal": 0,
+    "edmTotal": 0,
+    "totalQuantity": 0,
+    "totalWowQuantity": 0,
+    "totalEdmQuantity": 0,
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    },
+    "rewards": {
+      "partnerId": 20,
+      "siteId": 1,
+      "posId": 1,
+      "loyaltySiteType": "E",
+      "cardNo": 9355125316613
+    },
+    "totalEDMShippingFee": "",
+    "reusableBagsFee": "",
+    "orderTotal": "",
+    "orderDiscount": "",
+    "items": [
+      {
+        "stockCode": "",
+        "quantity": 2,
+        "pricePerItem": 0,
+        "isEDMProduct": "true"
+      },
+      {
+        "stockCode": "",
+        "quantity": 0,
+        "pricePerItem": 0,
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "payment": {
+      "creditCard": {
+        "aa": "4940521800534554",
+        "bb": "234",
+        "dd": "11",
+        "ee": "22",
+        "Save": false,
+        "Verify": false
+      }
+    }
+  },
+  "VerifyFullCancellationOfEDMOrder": {
+    "orderId": "",
+    "orderReference": "",
+    "edmInvoiceId": "",
+    "edmOrderId": "",
+    "searchTerm": "treats",
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:12345",
+    "sellerName": "Pet Culture",
+    "deliveryAddressId": "",
+    "deliveryAreaId": "",
+    "deliverySuburbId": "",
+    "timeSlotId": "",
+    "windowDate": "",
+    "deliveryDateText": "",
+    "deliveryTimeText": "",
+    "wowDeliveryCharges": 0,
+    "edmDeliveryCharges": 0,
+    "rewardPointBefore": 0,
+    "rewardPointAfter": 0,
+    "edmTotal": 0,
+    "wowTotal": 0,
+    "packagingFee": "",
+    "totalQuantity": 0,
+    "totalWowQuantity": 0,
+    "totalEdmQuantity": 0,
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    },
+    "rewards": {
+      "partnerId": 20,
+      "siteId": 1,
+      "posId": 1,
+      "loyaltySiteType": "E",
+      "cardNo": 9355125316613
+    },
+    "items": [
+      {
+        "stockCode": "",
+        "quantity": 2,
+        "pricePerItem": 0,
+        "isEDMProduct": "true"
+      },
+      {
+        "stockCode": "",
+        "quantity": 0,
+        "pricePerItem": 0,
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "payment": {
+      "creditCard": {
+        "aa": "4940521800534554",
+        "bb": "234",
+        "dd": "11",
+        "ee": "22",
+        "Save": false,
+        "Verify": false
+      }
+    }
+  },
+  "customerSelfServiceReturn":{
+    "orderId": "",
+    "orderReference": "",
+    "edmInvoiceId": "",
+    "edmOrderId": "",
+    "searchTerm": "treats",
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:12345",
+    "sellerName": "Pet Culture",
+    "deliveryAddressId": "",
+    "deliveryAreaId": "",
+    "deliverySuburbId": "",
+    "timeSlotId": "",
+    "windowDate": "",
+    "deliveryDateText": "",
+    "deliveryTimeText": "",
+    "wowDeliveryCharges": 0,
+    "edmDeliveryCharges": 0,
+    "rewardPointBefore": 0,
+    "rewardPointAfter": 0,
+    "edmTotal": 0,
+    "wowTotal": 0,
+    "packagingFee": "",
+    "totalQuantity": 0,
+    "totalWowQuantity": 0,
+    "totalEdmQuantity": 0,
+    "orderTotal": 0,
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    },
+    "rewards": {
+      "partnerId": 20,
+      "siteId": 1,
+      "posId": 1,
+      "loyaltySiteType": "E",
+      "cardNo": 9355125316613
+    },
+    "items": [
+      {
+        "stockCode": "",
+        "quantity": 2,
+        "pricePerItem": 0,
+        "isEDMProduct": "true"
+      },
+      {
+        "stockCode": "",
+        "quantity": 0,
+        "pricePerItem": 0,
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "payment": {
+      "creditCard": {
+        "aa": "4940521800534554",
+        "bb": "234",
+        "dd": "11",
+        "ee": "22",
+        "Save": false,
+        "Verify": false
       }
     }
   }
+}
