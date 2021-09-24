@@ -267,9 +267,14 @@ jobs:
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
           npm run browserstackTest -- --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
           chmod +x ./poll-build-status.sh
-          bash ./poll-build-status.sh
+        #    bash ./poll-build-status.sh
         displayName: "Npm install and run tests on BrowserStack"
 
+      - task: Bash@3
+        inputs:
+          targetType: "filePath"
+          filePath: ./poll-build-status.sh
+        displayName: "Polling for BrowserStack build status"
       # - task: ShellScript@2
       #   inputs:
       #     scriptPath: ./poll-build-status.sh
