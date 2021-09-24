@@ -13,7 +13,7 @@ BUILD_STATUS="running"
 
 $(sleep $BUILD_TIME_AVG)
 
-while [ "$BUILD_STATUS" == "running" ]
+while [ $BUILD_STATUS == "running" ]
 do
   # Get the build status
   $(browserstack-cypress build-info $BUILD_ID > temp.txt)
