@@ -3,4 +3,4 @@ export class MyAccountPage {
     return cy.get('shared-navigation-menu a[queryparamshandling]')
   }
 }
-export const onMyAccountPage = new MyAccountPage();
+export const onMyAccountPage = new MyAccountPage()

@@ -1,7 +1,7 @@
 /// <reference types="cypress-xpath" />
-import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
-import {onSearchResultsPage} from '../pageObjects/SearchResultsPage'
-import {onSideCartPage} from '../../../sideCart/ui/pageObjects/SideCartPage'
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onSearchResultsPage } from '../pageObjects/SearchResultsPage'
+import { onSideCartPage } from '../../../sideCart/ui/pageObjects/SideCartPage'
 
 Cypress.Commands.add('searchAndAddProductsToCart', (testData) => {
   const items = testData.items

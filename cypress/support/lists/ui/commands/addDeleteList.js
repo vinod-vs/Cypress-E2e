@@ -1,6 +1,6 @@
-import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
-import {onSearchResultsPage} from '../../../search/ui/pageObjects/SearchResultsPage'
-import {onListsPage} from '../pageObjects/ListsPage'
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onSearchResultsPage } from '../../../search/ui/pageObjects/SearchResultsPage'
+import { onListsPage } from '../pageObjects/ListsPage'
 
 Cypress.Commands.add('searchAndAddProductToNewList', (listName, searchTerm) => {
   onHomePage.getSearchHeader().type(searchTerm).type('{enter}')

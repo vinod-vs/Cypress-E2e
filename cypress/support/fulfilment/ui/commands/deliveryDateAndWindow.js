@@ -1,4 +1,4 @@
-import {onDeliveryDateAndWindowPage} from '../pageObjects/DeliveryDateAndWindowPage'
+import { onDeliveryDateAndWindowPage } from '../pageObjects/DeliveryDateAndWindowPage'
 import '../../../utilities/ui/utility'
 
 Cypress.Commands.add('selectDeliveryDateAndWindow', (tradingAccAddress) => {

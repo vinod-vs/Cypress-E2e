@@ -1,6 +1,6 @@
-import {onLoginPage} from '../pageObjects/LoginPage'
-import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
-import {onDeliveryDateAndWindowPage} from '../../../fulfilment/ui/pageObjects/DeliveryDateAndWindowPage'
+import { onLoginPage } from '../pageObjects/LoginPage'
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onDeliveryDateAndWindowPage } from '../../../fulfilment/ui/pageObjects/DeliveryDateAndWindowPage'
 
 Cypress.Commands.add('loginViaUi', (shopper) => {
   cy.visit('shop/securelogin')

@@ -1,4 +1,4 @@
-import {onCheckoutPage} from '../pageObjects/CheckoutPage'
+import { onCheckoutPage } from '../pageObjects/CheckoutPage'
 import '../../../utilities/ui/utility'
 
 Cypress.Commands.add('selectAnyAvailableDeliveryTimeSlotAndSave', () => {

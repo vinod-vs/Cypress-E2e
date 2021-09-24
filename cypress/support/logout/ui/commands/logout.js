@@ -1,5 +1,5 @@
-import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
-import {onMyAccountPage} from '../../../myAccount/ui/pageObjects/MyAccountPage'
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onMyAccountPage } from '../../../myAccount/ui/pageObjects/MyAccountPage'
 
 Cypress.Commands.add('logoutViaUi', (shopper) => {
   onHomePage.getMyAccount().contains('My Account').click()
