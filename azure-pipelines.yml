@@ -253,13 +253,6 @@ jobs:
     pool:
       name: wlx-ubuntu1804
     steps:
-      # - task: BrowserStackConfig@0
-      #   condition: succeededOrFailed()
-      #   inputs:
-      #     BrowserStackServiceEndPoint: "BrowserStack Connection"
-      #     browserstackLocal: true
-      #     bsLocalOptions: '{"verbose": true, "forceLocal": true}'
-
       - script: |
           npm install
           npm install -g browserstack-cypress-cli
@@ -267,7 +260,6 @@ jobs:
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
           npm run browserstackTest -- --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
           chmod +x ./poll-build-status.sh
-        #    bash ./poll-build-status.sh
         displayName: "Npm install and run tests on BrowserStack"
 
       - task: Bash@3
@@ -275,33 +267,9 @@ jobs:
           targetType: "filePath"
           filePath: ./poll-build-status.sh
         displayName: "Polling for BrowserStack build status"
-      # - task: ShellScript@2
-      #   inputs:
-      #     scriptPath: ./poll-build-status.sh
-      #   displayName: "Polling for BrowserStack build status"
 
       - script: |
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
         displayName: "Stop BrowserStack local"
 
       - task: BrowserStackResults@0
-      # - task: Npm@1
-      #   condition: succeededOrFailed()
-      #   inputs:
-      #     command: custom
-      #     customCommand: run browserstackTest "--env" "tags=B2B-API/API/B2B-UI,fileConfig=b2b" "--spec" "cypress/integration/login/apiTests/login.spec.js"
-      #   displayName: "Npm install and run tests on BrowserStack"
-      # - task: BrowserStackStopLocal@0
-      #   condition: succeededOrFailed()
-      # - task: BrowserStackResults@0
-      #   condition: succeededOrFailed()
-      # - task: NodeTool@0
-      #   inputs:
-      #     versionSpec: "14.x"
-      #   displayName: "Run tests on BrowserStack"
-      # - script: |
-      #     npm install
-      #     ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests
-      #     npm run browserstackTest --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b" --spec "cypress/integration/login/apiTests/login.spec.js"
-      #     ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier CypressLocalConnection1
-      #   displayName: "Npm install and run tests on BrowserStack"
