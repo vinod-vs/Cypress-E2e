@@ -28,9 +28,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
     })
 
     it('MPPF-954 | EM | Verify CUP details for different measure type', () => {
-
       cup.forEach(cupdetails => {
-        cy.log('=====VERIFYING CUP DETAILS FOR PRODUCT:'+cupdetails.searchTerm+' ========')
+        cy.log('=====VERIFYING CUP DETAILS FOR PRODUCT:' + cupdetails.searchTerm + ' ========')
         cy.loginViaApi(shoppers.emAccount2).then((response) => {
           expect(response).to.have.property('LoginResult', 'Success')
           serachForEDMproductWithCUPAndVerfiy(cupdetails)
@@ -40,8 +39,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
   })
 })
 
-
-function serachForEDMproductWithCUPAndVerfiy(cupTestdata) {
+function serachForEDMproductWithCUPAndVerfiy (cupTestdata) {
   searchRequest.SearchTerm = cupTestdata.searchTerm
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -51,166 +49,161 @@ function serachForEDMproductWithCUPAndVerfiy(cupTestdata) {
   })
 }
 
-function returnCUPprice(cupTestdata) {
-
+function returnCUPprice (cupTestdata) {
   let productPrice
-  //find out cup prrice needs to calculated based on base price or sale price
-  if (cupTestdata.cupCalcBasedOn == "basePrice") {
+  // find out cup prrice needs to calculated based on base price or sale price
+  if (cupTestdata.cupCalcBasedOn == 'basePrice') {
     productPrice = Number(cupTestdata.basePrice)
-  }
-  else {
+  } else {
     productPrice = Number(cupTestdata.salePrice)
   }
 
-  //calculate cup price
+  // calculate cup price
   let expectedCupPrice = new Number(0)
   if (cupTestdata.itemUnit == cupTestdata.comparativeUnit) {
     expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice) / Number(cupTestdata.itemSize)
-  }
-  else if (cupTestdata.itemUnit != cupTestdata.comparativeUnit) {
-
+  } else if (cupTestdata.itemUnit != cupTestdata.comparativeUnit) {
     let adjustmentValue
     switch (cupTestdata.measureType) {
       case 'weight':
         adjustmentValue = adjustItemsizeToComparativeSizeForDiffWeightComb(cupTestdata)
-        break;
+        break
       case 'volume':
         adjustmentValue = adjustItemsizeToComparativeSizeForDiffVolumeComb(cupTestdata)
-        break;
+        break
       case 'length':
         adjustmentValue = adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata)
-        break;
+        break
       default:
         adjustmentValue = 1
     }
     expectedCupPrice = (Number(cupTestdata.comparativeSize) * productPrice * adjustmentValue) / Number(cupTestdata.itemSize)
   }
 
-  return round(expectedCupPrice);
+  return round(expectedCupPrice)
 }
 
-function adjustItemsizeToComparativeSizeForDiffWeightComb(cupTestdata) {
+function adjustItemsizeToComparativeSizeForDiffWeightComb (cupTestdata) {
   let adjustmentValue = Number(0)
   cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
-  if (cupTestdata.itemUnit == "G" && cupTestdata.comparativeUnit == "KG") {
+  if (cupTestdata.itemUnit == 'G' && cupTestdata.comparativeUnit == 'KG') {
     adjustmentValue = 1000
   }
 
-  if (cupTestdata.itemUnit == "G" && cupTestdata.comparativeUnit == "MG") {
+  if (cupTestdata.itemUnit == 'G' && cupTestdata.comparativeUnit == 'MG') {
     adjustmentValue = 100
   }
 
-  if (cupTestdata.itemUnit == "MG" && cupTestdata.comparativeUnit == "G") {
+  if (cupTestdata.itemUnit == 'MG' && cupTestdata.comparativeUnit == 'G') {
     adjustmentValue = 0.01
   }
 
-  if (cupTestdata.itemUnit == "MG" && cupTestdata.comparativeUnit == "KG") {
+  if (cupTestdata.itemUnit == 'MG' && cupTestdata.comparativeUnit == 'KG') {
     adjustmentValue = 10000
   }
 
-  if (cupTestdata.itemUnit == "KG" && cupTestdata.comparativeUnit == "G") {
+  if (cupTestdata.itemUnit == 'KG' && cupTestdata.comparativeUnit == 'G') {
     adjustmentValue = 0.0001
   }
 
-  if (cupTestdata.itemUnit == "KG" && cupTestdata.comparativeUnit == "MG") {
+  if (cupTestdata.itemUnit == 'KG' && cupTestdata.comparativeUnit == 'MG') {
     adjustmentValue = 0.00001
   }
   cy.log('adjustmentValue:' + adjustmentValue)
 
-  return adjustmentValue;
+  return adjustmentValue
 }
 
-function adjustItemsizeToComparativeSizeForDiffVolumeComb(cupTestdata) {
+function adjustItemsizeToComparativeSizeForDiffVolumeComb (cupTestdata) {
   let adjustmentValue = Number(0)
   cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
-  if (cupTestdata.itemUnit == "ML" && cupTestdata.comparativeUnit == "L") {
+  if (cupTestdata.itemUnit == 'ML' && cupTestdata.comparativeUnit == 'L') {
     adjustmentValue = 1000
   }
 
-  if (cupTestdata.itemUnit == "ML" && cupTestdata.comparativeUnit == "KL") {
+  if (cupTestdata.itemUnit == 'ML' && cupTestdata.comparativeUnit == 'KL') {
     adjustmentValue = 10000
   }
 
-  if (cupTestdata.itemUnit == "L" && cupTestdata.comparativeUnit == "ML") {
+  if (cupTestdata.itemUnit == 'L' && cupTestdata.comparativeUnit == 'ML') {
     adjustmentValue = 0.001
   }
 
-  if (cupTestdata.itemUnit == "L" && cupTestdata.comparativeUnit == "KL") {
+  if (cupTestdata.itemUnit == 'L' && cupTestdata.comparativeUnit == 'KL') {
     adjustmentValue = 1000
   }
 
-  if (cupTestdata.itemUnit == "KL" && cupTestdata.comparativeUnit == "L") {
+  if (cupTestdata.itemUnit == 'KL' && cupTestdata.comparativeUnit == 'L') {
     adjustmentValue = 0.01
   }
 
-  if (cupTestdata.itemUnit == "KL" && cupTestdata.comparativeUnit == "ML") {
+  if (cupTestdata.itemUnit == 'KL' && cupTestdata.comparativeUnit == 'ML') {
     adjustmentValue = 0.00001
   }
   cy.log('adjustmentValue:' + adjustmentValue)
 
-  return adjustmentValue;
+  return adjustmentValue
 }
 
-function adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata) {
+function adjustItemsizeToComparativeSizeForDiffLengthComb (cupTestdata) {
   let adjustmentValue = Number(0)
   cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
-  if (cupTestdata.itemUnit == "MM" && cupTestdata.comparativeUnit == "CM") {
+  if (cupTestdata.itemUnit == 'MM' && cupTestdata.comparativeUnit == 'CM') {
     adjustmentValue = 100
   }
 
-  if (cupTestdata.itemUnit == "MM" && cupTestdata.comparativeUnit == "M") {
+  if (cupTestdata.itemUnit == 'MM' && cupTestdata.comparativeUnit == 'M') {
     adjustmentValue = 1000
   }
 
-  if (cupTestdata.itemUnit == "CM" && cupTestdata.comparativeUnit == "MM") {
+  if (cupTestdata.itemUnit == 'CM' && cupTestdata.comparativeUnit == 'MM') {
     adjustmentValue = 0.001
   }
 
-  if (cupTestdata.itemUnit == "CM" && cupTestdata.comparativeUnit == "M") {
+  if (cupTestdata.itemUnit == 'CM' && cupTestdata.comparativeUnit == 'M') {
     adjustmentValue = 1000
   }
 
-  if (cupTestdata.itemUnit == "M" && cupTestdata.comparativeUnit == "CM") {
+  if (cupTestdata.itemUnit == 'M' && cupTestdata.comparativeUnit == 'CM') {
     adjustmentValue = 0.0001
   }
 
-  if (cupTestdata.itemUnit == "M" && cupTestdata.comparativeUnit == "MM") {
+  if (cupTestdata.itemUnit == 'M' && cupTestdata.comparativeUnit == 'MM') {
     adjustmentValue = 0.00001
   }
   cy.log('adjustmentValue:' + adjustmentValue)
 
-  return adjustmentValue;
+  return adjustmentValue
 }
 
-function round(num) {
-  var m = Number((Math.abs(num) * 100).toPrecision(15));
-  return Math.round(m) / 100 * Math.sign(num);
+function round (num) {
+  const m = Number((Math.abs(num) * 100).toPrecision(15))
+  return Math.round(m) / 100 * Math.sign(num)
 }
 
-function roundOfDecimaltoTwoDigit(num) {
-  return (Math.round(num * 100) / 100).toFixed(2);
+function roundOfDecimaltoTwoDigit (num) {
+  return (Math.round(num * 100) / 100).toFixed(2)
 }
 
-function verifyCupValues(cupTestdata) {
+function verifyCupValues (cupTestdata) {
   let expCupPrice
   expCupPrice = returnCUPprice(cupTestdata)
   cy.log('expectedCUPPrice: ' + expCupPrice)
 
-  //cup price
+  // cup price
   expect(Number(cupTestdata.cupPrice)).to.be.equal(expCupPrice)
-  //hasCupPrice
+  // hasCupPrice
   expect(cupTestdata.hasCupPrice).to.be.equal(true)
-  //CupMeasure
-  let expComparativeSize = cupTestdata.comparativeSize
-  let expComparativeUnit = cupTestdata.comparativeUnit
-  let expCUPMeasure = expComparativeSize + expComparativeUnit
+  // CupMeasure
+  const expComparativeSize = cupTestdata.comparativeSize
+  const expComparativeUnit = cupTestdata.comparativeUnit
+  const expCUPMeasure = expComparativeSize + expComparativeUnit
   cy.log('expCUPMeasure: ' + expCUPMeasure)
   expect(cupTestdata.cupMeasure).to.be.equal(expCUPMeasure)
-  //CupString
+  // CupString
   let roundOfExpectedCUPprice
   roundOfExpectedCUPprice = roundOfDecimaltoTwoDigit(expCupPrice)
-  let expCUPString = '$' + roundOfExpectedCUPprice + ' / ' + expCUPMeasure
+  const expCUPString = '$' + roundOfExpectedCUPprice + ' / ' + expCUPMeasure
   cy.log('expCUPString: ' + expCUPString)
   expect(cupTestdata.cupString).to.be.equal(expCUPString)
-
 }
