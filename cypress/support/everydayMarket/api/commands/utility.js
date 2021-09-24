@@ -22,6 +22,7 @@ import '../../../payment/api/commands/zero'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../invoices/api/commands/commands'
 import '../../../fulfilment/api/commands/fulfilment'
+import '../../../utilities/api/apiUtilities'
 
 Cypress.Commands.add('placeAnySingleLineItemEdmOrder', (searchTerm, quantity) => {
   // Set fulfilment using the new /windows endpoint
@@ -65,7 +66,7 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
   return placeOrder()
 })
 
-function placeOrder () {
+function placeOrder() {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
@@ -303,9 +304,15 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
     creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
   })
   cy.creditcardPayment(testData.payment.creditCard, creditcardSessionHeader).then((response) => {
+    cy.log('creditcardPaymentResponse: ' + JSON.stringify(response))
     expect(response.status.responseText).to.be.eqls('ACCEPTED')
-    digitalPaymentRequest.payments[0].paymentInstrumentId = response.itemId
+    cy.getPaymentInstrumentId(response)
   })
+
+  cy.get('@paymentInstrumentId').then((paymentInstrumentId) => {
+    digitalPaymentRequest.payments[0].paymentInstrumentId = paymentInstrumentId
+  })
+
   cy.digitalPay(digitalPaymentRequest).then((response) => {
     expect(response.TransactionReceipt).to.not.be.null
     expect(response.PlacedOrderId).to.not.be.null
@@ -318,6 +325,18 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
     expect(response.Order.OrderId).to.eqls(confirmOrderRequest.placedOrderId)
     return response
   })
+})
+
+Cypress.Commands.add('getPaymentInstrumentId', (creditcardPaymentResponse) => {
+  let paymentInstrumentId = 0
+  if (creditcardPaymentResponse.itemId != undefined || creditcardPaymentResponse.itemId != null) {
+    paymentInstrumentId = creditcardPaymentResponse.itemId
+    cy.log('creditcardPaymentResponse.itemId: ' + creditcardPaymentResponse.itemId)
+  } else if (creditcardPaymentResponse.paymentInstrument != undefined || creditcardPaymentResponse.paymentInstrument != null) {
+    paymentInstrumentId = creditcardPaymentResponse.paymentInstrument.itemId
+    cy.log('creditcardPaymentResponse.paymentInstrument.itemId: ' + creditcardPaymentResponse.paymentInstrument.itemId)
+  }
+  cy.wrap(paymentInstrumentId).as('paymentInstrumentId')
 })
 
 Cypress.Commands.add('verifyOrderInvoice', (testData) => {
@@ -361,7 +380,6 @@ Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchRes
   cupTestdata.cupMeasure = cupMeasure
   cupTestdata.hasCupPrice = hasCupPrice
   cupTestdata.cupString = cupString
-  cy.log('product: '+cupTestdata.searchTerm+' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
+  cy.log('product: ' + cupTestdata.searchTerm + ' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
 
 })
-

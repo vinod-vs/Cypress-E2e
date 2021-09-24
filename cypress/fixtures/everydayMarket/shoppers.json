@@ -13,5 +13,16 @@
       "rewardsPassword": "testing123Rewards",
       "shopperId": "8409758",
       "platform": "B2C"
+    },
+    "emAccount3ForOrderAmendment": {
+      "email": "rjagadish+auto2@woolworths.com.au",
+      "password": "testing123",
+      "rewardsCardNumber": 9355125324854,
+      "rewardsEmail": "rjagadish@woolworths.com.au",
+      "rewardsPassword": "testing123Rewards",
+      "shopperId": "8449629",
+      "platform": "B2C"
     }
   }
+
+  
