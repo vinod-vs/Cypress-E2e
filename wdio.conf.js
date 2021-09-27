@@ -1,6 +1,6 @@
 export const reporters = ['browserstack']
 export const reporterOptions = {
   browserstack: {
-    outputDir: './'
+    outputDir: './results'
   }
 }
