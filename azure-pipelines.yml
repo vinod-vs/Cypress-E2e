@@ -272,4 +272,6 @@ jobs:
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
         displayName: "Stop BrowserStack local"
 
-      - task: BrowserStackResults@0
+      - task: browserstackcom.browserstack-vsts-extension.reports-task.BrowserStackResults@0
+        displayName: "BrowserStack Results."
+        continueOnError: true
