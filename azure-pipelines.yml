@@ -84,7 +84,7 @@ jobs:
         inputs:
           testRunner: "JUnit"
           testResultsFiles: "**/results-*.xml"
-          testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
+          testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
           mergeTestResults: true
           searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
         displayName: "Publish Test Results"
@@ -186,7 +186,7 @@ jobs:
         inputs:
           testRunner: "JUnit"
           testResultsFiles: "**/results-*.xml"
-          testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
+          testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
           mergeTestResults: true
           searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
         displayName: "Publish Test Results"
