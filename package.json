@@ -31,8 +31,7 @@
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.2.0",
         "moment": "^2.29.1",
-        "standard": "^16.0.3",
-        "wdio-browserstack-reporter": "^0.1.3"
+        "standard": "^16.0.3"
     },
     "standard": {
         "env": [

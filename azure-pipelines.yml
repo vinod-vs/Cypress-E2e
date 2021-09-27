@@ -272,6 +272,15 @@ jobs:
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
         displayName: "Stop BrowserStack local"
 
-      - task: browserstackcom.browserstack-vsts-extension.reports-task.BrowserStackResults@0
-        displayName: "BrowserStack Results"
-        continueOnError: true
+      - task: AzureCLI@2
+        displayName: "Upload BrowserStack Reports"
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            echo '============================================ Uploading run results to blob storage =================================='
+            az storage blob upload-batch -d '$web/browserstack/B2B/$(Build.BuildId)' -s ./results/browserstack-cypress-report.html --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/browserstack/B2B/$(Build.BuildId)/'
+          powerShellErrorActionPreference: "continue"
