@@ -273,5 +273,5 @@ jobs:
         displayName: "Stop BrowserStack local"
 
       - task: browserstackcom.browserstack-vsts-extension.reports-task.BrowserStackResults@0
-        displayName: "BrowserStack Results."
+        displayName: "BrowserStack Results"
         continueOnError: true
