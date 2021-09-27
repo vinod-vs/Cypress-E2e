@@ -12,8 +12,8 @@
             ]
         },
         {
-            "browser": "safari",
-            "os": "OS X Catalina",
+            "browser": "edge",
+            "os": "OS X Big Sur",
             "versions": [
                 "latest"
             ]
