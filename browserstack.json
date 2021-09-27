@@ -10,6 +10,13 @@
             "versions": [
                 "latest"
             ]
+        },
+        {
+            "browser": "safari",
+            "os": "OS X Catalina",
+            "versions": [
+                "latest"
+            ]
         }
     ],
     "run_settings": {
