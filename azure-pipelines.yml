@@ -248,7 +248,7 @@ jobs:
                 }]
             }]}' https://hooks.slack.com/services/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
 
-  - job: RunTestsOnBrowserStack
+  - job: RunB2BTestsOnBrowserStack
     displayName: "Install Node.js and run tests on BrowserStack"
     pool:
       name: wlx-ubuntu1804
@@ -258,7 +258,7 @@ jobs:
           npm install -g browserstack-cypress-cli
           chmod +x ./BrowserStackLocal
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
-          npm run browserstackTest -- --sync --env "tags=B2B-API/API/B2B-UI,fileConfig=b2b"
+          npm run browserstackTest -- --sync --env "tags=B2B-UI,fileConfig=b2b"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2B tests on BrowserStack"
 
@@ -281,6 +281,43 @@ jobs:
           scriptLocation: "inlineScript"
           inlineScript: |
             echo '============================================ Uploading run results to blob storage =================================='
-            az storage blob upload-batch -d '$web/browserstack/B2B/$(Build.BuildId)' -s './results/browserstack-cypress-report.html' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            az storage blob upload-batch -d '$web/browserstack/B2B/$(Build.BuildId)' -s results --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/browserstack/B2B/$(Build.BuildId)/'
+          powerShellErrorActionPreference: "continue"
+
+  - job: RunB2CTestsOnBrowserStack
+    displayName: "Install Node.js and run tests on BrowserStack"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - script: |
+          npm install
+          npm install -g browserstack-cypress-cli
+          chmod +x ./BrowserStackLocal
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
+          npm run browserstackTest -- --sync --env "tags=B2C-UI,fileConfig=b2b"
+          chmod +x ./poll-build-status.sh
+        displayName: "Npm install and run B2C tests on BrowserStack"
+
+      - task: Bash@3
+        inputs:
+          targetType: "filePath"
+          filePath: ./poll-build-status.sh
+        displayName: "Polling for BrowserStack build status"
+
+      - script: |
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
+        displayName: "Stop BrowserStack local"
+
+      - task: AzureCLI@2
+        displayName: "Upload BrowserStack Reports"
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            echo '============================================ Uploading run results to blob storage =================================='
+            az storage blob upload-batch -d '$web/browserstack/B2C/$(Build.BuildId)' -s results --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
             echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/browserstack/B2B/$(Build.BuildId)/'
           powerShellErrorActionPreference: "continue"
