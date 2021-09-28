@@ -257,7 +257,7 @@ jobs:
           npm install
           npm install -g browserstack-cypress-cli
           chmod +x ./BrowserStackLocal
-          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local './results/'
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
           npm run browserstackTest -- --sync --env "tags=B2B-UI,fileConfig=b2b"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2B tests on BrowserStack"
@@ -294,8 +294,8 @@ jobs:
           npm install
           npm install -g browserstack-cypress-cli
           chmod +x ./BrowserStackLocal
-          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local --folder './results/'
-          npm run browserstackTest -- --sync --env "tags=B2C-UI,fileConfig=b2b"
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
+          npm run browserstackTest -- --sync --env "tags=B2C-UI,fileConfig=b2c"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2C tests on BrowserStack"
 
@@ -307,6 +307,8 @@ jobs:
 
       - script: |
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
+          ls -l
+          cd results; ls -l
         displayName: "Stop BrowserStack local"
 
       - task: AzureCLI@2
