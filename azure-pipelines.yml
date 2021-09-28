@@ -270,6 +270,7 @@ jobs:
 
       - script: |
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
+          ls -l
         displayName: "Stop BrowserStack local"
 
       - task: AzureCLI@2
