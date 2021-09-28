@@ -319,5 +319,5 @@ jobs:
           inlineScript: |
             echo '============================================ Uploading run results to blob storage =================================='
             az storage blob upload-batch -d '$web/browserstack/B2C/$(Build.BuildId)' -s results --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
-            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/browserstack/B2B/$(Build.BuildId)/'
+            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/browserstack/B2C/$(Build.BuildId)/'
           powerShellErrorActionPreference: "continue"
