@@ -10,6 +10,7 @@
         "pretest": "npx standard || true",
         "test": "cypress run",
         "browserstackTest": "browserstack-cypress run",
+        "browserstackGenerateReport": "browserstack-cypress generate-report",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
         "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"

@@ -307,6 +307,7 @@ jobs:
 
       - script: |
           ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
+          npm run browserstackGenerateReport -- $(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -c 10-)
           ls -l
           cd results; ls -l
         displayName: "Stop BrowserStack local"

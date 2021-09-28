@@ -7,7 +7,6 @@ cypress/results
 cypress/.DS_Store
 allure-report
 cypress/allure-results
-log/usage.log
-results/browserstack-cypress-report.html
-results/browserstack-cypress-report.json
+log
+results
 local.log
