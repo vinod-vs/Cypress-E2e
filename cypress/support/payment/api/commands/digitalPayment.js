@@ -13,3 +13,13 @@ Cypress.Commands.add('openPayDigitalPay', (openPayDigitalPayment) => {
     return response.body
   })
 })
+
+Cypress.Commands.add('getDigitalPaymentInstruments', () => {
+  cy.api({
+    method: 'GET',
+    url: Cypress.env('digitalPaymentInstrumentsEndpoint')
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+    return response.body
+  })
+})

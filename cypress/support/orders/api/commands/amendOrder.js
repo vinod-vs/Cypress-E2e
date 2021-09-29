@@ -13,7 +13,7 @@ Cypress.Commands.add('amendOrder', (orderId) => {
 Cypress.Commands.add('getCurrentlyAmendingOrder', () => {
   cy.api({
     method: 'GET',
-    url: Cypress.env('amendingOrderEndPoint'),
+    url: Cypress.env('amendingOrderEndPoint')
   }).then((response) => {
     expect(response.status).to.eq(200)
     return response.body
@@ -38,7 +38,7 @@ Cypress.Commands.add('cancelAmendingOrder', (traderOrderId, revertExistingAmend)
 Cypress.Commands.add('clearAnyOrderAmendments', () => {
   cy.getCurrentlyAmendingOrder().as('amendOrderResponse')
   cy.get('@amendOrderResponse').then((amendOrderResponse) => {
-    if(amendOrderResponse.OrderId !== null) {
+    if (amendOrderResponse.OrderId !== null) {
       cy.log('Found ' + amendOrderResponse.OrderId + ' in currently amending state. Canceling its amendment now.')
       cy.cancelAmendingOrder(amendOrderResponse.OrderId, true)
     } else {
@@ -46,5 +46,3 @@ Cypress.Commands.add('clearAnyOrderAmendments', () => {
     }
   })
 })
-
-
