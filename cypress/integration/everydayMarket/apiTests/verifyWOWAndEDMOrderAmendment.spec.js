@@ -27,7 +27,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
     it('[API] RP-5031 EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
       const purchaseQty = 2
-      const shopper = shoppers.emAccount2
+      const shopper = shoppers.emAccount3ForOrderAmendment
       let req
 
       // Login using shopper saved in the fixture and verify it's successful
