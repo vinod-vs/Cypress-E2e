@@ -1,7 +1,7 @@
 {
     "name": "wow-e2e-api-automation",
     "version": "1.0.0",
-    "description": "E2E API Automation Framework",
+    "description": "E2E Automation Framework",
     "main": "index.js",
     "scripts": {
         "cypress:open": "cypress open",
