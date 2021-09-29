@@ -7,3 +7,6 @@ cypress/results
 cypress/.DS_Store
 allure-report
 cypress/allure-results
+log
+results
+local.log

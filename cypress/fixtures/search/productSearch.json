@@ -4,5 +4,5 @@
     "PageNumber": 1,
     "PageSize": 50,
     "SearchTerm": "",
-    "SortType": "Name"
+    "SortType": "TraderRelevance"
 }

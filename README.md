@@ -76,18 +76,13 @@ Here "API" is the tag for this test suite mentioned inside the 'TestFilter'.
 * For running the tests use environment variable like this:
     --env fileConfig=b2b
 
-# ToDo:
-1. ~~Running test with multiple set of data and iterate through it.~~
-2. Executing tests in parallel and get the test report consolidated. - Ara
-3. ~~CI/CD pipeline variables with smart selection for Browser, Run Env. variable and Base URL.~~
-4. Slack integration - Kristian
-5. ~~Custom commands to be used across multiple tests.~~
-6. Update readme file to include info. about using the cypress test automation project and running tests. - Amit, Kristian, Ara
-7. ~~Having custom command files for specific functional modules.~~ - Amit
-8. ~~Allure reporting implementation.~~
-
 # Setting fulfilment (type + window)
 From your test, use fulfilment fixture files (fulfilmentType.js & fulfilmentWindowType.js) to specify the fulfilment selection type (i.e. Delivery, Pick up, DTB) &
 fulfilment window type (i.e. Fleet, Delivery Now etc.)
 Call appropriate commands in 'Fulfilment' module support files. To verify API responses, you can use e.g. 'searchDeliveryAddress', 'addDeliveryAddress' & 'getFulfilmentWindowViaApi', whereas if you do no not need a response value, and just need to set fulfilment as part of a broader test, use e.g. 'setFulfilmentLocationWithWindow' (passing appropriate fulfilment selection & window types defined in the fulfilment fixture files)
 
+# BrowserStack integration
+We are running only UI tests in BrowserStack for both B2C and B2B. BrowserStack config can be found in 'browserstack.json' file.\
+Locally if you want to run your test(s) in BrowserStack, please use this command:\
+`npx browserstack-cypress run --sync --env "fileConfig=b2b,tags=B2B-API" --spec "cypress/integration/login/apiTests/login.spec.js"`\
+More info: [Run your Cypress tests] (https://www.browserstack.com/docs/automate/cypress)
