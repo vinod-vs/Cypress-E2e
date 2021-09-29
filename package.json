@@ -29,7 +29,8 @@
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.2.0",
         "standard": "^16.0.3",
-        "moment": "^2.29.1"
+        "moment": "^2.29.1",
+        "junit-report-merger": "^1.0.0"
     },
     "standard": {
         "env": [
