@@ -27,13 +27,13 @@
         "cypress-multi-reporters": "^1.4.0",
         "cypress-xpath": "^1.6.2",
         "faker": "^5.5.2",
+        "junit-report-merger": "^1.0.0",
         "mocha-junit-reporter": "^2.0.0",
         "mochawesome": "^6.2.2",
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.2.0",
-        "standard": "^16.0.3",
         "moment": "^2.29.1",
-        "junit-report-merger": "^1.0.0"
+        "standard": "^16.0.3"
     },
     "standard": {
         "env": [
