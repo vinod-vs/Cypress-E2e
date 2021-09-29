@@ -43,6 +43,11 @@ parameters:
 trigger:
   - main
 
+resources:
+  webhooks:
+    - webhook: "MyWebhooktrigger" ### Webhook alias
+      connection: "MyWebhookConnection" ### Incoming webhook service connection
+
 jobs:
   - job: RunB2CTests
     displayName: "Install Node.js and run B2C tests"
