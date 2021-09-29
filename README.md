@@ -82,7 +82,7 @@ fulfilment window type (i.e. Fleet, Delivery Now etc.)
 Call appropriate commands in 'Fulfilment' module support files. To verify API responses, you can use e.g. 'searchDeliveryAddress', 'addDeliveryAddress' & 'getFulfilmentWindowViaApi', whereas if you do no not need a response value, and just need to set fulfilment as part of a broader test, use e.g. 'setFulfilmentLocationWithWindow' (passing appropriate fulfilment selection & window types defined in the fulfilment fixture files)
 
 # BrowserStack integration
-We are running only UI tests in BrowserStack for both B2C and B2B. BrowserStack config can be found in 'browserstack.json' file.\
-Locally if you want to run your test(s) in BrowserStack, please use this command:\
-`npx browserstack-cypress run --sync --env "fileConfig=b2b,tags=B2B-API" --spec "cypress/integration/login/apiTests/login.spec.js"`\
-More info: [Run your Cypress tests] (https://www.browserstack.com/docs/automate/cypress)
+We are running only UI tests in BrowserStack for both B2C and B2B. BrowserStack config can be found in 'browserstack.json' file.
+Locally if you want to run your test(s) in BrowserStack, please use this command:
+`npx browserstack-cypress run --sync --env "fileConfig=b2b,tags=B2B-API" --spec "cypress/integration/login/apiTests/login.spec.js"`
+More info: [Run your Cypress tests] (https://www.browserstack.com/docs/automate/cypress "Run your Cypress tests")
