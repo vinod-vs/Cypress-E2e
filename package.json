@@ -13,7 +13,7 @@
         "browserstackGenerateReport": "browserstack-cypress generate-report",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
-        "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
+        "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"    
     },
     "author": "Test Automation Atom|Autobots Chapter",
     "license": "ISC",
@@ -33,6 +33,7 @@
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.2.0",
         "moment": "^2.29.1",
+        "mongodb": "^4.1.2",
         "standard": "^16.0.3"
     },
     "standard": {
