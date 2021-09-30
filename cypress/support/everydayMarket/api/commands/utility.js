@@ -15,6 +15,7 @@ import * as lib from './commonHelpers'
 import '../../../search/api/commands/search'
 import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../payment/api/commands/creditcard'
+import '../../../payment/api/commands/paypal'
 import '../../../sideCart/api/commands/addItemsToTrolley'
 import '../../../sideCart/api/commands/clearTrolley'
 import '../../../payment/api/commands/digitalPayment'
@@ -23,6 +24,7 @@ import '../../../checkout/api/commands/confirmOrder'
 import '../../../invoices/api/commands/commands'
 import '../../../fulfilment/api/commands/fulfilment'
 import '../../../utilities/api/apiUtilities'
+import { paymentType } from './paymentType'
 
 Cypress.Commands.add('placeAnySingleLineItemEdmOrder', (searchTerm, quantity) => {
   // Set fulfilment using the new /windows endpoint

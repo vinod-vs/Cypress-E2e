@@ -3,15 +3,22 @@
 import '../../../refunds/api/commands/commands'
 import '../../../invoices/api/commands/commands'
 
-export function verifyEventDetails (response, expectedEventIndex, expectedEventName, expectedTotalEventsLength, testData, shopperId) {
-  // Verify the event contents
-  expect(response.data[expectedEventIndex].orderId).to.equal(Number(testData.orderId))
-  expect(response.data[expectedEventIndex].orderReference).to.be.equal(testData.orderReference)
-  expect(response.data[expectedEventIndex].shopperId).to.be.equal(Number(shopperId))
-  expect(response.data[expectedEventIndex].domainEvent).to.be.equal(expectedEventName)
-  expect(response.data[expectedEventIndex].payload).to.not.be.null
-  // Verify there are only expectedTotalEventsLength events
-  expect(response.data).to.have.length(expectedTotalEventsLength)
+export function verifyEventDetails (response, expectedEventName, testData, shopperId, expectedEventCount) {
+  cy.log('Expected Event Name: ' + expectedEventName + ' , expected count: ' + expectedEventCount)
+  const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
+  cy.log('Expected events: ' + JSON.stringify(events))
+
+  events.forEach(event => {
+    // Verify the event contents
+    expect(event.orderId).to.equal(Number(testData.orderId))
+    expect(event.orderReference).to.be.equal(testData.orderReference)
+    expect(event.shopperId).to.be.equal(Number(shopperId))
+    expect(event.domainEvent).to.be.equal(expectedEventName)
+    expect(event.payload).to.not.be.null
+  })
+
+  // Verify there are only expectedEventCount events
+  expect(events).to.have.length(expectedEventCount)
 }
 
 export function verifyCommonOrderDetails (response, testData, shopperId) {
@@ -40,10 +47,9 @@ export function verifyOrderTotals (testData, confirmOrderResponse) {
   cy.log('ExpectedTotalIncludingGst: ' + testData.orderTotal)
   cy.log('TeamDiscount: ' + testData.teamDiscount)
   cy.log('OrderDiscountWithoutTeamDiscount: ' + testData.orderDiscountWithoutTeamDiscount)
-  expect(confirmOrderResponse.Order.WoolworthsSubtotal).to.be.equal(Number(testData.wowTotal))
-  expect(confirmOrderResponse.Order.MarketSubtotal).to.be.equal(Number(testData.edmTotal))
-  expect(confirmOrderResponse.Order.Subtotal).to.be.equal(Number(testData.edmTotal) + Number(testData.wowTotal))
-  // expect(confirmOrderResponse.Order.TotalIncludingGst).to.be.equal(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges))
+  expect(confirmOrderResponse.Order.WoolworthsSubtotal).to.be.equal(Number(Number.parseFloat(Number(testData.wowTotal)).toFixed(2)))
+  expect(confirmOrderResponse.Order.MarketSubtotal).to.be.equal(Number(Number.parseFloat(Number(testData.edmTotal)).toFixed(2)))
+  expect(confirmOrderResponse.Order.Subtotal).to.be.equal(Number(Number.parseFloat(Number(testData.edmTotal) + Number(testData.wowTotal)).toFixed(2)))
   expect(confirmOrderResponse.Order.TotalIncludingGst).to.be.equal(Number(Number.parseFloat(testData.orderTotal).toFixed(2)))
 }
 
@@ -54,12 +60,6 @@ export function generateRandomString () {
     randomStr += characters.charAt(Math.floor(Math.random() * characters.length))
   }
   return randomStr
-}
-
-export function getExpectedRewardPoints (deferredDiscountAmount, shippedItemQuantity, totalQuantity) {
-  let expectedRewardPoints = new Number(0)
-  expectedRewardPoints = Number(Math.round((deferredDiscountAmount * 200 * shippedItemQuantity) / totalQuantity))
-  return expectedRewardPoints
 }
 
 export function verifyRefundDetails (traderOrderId, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
@@ -90,4 +90,47 @@ export function verifyInvoiceDetails (invoice, testData) {
   expect(invoice.MarketInvoices[1].OrderDate).to.be.null
   expect(invoice.MarketInvoices[1].Address).to.not.be.null
   expect(invoice.MarketInvoices[1].DayRangeDispatchNote).to.be.null
+}
+
+export function verifyInitialOrderDetails (response, testData, shopperId) {
+  // Common Order details
+  verifyCommonOrderDetails(response, testData, shopperId)
+
+  // Seller details
+  expect(response.invoices[0].seller.sellerId).to.not.be.null
+  expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+
+  // Invoice details
+  expect(response.invoices[0].invoiceStatus).to.be.equal('PAID')
+  expect(response.invoices[0].wowId).to.not.be.null
+  expect(response.invoices[0].wowStatus).to.be.equal('Placed')
+  expect(response.invoices[0].seller.sellerId).to.not.be.null
+  expect(response.invoices[0].seller.sellerName).to.not.be.null
+  expect(response.invoices[0].shipments.length).to.be.equal(0)
+  expect(response.invoices[0].lineItems.length).to.be.equal(1)
+  expect(response.invoices[0].legacyId).to.not.be.null
+  expect(response.invoices[0].legacyIdFormatted).to.not.be.null
+  expect(response.invoices[0].invoiceTotal).to.be.greaterThan(0)
+  expect(response.invoices[0].updatedTimeStampUtc).to.not.be.null
+  expect(response.invoices[0].refunds.length).to.be.equal(0)
+  expect(response.invoices[0].orderTrackingStatus).to.be.equal('Received')
+  expect(response.invoices[0].pdfLink).to.not.be.null
+  expect(response.invoices[0].legacyIdFormatted).to.be.equal(testData.edmOrderId)
+  // Line item details
+  expect(response.invoices[0].lineItems[0].wowId).to.not.be.null
+  expect(response.invoices[0].lineItems[0].lineItemId).to.not.be.null
+  expect(response.invoices[0].lineItems[0].legacyId).to.not.be.null
+  expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
+  expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
+  expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
+  expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
+  expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
+  expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
+  expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
+  expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
+  // Rewards Details
+  // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETREWARD')
+  expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
+  expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
+  expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }

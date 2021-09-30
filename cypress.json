@@ -46,6 +46,8 @@
         "marketplacerPartialDispatchInvoiceEndpoint": "api/v2/client/invoices/INVOICE_ID/shipments",
         "marketplacerPetCultureAPIKey": "8cd814760b888f23b7cd0e1c91976618",
         "marketplacerBigWTestAPIKey": "568cdb1aea9781bd7bfd34ae394c2cec",
+        "marketApiRetryCount": 25,
+        "marketApiTimeout": 5000,
         "cancelOrderEndPoint": "apis/ui/order/cancel",
         "amendOrderEndPoint": "apis/ui/order/amend",
         "amendingOrderEndPoint": "/api/v3/ui/order/amending",
