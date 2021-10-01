@@ -14,6 +14,7 @@ import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmO
 import * as lib from './commonHelpers'
 import '../../../search/api/commands/search'
 import '../../../checkout/api/commands/navigateToCheckout'
+import '../../../checkout/api/commands/redeemRewardsDollars'
 import '../../../payment/api/commands/creditcard'
 import '../../../payment/api/commands/paypal'
 import '../../../sideCart/api/commands/addItemsToTrolley'
@@ -298,13 +299,7 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
     cy.getTestProductFromProductSearchResponse(response, testData)
   })
 
-  // Checkout, make a CC payment and place the order
-  cy.navigateToCheckout().then((response) => {
-    expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-    digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
-  })
-
-  // Pay the order using the right payment method
+  // Checkout and Pay the order using the right payment method
   cy.payTheOrder(testData).then((response) => {
     confirmOrderRequest.placedOrderId = response.PlacedOrderId
   })
@@ -321,8 +316,31 @@ Cypress.Commands.add('payTheOrder', (testData) => {
   cy.log('PaymentType: ' + testData.paymentType)
 
   if (testData.paymentType === paymentType.PAYPAL_ONLY) {
+    // Checkout
+    cy.navigateToCheckout().then((response) => {
+      expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
+    })
+    // Pay with paypal
+    cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
+  } else if (testData.paymentType === paymentType.PAYPAL_PLUS_REWARDS) {
+    // Redeem $10 from rewards
+    cy.redeemRewardsDollars(10)
+    // Checkout
+    cy.navigateToCheckout().then((response) => {
+      expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
+    })
+    // Pay with paypal
     cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
   } else { // default is CREDIT_CARD_ONLY
+    // Checkout
+    cy.navigateToCheckout().then((response) => {
+      expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
+    })
+
+    // Pay with CC
     cy.log('Using default PaymentType: CREDIT_CARD_ONLY')
     cy.navigatingToCreditCardIframe().then((response) => {
       expect(response).to.have.property('Success', true)

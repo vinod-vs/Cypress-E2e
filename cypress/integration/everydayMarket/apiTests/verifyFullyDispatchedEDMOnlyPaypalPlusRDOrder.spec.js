@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-expressions */
 
 import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
-import rewardsDetails from '../../../fixtures/everydayMarket/rewards.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
@@ -20,23 +19,31 @@ import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
+import rewardsDetails from '../../../fixtures/everydayMarket/rewards.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] RP-5030 - Full dispatch Everyday Market Only order using paypal', () => {
+  describe('[API] RP-5093 - Place Everyday Market only order using Paypal and Rewards dollars', () => {
+    const testData = tests.VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD
+    const shopper = shoppers.emAccount2
+    const rewardsCardNumber = shopper.rewardsCardNumber
+
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('[API] RP-5030 - Full dispatch Everyday Market Only order using paypal', () => {
-      const testData = tests.VerifyFullyDispatchedEDMOnlyOrderPaypal
+    after(() => {
+      cy.addRewardPoints(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber, 10000)
+    })
+
+    it('[API] RP-5093 - Place Everyday Market only order using Paypal and Rewards dollars', () => {
+      // const testData = tests.VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD
       let orderId
       let orderReference
       let edmOrderId
       let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shopper.shopperId
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {

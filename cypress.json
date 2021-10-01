@@ -24,6 +24,7 @@
         "clearTrolleyEndpoint": "apis/ui/Trolley/Clear",
         "addItemsToTrolleyEndpoint": "apis/ui/Trolley/Items",
         "navigateToCheckoutEndpoint": "apis/ui/Checkout",
+        "checkoutRedeemRewardsDollarsEndpoint": "apis/ui/Checkout/WoolworthsRewards/Redeem",
         "creditCardIframeEndpoint": "apis/ui/Checkout/DigitalPay/InitializeCreditCardIframe",
         "creditCardPaymentEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
         "digitalPaymentEndpoint": "apis/ui/Checkout/DigitalPay/Payment",
@@ -56,6 +57,7 @@
         "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
         "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",
         "rpgEndpoint": "https://test.api-wr.com/",
+        "rpgFinaliseEndpoint": "wx/v1/loyalty/partners/transactions/finalise",        
         "rpgQueryEndpoint": "wx/v1/loyalty/partners/cards/query",
         "tags": "API/UI"
     },
