@@ -69,7 +69,7 @@ export class SideCartPage {
 
   // #region - Selectors of available products panel
   getAvailableProductsInCartPanel () {
-    return cy.get('section[aria-label="Products in your cart"]')
+    return cy.get('.auto_products-in-cart')
   }
 
   getAvailableProductsList () {
