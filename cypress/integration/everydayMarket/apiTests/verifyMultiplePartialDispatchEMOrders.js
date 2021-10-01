@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
+import rewardsDetails from '../../../fixtures/everydayMarket/rewards.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
@@ -20,6 +21,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
+const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] MPPF-903 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
@@ -87,7 +89,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
           // Get customers current reward points balance before dispatch
-          cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+          cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
             expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
           })
@@ -144,7 +146,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
     })
   })
 })
-
 
 function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
   cy.log('Partial Dispatch :' + partialDispatchNumber + ':: Tracking ID ::' + trackingId)
@@ -275,7 +276,7 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
     })
 
     // Verify the reward points are credited to customers card after EDM dispatch
-    cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
+    cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
       testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
       const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
       cy.log('Testdata JSON: ' + JSON.stringify(testData))

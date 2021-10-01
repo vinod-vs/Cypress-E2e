@@ -1,0 +1,24 @@
+{
+    "finaliseTransactionReq": {
+      "siteId": 0,
+      "posId": 0,
+      "loyaltySiteType": "E",
+      "transDateTime": "",
+      "transId": 0,
+      "uniqueTransId": "",
+      "partnerId": 0,
+      "cardNo": 0,
+      "WOWRewards": {
+        "earnedBasePoints": 0,
+        "earnedBonusPoints": 5000,
+        "roundingPoint": 0,
+        "redeemedDollars": 0,
+        "redeemedOffers": [
+          {
+            "offerId": "P20001",
+            "earnedBonusPoints": 5000
+          }
+        ]
+      }
+    }
+  }
