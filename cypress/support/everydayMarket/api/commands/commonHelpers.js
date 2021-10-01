@@ -47,10 +47,9 @@ export function verifyOrderTotals (testData, confirmOrderResponse) {
   cy.log('ExpectedTotalIncludingGst: ' + testData.orderTotal)
   cy.log('TeamDiscount: ' + testData.teamDiscount)
   cy.log('OrderDiscountWithoutTeamDiscount: ' + testData.orderDiscountWithoutTeamDiscount)
-  expect(confirmOrderResponse.Order.WoolworthsSubtotal).to.be.equal(Number(testData.wowTotal))
-  expect(confirmOrderResponse.Order.MarketSubtotal).to.be.equal(Number(testData.edmTotal))
-  expect(confirmOrderResponse.Order.Subtotal).to.be.equal(Number(testData.edmTotal) + Number(testData.wowTotal))
-  // expect(confirmOrderResponse.Order.TotalIncludingGst).to.be.equal(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges))
+  expect(confirmOrderResponse.Order.WoolworthsSubtotal).to.be.equal(Number(Number.parseFloat(Number(testData.wowTotal)).toFixed(2)))
+  expect(confirmOrderResponse.Order.MarketSubtotal).to.be.equal(Number(Number.parseFloat(Number(testData.edmTotal)).toFixed(2)))
+  expect(confirmOrderResponse.Order.Subtotal).to.be.equal(Number(Number.parseFloat(Number(testData.edmTotal) + Number(testData.wowTotal)).toFixed(2)))
   expect(confirmOrderResponse.Order.TotalIncludingGst).to.be.equal(Number(Number.parseFloat(testData.orderTotal).toFixed(2)))
 }
 
@@ -61,12 +60,6 @@ export function generateRandomString () {
     randomStr += characters.charAt(Math.floor(Math.random() * characters.length))
   }
   return randomStr
-}
-
-export function getExpectedRewardPoints (deferredDiscountAmount, shippedItemQuantity, totalQuantity) {
-  let expectedRewardPoints = new Number(0)
-  expectedRewardPoints = Number(Math.round((deferredDiscountAmount * 200 * shippedItemQuantity) / totalQuantity))
-  return expectedRewardPoints
 }
 
 export function verifyRefundDetails (traderOrderId, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {

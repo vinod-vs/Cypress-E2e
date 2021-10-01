@@ -1,0 +1,14 @@
+{
+    "baseUrl": "https://atwork.woolworths.com.au/",
+    "env": {
+        "purchaseOrderCodeEndpoint": "apis/ui/b2b/trolley/setpurchaseordercode",
+        "discoverPageEndPoint": "apis/ui/inspiration/navigation",
+        "deliveryDiscoverPageEndPoint": "apis/ui/inspiration/page/work-delivery",
+        "deliveryNowDiscoverPageEndPoint": "apis/ui/inspiration/page/work-delivery-now",
+        "pickupAndDtbDiscoverPageEndPoint": "apis/ui/inspiration/page/work-pickup",
+        "shopWithListsDiscoverPageEndPoint": "apis/ui/inspiration/page/work-shop-with-lists",
+        "onlinePricingDiscoverPageEndPoint": "apis/ui/inspiration/page/work-online-pricing-payment",
+        "bulkOrdersDiscoverPageEndPoint": "apis/ui/inspiration/page/work-bulk-orders",
+        "faqDiscoverPageEndPoint": "apis/ui/inspiration/page/work-help-and-support-faq"
+    }
+}

@@ -55,8 +55,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
             }
           },
-          retries: Cypress.env('marketApiRetryCount'),
-          timeout: Cypress.env('marketApiTimeout')
+          retries: 10,
+          timeout: 5000
         }).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
@@ -70,13 +70,13 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
                 cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
             },
-            retries: Cypress.env('marketApiRetryCount'),
-            timeout: Cypress.env('marketApiTimeout')
+            retries: 15,
+            timeout: 5000
           }).then((response) => {
             lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
             lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
@@ -90,7 +90,6 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.getRewardsCardDetails(testData.rewards.partnerId, testData.rewards.siteId, testData.rewards.posId, testData.rewards.loyaltySiteType, testData.rewards.cardNo).then((response) => {
             expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
-            cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
           })
 
           // Dispatch the complete order from MP and verify the events and order statuses
@@ -103,8 +102,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
                 }
               },
-              retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
+              retries: 10,
+              timeout: 5000
             }).then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
@@ -158,14 +157,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               cy.orderEventsApiWithRetry(orderReference, {
                 function: function (response) {
                   if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
                     cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                     throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                   }
                 },
-                retries: Cypress.env('marketApiRetryCount'),
-                timeout: Cypress.env('marketApiTimeout')
+                retries: 15,
+                timeout: 5000
               }).then((response) => {
                 // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
                 lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
@@ -182,8 +181,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 cy.log('Testdata JSON: ' + JSON.stringify(testData))
                 cy.log('EDM Total: ' + testData.edmTotal)
                 cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
-                cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
+                cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
+                expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+                // Rewards has a logic of rouding to an even number if odd
+                // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
                 expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
               })
 

@@ -8,246 +8,341 @@ variables:
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 parameters:
-- name: browser
-  displayName: Browser
-  type: string
-  default: electron
-  values:
-  - chrome
-  - edge
-  - firefox
-  - electron
+  - name: browser
+    displayName: Browser
+    type: string
+    default: electron
+    values:
+      - chrome
+      - edge
+      - firefox
+      - electron
 
-- name: tags
-  displayName: Test Tags
-  type: string
-  default: API/UI
-  values:
-  - API/UI
-  - B2C-API
-  - EDM-API
-  - EDM-UI
-  - B2B-API
-  - B2B-UI
-  - API
-  - UI 
+  - name: tags
+    displayName: Test Tags
+    type: string
+    default: API/UI
+    values:
+      - API/UI
+      - B2C-API
+      - EDM-API
+      - EDM-UI
+      - B2B-API
+      - B2B-UI
+      - API
+      - UI
 
-- name: fileConfig
-  displayName: Config File Name
-  type: string
-  default: b2c
-  values:
-  - b2c
-  - b2b
+  - name: fileConfig
+    displayName: Config File Name
+    type: string
+    default: b2c
+    values:
+      - b2c
+      - b2b
 
 trigger:
   - main
 
-stages:
-  - stage: BuildAndTestB2CTests
-    jobs:
-      - job: RunB2CTests
-        displayName: "Install Node.js and Run B2C Tests"
-        pool:
-          name: wlx-ubuntu1804
-        steps:
-          - task: NodeTool@0
-            inputs:
-              versionSpec: "14.x"
-            displayName: "Run B2C Tests"
-          - script: |
-              npm install
-              npm test -- --env tags=B2C-API/API/B2C-UI,fileConfig=b2c --browser ${{ parameters.browser }}
-              npm run allure:generate
-            displayName: "Npm install and test"
+resources:
+  webhooks:
+    - webhook: "MyWebhooktrigger" ### Webhook alias
+      connection: "MyWebhookConnection" ### Incoming webhook service connection
 
-          - task: AzureCLI@2
-            condition: succeededOrFailed()
-            displayName: "Download Report History"
-            inputs:
-              azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
-              scriptType: "pscore"
-              scriptLocation: "inlineScript"
-              inlineScript: |
-                az config set extension.use_dynamic_install=yes_without_prompt
-                echo '============================================ Retrieving history from blob =================================='
-                az storage blob directory download -c '$web' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV) -s history -d 'cypress/allure-results' --recursive
-              powerShellErrorActionPreference: "continue"
+jobs:
+  - job: RunB2CTests
+    displayName: "Install Node.js and run B2C tests"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "14.x"
+        displayName: "Run B2C Tests"
+      - script: |
+          npm install
+          npm test -- --env tags=B2C-API/API/B2C-UI,fileConfig=b2c --browser ${{ parameters.browser }}
+          npm run allure:generate
+        displayName: "Npm install and run B2C tests"
 
-          - task: Npm@1
-            condition: succeededOrFailed()
-            inputs:
-              command: custom
-              customCommand: run allure:generate
-            displayName: "Generate Allure Results"
+      - task: AzureCLI@2
+        condition: succeededOrFailed()
+        displayName: "Download Report History"
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            az config set extension.use_dynamic_install=yes_without_prompt
+            echo '============================================ Retrieving history from blob =================================='
+            az storage blob directory download -c '$web' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV) -s history -d 'cypress/allure-results' --recursive
+          powerShellErrorActionPreference: "continue"
 
-          - task: PublishTestResults@2
-            condition: succeededOrFailed()
-            inputs:
-              testRunner: 'JUnit'
-              testResultsFiles: '**/results-*.xml'
-              testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
-              mergeTestResults: true
-              searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
-            displayName: "Publish Test Results"
+      - task: Npm@1
+        condition: succeededOrFailed()
+        inputs:
+          command: custom
+          customCommand: run allure:generate
+        displayName: "Generate Allure Results"
 
-          - task: AzureCLI@2
-            displayName: "Upload Allure Reports"
-            condition: succeededOrFailed()
-            inputs:
-              azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
-              scriptType: "pscore"
-              scriptLocation: "inlineScript"
-              inlineScript: |
-                echo '============================================ Uploading run results to blob storage =================================='
-                az storage blob upload-batch -d '$web/B2C/$(Build.BuildId)' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
-                echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/B2C/$(Build.BuildId)/'
-                az storage blob upload-batch -d '$web/history' -s allure-report/history --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
-                echo 'Uploaded history to blob storage...'
-              powerShellErrorActionPreference: "continue"
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: "JUnit"
+          testResultsFiles: "**/results-*.xml"
+          testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
+          mergeTestResults: true
+          searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
+        displayName: "Publish Test Results"
 
-          - task: Bash@3
-            condition: eq(variables.isMain, true)
-            inputs:
-              targetType: 'inline'
-              script: |
-                # Write your commands here
-                echo $(Build.BuildId)
-                curl -X POST -H 'Content-type: application/json' --data '{
-                "blocks": [
-                { 
-                    "type": "section",
+      - task: Bash@3
+        displayName: "Upload to xray"
+        inputs:
+          targetType: "inline"
+          script: |
+            npm install -g junit-report-merger
+            jrm ./cypress/results/mergedreport.xml "./cypress/results/*.xml"
+              
+            token=`curl --location --request POST 'https://xray.cloud.xpand-it.com/api/v1/authenticate' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{ "client_id": "$(client_id)","client_secret": "$(client_secret)" }'| tr -d '"' `
+
+            curl  -H "Content-Type: text/xml" -X POST -H "Authorization: Bearer ${token}" --data @cypress/results/mergedreport.xml 'https://xray.cloud.xpand-it.com/api/v1/import/execution/junit?projectKey=$(project_key)'
+
+      - task: AzureCLI@2
+        displayName: "Upload Allure Reports"
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            echo '============================================ Uploading run results to blob storage =================================='
+            az storage blob upload-batch -d '$web/B2C/$(Build.BuildId)' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/B2C/$(Build.BuildId)/'
+            az storage blob upload-batch -d '$web/history' -s allure-report/history --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Uploaded history to blob storage...'
+          powerShellErrorActionPreference: "continue"
+
+      - task: Bash@3
+        condition: eq(variables.isMain, true)
+        inputs:
+          targetType: "inline"
+          script: |
+            # Write your commands here
+            echo $(Build.BuildId)
+            curl -X POST -H 'Content-type: application/json' --data '{
+            "blocks": [
+            { 
+                "type": "section",
+                "text":
+                {
+                    "type": "mrkdwn",
+                    "text": "Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)*"
+                }
+            },
+            {
+                "type": "actions",
+                "elements": [
+                {
+                    "type": "button",
                     "text":
                     {
-                        "type": "mrkdwn",
-                        "text": "Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)*"
-                    }
+                        "type": "plain_text",
+                        "text": "Allure Report",
+                        "emoji": true
+                    },
+                    "url": "https://wowe2eautomation.z8.web.core.windows.net/B2C/$(Build.BuildId)/"
                 },
                 {
-                    "type": "actions",
-                    "elements": [
-                    {
-                        "type": "button",
-                        "text":
-                        {
-                            "type": "plain_text",
-                            "text": "Allure Report",
-                            "emoji": true
-                        },
-                        "url": "https://wowe2eautomation.z8.web.core.windows.net/B2C/$(Build.BuildId)/"
-                    },
-                    {
-                        "type": "button",
-                        "text":
-                        {
-                            "type": "plain_text",
-                            "text": "Pipeline Results",
-                            "emoji": true
-                        },
-                        "url": "https://wowonline.visualstudio.com/Woolworths%20Online/_build/results?buildId=$(Build.BuildId)&view=results"
-                    }]
-                }]}' https://hooks.slack.com/services/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
-
-  - stage: BuildAndTestB2BTests
-    jobs:
-      - job: RunB2BTests
-        displayName: "Install Node.js and Run B2B Tests"
-        pool:
-          name: wlx-ubuntu1804
-        steps:
-          - task: NodeTool@0
-            inputs:
-              versionSpec: "14.x"
-            displayName: "Run B2B Tests"
-          - script: |
-              npm install
-              npm test -- --env tags=B2B-API/B2B-UI/API,fileConfig=b2b --browser ${{ parameters.browser }}
-              npm run allure:generate
-            displayName: "Npm install and test"
-
-          - task: AzureCLI@2
-            condition: succeededOrFailed()
-            displayName: "Download Report History"
-            inputs:
-              azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
-              scriptType: "pscore"
-              scriptLocation: "inlineScript"
-              inlineScript: |
-                az config set extension.use_dynamic_install=yes_without_prompt
-                echo '============================================ Retrieving history from blob =================================='
-                az storage blob directory download -c '$web' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV) -s history -d 'cypress/allure-results' --recursive
-              powerShellErrorActionPreference: "continue"
-
-          - task: Npm@1
-            condition: succeededOrFailed()
-            inputs:
-              command: custom
-              customCommand: run allure:generate
-            displayName: "Generate Allure Results"
-
-          - task: PublishTestResults@2
-            condition: succeededOrFailed()
-            inputs:
-              testRunner: 'JUnit'
-              testResultsFiles: '**/results-*.xml'
-              testRunTitle: WOwE2EAPI-$(Build.BuildNumber)
-              mergeTestResults: true
-              searchFolder: '$(System.DefaultWorkingDirectory)/cypress/results'
-            displayName: "Publish Test Results"
-
-          - task: AzureCLI@2
-            displayName: "Upload Allure Reports"
-            condition: succeededOrFailed()
-            inputs:
-              azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
-              scriptType: "pscore"
-              scriptLocation: "inlineScript"
-              inlineScript: |
-                echo '============================================ Uploading run results to blob storage =================================='
-                az storage blob upload-batch -d '$web/B2B/$(Build.BuildId)' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
-                echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/B2B/$(Build.BuildId)/'
-                az storage blob upload-batch -d '$web/history' -s allure-report/history --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
-                echo 'Uploaded history to blob storage...'
-              powerShellErrorActionPreference: "continue"
-
-          - task: Bash@3
-            condition: eq(variables.isMain, true)
-            inputs:
-              targetType: 'inline'
-              script: |
-                # Write your commands here
-                echo $(Build.BuildId)
-                curl -X POST -H 'Content-type: application/json' --data '{
-                "blocks": [
-                { 
-                    "type": "section",
+                    "type": "button",
                     "text":
                     {
-                        "type": "mrkdwn",
-                        "text": "Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)*"
-                    }
+                        "type": "plain_text",
+                        "text": "Pipeline Results",
+                        "emoji": true
+                    },
+                    "url": "https://wowonline.visualstudio.com/Woolworths%20Online/_build/results?buildId=$(Build.BuildId)&view=results"
+                }]
+            }]}' https://hooks.slack.com/services/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
+
+  - job: RunB2BTests
+    displayName: "Install Node.js and run B2B tests"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "14.x"
+        displayName: "Run B2B Tests"
+      - script: |
+          npm install
+          npm test -- --env tags=B2B-API/B2B-UI/API,fileConfig=b2b --browser ${{ parameters.browser }}
+          npm run allure:generate
+        displayName: "Npm install and run B2B tests"
+
+      - task: AzureCLI@2
+        condition: succeededOrFailed()
+        displayName: "Download Report History"
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            az config set extension.use_dynamic_install=yes_without_prompt
+            echo '============================================ Retrieving history from blob =================================='
+            az storage blob directory download -c '$web' --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV) -s history -d 'cypress/allure-results' --recursive
+          powerShellErrorActionPreference: "continue"
+
+      - task: Npm@1
+        condition: succeededOrFailed()
+        inputs:
+          command: custom
+          customCommand: run allure:generate
+        displayName: "Generate Allure Results"
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: "JUnit"
+          testResultsFiles: "**/results-*.xml"
+          testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
+          mergeTestResults: true
+          searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
+        displayName: "Publish Test Results"
+
+      - task: AzureCLI@2
+        displayName: "Upload Allure Reports"
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            echo '============================================ Uploading run results to blob storage =================================='
+            az storage blob upload-batch -d '$web/B2B/$(Build.BuildId)' -s allure-report --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/B2B/$(Build.BuildId)/'
+            az storage blob upload-batch -d '$web/history' -s allure-report/history --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Uploaded history to blob storage...'
+          powerShellErrorActionPreference: "continue"
+
+      - task: Bash@3
+        condition: eq(variables.isMain, true)
+        inputs:
+          targetType: "inline"
+          script: |
+            # Write your commands here
+            echo $(Build.BuildId)
+            curl -X POST -H 'Content-type: application/json' --data '{
+            "blocks": [
+            { 
+                "type": "section",
+                "text":
+                {
+                    "type": "mrkdwn",
+                    "text": "Build \"$(Build.SourceVersionMessage)\" *$(Agent.JobStatus)*"
+                }
+            },
+            {
+                "type": "actions",
+                "elements": [
+                {
+                    "type": "button",
+                    "text":
+                    {
+                        "type": "plain_text",
+                        "text": "Allure Report",
+                        "emoji": true
+                    },
+                    "url": "https://wowe2eautomation.z8.web.core.windows.net/B2B/$(Build.BuildId)/"
                 },
                 {
-                    "type": "actions",
-                    "elements": [
+                    "type": "button",
+                    "text":
                     {
-                        "type": "button",
-                        "text":
-                        {
-                            "type": "plain_text",
-                            "text": "Allure Report",
-                            "emoji": true
-                        },
-                        "url": "https://wowe2eautomation.z8.web.core.windows.net/B2B/$(Build.BuildId)/"
+                        "type": "plain_text",
+                        "text": "Pipeline Results",
+                        "emoji": true
                     },
-                    {
-                        "type": "button",
-                        "text":
-                        {
-                            "type": "plain_text",
-                            "text": "Pipeline Results",
-                            "emoji": true
-                        },
-                        "url": "https://wowonline.visualstudio.com/Woolworths%20Online/_build/results?buildId=$(Build.BuildId)&view=results"
-                    }]
-                }]}' https://hooks.slack.com/services/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
+                    "url": "https://wowonline.visualstudio.com/Woolworths%20Online/_build/results?buildId=$(Build.BuildId)&view=results"
+                }]
+            }]}' https://hooks.slack.com/services/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
+
+  - job: RunB2BTestsOnBrowserStack
+    displayName: "Install Node.js and run B2B tests on BrowserStack"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - script: |
+          npm install
+          npm install -g browserstack-cypress-cli
+          chmod +x ./BrowserStackLocal
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
+          npm run browserstackTest -- --sync --env "tags=B2B-UI,fileConfig=b2b"
+          chmod +x ./poll-build-status.sh
+        displayName: "Npm install and run B2B tests on BrowserStack"
+
+      - task: Bash@3
+        inputs:
+          targetType: "filePath"
+          filePath: ./poll-build-status.sh
+        displayName: "Polling for BrowserStack build status"
+
+      - script: |
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
+          npm run browserstackGenerateReport -- $(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -c 10-)
+          mv ./results/browserstack-cypress-report.html ./results/browserstack-cypress-report-B2B.html
+          mv ./results/browserstack-cypress-report.json ./results/browserstack-cypress-report-B2B.json
+        displayName: "Stop BrowserStack local"
+
+      - task: AzureCLI@2
+        displayName: "Upload BrowserStack Reports"
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            echo '============================================ Uploading run results to blob storage =================================='
+            az storage blob upload-batch -d '$web/browserstack/B2B/$(Build.BuildId)' -s results --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/browserstack/B2B/$(Build.BuildId)/browserstack-cypress-report-B2B.html'
+          powerShellErrorActionPreference: "continue"
+
+  - job: RunB2CTestsOnBrowserStack
+    displayName: "Install Node.js and run B2C tests on BrowserStack"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - script: |
+          npm install
+          npm install -g browserstack-cypress-cli
+          chmod +x ./BrowserStackLocal
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon start --local-identifier WAW_Tests --force-local
+          npm run browserstackTest -- --sync --env "tags=B2C-UI,fileConfig=b2c"
+          chmod +x ./poll-build-status.sh
+        displayName: "Npm install and run B2C tests on BrowserStack"
+
+      - task: Bash@3
+        inputs:
+          targetType: "filePath"
+          filePath: ./poll-build-status.sh
+        displayName: "Polling for BrowserStack build status"
+
+      - script: |
+          ./BrowserStackLocal --key 2yqZoKxu1jgZzkNdrudi --daemon stop --local-identifier WAW_Tests
+          npm run browserstackGenerateReport -- $(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -c 10-)
+          mv ./results/browserstack-cypress-report.html ./results/browserstack-cypress-report-B2C.html
+          mv ./results/browserstack-cypress-report.json ./results/browserstack-cypress-report-B2C.json
+        displayName: "Stop BrowserStack local"
+
+      - task: AzureCLI@2
+        displayName: "Upload BrowserStack Reports"
+        condition: succeededOrFailed()
+        inputs:
+          azureSubscription: "WOWDEVTEST-Trader-Woolworths Online"
+          scriptType: "pscore"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            echo '============================================ Uploading run results to blob storage =================================='
+            az storage blob upload-batch -d '$web/browserstack/B2C/$(Build.BuildId)' -s results --account-name $(ACCOUNTNAMEDEV) --account-key $(ACCOUNTKEYDEV)
+            echo 'Report location is https://wowe2eautomation.z8.web.core.windows.net/browserstack/B2C/$(Build.BuildId)/browserstack-cypress-report-B2C.html'
+          powerShellErrorActionPreference: "continue"

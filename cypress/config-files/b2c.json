@@ -15,6 +15,10 @@
         "duSubscriptionTestDataFilePath":"cypress/fixtures/duSubscription/duSubscriptionTestData",
         "rocketUserName":"OrderServiceUser",
         "rocketPassword":"5e1ac07575224be090b46082e1bfb1f2",
-        "rocketOrderURL":"https://dxk8saae.uat.wx-d.net/orders-api/Orders"
+        "rocketOrderURL":"https://dxk8saae.uat.wx-d.net/orders-api/Orders",
+        "tags": "B2C-API",
+        "rocketMongoURI":"mongodb+srv://ordersdb-tests-user:nhayjFujzRYAt1Nt@uat-orders-0.7lxuc.mongodb.net/ordersdb?retryWrites=true&w=majority",
+        "rocketMongoDB":"ordersdb",
+        "rocketMongoDBCollection":"orders"
     }
 }

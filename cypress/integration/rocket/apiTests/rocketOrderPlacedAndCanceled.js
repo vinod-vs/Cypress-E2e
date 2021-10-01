@@ -6,7 +6,7 @@ import TestFilter from '../../../support/TestFilter'
 import '../../../support/rocket/api/commands/createAndCancelOrder'
 import '../../../support/utilities/ui/utility'
 const faker = require('faker/locale/en_AU')
-let dateNow = new Date()
+const dateNow = new Date()
 const moment = require('moment')
 
 TestFilter(['B2C-API'], () =>{
@@ -34,6 +34,10 @@ TestFilter(['B2C-API'], () =>{
           let firstName = faker.name.firstName()
           let lastName = faker.name.lastName()
           let email = firstName + '.' + lastName + '@testwoolies.com'
+          let mongoURI = Cypress.env('rocketMongoURI')
+          let mongoDB = Cypress.env("rocketMongoDB") 
+          let mongoDBCollection = Cypress.env("rocketMongoDBCollection") 
+          let filterKey = 'traderOrderId'
           rocketOrderInfo.orderRef = orderRef
           rocketOrderInfo.shopper.firstName = firstName
           rocketOrderInfo.shopper.lastName = lastName
@@ -61,7 +65,14 @@ TestFilter(['B2C-API'], () =>{
                 cy.createRocketOrderViaApi(rocketOrderInfo).then((response)=>{
                   expect(response.status).to.eq(200)
                   expect(response.body).to.have.property('orderId', orderId)              
-                 }) 
+                 })
+                 cy.task('connectToMongoDB',{mongoURI:mongoURI,mongoDB:mongoDB,mongoDBCollection:mongoDBCollection,filterKey:filterKey,orderId:orderId}).then((response) => {
+                    expect(+response.traderOrderId).to.eq(orderId)
+                    expect(response.orderStatus).to.eq('Placed')
+                    expect(response.orderReference).to.eq(OrderRefRandom)
+                    expect(response.orderSource).to.eq('UBR')
+                    cy.log('Connected to MongoDB and verification completed')
+                 })
               }).then(() =>{
                 //Should cancel the created order successfully
                 rocketCancelOrderInfo.orderId = orderId
@@ -72,6 +83,13 @@ TestFilter(['B2C-API'], () =>{
                   expect(response.body).to.have.property('orderReference', OrderRefRandom)
                   cancelCreatedOn = response.body.createdOn
                   cancelLastUpdatedOn = response.body.lastUpdatedOn
+                  cy.task('connectToMongoDB',{mongoURI:mongoURI,mongoDB:mongoDB,mongoDBCollection:mongoDBCollection,filterKey:filterKey,orderId:orderId}).then((response)=>{
+                    expect(+response.traderOrderId).to.eq(orderId)
+                    expect(response.orderStatus).to.eq('Cancelled')
+                    expect(response.orderReference).to.eq(OrderRefRandom)
+                    expect(response.orderSource).to.eq('UBR')
+                    cy.log('Connected to MongoDB and verification completed')
+                   })
                 }) 
               }).then(() =>{
                 //Should not change the created and updated cancellation time for same order
@@ -86,21 +104,21 @@ TestFilter(['B2C-API'], () =>{
                 })
           })   
         })
-
-        it('Should fail for order not placed', () => {
-            rocketOrderInfo.status = "dispatched"
-            cy.createRocketOrderViaApi(rocketOrderInfo).then((response)=>{
-               expect(response.status).to.eq(400)
-               expect(response.body.errors[0]).to.have.property('errorType', 'OrderStatusNotPlaced')              
-              })
-          })  
-
-        it('Should fail cancellation for incorrect orderID ', () => {
-            rocketCancelOrderInfo.orderId = 123
-            cy.cancelRocketOrderViaApi(rocketCancelOrderInfo, 123 ).then((response)=>{ 
-             expect(response.status).to.eq(404)
-             expect(response.body.errors[0]).to.have.property('errorType','OrderNotFound')
-            })
-          })  
+        
+    it('Should fail for order not placed', () => {
+      rocketOrderInfo.status = 'dispatched'
+      cy.createRocketOrderViaApi(rocketOrderInfo).then((response) => {
+        expect(response.status).to.eq(400)
+        expect(response.body.errors[0]).to.have.property('errorType', 'OrderStatusNotPlaced')
       })
+    })
+
+    it('Should fail cancellation for incorrect orderID ', () => {
+      rocketCancelOrderInfo.orderId = 123
+      cy.cancelRocketOrderViaApi(rocketCancelOrderInfo, 123).then((response) => {
+        expect(response.status).to.eq(404)
+        expect(response.body.errors[0]).to.have.property('errorType', 'OrderNotFound')
+      })
+    })
   })
+})

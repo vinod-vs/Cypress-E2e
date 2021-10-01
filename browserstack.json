@@ -1,0 +1,55 @@
+{
+    "auth": {
+        "username": "amitrawat_Rs70v4",
+        "access_key": "2yqZoKxu1jgZzkNdrudi"
+    },
+    "browsers": [
+        {
+            "browser": "chrome",
+            "os": "Windows 10",
+            "versions": [
+                "latest"
+            ]
+        },
+        {
+            "browser": "edge",
+            "os": "OS X Big Sur",
+            "versions": [
+                "latest"
+            ]
+        }
+    ],
+    "run_settings": {
+        "cypress_config_file": "./cypress.json",
+        "project_name": "WOW-E2E-Automation",
+        "build_name": "WOW-E2E-Automation-Build",
+        "parallels": "10",
+        "exclude": [],
+        "npm_dependencies": {
+            "@bahmutov/cy-api": "^1.5.0",
+            "@shelex/cypress-allure-plugin": "^2.3.5",
+            "allure-commandline": "^2.13.8",
+            "cypress": "^8.3.0",
+            "cypress-iframe": "^1.0.1",
+            "cypress-multi-reporters": "^1.4.0",
+            "cypress-xpath": "^1.6.2",
+            "faker": "^5.5.2",
+            "fs-extra": "^8.1.0",
+            "mocha-junit-reporter": "^2.0.0",
+            "mochawesome": "^6.2.2",
+            "mochawesome-merge": "^4.2.0",
+            "mochawesome-report-generator": "^5.2.0",
+            "browserstack-cypress-cli": "^1.8.1",
+            "browserstack-local": "^1.4.8",
+            "standard": "^16.0.3"
+        },
+        "package_config_options": {},
+        "headless": false
+    },
+    "connection_settings": {
+        "local": true,
+        "local_config_file": "./local_testing.yml",
+        "local_identifier": "WAW_Tests"
+    },
+    "disable_usage_reporting": false
+}
