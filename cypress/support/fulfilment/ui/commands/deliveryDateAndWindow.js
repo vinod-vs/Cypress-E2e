@@ -1,29 +1,27 @@
-import DeliveryDateAndWindowPage from '../pageObjects/DeliveryDateAndWindowPage'
+import { onDeliveryDateAndWindowPage } from '../pageObjects/DeliveryDateAndWindowPage'
 import '../../../utilities/ui/utility'
-
-const deliveryDateAndWindowPage = new DeliveryDateAndWindowPage()
 
 Cypress.Commands.add('selectDeliveryDateAndWindow', (tradingAccAddress) => {
   // Wait for the FMS page to load before checking whether shopping Preferences is saved
   cy.wait(Cypress.config('twoSecondWait'))
 
-  cy.checkIfElementExists(deliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
+  cy.checkIfElementExists(onDeliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
     if (shoppingPrefernceExists === true) {
-      deliveryDateAndWindowPage.getChangeTradingAccountLink().click()
+      onDeliveryDateAndWindowPage.getChangeTradingAccountLink().click()
     }
   })
 
-  deliveryDateAndWindowPage.getSelectTradingAccount().click()
+  onDeliveryDateAndWindowPage.getSelectTradingAccount().click()
 
-  deliveryDateAndWindowPage.getSelectOneOftheTradingAccounts().click()
+  onDeliveryDateAndWindowPage.getSelectOneOftheTradingAccounts().click()
 
-  deliveryDateAndWindowPage.getSelectTradingAccount().should('have.value', tradingAccAddress)
+  onDeliveryDateAndWindowPage.getSelectTradingAccount().should('have.value', tradingAccAddress)
 
-  deliveryDateAndWindowPage.getSaveAndContinueButton().click()
+  onDeliveryDateAndWindowPage.getSaveAndContinueButton().click()
 
-  deliveryDateAndWindowPage.getSelectDate()
+  onDeliveryDateAndWindowPage.getSelectDate()
 
-  deliveryDateAndWindowPage.getthefirsttimeslot().check({ force: true })
+  onDeliveryDateAndWindowPage.getthefirsttimeslot().check({ force: true })
 
-  deliveryDateAndWindowPage.getContinueShoppingButton().click()
+  onDeliveryDateAndWindowPage.getContinueShoppingButton().click()
 })

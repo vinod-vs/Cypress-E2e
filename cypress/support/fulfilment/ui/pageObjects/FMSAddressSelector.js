@@ -1,5 +1,5 @@
 export class FMSAddressSelector {
-  // #region tabs
+  // #region - Tabs
   getTabList () {
     return cy.get('.tab-list')
   }
@@ -17,7 +17,7 @@ export class FMSAddressSelector {
   }
   // #endregion
 
-  // #region Delivery address UI elements
+  // #region - Delivery address UI elements
   getSharedTextBox () {
     return cy.get('shared-textbox')
   }
@@ -47,7 +47,7 @@ export class FMSAddressSelector {
   }
   // #endregion
 
-  // #region Pick / DTB UI elements
+  // #region - Pick / DTB UI elements
   getSearchStoreSelectorTextbox () {
     return this.getSharedTextBox().find('#pickupAddressSelector')
   }
@@ -69,6 +69,7 @@ export class FMSAddressSelector {
     return cy.get('.shopper-action')
   }
 
+  // #region - General actions
   selectSavedAddressByKeyword (addressKeyword) {
     this.getSavedAddressesListLabel().each(addressRow => {
       const addressText = addressRow.find('label').text()
@@ -116,6 +117,7 @@ export class FMSAddressSelector {
     // we may need a libary to validate the suburb name in result list with postcode.
     this.getSearchStoreResultList().first().find('input').check({ force: true })
   }
+  // #endregion
 }
 
 export const onFMSAddressSelector = new FMSAddressSelector()

@@ -1,23 +1,19 @@
 /// <reference types="cypress-xpath" />
-import HomePage from '../../../homePage/ui/pageObjects/HomePage'
-import SideCartPage from '../../../sideCart/ui/pageObjects/SideCartPage'
-import SearchResultsPage from '../pageObjects/SearchResultsPage'
-
-const homePage = new HomePage()
-const sideCartPage = new SideCartPage()
-const searchResultsPage = new SearchResultsPage()
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onSearchResultsPage } from '../pageObjects/SearchResultsPage'
+import { onSideCartPage } from '../../../sideCart/ui/pageObjects/SideCartPage'
 
 Cypress.Commands.add('searchAndAddProductsToCart', (testData) => {
   const items = testData.items
   items.forEach(item => {
     cy.log('Adding item: ' + item.stockCode + ', of quantity: ' + item.quantity + ' to cart.')
     // Search for the desired item
-    homePage.getSearchHeader().click()
-    homePage.getSearchHeader().type(item.stockCode).type('{enter}')
+    onHomePage.getSearchHeader().click()
+    onHomePage.getSearchHeader().type(item.stockCode).type('{enter}')
 
     // Capture the item price
     cy.wait(Cypress.config('oneSecondWait'))
-    searchResultsPage.getProductPrice().then(function (amountElement) {
+    onSearchResultsPage.getProductPrice().then(function (amountElement) {
       const amount = amountElement.text()
       item.pricePerItem = amount.split('$')[1]
       cy.log('Item amount: ' + item.pricePerItem)
@@ -27,10 +23,10 @@ Cypress.Commands.add('searchAndAddProductsToCart', (testData) => {
     cy.get('.cartControls-addCart').click()
     cy.wait(Cypress.config('halfSecondWait'))
     // Side cart is opened when first item is added. Close it if opened.
-    cy.checkIfElementExists(sideCartPage.getCloseSideCartButtonLocatorString()).then((returnedValue) => {
+    cy.checkIfElementExists(onSideCartPage.getCloseSideCartButtonLocatorString()).then((returnedValue) => {
       if (returnedValue === true) {
         cy.wait(Cypress.config('halfSecondWait'))
-        sideCartPage.getCloseSideCartButton().click()
+        onSideCartPage.getCloseSideCartButton().click()
         cy.wait(Cypress.config('halfSecondWait'))
       }
     })
@@ -38,7 +34,7 @@ Cypress.Commands.add('searchAndAddProductsToCart', (testData) => {
     // Adding desired quantity
     let i
     for (i = 1; i < item.quantity; i++) {
-      searchResultsPage.getIncreaseQuantityButton().eq(0).click()
+      onSearchResultsPage.getIncreaseQuantityButton().eq(0).click()
       cy.wait(Cypress.config('halfSecondWait'))
     }
 
@@ -50,7 +46,7 @@ Cypress.Commands.add('searchAndAddProductsToCart', (testData) => {
     cy.wait(Cypress.config('oneSecondWait'))
 
     // Clear search
-    homePage.getClearSearchHeader().click()
+    onHomePage.getClearSearchHeader().click()
     cy.wait(Cypress.config('oneSecondWait'))
 
     // TO-DO verify the desired item and quantity is added to cart
@@ -59,7 +55,7 @@ Cypress.Commands.add('searchAndAddProductsToCart', (testData) => {
 
 Cypress.Commands.add('getProductTitle', (itemIndexOrPositionOnSearchResultsPage, itemToAdd) => {
   // function getProductTitle(index, item) {
-  const itemTitleLocatorString = searchResultsPage.getItemTitleLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+  const itemTitleLocatorString = onSearchResultsPage.getItemTitleLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
   cy.log('itemTitleLocatorString: ' + itemTitleLocatorString)
   cy.checkIfElementExists(itemTitleLocatorString).then((isProductTitleAvailable) => {
     cy.log('isProductTitleAvailable: ' + isProductTitleAvailable)
@@ -81,7 +77,7 @@ Cypress.Commands.add('addProductsToCart', (itemIndexOrPositionOnSearchResultsPag
 })
 
 Cypress.Commands.add('addToCart', (itemIndexOrPositionOnSearchResultsPage) => {
-  const addToCartLocator = searchResultsPage.getAddToCartByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+  const addToCartLocator = onSearchResultsPage.getAddToCartByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
   cy.log('addToCartLocator: ' + addToCartLocator)
   cy.wait(Cypress.config('halfSecondWait'))
   cy.get(addToCartLocator).click()
@@ -89,18 +85,18 @@ Cypress.Commands.add('addToCart', (itemIndexOrPositionOnSearchResultsPage) => {
 })
 
 Cypress.Commands.add('closeSideCart', () => {
-  cy.checkIfElementExists(sideCartPage.getCloseSideCartButtonLocatorString()).then((returnedValue) => {
+  cy.checkIfElementExists(onSideCartPage.getCloseSideCartButtonLocatorString()).then((returnedValue) => {
     if (returnedValue === true) {
       cy.log('Closing opened side cart.')
       cy.wait(Cypress.config('halfSecondWait'))
-      sideCartPage.getCloseSideCartButton().click()
+      onSideCartPage.getCloseSideCartButton().click()
       cy.wait(Cypress.config('halfSecondWait'))
     }
   })
 })
 
 Cypress.Commands.add('getItemPrice', (itemIndexOrPositionOnSearchResultsPage, itemToAdd) => {
-  const priceLocator = searchResultsPage.getProductPriceByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+  const priceLocator = onSearchResultsPage.getProductPriceByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
   cy.log('priceLocator: ' + priceLocator)
   cy.wait(Cypress.config('oneSecondWait'))
   cy.get(priceLocator).then(function (amountElement) {
@@ -111,8 +107,8 @@ Cypress.Commands.add('getItemPrice', (itemIndexOrPositionOnSearchResultsPage, it
 })
 
 Cypress.Commands.add('increaseItemQuantity', (itemIndexOrPositionOnSearchResultsPage, itemToAdd) => {
-  // const increaseQuantityLocator = searchResultsPage.getIncreaseQuantityButtonByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
-  const quantityInputFieldLocator = searchResultsPage.getQuantityInputFieldByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+  // const increaseQuantityLocator = onSearchResultsPage.getIncreaseQuantityButtonByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+  const quantityInputFieldLocator = onSearchResultsPage.getQuantityInputFieldByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
 
   if (itemToAdd.quantity > 1) {
     cy.log('Increasing Item quantity by ' + itemToAdd.quantity)
@@ -133,11 +129,11 @@ Cypress.Commands.add('increaseItemQuantity', (itemIndexOrPositionOnSearchResults
 const findAndAddProduct = (itemToAdd) => {
   const findProduct = (itemIndexOrPositionOnSearchResultsPage) => {
     let productFound = false
-    cy.get(searchResultsPage.getAddToCartByItemLocatorString1()).its('length').then((len) => {
+    cy.get(onSearchResultsPage.getAddToCartByItemLocatorString1()).its('length').then((len) => {
       if (itemIndexOrPositionOnSearchResultsPage >= len) return
 
-      const addToCartLocator = searchResultsPage.getAddToCartByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
-      const marketProductLocator = searchResultsPage.getMarketProductRoundelLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+      const addToCartLocator = onSearchResultsPage.getAddToCartByItemLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
+      const marketProductLocator = onSearchResultsPage.getMarketProductRoundelLocatorString().replace('INDEX', itemIndexOrPositionOnSearchResultsPage)
       cy.log(addToCartLocator)
       cy.log(marketProductLocator)
 
@@ -182,15 +178,15 @@ Cypress.Commands.add('searchAndAddProductsToCartBySearchTerm', (testData) => {
   items.forEach(item => {
     cy.log('Searching for item: ' + item.searchTerm + ' , isEMProduct: ' + item.isEMProduct)
     // Search for the desired item
-    homePage.getSearchHeader().click()
-    homePage.getSearchHeader().type(item.searchTerm).type('{enter}')
+    onHomePage.getSearchHeader().click()
+    onHomePage.getSearchHeader().type(item.searchTerm).type('{enter}')
     cy.wait(Cypress.config('fiveSecondWait'))
 
     // Find and add products
     findAndAddProduct(item)
 
     // Clear search
-    homePage.getClearSearchHeader().click()
+    onHomePage.getClearSearchHeader().click()
     cy.wait(Cypress.config('oneSecondWait'))
   })
 })

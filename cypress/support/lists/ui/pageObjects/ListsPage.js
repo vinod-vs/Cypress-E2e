@@ -1,4 +1,4 @@
-class ListsPage {
+export class ListsPage {
   gettheList (listName) {
     return cy.get('shared-list-item').find('h3').contains(listName)
   }
@@ -24,4 +24,4 @@ class ListsPage {
   }
 }
 
-export default ListsPage
+export const onListsPage = new ListsPage()

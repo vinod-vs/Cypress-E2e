@@ -1,4 +1,4 @@
-class DeliveryDateAndWindowPage {
+export class DeliveryDateAndWindowPage {
   getWowfulfilmentMethodContainer () {
     return cy.get('wow-fulfilment-method-selector-container')
   }
@@ -36,4 +36,4 @@ class DeliveryDateAndWindowPage {
   }
 }
 
-export default DeliveryDateAndWindowPage
+export const onDeliveryDateAndWindowPage = new DeliveryDateAndWindowPage()

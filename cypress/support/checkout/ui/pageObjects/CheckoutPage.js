@@ -1,4 +1,4 @@
-class CheckoutPage {
+export class CheckoutPage {
   getPlaceOrderButton () {
     return cy.get('.auto_place-order > .shopper-action')
   }
@@ -144,4 +144,4 @@ class CheckoutPage {
   }
 }
 
-export default CheckoutPage
+export const onCheckoutPage = new CheckoutPage()
