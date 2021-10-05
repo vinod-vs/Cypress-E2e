@@ -15,6 +15,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import '../../../support/rewards/api/commands/rewards'
 import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
+import * as refundsLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
@@ -133,7 +134,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
         // Partial seller cancellation - mark the last item as OOS via Marketplacer
-        cy.cancelLineItemInInvoice(data.invoices[0].invoiceId, data.invoices[0].lineItems[0].lineItemId, cancelledQty)
+        cy.cancelLineItemInInvoice(data.invoices[0].invoiceId, data.invoices[0].lineItems[0].lineItemId, cancelledQty, false)
           .then(() => {
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
@@ -189,19 +190,21 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
             cy.all(
               cy.get('@rewardBalanceBefore'),
-              cy.get('@rewardBalanceAfter')
-            ).then(([before, after]) => {
-              // TODO: Improve with proper validation of rewards points earning
+              cy.get('@rewardBalanceAfter'),
+              cy.get('@cancelledOrderProjection')
+            ).then(([before, after, cancelledOrderProjection]) => {
+              expect(after).to.be.greaterThan(before)
+              const expectedRewards = Math.floor(Number(before) + Number(cancelledOrderProjection.invoices[0].refunds[0].refundItems[0].amount))
+              expect(Number(after)).to.be.gte(Number(expectedRewards))
             })
           })
       })
 
-      // TODO: Add back once the failure is fixed
-      // //Verify the refund is only for the cancelled item and the shipping fee is not returned
-      // cy.get('@cancelledOrderProjection').then((cancelledProjection) => {
-      //   cy.log('cancelledProjection.invoices[0].refunds[0].refundAmount: ' + cancelledProjection.invoices[0].refunds[0].refundAmount)
-      //   lib.verifyRefundDetails(req.orderId, cancelledProjection.invoices[0].refunds[0].refundAmount, 0)
-      // })
+      // Verify the refund is only for the cancelled item and the shipping fee is not returned
+      cy.get('@cancelledOrderProjection').then((cancelledProjection) => {
+        cy.log('cancelledProjection.invoices[0].refunds[0].refundAmount: ' + cancelledProjection.invoices[0].refunds[0].refundAmount)
+        refundsLib.verifyRefundDetails(req.orderId, cancelledProjection.invoices[0].refunds[0].refundAmount, 0)
+      })
 
       // TODO: Add invoice verifications
     })

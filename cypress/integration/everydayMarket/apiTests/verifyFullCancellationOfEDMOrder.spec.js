@@ -101,7 +101,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
           // Seller cancells all the EM items and verify the events and order statuses
-          cy.cancelLineItemInInvoice(encodedEdmInvoiceId, encodedEdmLineitemId, testData.items[0].quantity).then((response) => {
+          cy.cancelLineItemInInvoice(encodedEdmInvoiceId, encodedEdmLineitemId, testData.items[0].quantity, false).then((response) => {
             // After Seller cancellation, Invoke the order api and verify the projection content is updated acordingly for refunds
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
               function: function (response) {

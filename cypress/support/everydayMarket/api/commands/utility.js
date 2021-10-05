@@ -226,7 +226,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
             item.pricePerItem = response.Products[x].Products[0].Price
             totalWowQuantity = totalWowQuantity + wowQuantity
             totalQuantity = totalQuantity + wowQuantity
-            wowTotal = Number(item.quantity) * Number(item.pricePerItem)
+            wowTotal = Number.parseFloat(Number(item.quantity) * Number(item.pricePerItem)).toFixed(2)
 
             cy.log('Adding WOW Item to Cart. Stockcode: ' + wowStockCode + ' , of quantity: ' + wowQuantity)
             cy.addItemsToTrolley(addItemsBodyWow).then((response) => {
@@ -256,7 +256,8 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
           item.pricePerItem = response.Products[y].Products[0].Price
           totalEdmQuantity = totalEdmQuantity + mpQuantity
           totalQuantity = totalQuantity + mpQuantity
-          edmTotal = Number(item.quantity) * Number(item.pricePerItem)
+          edmTotal = Number.parseFloat(Number(item.quantity) * Number(item.pricePerItem)).toFixed(2)
+
           cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
           cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
             expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(item.quantity))

@@ -65,18 +65,21 @@ Cypress.Commands.add('partialDispatchOfLineItemsInInvoice', (decodedInvoiceId, d
 })
 
 /*
-  Usage: cy.cancelLineItemInInvoice("SW52b2ljZS0yNzI5OQ==", "TGluZUl0ZW0tMzI1MTU=", 1)
+  Usage: cy.cancelLineItemInInvoice("SW52b2ljZS0yNzI5OQ==", "TGluZUl0ZW0tMzI1MTU=", 1, true)
+  Dispatched values:
+  true  - means the item is dispatched. Which means we can calling this api to replicate a customer return
+  false - means the item is not-dispatched. Which means we can calling this api to replicate a seller cancellation or out-of-stock scenario
 */
-Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineItemId, quantity) => {
+Cypress.Commands.add('cancelLineItemInInvoice', (encodedInvoiceId, encodedLineItemId, quantity, dispatched) => {
   let encodedRefundRequestId
-  cy.refundRequestCreate(encodedInvoiceId, encodedLineItemId, quantity).then((response) => {
+  cy.refundRequestCreate(encodedInvoiceId, encodedLineItemId, quantity, dispatched).then((response) => {
     encodedRefundRequestId = response.data.refundRequestCreate.refundRequest.id
     cy.log('encodedRefundRequestId: ' + encodedRefundRequestId)
     cy.refundRequestReturn(encodedRefundRequestId)
   })
 })
 
-Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId, quantity) => {
+Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId, quantity, dispatched) => {
   let mutation = String(`mutation{
         refundRequestCreate(input: 
           {
@@ -85,6 +88,7 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
               lineItemId: "ENCODED_LINEITEM_ID"
               reason: "Automation Reason: I don't want this"
               quantity: QUANTITY
+              dispatched: DISPATCHED_VALUE
             }
             notes: [{
               note: "Automation refundRequestCreate note: I don't want this"
@@ -105,6 +109,7 @@ Cypress.Commands.add('refundRequestCreate', (encodedInvoiceId, encodedLineItemId
       }`).replace('ENCODED_INVOICE_ID', encodedInvoiceId)
   mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
   mutation = String(mutation).replace('QUANTITY', quantity)
+  mutation = String(mutation).replace('DISPATCHED_VALUE', dispatched)
 
   cy.api({
     method: 'POST',
