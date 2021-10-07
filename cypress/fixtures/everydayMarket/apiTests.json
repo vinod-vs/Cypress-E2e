@@ -158,7 +158,7 @@
       }
     }
   },
-  "GenericTestData": {
+  "GenericWOWPlusEDMCCPaymentTestData": {
     "searchTerm": "treats",
     "carrier": "Australia Post",
     "trackingNumber": "Automation:12345",
@@ -187,5 +187,26 @@
         "Verify": false
       }
     }
+  },
+  "GenericWOWPlusEDMPPPaymentTestData": {
+    "searchTerm": "treats",
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:12345",
+    "sellerName": "Pet Culture",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    },
+    "items": [
+      {
+        "quantity": 2,
+        "isEDMProduct": "true"
+      },
+      {
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "paymentType": "PAYPAL_ONLY"    
   }
 }
