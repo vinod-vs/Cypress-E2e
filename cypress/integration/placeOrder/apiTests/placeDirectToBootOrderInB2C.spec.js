@@ -34,7 +34,7 @@ TestFilter(['B2C-API'], () => {
         expect(response[0].AddressId).to.not.be.null
       })
 
-      cy.getFulfilmentWindowViaApi(windowType.directToBoot).then((response) => {
+      cy.getFulfilmentWindowViaApi(windowType.DIRECT_TO_BOOT).then((response) => {
         expect(response.Id).to.be.greaterThan(0)
       })
 

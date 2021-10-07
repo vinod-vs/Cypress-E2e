@@ -27,6 +27,7 @@
         "checkoutRedeemRewardsDollarsEndpoint": "apis/ui/Checkout/WoolworthsRewards/Redeem",
         "creditCardIframeEndpoint": "apis/ui/Checkout/DigitalPay/InitializeCreditCardIframe",
         "creditCardPaymentEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
+        "addGiftCardEndpoint": "apis/ui/Checkout/DigitalPay/GiftCard/Tokenize",
         "digitalPaymentEndpoint": "apis/ui/Checkout/DigitalPay/Payment",
         "digitalPaymentInstrumentsEndpoint": "api/v3/ui/checkout/digitalpay/instruments",
         "payOrderZeroEndpoint": "/apis/ui/Checkout/PayOrder/Zero",
@@ -63,8 +64,8 @@
         "rpgQueryEndpoint": "wx/v1/loyalty/partners/cards/query",
         "tags": "API/UI"
     },
-    "viewportHeight": 2080,
-    "viewportWidth": 3536,
+    "viewportHeight": 1080,
+    "viewportWidth": 1536,
     "defaultCommandTimeout": 30000,
     "chromeWebSecurity": false,
     "pageLoadTimeout": 60000,

@@ -49,3 +49,14 @@ Cypress.Commands.add('getDateTime', () => {
   const currentTime = date + 'T' + time
   return cy.wrap(currentTime)
 })
+
+Cypress.Commands.add('generateRandomString', () => {
+  let text = ''
+  const alpha = 'abcdefghijklmnopqrstuvwxyz'
+
+  for (let i = 0; i < alpha.length; i++) {
+    text += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  }
+
+  return cy.wrap(text)
+})
