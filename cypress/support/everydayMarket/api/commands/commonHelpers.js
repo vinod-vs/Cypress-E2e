@@ -70,6 +70,36 @@ export function verifyRefundDetails (traderOrderId, expectedEdmRefundTotal, expe
   })
 }
 
+export function verifyCompleteRefundDetails (traderOrderId, expectedWOWRefundTotal, expectedWOWReusableBagsRefund, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
+  cy.getRefundDetails(traderOrderId).then((response) => {
+    expect(response.Total).to.be.equal(Number(Number.parseFloat(Number(expectedEdmRefundTotal) + Number(expectedEdmShippingFeeRefund) + Number(expectedWOWRefundTotal) + Number(expectedWOWReusableBagsRefund)).toFixed(2)))
+    expect(response.Summaries.Woolworths[0].Value).to.be.equal(Number(expectedWOWRefundTotal))
+    expect(response.Summaries.Woolworths[1].Value).to.be.equal(Number(expectedWOWReusableBagsRefund))
+    expect(response.Summaries.Market[0].Value).to.be.equal(Number(expectedEdmRefundTotal))
+    expect(response.Summaries.Market[1].Value).to.be.equal(Number(expectedEdmShippingFeeRefund))
+  })
+}
+
+export function verifyCompleteRefundDetailsWithRetry (traderOrderId, expectedWOWRefundTotal, expectedWOWReusableBagsRefund, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
+  const total = Number.parseFloat(Number(expectedWOWRefundTotal) + Number(expectedWOWReusableBagsRefund) + Number(expectedEdmRefundTotal) + Number(expectedEdmShippingFeeRefund)).toFixed(2)
+  cy.getRefundDetailsWithRetry(traderOrderId, {
+    function: function (response) {
+      if (response.body.Total !== Number(total)) {
+        cy.log('Total expected was ' + total + ' , but api returned ' + response.body.Total)
+        throw new Error('Total expected was ' + total + ' , but api returned ' + response.body.Total)
+      }
+    },
+    retries: Cypress.env('refundApiRetryCount'),
+    timeout: Cypress.env('refundApiTimeout')
+  }).then((response) => {
+    expect(response.Total).to.be.equal(Number(Number.parseFloat(Number(expectedEdmRefundTotal) + Number(expectedEdmShippingFeeRefund) + Number(expectedWOWRefundTotal) + Number(expectedWOWReusableBagsRefund)).toFixed(2)))
+    expect(response.Summaries.Woolworths[0].Value).to.be.equal(Number(expectedWOWRefundTotal))
+    expect(response.Summaries.Woolworths[1].Value).to.be.equal(Number(expectedWOWReusableBagsRefund))
+    expect(response.Summaries.Market[0].Value).to.be.equal(Number(expectedEdmRefundTotal))
+    expect(response.Summaries.Market[1].Value).to.be.equal(Number(expectedEdmShippingFeeRefund))
+  })
+}
+
 export function verifyInvoiceDetails (invoice, testData) {
   expect(invoice).to.not.be.null
   expect(invoice.InvoiceId).to.be.equal(Number(testData.orderId))

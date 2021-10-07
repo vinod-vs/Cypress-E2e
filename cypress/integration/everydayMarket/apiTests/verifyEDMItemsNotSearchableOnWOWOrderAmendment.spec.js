@@ -37,7 +37,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
     it('[API] RP-5152 - EM | Amend grocery order and verify Everyday Market products are not searchable and addable to cart', () => {
       const shopper = shoppers.emAccount3ForOrderAmendment
       const shopperId = shoppers.emAccount3ForOrderAmendment.shopperId
-      const testData = tests.GenericTestData
+      const testData = tests.GenericWOWPlusEDMPPPaymentTestData
       let orderId
       let orderReference
       let edmOrderId
