@@ -23,13 +23,13 @@ import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] RP-5037 | EM | MPer | Partial Customer Return Everyday Market order', () => {
+  describe('[API] RP-5037 - Partial Customer Return Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('RP-5037 | EM | MPer | Partial Customer Return Everyday Market order', () => {
+    it('RP-5037 - Partial Customer Return Everyday Market order', () => {
       const testData = tests.VerifyFullyDispatchedEDMOrder
       let marketRefundId
       let totalMarketRefundAmount

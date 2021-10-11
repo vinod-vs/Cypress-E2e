@@ -15,7 +15,7 @@ import '../../../support/orders/api/commands/amendOrder'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] RP-5031 EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
+  describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -25,7 +25,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearAnyOrderAmendments()
     })
 
-    it('[API] RP-5031 EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
+    it('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
       const purchaseQty = 2
       const shopper = shoppers.emAccount3ForOrderAmendment
       let req

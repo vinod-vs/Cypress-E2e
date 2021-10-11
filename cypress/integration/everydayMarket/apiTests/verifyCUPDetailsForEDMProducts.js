@@ -21,13 +21,13 @@ import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP.json'
 import searchRequest from '../../../fixtures/search/productSearch.json'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API]  MPPF-954 | EM | Verify CUP details for a product for measure type-Weight', () => {
+  describe('[API]  RP-5042 | EM | Verify CUP details for a product for measure type-Weight', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('MPPF-954 | EM | Verify CUP details for different measure type', () => {
+    it('RP-5042 | EM | Verify CUP details for different measure type', () => {
       cup.forEach(cupdetails => {
         cy.log('=====VERIFYING CUP DETAILS FOR PRODUCT:' + cupdetails.searchTerm + ' ========')
         cy.loginViaApi(shoppers.emAccount2).then((response) => {

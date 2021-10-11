@@ -29,7 +29,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('MPPF-962   Create Everyday Market items self service return - completely returned by the customer', () => {
+    it('RP-5097 - Create Everyday Market items self service return - completely returned by the customer', () => {
       const testData = tests.customerSelfServiceReturn
       let orderId
       let orderReference
