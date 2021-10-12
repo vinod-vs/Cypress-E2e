@@ -389,8 +389,25 @@ Cypress.Commands.add('getExpectedCCCardDetails', () => {
   const card = Cypress.env('card')
   let cardDetails
   cy.log('Using CC: ' + card)
-  //Select desired card. Default is amex
-  if (card === 'visa') { cardDetails = creditCardDetails.visa } else if (card === 'amex') { cardDetails = creditCardDetails.amex } else if (card === 'diner') { cardDetails = creditCardDetails.diner } else if (card === 'mastercard') { cardDetails = creditCardDetails.mastercard } else { cardDetails = creditCardDetails.amex }
+
+  // Select desired card. Default is amex
+  switch (card) {
+    case 'visa':
+      cardDetails = creditCardDetails.visa
+      break
+    case 'amex':
+      cardDetails = creditCardDetails.amex
+      break
+    case 'diner':
+      cardDetails = creditCardDetails.diner
+      break
+    case 'mastercard':
+      cardDetails = creditCardDetails.mastercard
+      break
+    default:
+      cardDetails = creditCardDetails.amex
+      break
+  }
 
   cy.log('CardDetails: ' + JSON.stringify(cardDetails))
   cy.wrap(cardDetails).as('creditCardToUse')

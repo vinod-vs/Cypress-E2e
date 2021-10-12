@@ -28,7 +28,14 @@ Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTracking
 })
 
 const getApiKeyForSeller = (sellerName) => {
-  if (sellerName === 'Pet Culture') { return Cypress.env('marketplacerPetCultureAPIKey') } else if (sellerName === 'BigWTest') { return Cypress.env('marketplacerBigWTestAPIKey') }
+  switch (sellerName) {
+    case 'Pet Culture':
+      return Cypress.env('marketplacerPetCultureAPIKey')
+    case 'BigWTest':
+      return Cypress.env('marketplacerBigWTestAPIKey')
+    default:
+      return Cypress.env('marketplacerPetCultureAPIKey')
+  }
 }
 
 /*
