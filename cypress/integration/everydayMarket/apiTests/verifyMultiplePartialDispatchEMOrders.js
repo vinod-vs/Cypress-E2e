@@ -23,13 +23,13 @@ import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers
 
 const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
 TestFilter(['B2C-API', 'EDM-API'], () => {
-  describe('[API] MPPF-903 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
+  describe('[API] RP-5040 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('MPPF-903 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
+    it('RP-5040 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
       const testData = tests.VerifyMultiplePartialDispatchedEDMOrder
       let orderId
       let orderReference

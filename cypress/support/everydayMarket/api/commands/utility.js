@@ -74,15 +74,19 @@ function placeOrder () {
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
   cy.navigatingToCreditCardIframe().its('IframeUrl').invoke('split', '/').its(5).as('ccSessionId')
+  // Get expected CC to use from env
+  cy.getExpectedCCCardDetails()
 
   cy.get('@balanceToPay').then((amount) => {
     if (amount > 0) {
       // Grab Digital pay instrument Id for the test credit card set in the fixture
       cy.get('@ccSessionId').then((ccSessionId) => {
-        cy.creditcardPayment(creditCardDetails.diner, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId })
-          .then((response) => {
-            cy.getPaymentInstrumentId(response)
-          })
+        cy.get('@creditCardToUse').then((creditCardToUse) => {
+          cy.creditcardPayment(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId })
+            .then((response) => {
+              cy.getPaymentInstrumentId(response)
+            })
+        })
       })
 
       // Call digital pay endpoint to confirm the order
@@ -347,10 +351,13 @@ Cypress.Commands.add('payTheOrder', (testData) => {
       expect(response).to.have.property('Success', true)
       creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
     })
-    cy.creditcardPayment(testData.payment.creditCard, creditcardSessionHeader).then((response) => {
-      cy.log('creditcardPaymentResponse: ' + JSON.stringify(response))
-      expect(response.status.responseText).to.be.eqls('ACCEPTED')
-      cy.getPaymentInstrumentId(response)
+    cy.getExpectedCCCardDetails()
+    cy.get('@creditCardToUse').then((creditCardToUse) => {
+      cy.creditcardPayment(creditCardToUse, creditcardSessionHeader).then((response) => {
+        cy.log('creditcardPaymentResponse: ' + JSON.stringify(response))
+        expect(response.status.responseText).to.be.eqls('ACCEPTED')
+        cy.getPaymentInstrumentId(response)
+      })
     })
     cy.get('@paymentInstrumentId').then((paymentInstrumentId) => {
       digitalPaymentRequest.payments[0].paymentInstrumentId = paymentInstrumentId
@@ -376,6 +383,17 @@ Cypress.Commands.add('getPaymentInstrumentId', (creditcardPaymentResponse) => {
     cy.log('creditcardPaymentResponse.paymentInstrument.itemId: ' + creditcardPaymentResponse.paymentInstrument.itemId)
   }
   cy.wrap(paymentInstrumentId).as('paymentInstrumentId')
+})
+
+Cypress.Commands.add('getExpectedCCCardDetails', () => {
+  const card = Cypress.env('card')
+  let cardDetails
+  cy.log('Using CC: ' + card)
+  //Select desired card. Default is amex
+  if (card === 'visa') { cardDetails = creditCardDetails.visa } else if (card === 'amex') { cardDetails = creditCardDetails.amex } else if (card === 'diner') { cardDetails = creditCardDetails.diner } else if (card === 'mastercard') { cardDetails = creditCardDetails.mastercard } else { cardDetails = creditCardDetails.amex }
+
+  cy.log('CardDetails: ' + JSON.stringify(cardDetails))
+  cy.wrap(cardDetails).as('creditCardToUse')
 })
 
 Cypress.Commands.add('verifyOrderInvoice', (testData) => {
