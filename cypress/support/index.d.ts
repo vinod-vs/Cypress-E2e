@@ -4,7 +4,7 @@ declare namespace Cypress {
     clearCookies(value: any): void;
     clearLocalStorage(value: any): void;
     loginViaApi(value: any): void;
-    searchPickupDTBStores(fulfilmentType: String, arg1: any): any;
+    searchPickupDTBStores(fulfilmentType: String, searchValue: any): any;
     getFulfilmentWindowViaApi(windowType: String): any;
     completeWindowFulfilmentViaApi(): any;
     clearTrolley(): void;
