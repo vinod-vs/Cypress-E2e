@@ -2,15 +2,14 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["es5", "dom"],
-    "types": ["cypress"],
+    "types": ["cypress", "cypress-xpath"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    //"allowJs": true,
-    //"strict": true,
-    //"strictNullChecks": true,
-    //"forceConsistentCasingInFileNames": true
+    "strict": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true
   }
 }
