@@ -1,15 +1,31 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["es5", "dom"],
-    "types": ["cypress", "cypress-xpath"],
+    "target": "es6",
+    "baseUrl": "./",
+    "outDir": "./",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "cypress-xpath"
+    ],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
