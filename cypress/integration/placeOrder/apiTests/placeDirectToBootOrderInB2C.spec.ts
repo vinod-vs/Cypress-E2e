@@ -30,15 +30,15 @@ TestFilter(['B2C-API'], () => {
     it('Should place a Direct to boot order using credit card', () => {
       cy.loginViaApi(shopper)
 
-      cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response) => {
+      cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response: any) => {
         expect(response[0].AddressId).to.not.be.null
       })
 
-      cy.getFulfilmentWindowViaApi(windowType.DIRECT_TO_BOOT).then((response) => {
+      cy.getFulfilmentWindowViaApi(windowType.DIRECT_TO_BOOT).then((response: any) => {
         expect(response.Id).to.be.greaterThan(0)
       })
 
-      cy.completeWindowFulfilmentViaApi().then((response) => {
+      cy.completeWindowFulfilmentViaApi().then((response: any) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 
@@ -46,23 +46,23 @@ TestFilter(['B2C-API'], () => {
 
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Water', 60.0)
 
-      cy.navigateToCheckout().then((response) => {
+      cy.navigateToCheckout().then((response: any) => {
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
 
-        cy.navigatingToCreditCardIframe().then((response) => {
+        cy.navigatingToCreditCardIframe().then((response: any) => {
           expect(response).to.have.property('Success', true)
 
           creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
         })
       })
 
-      cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
+      cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response: any) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
 
         digitalPayment.payments[0].paymentInstrumentId = response.itemId
       })
 
-      cy.digitalPay(digitalPayment).then((response) => {
+      cy.digitalPay(digitalPayment).then((response: any) => {
         expect(response.TransactionReceipt).to.not.be.null
 
         expect(response.PlacedOrderId).to.not.be.null
@@ -70,7 +70,7 @@ TestFilter(['B2C-API'], () => {
         confirmOrderParameter.placedOrderId = response.PlacedOrderId
       })
 
-      cy.confirmOrder(confirmOrderParameter).then((response) => {
+      cy.confirmOrder(confirmOrderParameter).then((response: any) => {
         expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
 
         cy.log('This is the order id: ' + response.Order.OrderId)
