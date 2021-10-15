@@ -2,6 +2,7 @@
 /// <reference types="cypress" />
 import '../../../refunds/api/commands/commands'
 import '../../../invoices/api/commands/commands'
+import '../../../oqs/api/commands/oqs'
 
 export function verifyEventDetails (response, expectedEventName, testData, shopperId, expectedEventCount) {
   cy.log('Expected Event Name: ' + expectedEventName + ' , expected count: ' + expectedEventCount)
@@ -41,8 +42,8 @@ export function verifyOrderTotals (testData, confirmOrderResponse) {
   testData.packagingFee = confirmOrderResponse.Order.PackagingFee
   testData.teamDiscount = confirmOrderResponse.Order.TeamDiscount
   testData.orderDiscountWithoutTeamDiscount = confirmOrderResponse.Order.OrderDiscountWithoutTeamDiscount
-  testData.orderTotal = Number(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges) -
-    Number(testData.teamDiscount) - Number(testData.orderDiscountWithoutTeamDiscount))
+  testData.orderTotal = Number(Number.parseFloat(Number(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges) -
+    Number(testData.teamDiscount) - Number(testData.orderDiscountWithoutTeamDiscount))).toFixed(2))
   cy.log('Testdata JSON: ' + JSON.stringify(testData))
   cy.log('ExpectedTotalIncludingGst: ' + testData.orderTotal)
   cy.log('TeamDiscount: ' + testData.teamDiscount)
@@ -163,4 +164,155 @@ export function verifyInitialOrderDetails (response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
   expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
   expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
+}
+
+/**
+ *
+ * @param {*} traderOrderId
+ * @param {*} expectedWOWOrderStatus
+ * @param {*} isMarketOnly
+ * @param {*} testData
+ *
+ * Make sure your latest projection is saved as 'finalProjection'. OQS response is verified against this projection
+ */
+export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isMarketOnly, testData) {
+  // Invoke OQS api
+  cy.getOrderStatus(traderOrderId).then((oqsResponse) => {
+    cy.log(JSON.stringify(oqsResponse))
+  }).as('oqsResponse')
+
+  // Verify the response against the projection
+  cy.all(
+    cy.get('@finalProjection'),
+    cy.get('@oqsResponse')
+  ).then(([projection, oqsResponse]) => {
+    // Verify common details
+    expect(oqsResponse.OrderId).to.be.equal(projection.orderId)
+    expect(oqsResponse.ShopperId).to.be.equal(projection.shopperId)
+    expect(oqsResponse.MarketDeliveryStreet1).to.not.be.null
+    expect(oqsResponse.MarketDeliveryStreet2).to.not.be.null
+    expect(oqsResponse.MarketDeliverySuburb).to.not.be.null
+    expect(oqsResponse.MarketDeliveryPostCode).to.not.be.null
+    expect(oqsResponse.IsMarketOnly).to.be.equal(isMarketOnly)
+    expect(oqsResponse.MarketOrders.length).to.be.greaterThan(0)
+    expect(oqsResponse.MarketShippingPdfLink).to.be.equal(projection.shippingPdfLink)
+    expect(oqsResponse.CurrentStatus).to.be.equal(expectedWOWOrderStatus)
+
+    // If marketOnly order, verify there are no WOW products
+    if (isMarketOnly) {
+      expect(oqsResponse.OrderProducts).to.be.empty
+    }
+
+    // Verify wow order details
+    // Filter WOW items from testdata
+    const wowItems = testData.items.filter(item => item.isEDMProduct === String(false))
+    // Verify the WOW items count match the OQS response. If there is a promo like 'Woolworths Disney+ Ooshie Collectibles'
+    // This will also be added under OrderedProducts. Hence checking length to be for greater than or equal from testdata
+    expect(oqsResponse.OrderProducts.length).to.be.gte(wowItems.length)
+    wowItems.forEach(function (item, k) {
+      expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
+      expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
+      expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
+      expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
+    })
+
+    // Verify edm order details
+    // Verify the edm products count matches with the invoices count
+    expect(oqsResponse.MarketOrders.length).to.be.equal(projection.invoices.length)
+    // Verify each edm item
+    oqsResponse.MarketOrders.forEach(function (item, i) {
+      // Verify the edm items per product/invoice count matches with the lineItems of each invoices count
+      expect(oqsResponse.MarketOrders[i].Products.length).to.be.equal(projection.invoices[i].lineItems.length)
+      oqsResponse.MarketOrders[i].Products.forEach(function (item, j) {
+        expect(oqsResponse.MarketOrders[i].LegacyIdFormatted).to.be.equal(projection.invoices[i].legacyIdFormatted)
+        expect(oqsResponse.MarketOrders[i].SellerName).to.be.equal(projection.invoices[i].seller.sellerName)
+        // Verify order status
+        if (projection.invoices[i].wowStatus === 'SellerCancelled') { expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Cancelled') } else { expect(oqsResponse.MarketOrders[i].Status).to.be.equal(projection.invoices[i].wowStatus) }
+        expect(oqsResponse.MarketOrders[i].Total).to.be.equal(projection.invoices[i].invoiceTotal)
+        expect(oqsResponse.MarketOrders[i].MarketShippingFee).to.be.equal(projection.shippingAmount)
+        expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
+        expect(oqsResponse.MarketOrders[i].CreatedDate).to.not.be.null
+        expect(oqsResponse.MarketOrders[i].UpdatedDate).to.not.be.null
+        expect(oqsResponse.MarketOrders[i].DeliveryInfo).to.not.be.null
+        // Verify if there are any Shipments
+        // When Projection shipments lenght is 0, the OQS response will still have shipments with field DispatchedAtUtc.
+        // Hence checking for length before verification starts
+        if (projection.invoices[i].shipments.length !== 0) {
+          expect(oqsResponse.MarketOrders[i].Shipment.Carrier).to.be.equal(projection.invoices[i].shipments[0].carrier)
+          expect(oqsResponse.MarketOrders[i].Shipment.TrackingLink).to.be.equal(projection.invoices[i].shipments[0].trackingLink)
+          expect(oqsResponse.MarketOrders[i].Shipment.TrackingNumber).to.be.equal(projection.invoices[i].shipments[0].trackingNumber)
+        } else {
+          expect(projection.invoices[i].shipments).to.be.empty
+          expect(oqsResponse.MarketOrders[i].Shipment.Carrier).to.be.undefined
+          expect(oqsResponse.MarketOrders[i].Shipment.TrackingLink).to.be.undefined
+          expect(oqsResponse.MarketOrders[i].Shipment.TrackingNumber).to.be.undefined
+        }
+        // Verify if there are any refunds
+        if (projection.invoices[i].refunds.length !== 0) {
+          oqsResponse.MarketOrders[i].Refunds.forEach(function (oqsRefund, m) {
+            expect(oqsRefund.Id).to.be.equal(projection.invoices[i].refunds[m].id)
+            expect(oqsRefund.RefundAmount).to.be.equal(projection.invoices[i].refunds[m].refundAmount)
+            expect(oqsRefund.Status).to.be.equal(projection.invoices[i].refunds[m].status)
+            expect(oqsRefund.InitiatedBy).to.be.equal(projection.invoices[i].refunds[m].initiatedBy)
+            expect(oqsRefund.UpdatedUtc).to.be.equal(projection.invoices[i].refunds[m].updatedUtc)
+            // Notes
+            expect(JSON.stringify(oqsRefund.Notes).toLowerCase()).to.deep.equal(JSON.stringify(projection.invoices[i].refunds[m].notes).toLowerCase())
+            // RefundItems
+            oqsRefund.RefundItems.forEach(function (oqsRefundItem, n) {
+              expect(oqsRefundItem.Id).to.be.equal(projection.invoices[i].refunds[m].refundItems[n].id)
+              expect(oqsRefundItem.Reason).to.be.equal(projection.invoices[i].refunds[m].refundItems[n].reason)
+              expect(oqsRefundItem.Quantity).to.be.equal(projection.invoices[i].refunds[m].refundItems[n].quantity)
+              expect(oqsRefundItem.Amount).to.be.equal(projection.invoices[i].refunds[m].refundItems[n].amount)
+              expect(oqsRefundItem.Quantity).to.be.equal(projection.invoices[i].refunds[m].refundItems[n].quantity)
+              expect(oqsRefundItem.StockCode).to.be.equal(projection.invoices[i].refunds[m].refundItems[n].lineItem.stockCode)
+            })
+          })
+        } else {
+          expect(projection.invoices[i].refunds).to.be.empty
+          expect(oqsResponse.MarketOrders[i].Refunds).to.be.undefined
+        }
+
+        // Verify if there are any returns
+        if (projection.invoices[i].returns.length !== 0) {
+          oqsResponse.MarketOrders[i].Returns.forEach(function (oqsReturn, m) {
+            expect(oqsReturn.ReturnId).to.be.equal(projection.invoices[i].returns[m].returnId)
+            expect(oqsReturn.MarketRefundId).to.be.equal(projection.invoices[i].returns[m].marketRefundId)
+            expect(oqsReturn.RefundAmount).to.be.equal(projection.invoices[i].returns[m].refundAmount)
+            expect(oqsReturn.TrackingId).to.be.equal(projection.invoices[i].returns[m].trackingId)
+            expect(oqsReturn.ConsignmentId).to.be.equal(projection.invoices[i].returns[m].consignmentId)
+            expect(oqsReturn.CreatedUtc).to.be.equal(projection.invoices[i].returns[m].createdUtc)
+            // Labels
+            oqsReturn.Labels.forEach(function (oqsReturnLabel, p) {
+              expect(oqsReturnLabel.Url).to.be.equal(projection.invoices[i].returns[m].labels[p].url)
+            })
+            // ReturnItems
+            oqsReturn.ReturnItems.forEach(function (oqsReturnItem, n) {
+              expect(oqsReturnItem.Id).to.be.equal(projection.invoices[i].returns[m].returnItems[n].id)
+              oqsReturnItem.LineItems.forEach(function (oqsReturnLineItem, o) {
+                expect(oqsReturnLineItem.Id).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].id)
+                expect(oqsReturnLineItem.StockCode).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].stockCode)
+                expect(oqsReturnLineItem.Quantity).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].quantity)
+                expect(oqsReturnLineItem.Amount).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].amount)
+                expect(oqsReturnLineItem.Reason).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].reason)
+                expect(oqsReturnLineItem.Weight).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].weight)
+                expect(oqsReturnLineItem.Notes).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].notes)
+                expect(oqsReturnLineItem.TrackingId).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].trackingId)
+                expect(oqsReturnLineItem.ConsignmentId).to.be.equal(projection.invoices[i].returns[m].returnItems[n].lineItems[o].consignmentId)
+              })
+            })
+          })
+        } else {
+          expect(projection.invoices[i].returns).to.be.empty
+          expect(oqsResponse.MarketOrders[i].Returns).to.be.undefined
+        }
+
+        // Products
+        expect(oqsResponse.MarketOrders[i].Products[j].StockCode).to.be.equal(projection.invoices[i].lineItems[j].stockCode)
+        expect(oqsResponse.MarketOrders[i].Products[j].Quantity).to.be.equal(projection.invoices[i].lineItems[j].quantity)
+        expect(oqsResponse.MarketOrders[i].Products[j].RefundableQuantity).to.be.equal(projection.invoices[i].lineItems[j].refundableQuantity)
+        expect(oqsResponse.MarketOrders[i].Products[j].Total).to.be.equal(projection.invoices[i].lineItems[j].totalAmount)
+        expect(oqsResponse.MarketOrders[i].Products[j].SalePrice).to.be.equal(projection.invoices[i].lineItems[j].salePrice)
+      })
+    })
+  })
 }

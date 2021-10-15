@@ -19,16 +19,7 @@
         "bufferWowQuantity": 5
       }
     ],
-    "payment": {
-      "creditCard": {
-        "aa": "4940521800534554",
-        "bb": "234",
-        "dd": "11",
-        "ee": "22",
-        "Save": false,
-        "Verify": false
-      }
-    }
+    "paymentType": "CREDIT_CARD_ONLY"
   },
   "VerifyFullyDispatchedEDMOnlyOrderPaypal": {
     "searchTerm": "treats",
@@ -87,16 +78,7 @@
         "bufferWowQuantity": 5
       }
     ],
-    "payment": {
-      "creditCard": {
-        "aa": "4940521800534554",
-        "bb": "234",
-        "dd": "11",
-        "ee": "22",
-        "Save": false,
-        "Verify": false
-      }
-    }
+    "paymentType": "CREDIT_CARD_ONLY"
   },
   "VerifyFullCancellationOfEDMOrder": {
     "searchTerm": "treats",
@@ -117,16 +99,7 @@
         "bufferWowQuantity": 5
       }
     ],
-    "payment": {
-      "creditCard": {
-        "aa": "4940521800534554",
-        "bb": "234",
-        "dd": "11",
-        "ee": "22",
-        "Save": false,
-        "Verify": false
-      }
-    }
+    "paymentType": "CREDIT_CARD_ONLY"
   },
   "customerSelfServiceReturn":{
     "searchTerm": "treats",
@@ -147,16 +120,7 @@
         "bufferWowQuantity": 5
       }
     ],
-    "payment": {
-      "creditCard": {
-        "aa": "4940521800534554",
-        "bb": "234",
-        "dd": "11",
-        "ee": "22",
-        "Save": false,
-        "Verify": false
-      }
-    }
+    "paymentType": "CREDIT_CARD_ONLY"
   },
   "GenericWOWPlusEDMCCPaymentTestData": {
     "searchTerm": "treats",
@@ -177,16 +141,7 @@
         "bufferWowQuantity": 5
       }
     ],
-    "payment": {
-      "creditCard": {
-        "aa": "4940521800534554",
-        "bb": "234",
-        "dd": "11",
-        "ee": "22",
-        "Save": false,
-        "Verify": false
-      }
-    }
+    "paymentType": "CREDIT_CARD_ONLY"
   },
   "GenericWOWPlusEDMPPPaymentTestData": {
     "searchTerm": "treats",

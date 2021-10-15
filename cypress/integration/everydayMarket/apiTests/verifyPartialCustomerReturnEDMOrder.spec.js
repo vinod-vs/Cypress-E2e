@@ -74,7 +74,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
                 cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
@@ -161,8 +161,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               cy.orderEventsApiWithRetry(orderReference, {
                 function: function (response) {
                   if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
                     cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                     throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                   }
@@ -203,10 +203,10 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                 expect(customerReturnResponse.lineItems[0].amount).to.be.equal(testData.items[0].pricePerItem)
                 expect(customerReturnResponse.refundAmount).to.be.equal((testData.items[0].quantity - 1) * testData.items[0].pricePerItem)
                 cy.log('For StockCode= ' + customerReturnResponse.lineItems[0].stockCode +
-                    ' the Purchased quantities are= ' + testData.items[0].quantity +
-                    ' and it is returned with quantities= ' + customerReturnResponse.lineItems[0].quantity +
-                    ' and Total Refunded Amount is= ' + customerReturnResponse.refundAmount +
-                    ' Where Unit Price of EM lineItem is= ' + customerReturnResponse.lineItems[0].amount)
+                  ' the Purchased quantities are= ' + testData.items[0].quantity +
+                  ' and it is returned with quantities= ' + customerReturnResponse.lineItems[0].quantity +
+                  ' and Total Refunded Amount is= ' + customerReturnResponse.refundAmount +
+                  ' Where Unit Price of EM lineItem is= ' + customerReturnResponse.lineItems[0].amount)
                 totalMarketRefundAmount = customerReturnResponse.refundAmount
 
                 /* After Return API Response, Invoke the Projection order api "​/api​/v1​/shoppers​/{shopperId}​/orders​/{orderId}" and Fetch the encoded ""marketRefundId"
@@ -249,7 +249,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                   },
                   retries: Cypress.env('marketApiRetryCount'),
                   timeout: Cypress.env('marketApiTimeout')
-                }).then((ordersApiByShopperIdAndTraderOrderIdResponse) => {
+                }).as('finalProjection').then((ordersApiByShopperIdAndTraderOrderIdResponse) => {
                   cy.log('"Process Return" EM LineItem Status in Order Api Projection after hitting MP GraphQL refundRequestReturn API  was= ' + ordersApiByShopperIdAndTraderOrderIdResponse.invoices[0].refunds[0].status) // Returned
                   expect(ordersApiByShopperIdAndTraderOrderIdResponse.invoices[0].refunds[0].status).to.be.equal('Returned') // This is Status on Website
                 })
@@ -266,9 +266,12 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               // Now Calling Rewards API to verify the Rewards Points Balance are not Deducted after the Return is Performed
               cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
                 cy.log(' Rewards Points After DISPATCH were= ' + testData.rewardPointAfter +
-                     ' and Rewards Points After RETURN are= ' + response.queryCardDetailsResp.pointBalance)
+                  ' and Rewards Points After RETURN are= ' + response.queryCardDetailsResp.pointBalance)
                 expect(response.queryCardDetailsResp.pointBalance).to.be.equal(testData.rewardPointAfter)
               })
+
+              // Invoke OQS TMO api and validate it against the projection
+              lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
             })
           })
         })

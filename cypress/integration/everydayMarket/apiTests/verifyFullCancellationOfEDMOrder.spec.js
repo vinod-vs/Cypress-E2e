@@ -78,7 +78,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
                 cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
@@ -112,7 +112,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               },
               retries: 10,
               timeout: 5000
-            }).then((response) => {
+            }).as('finalProjection').then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
               // Seller details
@@ -202,8 +202,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
-                  !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
+                !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
+                !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
                 cy.log('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
                 throw new Error('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted were not present')
               }
@@ -230,6 +230,9 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           // Verify the MP and shipping invoices are available for the customer
           // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
+
+          // Invoke OQS TMO api and validate it against the projection
+          lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
         })
       })
     })

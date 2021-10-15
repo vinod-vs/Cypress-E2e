@@ -107,7 +107,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               },
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
-            }).then((response) => {
+            }).as('finalProjection').then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, testData, shopperId)
               // Seller details
@@ -195,6 +195,9 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               // Verify the MP and shipping invoices are available for the customer
               // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
+
+              // Invoke OQS TMO api and validate it against the projection
+              lib.verifyOQSOrderStatus(testData.orderId, 'Received', true, testData)
             })
           })
         })

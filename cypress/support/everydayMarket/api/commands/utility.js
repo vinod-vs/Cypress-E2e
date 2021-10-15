@@ -260,7 +260,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
           item.pricePerItem = response.Products[y].Products[0].Price
           totalEdmQuantity = totalEdmQuantity + mpQuantity
           totalQuantity = totalQuantity + mpQuantity
-          edmTotal = Number.parseFloat(Number(item.quantity) * Number(item.pricePerItem)).toFixed(2)
+          edmTotal = Number(Number.parseFloat(Number(item.quantity) * Number(item.pricePerItem)).toFixed(2))
 
           cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
           cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
@@ -320,49 +320,36 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
 Cypress.Commands.add('payTheOrder', (testData) => {
   cy.log('PaymentType: ' + testData.paymentType)
 
-  if (testData.paymentType === paymentType.PAYPAL_ONLY) {
-    // Checkout
-    cy.navigateToCheckout().then((response) => {
-      expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-      digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
-    })
-    // Pay with paypal
-    cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
-  } else if (testData.paymentType === paymentType.PAYPAL_PLUS_REWARDS) {
-    // Redeem $10 from rewards
-    cy.redeemRewardsDollars(10)
-    // Checkout
-    cy.navigateToCheckout().then((response) => {
-      expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-      digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
-    })
-    // Pay with paypal
-    cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
-  } else { // default is CREDIT_CARD_ONLY
-    // Checkout
-    cy.navigateToCheckout().then((response) => {
-      expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-      digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
-    })
-
-    // Pay with CC
-    cy.log('Using default PaymentType: CREDIT_CARD_ONLY')
-    cy.navigatingToCreditCardIframe().then((response) => {
-      expect(response).to.have.property('Success', true)
-      creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
-    })
-    cy.getExpectedCCCardDetails()
-    cy.get('@creditCardToUse').then((creditCardToUse) => {
-      cy.creditcardPayment(creditCardToUse, creditcardSessionHeader).then((response) => {
-        cy.log('creditcardPaymentResponse: ' + JSON.stringify(response))
-        expect(response.status.responseText).to.be.eqls('ACCEPTED')
-        cy.getPaymentInstrumentId(response)
+  switch (testData.paymentType) {
+    case paymentType.PAYPAL_ONLY:
+      // Checkout
+      cy.navigateToCheckout().then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+        digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
       })
-    })
-    cy.get('@paymentInstrumentId').then((paymentInstrumentId) => {
-      digitalPaymentRequest.payments[0].paymentInstrumentId = paymentInstrumentId
-    })
-    cy.digitalPay(digitalPaymentRequest).as('paymentResponse')
+      // Pay with paypal
+      cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
+      break
+    case paymentType.PAYPAL_PLUS_REWARDS:
+      // Redeem $10 from rewards
+      cy.redeemRewardsDollars(10)
+      // Checkout
+      cy.navigateToCheckout().then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+        digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
+      })
+      // Pay with paypal
+      cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
+      break
+    case paymentType.CREDIT_CARD_ONLY:
+      cy.payByCreditCard()
+      break
+    case paymentType.CREDIT_CARD_PLUS_REWARDS:
+      // TODO
+      break
+    default: // default is CREDIT_CARD_ONLY
+      cy.payByCreditCard()
+      break
   }
 
   // Verify the order is placed
@@ -383,6 +370,33 @@ Cypress.Commands.add('getPaymentInstrumentId', (creditcardPaymentResponse) => {
     cy.log('creditcardPaymentResponse.paymentInstrument.itemId: ' + creditcardPaymentResponse.paymentInstrument.itemId)
   }
   cy.wrap(paymentInstrumentId).as('paymentInstrumentId')
+})
+
+Cypress.Commands.add('payByCreditCard', () => {
+  // Checkout
+  cy.navigateToCheckout().then((response) => {
+    expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+    digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
+  })
+
+  // Pay with CC
+  cy.log('Using default PaymentType: CREDIT_CARD_ONLY')
+  cy.navigatingToCreditCardIframe().then((response) => {
+    expect(response).to.have.property('Success', true)
+    creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
+  })
+  cy.getExpectedCCCardDetails()
+  cy.get('@creditCardToUse').then((creditCardToUse) => {
+    cy.creditcardPayment(creditCardToUse, creditcardSessionHeader).then((response) => {
+      cy.log('creditcardPaymentResponse: ' + JSON.stringify(response))
+      expect(response.status.responseText).to.be.eqls('ACCEPTED')
+      cy.getPaymentInstrumentId(response)
+    })
+  })
+  cy.get('@paymentInstrumentId').then((paymentInstrumentId) => {
+    digitalPaymentRequest.payments[0].paymentInstrumentId = paymentInstrumentId
+  })
+  cy.digitalPay(digitalPaymentRequest).as('paymentResponse')
 })
 
 Cypress.Commands.add('getExpectedCCCardDetails', () => {
