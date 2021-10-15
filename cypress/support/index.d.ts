@@ -4,11 +4,11 @@ declare namespace Cypress {
     clearCookies(value: any): void;
     clearLocalStorage(value: any): void;
     loginViaApi(value: any): void;
-    searchPickupDTBStores(fulfilmentType: String, searchValue: any): any;
-    getFulfilmentWindowViaApi(windowType: String): any;
+    searchPickupDTBStores(fulfilmentType: string, searchValue: any): any;
+    getFulfilmentWindowViaApi(windowType: string): any;
     completeWindowFulfilmentViaApi(): any;
     clearTrolley(): void;
-    addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm: String, priceThreshold: Number): void;
+    addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm: string, priceThreshold: number): void;
     navigateToCheckout(): any;
     navigatingToCreditCardIframe(): any;
     creditcardPayment(cardDetails: any, sessionHeader: any): any;
