@@ -75,7 +75,7 @@ TestFilter(['B2C-API'], () => {
           // Test a new user has any existing subscription plan
           cy.checkExistingPlanViaApi(shopperId).then((response) => {
             expect(response.status).to.eq(200)
-            expect(response.body.Errors[0].ErrorMessage).to.contain('Could not find a subscriber for tenant WOOLWORTHSONLINE and externalId ' + shopperId)
+            expect(response.body.Errors[0].ErrorMessage).to.contain('Could not find a subscriber for tenant WOOLWORTHSONLINE and customerIdentifier ' + shopperId)
           })
           // Search billing address
           cy.searchBillingAddressViaApi(searchAddress.search).then((response) => {
