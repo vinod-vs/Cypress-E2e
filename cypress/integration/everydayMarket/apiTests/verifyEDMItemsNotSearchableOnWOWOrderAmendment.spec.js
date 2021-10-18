@@ -67,7 +67,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           },
           retries: Cypress.env('marketApiRetryCount'),
           timeout: Cypress.env('marketApiTimeout')
-        }).then((response) => {
+        }).as('finalProjection').then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
           testData.edmOrderId = edmOrderId
@@ -108,15 +108,18 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           expect(response.SearchResultsCount).to.be.greaterThan(0)
 
           // Verify no EDM products are available for user to ATC
-          const edmSearchProduct = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].RichDescription !== null && searchProduct.Products[0].Price !== null)
+          const edmSearchProduct = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null)
           cy.log('Product EDM Search' + JSON.stringify(edmSearchProduct))
           expect(edmSearchProduct).to.be.empty
 
           // Verify WOW itmes are still searchable and addable to cart
-          const wowSearchProduct = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].RichDescription !== null && searchProduct.Products[0].Price !== null)
+          const wowSearchProduct = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null)
           cy.log('Product WOW Search' + JSON.stringify(wowSearchProduct))
           expect(wowSearchProduct.length).to.be.greaterThan(0)
         })
+
+        // Invoke OQS TMO api and validate it against the projection
+        lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
       })
     })
   })

@@ -142,12 +142,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           // Verify NO refund details
           lib.verifyRefundDetails(testData.orderId, 0, 0)
         })
+        // Invoke OQS TMO api and validate it against the projection
+        lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
       })
     })
   })
 })
 
-function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
+function verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
   cy.log('Partial Dispatch :' + partialDispatchNumber + ':: Tracking ID ::' + trackingId)
   // After dispatch, Invoke the order api and verify the projection content is updated acordingly
   cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -166,7 +168,7 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
     },
     retries: 10,
     timeout: 5000
-  }).then((response) => {
+  }).as('finalProjection').then((response) => {
     // Order details
     lib.verifyCommonOrderDetails(response, testData, shopperId)
     // Seller details

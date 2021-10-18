@@ -4,7 +4,7 @@ import '../../../refunds/api/commands/commands'
 import '../../../invoices/api/commands/commands'
 import '../../../oqs/api/commands/oqs'
 
-export function verifyEventDetails (response, expectedEventName, testData, shopperId, expectedEventCount) {
+export function verifyEventDetails(response, expectedEventName, testData, shopperId, expectedEventCount) {
   cy.log('Expected Event Name: ' + expectedEventName + ' , expected count: ' + expectedEventCount)
   const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
   cy.log('Expected events: ' + JSON.stringify(events))
@@ -22,7 +22,7 @@ export function verifyEventDetails (response, expectedEventName, testData, shopp
   expect(events).to.have.length(expectedEventCount)
 }
 
-export function verifyCommonOrderDetails (response, testData, shopperId) {
+export function verifyCommonOrderDetails(response, testData, shopperId) {
   // Order details
   expect(response.orderId).to.equal(Number(testData.orderId))
   expect(response.orderReference).to.be.equal(testData.orderReference)
@@ -36,7 +36,7 @@ export function verifyCommonOrderDetails (response, testData, shopperId) {
   expect(response.invoices.length).to.be.equal(1)
 }
 
-export function verifyOrderTotals (testData, confirmOrderResponse) {
+export function verifyOrderTotals(testData, confirmOrderResponse) {
   testData.edmDeliveryCharges = confirmOrderResponse.Order.MarketDeliveryFee
   testData.wowDeliveryCharges = confirmOrderResponse.Order.WoolworthsDeliveryFee
   testData.packagingFee = confirmOrderResponse.Order.PackagingFee
@@ -54,7 +54,7 @@ export function verifyOrderTotals (testData, confirmOrderResponse) {
   expect(confirmOrderResponse.Order.TotalIncludingGst).to.be.equal(Number(Number.parseFloat(testData.orderTotal).toFixed(2)))
 }
 
-export function generateRandomString () {
+export function generateRandomString() {
   let randomStr = ''
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   for (let i = 0; i < 10; i++) {
@@ -63,7 +63,7 @@ export function generateRandomString () {
   return randomStr
 }
 
-export function verifyRefundDetails (traderOrderId, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
+export function verifyRefundDetails(traderOrderId, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
   cy.getRefundDetails(traderOrderId).then((response) => {
     expect(response.Total).to.be.equal(Number(Number.parseFloat(Number(expectedEdmRefundTotal) + Number(expectedEdmShippingFeeRefund)).toFixed(2)))
     expect(response.Summaries.Market[0].Value).to.be.equal(Number(expectedEdmRefundTotal))
@@ -71,7 +71,7 @@ export function verifyRefundDetails (traderOrderId, expectedEdmRefundTotal, expe
   })
 }
 
-export function verifyCompleteRefundDetails (traderOrderId, expectedWOWRefundTotal, expectedWOWReusableBagsRefund, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
+export function verifyCompleteRefundDetails(traderOrderId, expectedWOWRefundTotal, expectedWOWReusableBagsRefund, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
   cy.getRefundDetails(traderOrderId).then((response) => {
     expect(response.Total).to.be.equal(Number(Number.parseFloat(Number(expectedEdmRefundTotal) + Number(expectedEdmShippingFeeRefund) + Number(expectedWOWRefundTotal) + Number(expectedWOWReusableBagsRefund)).toFixed(2)))
     expect(response.Summaries.Woolworths[0].Value).to.be.equal(Number(expectedWOWRefundTotal))
@@ -81,7 +81,7 @@ export function verifyCompleteRefundDetails (traderOrderId, expectedWOWRefundTot
   })
 }
 
-export function verifyCompleteRefundDetailsWithRetry (traderOrderId, expectedWOWRefundTotal, expectedWOWReusableBagsRefund, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
+export function verifyCompleteRefundDetailsWithRetry(traderOrderId, expectedWOWRefundTotal, expectedWOWReusableBagsRefund, expectedEdmRefundTotal, expectedEdmShippingFeeRefund) {
   const total = Number.parseFloat(Number(expectedWOWRefundTotal) + Number(expectedWOWReusableBagsRefund) + Number(expectedEdmRefundTotal) + Number(expectedEdmShippingFeeRefund)).toFixed(2)
   cy.getRefundDetailsWithRetry(traderOrderId, {
     function: function (response) {
@@ -101,7 +101,7 @@ export function verifyCompleteRefundDetailsWithRetry (traderOrderId, expectedWOW
   })
 }
 
-export function verifyInvoiceDetails (invoice, testData) {
+export function verifyInvoiceDetails(invoice, testData) {
   expect(invoice).to.not.be.null
   expect(invoice.InvoiceId).to.be.equal(Number(testData.orderId))
   expect(invoice.CollectionType).to.be.equal('Courier')
@@ -123,7 +123,7 @@ export function verifyInvoiceDetails (invoice, testData) {
   expect(invoice.MarketInvoices[1].DayRangeDispatchNote).to.be.null
 }
 
-export function verifyInitialOrderDetails (response, testData, shopperId) {
+export function verifyInitialOrderDetails(response, testData, shopperId) {
   // Common Order details
   verifyCommonOrderDetails(response, testData, shopperId)
 
@@ -175,7 +175,7 @@ export function verifyInitialOrderDetails (response, testData, shopperId) {
  *
  * Make sure your latest projection is saved as 'finalProjection'. OQS response is verified against this projection
  */
-export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isMarketOnly, testData) {
+export function verifyOQSOrderStatus(traderOrderId, expectedWOWOrderStatus, isMarketOnly, testData) {
   // Invoke OQS api
   cy.getOrderStatus(traderOrderId).then((oqsResponse) => {
     cy.log(JSON.stringify(oqsResponse))
@@ -187,7 +187,7 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
     cy.get('@oqsResponse')
   ).then(([projection, oqsResponse]) => {
     // Verify common details
-    expect(oqsResponse.OrderId).to.be.equal(projection.orderId)
+    expect(oqsResponse.OrderId).to.be.equal(Number(traderOrderId))
     expect(oqsResponse.ShopperId).to.be.equal(projection.shopperId)
     expect(oqsResponse.MarketDeliveryStreet1).to.not.be.null
     expect(oqsResponse.MarketDeliveryStreet2).to.not.be.null
@@ -206,15 +206,20 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
     // Verify wow order details
     // Filter WOW items from testdata
     const wowItems = testData.items.filter(item => item.isEDMProduct === String(false))
-    // Verify the WOW items count match the OQS response. If there is a promo like 'Woolworths Disney+ Ooshie Collectibles'
-    // This will also be added under OrderedProducts. Hence checking length to be for greater than or equal from testdata
     expect(oqsResponse.OrderProducts.length).to.be.gte(wowItems.length)
-    wowItems.forEach(function (item, k) {
-      expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
-      expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
-      expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
-      expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
-    })
+    if (wowItems.length !== 0) {
+      // Verify the WOW items count match the OQS response. If there is a promo like 'Woolworths Disney+ Ooshie Collectibles'
+      // This will also be added under OrderedProducts. Hence checking length to be for greater than or equal from testdata
+      wowItems.forEach(function (item, k) {
+        expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
+        expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
+        expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
+        expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
+      })
+    } else {
+      //On WOW order cancellations the OQS response with the new traderOrderId will have empty OrderProducts as the WOW items will be removed and only the EDM products will be retained in the new traderorderId
+      expect(oqsResponse.OrderProducts).to.be.empty
+    }
 
     // Verify edm order details
     // Verify the edm products count matches with the invoices count
@@ -227,7 +232,13 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
         expect(oqsResponse.MarketOrders[i].LegacyIdFormatted).to.be.equal(projection.invoices[i].legacyIdFormatted)
         expect(oqsResponse.MarketOrders[i].SellerName).to.be.equal(projection.invoices[i].seller.sellerName)
         // Verify order status
-        if (projection.invoices[i].wowStatus === 'SellerCancelled') { expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Cancelled') } else { expect(oqsResponse.MarketOrders[i].Status).to.be.equal(projection.invoices[i].wowStatus) }
+        if (projection.invoices[i].wowStatus === 'SellerCancelled') {
+          expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Cancelled')
+        } else if (projection.invoices[i].wowStatus === 'Placed') {
+          expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Received')
+        } else {
+          expect(oqsResponse.MarketOrders[i].Status).to.be.equal(projection.invoices[i].wowStatus)
+        }
         expect(oqsResponse.MarketOrders[i].Total).to.be.equal(projection.invoices[i].invoiceTotal)
         expect(oqsResponse.MarketOrders[i].MarketShippingFee).to.be.equal(projection.shippingAmount)
         expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
@@ -237,6 +248,7 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
         // Verify if there are any Shipments
         // When Projection shipments lenght is 0, the OQS response will still have shipments with field DispatchedAtUtc.
         // Hence checking for length before verification starts
+        //For shipments, only the first shipment is sent to OQS from order update service. Hence just checking for the first shipment and not all the shipments in the projection.
         if (projection.invoices[i].shipments.length !== 0) {
           expect(oqsResponse.MarketOrders[i].Shipment.Carrier).to.be.equal(projection.invoices[i].shipments[0].carrier)
           expect(oqsResponse.MarketOrders[i].Shipment.TrackingLink).to.be.equal(projection.invoices[i].shipments[0].trackingLink)

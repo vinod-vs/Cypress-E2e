@@ -73,7 +73,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
                 cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
@@ -157,8 +157,8 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               cy.orderEventsApiWithRetry(orderReference, {
                 function: function (response) {
                   if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
                     cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                     throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                   }
@@ -220,7 +220,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                     },
                     retries: Cypress.env('marketApiRetryCount'),
                     timeout: Cypress.env('marketApiTimeout')
-                  }).then((response) => {
+                  }).as('finalProjection').then((response) => {
                     expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
                     expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
                     expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
@@ -257,7 +257,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                     cy.orderEventsApiWithRetry(orderReference, {
                       function: function (response) {
                         if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
-                        !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
+                          !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
                           cy.log('Expected MarketOrderRefund & RefundCompleted were not present')
                           throw new Error('Expected MarketOrderRefund & RefundCompleted were not present')
                         }
@@ -268,6 +268,9 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
                       lib.verifyEventDetails(response, 'MarketOrderRefund', testData, shopperId, 1)
                       lib.verifyEventDetails(response, 'RefundCompleted', testData, shopperId, 1)
                     })
+
+                    // Invoke OQS TMO api and validate it against the projection
+                    lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
                   })
                 })
               })

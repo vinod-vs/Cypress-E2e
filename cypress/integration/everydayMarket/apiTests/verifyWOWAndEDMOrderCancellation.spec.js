@@ -113,7 +113,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               },
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
-            }).as('newProjectionAfterCancelation').then((response) => {
+            }).as('finalProjection').then((response) => {
               // Order details
               lib.verifyCommonOrderDetails(response, { ...testData, orderId: response.orderId }, shopperId)
               // Seller details
@@ -201,7 +201,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
           // Verify invoices
-          cy.get('@newProjectionAfterCancelation').then((newProjectionAfterCancelation) => {
+          cy.get('@finalProjection').then((newProjectionAfterCancelation) => {
             // Verify the MP and shipping invoices are available for the customer
             // TO-DO Verify the invoice content
             cy.verifyOrderInvoice({ ...testData, orderId: newProjectionAfterCancelation.orderId })
@@ -211,6 +211,14 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
             cy.log('ExpectedWowRefund: ' + wowRefund)
             // Verify just the WOW order is refunded and not the EM order
             lib.verifyCompleteRefundDetailsWithRetry(testData.orderId, wowRefund, 0, 0, 0)
+          })
+
+          // Invoke OQS TMO api and validate it against the projection
+          cy.get('@finalProjection').then((finalProjection) => {
+            //Old trader order will be in Cancelled state, Will be an WOW + MP Order and will have all the WOW items as well
+            lib.verifyOQSOrderStatus(testData.orderId, 'Cancelled', false, testData)
+            //New trader order will be in Received state, Will be an MP ONLY Order and will NOT have all the WOW items in it
+            lib.verifyOQSOrderStatus(finalProjection.orderId, 'Received', true, { ...testData, items: [] })
           })
         })
       })
