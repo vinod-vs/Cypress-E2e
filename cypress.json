@@ -21,6 +21,8 @@
         "timeSlotsEndpoint": "apis/ui/Timeslots",
         "windowsEndpoint": "/api/v3/ui/checkout/windows",
         "fulfilmentEndpoint": "apis/ui/Fulfilment",
+        "deliveryOptionsEndpoint": "/apis/ui/Delivery/Options",
+        "deliveryInfoEndpoint": "/apis/ui/Delivery/DeliveryInfo",
         "clearTrolleyEndpoint": "apis/ui/Trolley/Clear",
         "addItemsToTrolleyEndpoint": "apis/ui/Trolley/Items",
         "navigateToCheckoutEndpoint": "apis/ui/Checkout",

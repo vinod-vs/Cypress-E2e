@@ -13,6 +13,14 @@ declare namespace Cypress {
     navigatingToCreditCardIframe(): any;
     creditcardPayment(cardDetails: any, sessionHeader: any): any;
     digitalPay(digiPayRequest: any): any;
-    confirmOrder(orderDetails: any): any;  
+    confirmOrder(orderDetails: any): any;
+    logOutViaApi(): void;
+    setSignUpDetails(): any;
+    signUpViaApi(signUpDetails: any): any;
+    setDeliveryOptionsViaApi(deliveryOptions: any): any;
+    setFulfilmentLocationWithWindow(fulfilmentType: string, addressSearchBody: any, windowType: string): any;
+    placeOrderViaApiWithAddedCreditCard(creditCardDetails: any): any;
+    api(request: any): any;
   }
-}
+}  
+  
