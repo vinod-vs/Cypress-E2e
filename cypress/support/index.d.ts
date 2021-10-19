@@ -3,11 +3,13 @@ declare namespace Cypress {
     // Cypress custom commands
     clearCookies(value: any): void;
     clearLocalStorage(value: any): void;
-    loginViaApi(value: any): void;
+    loginViaApi(value: any): any;
     searchPickupDTBStores(fulfilmentType: string, searchValue: any): any;
+    addDeliveryAddress(): any;
+    searchDeliveryAddress(addressSearchBody: any): any;
     getFulfilmentWindowViaApi(windowType: string): any;
     completeWindowFulfilmentViaApi(): any;
-    clearTrolley(): void;
+    clearTrolley(): any;
     addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm: string, priceThreshold: number): void;
     navigateToCheckout(): any;
     navigatingToCreditCardIframe(): any;

@@ -5,7 +5,7 @@ Cypress.Commands.add('navigatingToCreditCardIframe', () => {
 })
 
 Cypress.Commands.add('creditcardPayment', (creditcardPayment, creditcardSessionHeader) => {
-  cy.request({
+  cy.api({
     method: 'POST',
     url: Cypress.env('creditCardPaymentEndpoint'),
     headers: {

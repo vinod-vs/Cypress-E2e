@@ -13,8 +13,8 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails) 
   })
 
   cy.creditcardPayment(creditCardDetails, creditcardSessionHeader).then((response: any) => {
-    cy.log('Payment Instrument ItemId is: ' + response.paymentInstrument.itemId)
-    digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
+    cy.log('Payment Instrument ItemId is: ' + response.itemId)
+    digitalPayment.payments[0].paymentInstrumentId = response.itemId
   })
 
   cy.digitalPay(digitalPayment).then((response: any) => {
