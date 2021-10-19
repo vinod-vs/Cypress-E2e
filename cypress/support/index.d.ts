@@ -21,6 +21,6 @@ declare namespace Cypress {
     setFulfilmentLocationWithWindow(fulfilmentType: string, addressSearchBody: any, windowType: string): any;
     placeOrderViaApiWithAddedCreditCard(creditCardDetails: any): any;
     api(request: any): any;
+    navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
   }
-}  
-  
+}

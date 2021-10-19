@@ -12,6 +12,7 @@
         "shopWithListsDiscoverPageEndPoint": "apis/ui/inspiration/page/work-shop-with-lists",
         "onlinePricingDiscoverPageEndPoint": "apis/ui/inspiration/page/work-online-pricing-payment",
         "bulkOrdersDiscoverPageEndPoint": "apis/ui/inspiration/page/work-bulk-orders",
-        "faqDiscoverPageEndPoint": "apis/ui/inspiration/page/work-help-and-support-faq"
+        "faqDiscoverPageEndPoint": "apis/ui/inspiration/page/work-help-and-support-faq",
+        "expressionOfInterestPageEndPoint": "apis/ui/SeoMetatags"
     }
 }

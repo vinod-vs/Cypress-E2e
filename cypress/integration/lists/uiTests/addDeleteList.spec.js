@@ -13,8 +13,9 @@ TestFilter(['B2B-UI'], () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
-      cy.clearCookie('w-rctx')
+      // cy.clearCookie('w-rctx')
       cy.clearLocalStorage({ domain: null })
+      Cypress.Cookies.preserveOnce('w-rctx')
     })
     it('Create a list and Delete the list', () => {
       // Login

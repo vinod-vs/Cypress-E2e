@@ -27,11 +27,6 @@ require('cypress-xpath')
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-// note this may conflict with clearcookies as defaults always supersedes
-Cypress.Cookies.defaults({
-  preserve: ['w-rctx']
-})
-
 // Required to ignore uncaught exceptions thrown by the application else tests will fail on an occurances
 Cypress.on('uncaught:exception', (err, runnable) => {
   // returning false here prevents Cypress from

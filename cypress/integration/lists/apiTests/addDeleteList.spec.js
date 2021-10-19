@@ -21,6 +21,7 @@ TestFilter(['API'], () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
+      Cypress.Cookies.preserveOnce('w-rctx')
     })
 
     it('Should create a new list, add items in the list and delete the list', () => {
