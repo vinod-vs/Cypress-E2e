@@ -129,7 +129,7 @@ export function verifyInitialOrderDetails(response, testData, shopperId) {
 
   // Seller details
   expect(response.invoices[0].seller.sellerId).to.not.be.null
-  expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+  expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
 
   // Invoice details
   expect(response.invoices[0].invoiceStatus).to.be.equal('PAID')
@@ -172,10 +172,11 @@ export function verifyInitialOrderDetails(response, testData, shopperId) {
  * @param {*} expectedWOWOrderStatus
  * @param {*} isMarketOnly
  * @param {*} testData
+ * * @param {*} args[0] skipStatusVerification -> true if you want to skip status verification else false
  *
  * Make sure your latest projection is saved as 'finalProjection'. OQS response is verified against this projection
  */
-export function verifyOQSOrderStatus(traderOrderId, expectedWOWOrderStatus, isMarketOnly, testData) {
+export function verifyOQSOrderStatus(traderOrderId, expectedWOWOrderStatus, isMarketOnly, testData, ...args) {
   // Invoke OQS api
   cy.getOrderStatus(traderOrderId).then((oqsResponse) => {
     cy.log(JSON.stringify(oqsResponse))
@@ -232,12 +233,16 @@ export function verifyOQSOrderStatus(traderOrderId, expectedWOWOrderStatus, isMa
         expect(oqsResponse.MarketOrders[i].LegacyIdFormatted).to.be.equal(projection.invoices[i].legacyIdFormatted)
         expect(oqsResponse.MarketOrders[i].SellerName).to.be.equal(projection.invoices[i].seller.sellerName)
         // Verify order status
-        if (projection.invoices[i].wowStatus === 'SellerCancelled') {
-          expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Cancelled')
-        } else if (projection.invoices[i].wowStatus === 'Placed') {
-          expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Received')
+        if (args.length > 0 && args[0] !== true) {
+          if (projection.invoices[i].wowStatus === 'SellerCancelled') {
+            expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Cancelled')
+          } else if (projection.invoices[i].wowStatus === 'Placed') {
+            expect(oqsResponse.MarketOrders[i].Status).to.be.equal('Received')
+          } else {
+            expect(oqsResponse.MarketOrders[i].Status).to.be.equal(projection.invoices[i].wowStatus)
+          }
         } else {
-          expect(oqsResponse.MarketOrders[i].Status).to.be.equal(projection.invoices[i].wowStatus)
+          cy.log('Skipping status validation. Projection Status: ' + projection.invoices[i].wowStatus + ' , OQS Status: ' + oqsResponse.MarketOrders[i].Status)
         }
         expect(oqsResponse.MarketOrders[i].Total).to.be.equal(projection.invoices[i].invoiceTotal)
         expect(oqsResponse.MarketOrders[i].MarketShippingFee).to.be.equal(projection.shippingAmount)
