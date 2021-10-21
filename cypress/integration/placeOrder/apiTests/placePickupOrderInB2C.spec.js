@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shopper from '../../../fixtures/login/b2cLogin.json'
+import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import searchBody from '../../../fixtures/search/productSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
@@ -20,6 +20,7 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/address/api/commands/searchSetValidateAddress'
 
 TestFilter(['B2C-API'], () => {
   describe('[API] Place a Pick up order in B2C platform using Credit Card', () => {
@@ -29,7 +30,11 @@ TestFilter(['B2C-API'], () => {
     })
 
     it('Should place a Pick up order using a credit card', () => {
-      cy.loginViaApi(shopper)
+      cy.loginWithNewShopperViaApi()
+
+      cy.searchBillingAddressViaApi(addressSearchBody.search).then((response) => {
+        cy.setBillingAddressViaApi(response.body.Response[0].Id)  
+      })
 
       cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response) => {
         expect(response[0].AddressId).to.not.be.null
@@ -76,7 +81,7 @@ TestFilter(['B2C-API'], () => {
       cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
 
-        digitalPayment.payments[0].paymentInstrumentId = response.itemId
+        digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
       cy.digitalPay(digitalPayment).then((response) => {

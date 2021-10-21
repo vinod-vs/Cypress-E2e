@@ -102,7 +102,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           trackingId1 = lib.generateRandomString()
           cy.log('First Tracking Id :' + trackingId1)
           const data1 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
-          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data1, trackingId1, testData.carrier, testData.sellerName).then((response) => {
+          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data1, trackingId1, testData.carrier, testData.items[0].sellerName).then((response) => {
             partialDispatchNumber = 1
             expect(response.data.attributes.shipment_tracking_number).to.be.equal(trackingId1)
             expect(response.data.attributes.shipment_carrier).to.be.equal(testData.carrier)
@@ -122,7 +122,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           trackingId2 = lib.generateRandomString()
           cy.log('Second Tracking Id :' + trackingId2)
           const data2 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
-          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data2, trackingId2, testData.carrier, testData.sellerName).then((response) => {
+          cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data2, trackingId2, testData.carrier, testData.items[0].sellerName).then((response) => {
             partialDispatchNumber = 2
             expect(response.data.attributes.shipment_tracking_number).to.be.equal(trackingId2)
             expect(response.data.attributes.shipment_carrier).to.be.equal(testData.carrier)
@@ -173,7 +173,7 @@ function verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId, 
     lib.verifyCommonOrderDetails(response, testData, shopperId)
     // Seller details
     expect(response.invoices[0].seller.sellerId).to.not.be.null
-    expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+    expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
     // Invoice details
     if (partialDispatchNumber === 1) {
       expect(response.invoices[0].invoiceStatus).to.be.equal('PARTIALLY_SENT')

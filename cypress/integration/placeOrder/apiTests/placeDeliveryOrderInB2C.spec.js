@@ -1,10 +1,7 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shopper from '../../../fixtures/login/b2cLogin.json'
-import searchBody from '../../../fixtures/search/productSearch.json'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
-import addItemsBody from '../../../fixtures/sideCart/addItemsToTrolley.json'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
@@ -21,10 +18,6 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 
-let productStockCode
-let productPrice
-let supplyLimit
-
 TestFilter(['B2C-API'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
     before(() => {
@@ -33,9 +26,7 @@ TestFilter(['B2C-API'], () => {
     })
 
     it('Should place an order using credit card', () => {
-      cy.loginViaApi(shopper).then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
-      })
+      cy.loginWithNewShopperViaApi()
 
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
         expect(response.Response[0].Id).to.not.be.empty
@@ -65,78 +56,8 @@ TestFilter(['B2C-API'], () => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 
-      cy.clearTrolley().then((response) => {
-        expect(response).to.have.property('TrolleyItemCount', 0)
-
-        expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
-      })
-
-      searchBody.SearchTerm = 'Fish'
-
-      cy.productSearch(searchBody).then((response) => {
-        expect(response.SearchResultsCount).to.be.greaterThan(0)
-
-        let x
-
-        for (x in response.Products) {
-          if (response.Products[x].Products[0].Price !== null &&
-                        response.Products[x].Products[0].IsInStock === true &&
-                        response.Products[x].Products[0].ProductRestrictionMessage === null &&
-                        response.Products[x].Products[0].ProductWarningMessage === null) {
-            productStockCode = response.Products[x].Products[0].Stockcode
-
-            productPrice = response.Products[x].Products[0].InstorePrice
-
-            supplyLimit = response.Products[x].Products[0].SupplyLimit
-
-            break
-          }
-        }
-
-        addItemsBody.StockCode = productStockCode
-
-        if (productPrice >= 3 && supplyLimit >= 10) {
-          addItemsBody.Quantity = 10
-        } else if (productPrice < 3 && supplyLimit >= 30) {
-          addItemsBody.Quantity = 30
-        }
-      })
-
-      cy.addItemsToTrolley(addItemsBody).then((response) => {
-        expect(response.TotalTrolleyItemQuantity).to.be.eqls(addItemsBody.Quantity)
-
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0).then((response) => {
         expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
-
-        cy.wrap(response.Totals.WoolworthsSubTotal).as('cartSubTotal')
-      })
-
-      cy.get('@cartSubTotal').then(cartSubTotal => {
-        if (cartSubTotal < 30) {
-          searchBody.SearchTerm = 'Bread Rolls'
-
-          cy.productSearch(searchBody).then((response) => {
-            expect(response.SearchResultsCount).to.be.greaterThan(0)
-
-            let x
-
-            for (x in response.Products) {
-              if (response.Products[x].Products[0].Price !== null && response.Products[x].Products[0].IsInStock === true) {
-                productStockCode = response.Products[x].Products[0].Stockcode
-
-                productPrice = response.Products[x].Products[0].InstorePrice
-
-                break
-              }
-            }
-            addItemsBody.StockCode = productStockCode
-
-            if (productPrice >= 3) {
-              addItemsBody.Quantity = 10
-            } else {
-              addItemsBody.Quantity = 30
-            }
-          })
-        }
       })
 
       cy.navigateToCheckout().then((response) => {
@@ -154,7 +75,7 @@ TestFilter(['B2C-API'], () => {
       cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
 
-        digitalPayment.payments[0].paymentInstrumentId = response.itemId
+        digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
       cy.digitalPay(digitalPayment).then((response) => {

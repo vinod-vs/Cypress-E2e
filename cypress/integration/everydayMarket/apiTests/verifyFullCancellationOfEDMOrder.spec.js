@@ -117,7 +117,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               lib.verifyCommonOrderDetails(response, testData, shopperId)
               // Seller details
               expect(response.invoices[0].seller.sellerId).to.not.be.null
-              expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+              expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
               // Verifying Invoice details after seller cancellation
               expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
               expect(response.invoices[0].wowStatus).to.be.equal('SellerCancelled')

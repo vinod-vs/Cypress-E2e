@@ -11,12 +11,12 @@ export class DeliveryDateAndWindowPage {
     return cy.get('button.selected-fulfilment-method--editButton')
   }
 
-  getSelectTradingAccount () {
+  getSelectTradingAccountList () {
     return cy.get('#deliveryAddressSelector')
   }
 
-  getSelectOneOftheTradingAccounts () {
-    return cy.get('#deliveryAddressSelector-option2')
+  getTheFirstTradingAccount () {
+    return cy.get('#deliveryAddressSelector-option1')
   }
 
   getSaveAndContinueButton () {
@@ -24,7 +24,7 @@ export class DeliveryDateAndWindowPage {
   }
 
   getSelectDate () {
-    return cy.get('select.day-dropdown').select('2: Object')
+    return cy.get('select.day-dropdown').select('3: Object')
   }
 
   getthefirsttimeslot () {

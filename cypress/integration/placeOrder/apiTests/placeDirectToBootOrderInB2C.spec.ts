@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shopper from '../../../fixtures/login/b2cLogin.json'
+import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
@@ -19,6 +19,7 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/address/api/commands/searchSetValidateAddress'
 
 TestFilter(['B2C-API'], () => {
   describe('[API] Place a Direct to boot order in B2C platform using Credit Card', () => {
@@ -28,7 +29,11 @@ TestFilter(['B2C-API'], () => {
     })
 
     it('Should place a Direct to boot order using credit card', () => {
-      cy.loginViaApi(shopper)
+      cy.loginWithNewShopperViaApi()
+
+      cy.searchBillingAddressViaApi(addressSearchBody.search).then((response: any) => {
+        cy.setBillingAddressViaApi(response.body.Response[0].Id)  
+      })
 
       cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response: any) => {
         expect(response[0].AddressId).to.not.be.null
@@ -59,7 +64,7 @@ TestFilter(['B2C-API'], () => {
       cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response: any) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
 
-        digitalPayment.payments[0].paymentInstrumentId = response.itemId
+        digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
       cy.digitalPay(digitalPayment).then((response: any) => {

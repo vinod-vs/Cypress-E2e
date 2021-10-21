@@ -258,6 +258,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
           addItemsBodyMp.Quantity = mpQuantity
           item.stockCode = mpStockCode
           item.pricePerItem = response.Products[y].Products[0].Price
+          item.sellerName = response.Products[y].Products[0].ThirdPartyProductInfo.VendorName
           totalEdmQuantity = totalEdmQuantity + mpQuantity
           totalQuantity = totalQuantity + mpQuantity
           edmTotal = Number(Number.parseFloat(Number(item.quantity) * Number(item.pricePerItem)).toFixed(2))

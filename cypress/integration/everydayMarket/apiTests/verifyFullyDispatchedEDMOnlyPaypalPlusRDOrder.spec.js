@@ -34,7 +34,13 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
     })
 
     after(() => {
+      //Make sure we add back some points so that the account has some money
       cy.addRewardPoints(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber, 10000)
+
+      // Reset Redeem to 0. If the test fails inbetween and the reward dollars was set, 
+      //future order placements and payments from the account will keep on failing with an error from RPG.
+      //Resetting to 0 will avoid this
+      cy.redeemRewardsDollars(0)
     })
 
     it('[API] RP-5093 - Place Everyday Market only order using Paypal and Rewards dollars', () => {
@@ -103,7 +109,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
           // Dispatch the complete order from MP and verify the events and order statuses
-          cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.sellerName).then((response) => {
+          cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.items[0].sellerName).then((response) => {
             // After dispatch, Invoke the order api and verify the projection content is updated acordingly
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
               function: function (response) {
@@ -119,7 +125,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               lib.verifyCommonOrderDetails(response, testData, shopperId)
               // Seller details
               expect(response.invoices[0].seller.sellerId).to.not.be.null
-              expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+              expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
               // Invoice details
               expect(response.invoices[0].invoiceStatus).to.be.equal('SENT')
               expect(response.invoices[0].wowStatus).to.be.equal('Shipped')

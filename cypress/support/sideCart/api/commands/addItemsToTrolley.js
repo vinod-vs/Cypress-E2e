@@ -37,7 +37,7 @@ Cypress.Commands.add('addAvailableNonRestrictedPriceLimitedWowItemsToTrolley', (
   cy.productSearch(searchRequestBody).then((searchResponse) => {
     cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
       getPriceLimitedItemsForTrolleyAddition(itemResponse, totalThreshold).forEach((item) => {
-        cy.addItemsToTrolley(item)
+        return cy.addItemsToTrolley(item)
       })
     })
   })

@@ -1,6 +1,5 @@
 /// <reference types="Cypress" />
 import shoppers from '../../../fixtures/lists/b2bShoppers.json'
-import tradingAccount from '../../../fixtures/fulfilmentMethod/tradeAccountDetails.json'
 import searchDetails from '../../../fixtures/search/searchTerms.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/ui/commands/login'
@@ -13,7 +12,6 @@ TestFilter(['B2B-UI'], () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
-      // cy.clearCookie('w-rctx')
       cy.clearLocalStorage({ domain: null })
       Cypress.Cookies.preserveOnce('w-rctx')
     })
@@ -22,7 +20,7 @@ TestFilter(['B2B-UI'], () => {
       cy.loginViaUi(shoppers[0])
 
       // Select Delivery date Window
-      cy.selectDeliveryDateAndWindow(tradingAccount[0].trading_acc_address)
+      cy.selectDeliveryDateAndWindow()
 
       const listName = faker.commerce.productName()
 

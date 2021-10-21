@@ -98,11 +98,11 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
         })
 
         // Cancel the above created WOW order
-        cy.cancelOrder(orderId)
+        cy.cancelOrder(orderId).as('cancelOrder')
 
-        cy.get('@initialOrderProjection').then((initialOrderProjection) => {
+        cy.get('@cancelOrder').then((cancelOrder) => {
           // Verify the MP order remains unchanged by dispatching its items
-          cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.sellerName).as('fullDispatchAnInvoice').then((response) => {
+          cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.items[0].sellerName).as('fullDispatchAnInvoice').then((response) => {
             // After dispatch, Invoke the order api and verify the projection content is updated acordingly
             cy.ordersApiByEdmInvoiceIdWithRetry(testData.edmOrderId, {
               function: function (response) {
@@ -118,7 +118,7 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
               lib.verifyCommonOrderDetails(response, { ...testData, orderId: response.orderId }, shopperId)
               // Seller details
               expect(response.invoices[0].seller.sellerId).to.not.be.null
-              expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+              expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
               // Invoice details
               expect(response.invoices[0].invoiceStatus).to.be.equal('SENT')
               expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
@@ -201,24 +201,22 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           })
 
           // Verify invoices
-          cy.get('@finalProjection').then((newProjectionAfterCancelation) => {
+          cy.get('@finalProjection').then((finalProjection) => {
             // Verify the MP and shipping invoices are available for the customer
             // TO-DO Verify the invoice content
-            cy.verifyOrderInvoice({ ...testData, orderId: newProjectionAfterCancelation.orderId })
+            cy.verifyOrderInvoice({ ...testData, orderId: finalProjection.orderId })
 
             const wowRefund = Number.parseFloat(Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges) -
               Number(testData.teamDiscount) - Number(testData.orderDiscountWithoutTeamDiscount)).toFixed(2)
             cy.log('ExpectedWowRefund: ' + wowRefund)
             // Verify just the WOW order is refunded and not the EM order
             lib.verifyCompleteRefundDetailsWithRetry(testData.orderId, wowRefund, 0, 0, 0)
-          })
 
-          // Invoke OQS TMO api and validate it against the projection
-          cy.get('@finalProjection').then((finalProjection) => {
+            // Invoke OQS TMO api and validate it against the projection
             //Old trader order will be in Cancelled state, Will be an WOW + MP Order and will have all the WOW items as well
-            lib.verifyOQSOrderStatus(testData.orderId, 'Cancelled', false, testData)
+            lib.verifyOQSOrderStatus(testData.orderId, 'Cancelled', false, testData, true)
             //New trader order will be in Received state, Will be an MP ONLY Order and will NOT have all the WOW items in it
-            lib.verifyOQSOrderStatus(finalProjection.orderId, 'Received', true, { ...testData, items: [] })
+            lib.verifyOQSOrderStatus(finalProjection.orderId, 'Received', true, { ...testData, items: [] }, false)
           })
         })
       })
