@@ -11,11 +11,9 @@ Cypress.Commands.add('selectDeliveryDateAndWindow', (tradingAccAddress) => {
     }
   })
 
-  onDeliveryDateAndWindowPage.getSelectTradingAccount().click()
+  onDeliveryDateAndWindowPage.getSelectTradingAccountList().click()
 
-  onDeliveryDateAndWindowPage.getSelectOneOftheTradingAccounts().click()
-
-  onDeliveryDateAndWindowPage.getSelectTradingAccount().should('have.value', tradingAccAddress)
+  onDeliveryDateAndWindowPage.getTheFirstTradingAccount().click()
 
   onDeliveryDateAndWindowPage.getSaveAndContinueButton().click()
 
