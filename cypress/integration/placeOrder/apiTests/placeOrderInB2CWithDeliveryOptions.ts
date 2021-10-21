@@ -10,6 +10,7 @@ import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import '../../../support/signUp/api/commands/signUp'
 import '../../../support/delivery/api/commands/options'
 import '../../../support/logout/api/commands/logout'
+import '../../../support/login/api/commands/login'
 import '../../../support/checkout/api/commands/checkoutHelper'
 import '../../../support/fulfilment/api/commands/fulfilment'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
@@ -17,22 +18,17 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/address/api/commands/searchSetValidateAddress'
 
 TestFilter(['B2C-API'], () => {
   const searchTerm = 'Kitchen'
   const trolleyThreshold = 50.00
 
   describe('[API] Place a delivery order on B2C Platform with delivery options selected', () => {
-    before(() => {
+    beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
-      cy.logOutViaApi()
-
-      cy.setSignUpDetails().then((details: any) => {
-        cy.signUpViaApi(details).then((response: any) => {
-          cy.log('This is the shopper id for the user : ' + response.body.ShopperId)
-        })
-      })
+      cy.loginWithNewShopperViaApi()
     })
 
     it('Should place an order with leave unattended selected', () => {
@@ -60,6 +56,9 @@ TestFilter(['B2C-API'], () => {
     })
 
     it('Should place an order with store pick up notes', () => {
+      cy.searchBillingAddressViaApi(addressSearchBody.search).then((response: any) => {
+        cy.setBillingAddressViaApi(response.body.Response[0].Id)  
+      })
       cy.setFulfilmentLocationWithWindow(fulfilmentType.PICK_UP, storeSearchBody.postCode, windowType.PICK_UP)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
