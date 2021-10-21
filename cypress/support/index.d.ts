@@ -24,5 +24,6 @@ declare namespace Cypress {
     placeOrderViaApiWithAddedCreditCard(creditCardDetails: any): any;
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
+    loginViaUi(shopper: any): any;
   }
 }

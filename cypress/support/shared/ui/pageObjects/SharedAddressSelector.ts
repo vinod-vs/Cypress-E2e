@@ -1,4 +1,4 @@
-export class FMSAddressSelector {
+export class SharedAddressSelector{
   // #region - Tabs
   getTabList () {
     return cy.get('.tab-list')
@@ -18,10 +18,6 @@ export class FMSAddressSelector {
   // #endregion
 
   // #region - Delivery address UI elements
-  getSharedTextBox () {
-    return cy.get('shared-textbox')
-  }
-
   getSavedAddressesList () {
     return cy.get('.saved-addresses')
   }
@@ -35,11 +31,11 @@ export class FMSAddressSelector {
   }
 
   getPreviousAddressesButtonLink () {
-    return cy.get('.linkButton')
+    return cy.get('[class*="linkButton fulfilment-button"]')
   }
 
   getSearchAddressSelectorTextbox () {
-    return this.getSharedTextBox().find('#deliveryAddressSelector')
+    return cy.get('#deliveryAddressSelector')
   }
 
   getSearchAddressResultList () {
@@ -49,7 +45,7 @@ export class FMSAddressSelector {
 
   // #region - Pick / DTB UI elements
   getSearchStoreSelectorTextbox () {
-    return this.getSharedTextBox().find('#pickupAddressSelector')
+    return cy.get('#pickupAddressSelector')
   }
 
   getChangeServiceLink () {
@@ -70,7 +66,7 @@ export class FMSAddressSelector {
   }
 
   // #region - General actions
-  selectSavedAddressByKeyword (addressKeyword) {
+  selectSavedAddressByKeyword (addressKeyword: string) {
     this.getSavedAddressesListLabel().each(addressRow => {
       const addressText = addressRow.find('label').text()
 
@@ -81,7 +77,7 @@ export class FMSAddressSelector {
     })
   }
 
-  searchForNewAddress (addressKeyword) {
+  searchForNewAddress (addressKeyword: string) {
     this.getSearchAddressSelectorTextbox().type(addressKeyword)
 
     this.getSearchAddressResultList().each(resultOption => {
@@ -94,7 +90,7 @@ export class FMSAddressSelector {
     })
   }
 
-  searchForStoreBySuburbName (suburbName) {
+  searchForStoreBySuburbName (suburbName: string) {
     this.getSearchStoreSelectorTextbox().type(suburbName)
 
     this.getSuburbResultList().first().click()
@@ -109,8 +105,8 @@ export class FMSAddressSelector {
     })
   }
 
-  searchForStoreByPostcode (postcode) {
-    this.getSearchStoreSelectorTextbox().type(postcode)
+  searchForStoreByPostcode (postcode: number) {
+    this.getSearchStoreSelectorTextbox().type(postcode.toString())
 
     // it's a bit farfetched to choose the first result from list as below.
     // but if we want to make sure automation select the correct suburb by given postcode,
@@ -119,5 +115,3 @@ export class FMSAddressSelector {
   }
   // #endregion
 }
-
-export const onFMSAddressSelector = new FMSAddressSelector()
