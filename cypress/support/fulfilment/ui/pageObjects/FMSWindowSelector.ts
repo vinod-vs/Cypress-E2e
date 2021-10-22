@@ -32,13 +32,20 @@ export class FMSWindowSelector {
     this.selectDayByKeyword('Tomorrow')
   }
 
-  selectLatestAvailableDay () {
-    this.selectDayByKeyword()
+  selectNextAvailableDay () {
+    cy.get('.day-dropdown > option')
+      .each(dayOption => {
+        if(!dayOption.prop('disabled'))
+        {
+          cy.wrap(dayOption).parent().select(dayOption.text())
+          return false;
+        }
+      })
   }
   // #endregion
 
   // #region - General actions
-  selectDayByKeyword (dayKeyword) {
+  selectDayByKeyword (dayKeyword: string) {
     cy.get('.day-dropdown > option')
       .contains(dayKeyword)
       .then(dayOption => {
@@ -46,33 +53,35 @@ export class FMSWindowSelector {
     })
   }
 
-  selectTimeSlotByTime (startTime, endTime = 'undefined') {
-    this.#selectTimeSlotStartFromIndex(0, startTime, endTime)
+  selectTimeSlotByTime (startTimeString: string, endTimeString = 'undefined') {
+    this.selectTimeSlotStartFromIndex(0, startTimeString, endTimeString)
   }
 
   selectFirstTimeslot () {
     this.getAllTimeSlotList().first().find('input').check({ force: true })
+    cy.wait(500)
   }
 
   selectLastTimeslot () {
     this.getAllTimeSlotList().last().find('input').check({ force: true })
+    cy.wait(500)
   }
   // #endregion
 
   // #region - private methods
-  #selectTimeSlotStartFromIndex (index, startTime, endTime = 'undefined') {
+  private selectTimeSlotStartFromIndex (index: number, startTimeString: string, endTimeString = 'undefined') {
     let found = false
 
     this.getAllTimeSlotList().its('length').then(len => {
       if (index >= len) {
-        throw new Error('Test failed. Unable to find given time slot: ' + startTime + ' to ' + endTime)
+        throw new Error('Test failed. Unable to find given time slot: ' + startTimeString + ' to ' + endTimeString)
       }
 
       this.getAllTimeSlotList().eq(index).find('.time-slot-text').invoke('text').then(windowTimeText => {
         const startTimeOnLabel = windowTimeText.substring(0, windowTimeText.indexOf('to')).trim()
         const endTimeOnLabel = windowTimeText.substring(windowTimeText.indexOf('to') + 2).trim()
 
-        if (startTimeOnLabel.toLowerCase() == startTime.toLowerCase() && (endTime == 'undefined' || endTimeOnLabel.toLowerCase() == endTime.toLowerCase())) {
+        if (startTimeOnLabel.toLowerCase() == startTimeString.toLowerCase() && (endTimeString == 'undefined' || endTimeOnLabel.toLowerCase() == endTimeString.toLowerCase())) {
           this.getAllTimeSlotList().eq(index).find('input').check({ force: true })
           found = true
           return false
@@ -80,10 +89,11 @@ export class FMSWindowSelector {
       })
         .then(() => {
           if (!found) {
-            this.#selectTimeSlotStartFromIndex(++index, startTime, endTime)
+            this.selectTimeSlotStartFromIndex(++index, startTimeString, endTimeString)
           }
         })
     })
+    cy.wait(500)
   }
   // #endregion
 }
