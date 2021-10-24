@@ -23,8 +23,6 @@ Cypress.Commands.add('searchAndAddProductToNewList', (listName, searchTerm) => {
 
   onSearchResultsPage.getProductSaveToNewListButton().click()
 
-  onSearchResultsPage.getProductSavedNotification().should('be.visible')
-
   onSearchResultsPage.getProductSavedNotification().find('a').should('contain.text', listName)
 })
 
