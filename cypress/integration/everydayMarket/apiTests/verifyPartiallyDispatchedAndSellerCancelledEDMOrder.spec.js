@@ -17,7 +17,7 @@ import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 import * as refundsLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['B2C-API', 'EDM-API'], () => {
+TestFilter(['EDM-API'], () => {
   describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })

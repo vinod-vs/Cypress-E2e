@@ -21,7 +21,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['B2C-API', 'EDM-API'], () => {
+TestFilter(['EDM-API'], () => {
   describe('[API] RP-5041 - Full cancellation of Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
