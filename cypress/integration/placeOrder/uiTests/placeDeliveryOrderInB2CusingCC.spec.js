@@ -15,7 +15,7 @@ import '../../../support/payment/ui/commands/creditCardPayment'
 import '../../../support/payment/ui/commands/payPalPayment'
 import '../../../support/utilities/ui/utility'
 
-TestFilter(['EDM-UI'], () => {
+TestFilter(['B2C-UI'], () => {
   describe.skip('[UI] Place an order with WOW and MP items', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
