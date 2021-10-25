@@ -13,6 +13,7 @@ import '../../../support/rewards/api/commands/rewards'
 import '../../../support/refunds/api/commands/commands'
 import '../../../support/orders/api/commands/amendOrder'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
+import * as commonLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
@@ -107,12 +108,15 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
           }).as('eventsAfterAmendment')
         })
 
+        cy.get('@orderDataAfterAmendment').as('finalProjection')
+
         cy.all(
           cy.get('@confirmedAmendedTraderOrder'),
           cy.get('@orderDataBeforeAmendment'),
           cy.get('@orderDataAfterAmendment'),
-          cy.get('@eventsAfterAmendment')
-        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {
+          cy.get('@eventsAfterAmendment'),
+          cy.get('@finalProjection')
+        ).then(([amendedOrder, beforeData, afterData, afterEvents, finalProjection]) => {
           // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
           expect({
             ...beforeData,
@@ -121,6 +125,12 @@ TestFilter(['B2C-API', 'EDM-API'], () => {
 
           // Validate EDM order events after amendment to have 'OrderPlaced' event
           lib.validateEvents(afterEvents, 'OrderPlaced', 2)
+
+          // Invoke OQS TMO api and validate it against the projection
+          //Old trader order will be in Cancelled state, Will be an WOW + MP Order and will have all the WOW items as well. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
+          commonLib.verifyOQSOrderStatus(beforeData.orderId, 'Cancelled', false, null, true)
+          //New trader order will be in Received state, Will be an WOW + MP Order and will have all the WOW items in it. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
+          commonLib.verifyOQSOrderStatus(afterData.orderId, 'Received', false, null, false)
         })
       })
     })

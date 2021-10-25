@@ -172,7 +172,7 @@ export function verifyInitialOrderDetails(response, testData, shopperId) {
  * @param {*} expectedWOWOrderStatus
  * @param {*} isMarketOnly
  * @param {*} testData
- * * @param {*} args[0] skipStatusVerification -> true if you want to skip status verification else false
+ * @param {*} args[0] skipStatusVerification -> true if you want to skip status verification else false
  *
  * Make sure your latest projection is saved as 'finalProjection'. OQS response is verified against this projection
  */
@@ -206,22 +206,24 @@ export function verifyOQSOrderStatus(traderOrderId, expectedWOWOrderStatus, isMa
 
     // Verify wow order details
     // Filter WOW items from testdata
-    const wowItems = testData.items.filter(item => item.isEDMProduct === String(false))
-    expect(oqsResponse.OrderProducts.length).to.be.gte(wowItems.length)
-    if (wowItems.length !== 0) {
-      // Verify the WOW items count match the OQS response. If there is a promo like 'Woolworths Disney+ Ooshie Collectibles'
-      // This will also be added under OrderedProducts. Hence checking length to be for greater than or equal from testdata
-      wowItems.forEach(function (item, k) {
-        expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
-        expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
-        expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
-        expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
-      })
-    } else {
-      //On WOW order cancellations the OQS response with the new traderOrderId will have empty OrderProducts as the WOW items will be removed and only the EDM products will be retained in the new traderorderId
-      expect(oqsResponse.OrderProducts).to.be.empty
+    if (testData !== null) {
+      const wowItems = testData.items.filter(item => item.isEDMProduct === String(false))
+      expect(oqsResponse.OrderProducts.length).to.be.gte(wowItems.length)
+      if (wowItems.length !== 0) {
+        // Verify the WOW items count match the OQS response. If there is a promo like 'Woolworths Disney+ Ooshie Collectibles'
+        // This will also be added under OrderedProducts. Hence checking length to be for greater than or equal from testdata
+        wowItems.forEach(function (item, k) {
+          expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
+          expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
+          expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
+          expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
+        })
+      } else {
+        //On WOW order cancellations the OQS response with the new traderOrderId will have empty OrderProducts as the WOW items will be removed and only the EDM products will be retained in the new traderorderId
+        expect(oqsResponse.OrderProducts).to.be.empty
+      }
     }
-
+    
     // Verify edm order details
     // Verify the edm products count matches with the invoices count
     expect(oqsResponse.MarketOrders.length).to.be.equal(projection.invoices.length)
