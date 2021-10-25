@@ -22,7 +22,7 @@ import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
 const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
-TestFilter(['EDM-API'], () => {
+TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5040 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })

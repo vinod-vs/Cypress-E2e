@@ -14,7 +14,7 @@ import '../../../support/refunds/api/commands/commands'
 import '../../../support/orders/api/commands/amendOrder'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })

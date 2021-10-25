@@ -22,7 +22,7 @@ import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import rewardsDetails from '../../../fixtures/everydayMarket/rewards.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5093 - Place Everyday Market only order using Paypal and Rewards dollars', () => {
     const testData = tests.VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD
     const shopper = shoppers.emAccount2

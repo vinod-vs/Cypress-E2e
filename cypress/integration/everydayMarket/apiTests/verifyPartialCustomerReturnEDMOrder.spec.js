@@ -22,7 +22,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['B2C-API', 'EDM-API'], () => {
   describe('[API] RP-5037 - Partial Customer Return Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
