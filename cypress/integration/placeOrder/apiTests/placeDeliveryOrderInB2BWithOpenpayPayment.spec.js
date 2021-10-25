@@ -164,6 +164,8 @@ TestFilter(['B2B-API'], () => {
 
         cy.log('This is the order id: ' + response.Order.OrderId)
       })
+
+      cy.logOutViaApi()
     })
   })
 })

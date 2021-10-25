@@ -79,6 +79,8 @@ TestFilter(['B2B-API'], () => {
 
       cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment).then(() => {
       })
+
+      cy.logOutViaApi()
     })
   })
 })
