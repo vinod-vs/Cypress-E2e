@@ -20,6 +20,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/payment/api/commands/setPurchaseOrderCode'
+import '../../../support/logout/api/commands/logout'
 
 let productStockCode
 let productPrice
@@ -30,6 +31,7 @@ TestFilter(['B2B-API'], () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
+      cy.logOutViaApi()
     })
 
     it('Should place an order on Woolworths at Work website using OpenPay as payment option', () => {

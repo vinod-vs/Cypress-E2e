@@ -4,12 +4,14 @@ import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
 import b2bShoppers from '../../../fixtures/login/b2bShoppers.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
+import '../../../support/logout/api/commands/logout'
 
 TestFilter(['B2C-API'], () => {
   describe('[API] Perform Login', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
+      cy.logOutViaApi()
     })
 
     Cypress._.times(b2cShoppers.length, (n) => {

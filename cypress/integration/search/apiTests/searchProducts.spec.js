@@ -6,12 +6,14 @@ import searchBody from '../../../fixtures/search/productSearch.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
+import '../../../support/logout/api/commands/logout'
 
 TestFilter(['API'], () => {
   describe('[API] Search product', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
+      cy.logOutViaApi()
     })
 
     it('Search product', () => {

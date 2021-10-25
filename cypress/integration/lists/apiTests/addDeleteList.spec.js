@@ -13,6 +13,7 @@ import '../../../support/lists/api/commands/deleteList'
 import '../../../support/lists/api/commands/addItemToList'
 import '../../../support/search/api/commands/search'
 import '../../../support/lists/api/commands/getProductsInList'
+import '../../../support/logout/api/commands/logout'
 
 const faker = require('faker')
 
@@ -21,7 +22,7 @@ TestFilter(['API'], () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
-      Cypress.Cookies.preserveOnce('w-rctx')
+      cy.logOutViaApi()
     })
 
     it('Should create a new list, add items in the list and delete the list', () => {

@@ -15,7 +15,6 @@ TestFilter(['B2B-UI'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
       cy.logOutViaApi()
-      Cypress.Cookies.preserveOnce('w-rctx')
     })
     it('Create a list and Delete the list', () => {
       // Login

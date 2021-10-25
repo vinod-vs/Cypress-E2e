@@ -17,6 +17,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/checkout/api/commands/checkoutHelper'
+import '../../../support/logout/api/commands/logout'
 
 const searchTerm = 'Fish'
 const trolleyThreshold = 50.00
@@ -26,6 +27,7 @@ TestFilter(['B2B-API'], () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
+      cy.logOutViaApi()
     })
 
     it('Should place an order on Woolworths at Work website using Credit Card as payment option', () => {
