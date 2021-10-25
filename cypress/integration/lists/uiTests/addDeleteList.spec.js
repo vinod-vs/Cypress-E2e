@@ -5,6 +5,7 @@ import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/ui/commands/login'
 import '../../../support/fulfilment/ui/commands/deliveryDateAndWindow'
 import '../../../support/lists/ui/commands/addDeleteList'
+import '../../../support/logout/api/commands/logout'
 
 const faker = require('faker')
 TestFilter(['B2B-UI'], () => {
@@ -13,6 +14,7 @@ TestFilter(['B2B-UI'], () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
+      cy.logOutViaApi()
       Cypress.Cookies.preserveOnce('w-rctx')
     })
     it('Create a list and Delete the list', () => {

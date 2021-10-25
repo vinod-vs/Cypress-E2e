@@ -275,7 +275,7 @@ jobs:
       - script: |
           npm install
           npm install -g browserstack-cypress-cli
-          npm run browserstackTest -- --env "tags=B2B-UI,fileConfig=b2b"
+          npx browserstack-cypress run --sync --env "tags=B2B-UI,fileConfig=b2b"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2B tests on BrowserStack"
 
@@ -286,10 +286,11 @@ jobs:
         displayName: "Polling for BrowserStack build status"
 
       - script: |
-          npm run browserstackGenerateReport -- $(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -c 10-)
+          ls -l
+          npx browserstack-cypress generate-report $(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -c 10-)
           mv ./results/browserstack-cypress-report.html ./results/browserstack-cypress-report-B2B.html
           mv ./results/browserstack-cypress-report.json ./results/browserstack-cypress-report-B2B.json
-        displayName: "Stop BrowserStack local"
+        displayName: "Generate BrowserStack Report"
 
       - task: AzureCLI@2
         displayName: "Upload BrowserStack Reports"
@@ -312,7 +313,7 @@ jobs:
       - script: |
           npm install
           npm install -g browserstack-cypress-cli
-          npm run browserstackTest -- --env "tags=B2C-UI,fileConfig=b2c"
+          npx browserstack-cypress run --sync --env "tags=B2C-UI,fileConfig=b2c"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2C tests on BrowserStack"
 
@@ -323,10 +324,11 @@ jobs:
         displayName: "Polling for BrowserStack build status"
 
       - script: |
-          npm run browserstackGenerateReport -- $(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -c 10-)
+          ls -l
+          npx browserstack-cypress generate-report $(grep -E 'BUILD_ID=[a-z,A-Z,0-9]*' ./log/build_results.txt | cut -c 10-)
           mv ./results/browserstack-cypress-report.html ./results/browserstack-cypress-report-B2C.html
           mv ./results/browserstack-cypress-report.json ./results/browserstack-cypress-report-B2C.json
-        displayName: "Stop BrowserStack local"
+        displayName: "Generate BrowserStack Report"
 
       - task: AzureCLI@2
         displayName: "Upload BrowserStack Reports"

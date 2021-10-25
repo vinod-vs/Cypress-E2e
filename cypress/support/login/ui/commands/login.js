@@ -1,6 +1,6 @@
 import { onLoginPage } from '../pageObjects/LoginPage'
 import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
-import { onDeliveryDateAndWindowPage } from '../../../fulfilment/ui/pageObjects/DeliveryDateAndWindowPage'
+import { onDeliveryDateAndWindowPage } from '../../../fulfilment/ui/pageObjects/DeliveryDateAndWindowPage.ts'
 
 Cypress.Commands.add('loginViaUi', (shopper) => {
   cy.visit('shop/securelogin')
