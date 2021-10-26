@@ -28,5 +28,6 @@ declare namespace Cypress {
     searchBillingAddressViaApi(address: string): any;
     setBillingAddressViaApi(addressId: number): any;
     loginWithNewShopperViaApi(): any;
+    adminLoginViaUi(loginDetails: any): any;
   }
 }
