@@ -33,7 +33,15 @@ class SessionGroupsV2Page {
     
     getCreateNewSessionGroup () {
         return cy.get('a:contains("Create New Session Group")')
-    } 
+    }
+    
+    getSessionGroupEntry (sessionGroupName:string) {
+        return cy.get('a:contains("'+ sessionGroupName +'")')
+    }
+
+    getDeleteSessionGroup (sessionGroupName:string) {
+        return cy.get('a:contains("'+ sessionGroupName +'")')
+    }
 
 }
 
