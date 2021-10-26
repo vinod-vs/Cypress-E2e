@@ -9,7 +9,7 @@ import '../../../support/logout/api/commands/logout'
 
 const faker = require('faker')
 TestFilter(['B2B-UI'], () => {
-  describe('[UI] Create a list and delete the list in B2B', () => {
+  describe.skip('[UI] Create a list and delete the list in B2B', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
@@ -17,7 +17,7 @@ TestFilter(['B2B-UI'], () => {
       cy.logOutViaApi()
       Cypress.Cookies.preserveOnce('w-rctx')
     })
-    it('Create a list and Delete the list', () => {
+    it.skip('Create a list and Delete the list', () => {
       // Login
       cy.loginViaUi(shoppers[0])
 
