@@ -32,9 +32,10 @@ export class CheckoutTimePanel{
             
             cy.get(".dates-container-inner button").eq(startIndex).click().then(() => {
                 var totalWindowLength = Cypress.$('#times-radio-group wow-time-slot-time').length
-                var badgedwindowLength = Cypress.$('#times-radio-group wow-time-slot-time .badge').length
+                var crowdWindowLength = Cypress.$('#times-radio-group wow-time-slot-time .crowd-sourced').length
+                var deliveryNowWindowLength = Cypress.$('#times-radio-group wow-time-slot-time .delivery-now').length
 
-                if(totalWindowLength != badgedwindowLength)
+                if(totalWindowLength != crowdWindowLength + deliveryNowWindowLength)
                 {
                     found = true
                     return false
