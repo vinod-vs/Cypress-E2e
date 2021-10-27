@@ -12,10 +12,5 @@
         "email": "pk+biz@woolworths.com.au",
         "password": "test123",
         "platform": "B2C"
-    },
-    {
-        "email": "pwang1+1@woolworths.com.au",
-        "password": "S123456",
-        "platform": "B2C"
     }
 ]
