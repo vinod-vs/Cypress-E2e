@@ -52,6 +52,7 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
                             digitalPayment.payments[0].paymentInstrumentId = response.itemId
                           }).then(() => {
                             cy.digitalPay(digitalPayment).then((response) => {
+                              cy.wait(5000)
                               confirmOrderParameter.placedOrderId = response.PlacedOrderId
                               expect(response.PlacedOrderId).to.not.be.null
                             }).then(() => {
