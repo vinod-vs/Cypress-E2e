@@ -8,7 +8,7 @@ var sessionGroupName:string
 var timeStamp:string
 
 TestFilter(['B2C-UI'], () => {
-    describe.skip('[UI] Create, Update, Delete Session Groups V2', () => {
+    describe('[UI] Create, Update, Delete Session Groups V2', () => {
 
         beforeEach(() => {
             cy.clearCookies({ domain: null })
