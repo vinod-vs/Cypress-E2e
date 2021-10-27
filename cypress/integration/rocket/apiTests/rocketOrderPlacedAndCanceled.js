@@ -81,8 +81,7 @@ TestFilter(['B2C-API'], () =>{
                   expect(response.body).to.have.property('orderId', orderId)
                   expect(response.body).to.have.property('orderStatus', 'Cancelled')
                   expect(response.body).to.have.property('orderReference', OrderRefRandom)
-                  cancelCreatedOn = response.body.createdOn
-                  cancelLastUpdatedOn = response.body.lastUpdatedOn
+                 
                   cy.task('connectToMongoDB',{mongoURI:mongoURI,mongoDB:mongoDB,mongoDBCollection:mongoDBCollection,filterKey:filterKey,orderId:orderId}).then((response)=>{
                     expect(+response.traderOrderId).to.eq(orderId)
                     expect(response.orderStatus).to.eq('Cancelled')
@@ -92,15 +91,15 @@ TestFilter(['B2C-API'], () =>{
                    })
                 }) 
               }).then(() =>{
-                //Should not change the created and updated cancellation time for same order
+                //Should be able to cancel the same order placed 
                 rocketCancelOrderInfo.orderId = orderId
                 cy.cancelRocketOrderViaApi(rocketCancelOrderInfo, orderId ).then((response)=>{ 
                   expect(response.status).to.eq(200)
                   expect(response.body).to.have.property('orderId', orderId)
                   expect(response.body).to.have.property('orderStatus', 'Cancelled')
                   expect(response.body).to.have.property('orderReference', OrderRefRandom)
-                  expect(response.body).to.have.property('createdOn', cancelCreatedOn)
-                  expect(response.body).to.have.property('lastUpdatedOn', cancelLastUpdatedOn)
+                  
+                  
                 })
           })   
         })
