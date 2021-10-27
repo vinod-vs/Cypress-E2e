@@ -166,21 +166,21 @@ export class SideCartPage {
     this.getCheckoutButton().click()
   }
 
-  modifyItemQuantity (productName, expectedAmount) {
-    this.#findItemDetailsByName(productName)
+  modifyItemQuantityByName (productName: string, expectedAmount: number) {
+    this.findItemDetailsByName(productName)
       .find('.cartControls-quantityInput')
       .clear()
-      .type(expectedAmount)
+      .type(expectedAmount.toString())
       .should('have.value', expectedAmount)
   }
 
-  removeItemByName (productName) {
-    this.#findItemDetailsByName(productName)
+  removeItemByName (productName: string) {
+    this.findItemDetailsByName(productName)
       .find('.cart-item-remove-button')
       .click()
   }
 
-  removeItemsByNames (productNameList) {
+  removeItemsByNames (productNameList: string[]) {
     for (const eachName of productNameList) {
       this.removeItemByName(eachName)
     }
@@ -197,7 +197,7 @@ export class SideCartPage {
   // #endregion
 
   // #endregion - private methods
-  #findItemDetailsByName (productName) {
+  private findItemDetailsByName (productName: string) {
     return this.getAllProductsNameList()
       .should('have.lengthOf.greaterThan', 0)
       .contains(productName)
