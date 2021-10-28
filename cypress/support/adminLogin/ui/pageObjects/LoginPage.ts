@@ -1,7 +1,7 @@
 class LoginPage {
 
     open() {
-      cy.visit('https://adminuatsite.woolworths.com.au/Manage/Login')
+      cy.visit('Manage/Login')
     }
 
     getEmailAddress () {
