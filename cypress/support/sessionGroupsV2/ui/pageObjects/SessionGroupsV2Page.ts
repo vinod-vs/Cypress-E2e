@@ -40,7 +40,7 @@ class SessionGroupsV2Page {
     }
 
     getDeleteSessionGroup (sessionGroupName:string) {
-        return cy.get('a:contains("'+ sessionGroupName +'")')
+        return cy.xpath('//a[text()=\'' + sessionGroupName + '\']/../..//td[@class=\'delete\']')
     }
 
 }

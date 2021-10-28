@@ -46,7 +46,8 @@ TestFilter(['B2C-UI'], () => {
         })
 
         it('Delete Session Group v2', function() {
-            //to do
+            sessionGroupsV2Page.getDeleteSessionGroup(sessionGroupName).click()
+            sessionGroupsV2Page.getSessionGroupEntry(sessionGroupName).should('not.exist')
         })
     })
 })
