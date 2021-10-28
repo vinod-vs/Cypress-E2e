@@ -23,6 +23,7 @@ import '../../../support/address/api/commands/searchSetValidateAddress'
 TestFilter(['B2C-API'], () => {
   const searchTerm = 'Kitchen'
   const trolleyThreshold = 50.00
+  const platform = Cypress.env('b2cPlatform')
 
   describe('[API] Place a delivery order on B2C Platform with delivery options selected', () => {
     beforeEach(() => {
@@ -38,7 +39,7 @@ TestFilter(['B2C-API'], () => {
       deliveryOptions.CanLeaveUnattended = true
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
         expect(confirmOrderResponse.Order.CanLeaveOrderUnattended).to.eql(true)
       })
     })
@@ -50,7 +51,7 @@ TestFilter(['B2C-API'], () => {
       deliveryOptions.DeliveryInstructions = 'Delivery Instructions added by API'
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
         expect(confirmOrderResponse.Order.DeliveryInstructions).to.eql(deliveryOptions.DeliveryInstructions)
       })
     })
@@ -65,7 +66,7 @@ TestFilter(['B2C-API'], () => {
       deliveryOptions.PickupInstructions = 'Store Pick up Instructions added by API'
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
         expect(confirmOrderResponse.Order.DeliveryInstructions).to.eql(deliveryOptions.PickupInstructions)
       })
     })

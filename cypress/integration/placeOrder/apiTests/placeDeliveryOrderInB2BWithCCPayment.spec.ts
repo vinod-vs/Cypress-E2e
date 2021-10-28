@@ -20,6 +20,7 @@ import '../../../support/checkout/api/commands/checkoutHelper'
 
 const searchTerm = 'Fish'
 const trolleyThreshold = 50.00
+const platform = Cypress.env('b2bPlatform')
 
 TestFilter(['B2B-API'], () => {
   describe('[API] Place a delivery order on Woolworths at Work website using Credit Card', () => {
@@ -75,7 +76,7 @@ TestFilter(['B2B-API'], () => {
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment).then(() => {
+      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then(() => {
       })
     })
   })

@@ -2,7 +2,7 @@ import digitalPayment from '../../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 
-Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails) => {
+Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: any, platform: string) => {
   cy.navigateToCheckout().then((response: any) => {
     cy.log('Balance To Pay is: ' + response.Model.Order.BalanceToPay)
     digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
@@ -13,7 +13,11 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails) 
   })
 
   cy.creditcardPayment(creditCardDetails, creditcardSessionHeader).then((response: any) => {
-    digitalPayment.payments[0].paymentInstrumentId = response.itemId
+    if (platform.toUpperCase() === 'B2C') {
+      digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
+    } else if (platform.toUpperCase() === 'B2B') {
+      digitalPayment.payments[0].paymentInstrumentId = response.itemId
+    }
   })
 
   cy.digitalPay(digitalPayment).then((response: any) => {
