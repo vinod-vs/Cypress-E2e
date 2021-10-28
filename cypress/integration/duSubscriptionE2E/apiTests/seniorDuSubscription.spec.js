@@ -99,7 +99,7 @@ TestFilter(['B2C-API'], () => {
             expect(response.IframeUrl).to.contain(Cypress.env('creditCardPaymentEndpoint').split('/')[2])
             const iframeURL = response.IframeUrl
             creditcardSessionHeader.creditcardSessionId = iframeURL.split('/').pop()
-            cy.creditcardPayment(ccDetails.visa, creditcardSessionHeader).then((response) => {
+            cy.creditcardPayment(ccDetails.diner, creditcardSessionHeader).then((response) => {
               expect(response.status).to.have.property('responseText', 'ACCEPTED')
               expect(response.status).to.have.property('responseCode', '00')
               // expect(response.body.status).to.have.property('esResponse', null)
