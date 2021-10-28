@@ -1,7 +1,7 @@
 import TestFilter from '../../../support/TestFilter'
 import {sessionGroupsV2Page} from '../../../support/sessionGroupsV2/ui/pageObjects/SessionGroupsV2Page'
-import loginDetails from '../../../fixtures/admin/loginDetails.json'
-import '../../../support/adminLogin/ui/commands/login'
+import loginDetails from '../../../fixtures/siteManagement/loginDetails.json'
+import '../../../support/siteManagement/ui/commands/login'
 
 var sessionGroupName:string
 var timeStamp:string
