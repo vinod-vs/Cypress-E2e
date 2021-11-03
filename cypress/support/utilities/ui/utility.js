@@ -50,6 +50,13 @@ Cypress.Commands.add('getDateTime', () => {
   return cy.wrap(currentTime)
 })
 
+Cypress.Commands.add('getDayOfWeek', (dateObject) => {
+  const dayOfWeek = dateObject.getDay()
+
+  return cy.wrap(isNaN(dayOfWeek)? null :
+    ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek])
+})
+
 Cypress.Commands.add('generateRandomString', () => {
   let text = ''
   const alpha = 'abcdefghijklmnopqrstuvwxyz'
@@ -60,3 +67,29 @@ Cypress.Commands.add('generateRandomString', () => {
 
   return cy.wrap(text)
 })
+
+Cypress.Commands.add('getBootstrapResponse', () => {
+  cy.api({
+    method: 'GET',
+    url: Cypress.env('bootstrapEndpoint')
+  }).then((response) => {
+    return response.body
+  })
+})
+
+Cypress.Commands.add('formatToAmPm', (date) => {
+  let hours = date.getHours()
+  let minutes = date.getMinutes()
+  let ampm = hours >= 12 ? 'pm' : 'am'
+  hours = hours % 12
+  hours = hours ? hours : 12 // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes
+  let strTime = hours + ':' + minutes + ' ' + ampm
+
+  return cy.wrap(strTime)
+})
+
+Cypress.Commands.add('removeNewLineCarriageReturn', (text) => {
+  return text.replace("(\\r?\\n)+", " ")
+})
+
