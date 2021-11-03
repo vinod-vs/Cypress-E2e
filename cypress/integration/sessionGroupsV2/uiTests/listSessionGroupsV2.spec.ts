@@ -6,7 +6,7 @@ import '../../../support/siteManagement/ui/commands/login'
 var sessionGroupName:string
 var timeStamp:string
 
-TestFilter(['B2C-UI'], () => {
+TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P0', 'CONWAY'], () => {
     describe('[UI] Navigate to Session Groups V2 Page', () => {
 
         beforeEach(() => {
