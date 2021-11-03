@@ -43,6 +43,19 @@ class SessionGroupsV2Page {
         return cy.xpath('//a[text()=\'' + sessionGroupName + '\']/../..//td[@class=\'delete\']')
     }
 
+    getShowSelect() {
+        return cy.get('.selectwrap > select')
+    }
+
+    getSelectOption(option:string) {
+        return cy.xpath('//select/option[@value=\' + option + \']')
+    }
+
+    getTableRow(row:number) {
+        row = row + 1    
+        return cy.xpath('//tbody/tr[' + row + ']')
+    }
+
 }
 
 export const sessionGroupsV2Page = new SessionGroupsV2Page();
