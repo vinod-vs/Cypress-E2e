@@ -6,6 +6,31 @@ export class myOrderPage {
     getMyOrdersLink () {
         return cy.get('nav.navigation-items').find('a').eq(2).contains('My orders')
     }
+
+    getMyOrderNumber() {
+
+    }
+
+    getOrderDateString() {
+        return cy.get('span.content')
+    }
+
+    getOrderTotalString() {
+
+    }
+
+    getDeliveryDateString() {
+
+    }
+
+    getTrackMyOderLink() {
+
+    }
+
+    getViewOrderDetailsLink() {
+
+    }
+
     }
     
     export const onMyOrderPage = new myOrderPage()
