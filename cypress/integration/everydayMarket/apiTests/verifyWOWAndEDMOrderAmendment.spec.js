@@ -1,14 +1,13 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
 import eventsRequest from '../../../fixtures/everydayMarket/events.json'
 import search from '../../../fixtures/everydayMarket/search.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
-import '../../../support/everydayMarket/api/commands/utility'
+import '../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import '../../../support/rewards/api/commands/rewards'
 import '../../../support/refunds/api/commands/commands'
 import '../../../support/orders/api/commands/amendOrder'
@@ -28,20 +27,23 @@ TestFilter(['EDM-API'], () => {
 
     it('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
       const purchaseQty = 2
-      const shopper = shoppers.emAccount3ForOrderAmendment
       let req
 
-      // Login using shopper saved in the fixture and verify it's successful
-      cy.loginViaApi(shopper).its('LoginResult').should('eq', 'Success')
+      // Login using a newly signed up shopper
+      cy.loginWithNewShopperViaApi()
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search
-      cy.placeAnySingleLineItemWowAndEdmOrder(search.searchTerm, purchaseQty).as('confirmedTraderOrder')
+      cy.prepareAnySingleLineItemWowAndEdmOrder(search.searchTerm, purchaseQty)
+      cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
 
-      cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
+      cy.all(
+        cy.get('@confirmedTraderOrder'),
+        cy.get('@shopperId')
+      ).then(([confirmedOrder, shopperId]) => {
         req = {
           ...eventsRequest,
-          shopperId: shopper.shopperId,
+          shopperId: shopperId,
           orderId: confirmedOrder.Order.OrderId,
           orderReference: confirmedOrder.Order.OrderReference
         }
@@ -80,7 +82,7 @@ TestFilter(['EDM-API'], () => {
         })
 
         // Amend the WOW part of the order
-        cy.completeOrderAmendment(req.orderId, search.searchTerm).as('confirmedAmendedTraderOrder').then(() => {
+        cy.completeOrderAmendment(req.orderId).as('confirmedAmendedTraderOrder').then(() => {
           cy.all(
             cy.get('@invoiceIds'),
             cy.get('@confirmedAmendedTraderOrder')

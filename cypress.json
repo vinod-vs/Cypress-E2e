@@ -45,6 +45,8 @@
         "ordersApiByInvoiceIdEndpoint": "api/v1/orders/search?invoiceIds=INVOICE_ID",
         "ordersApiByShopperIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders",
         "ordersApiByShopperIdAndTraderOrderIdEndpoint": "api/v1/shoppers/SHOPPER_ID/orders/ORDER_ID",
+        "orderPaymentServiceRefundsEndPoint": "https://dxk8saae.uat.wx-d.net/order-payments/api/refunds/filterby?orderId=TRADER_ORDER_ID",
+        "orderPaymentServiceRefundPaymentsEndpoint": "https://dxk8saae.uat.wx-d.net/order-payments/api/refundpayments?refundId=REFUND_ID",
         "marketplacerApiEndpoint": "https://woolworths.test-fresh.marketplacer.com/",
         "marketplacerFullDispatchInvoiceEndpoint": "api/v2/client/invoices/INVOICE_ID/sent",
         "marketplacerPartialDispatchInvoiceEndpoint": "api/v2/client/invoices/INVOICE_ID/shipments",

@@ -12,6 +12,7 @@ import '../../../support/login/api/commands/login'
 import '../../../support/everydayMarket/api/commands/orderApi'
 import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
+import '../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import '../../../support/rewards/api/commands/rewards'
 import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
@@ -36,7 +37,8 @@ TestFilter(['EDM-API'], () => {
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search
-      cy.placeAnySingleLineItemEdmOrder(search.searchTerm, purchaseQty).as('confirmedTraderOrder')
+      cy.prepareAnySingleLineItemEdmOrder(search.searchTerm, purchaseQty)
+      cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
 
       cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
         req = {
