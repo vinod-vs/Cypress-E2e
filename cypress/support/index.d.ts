@@ -38,5 +38,11 @@ declare namespace Cypress {
     adminLoginViaUi(loginDetails: any): any;
     selectRandomWindowInCheckout(fulfilmentType: string, fulfilmentWindow: string): any;
     removeNewLineCarriageReturn(initialText: string): string;
+    loginViaUI(email: string, password: string): any;
+    selectTopMenu(menuToSelect: string): any;
+    selectOrderManagementSubMenu(menuToSelect: string): any;
+    searchOrder(orderId: string): any;
+    loginToSMAndSearchOrder(loginDetails: any, orderId: string): any
+    validateOrderDetailsOnSM(isMarketOnly: boolean): any
   }
 }

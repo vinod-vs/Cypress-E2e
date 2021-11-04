@@ -34,12 +34,12 @@ TestFilter(['EDM-API'], () => {
     })
 
     after(() => {
-      //Make sure we add back some points so that the account has some money
+      // Make sure we add back some points so that the account has some money
       cy.addRewardPoints(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber, 10000)
 
-      // Reset Redeem to 0. If the test fails inbetween and the reward dollars was set, 
-      //future order placements and payments from the account will keep on failing with an error from RPG.
-      //Resetting to 0 will avoid this
+      // Reset Redeem to 0. If the test fails inbetween and the reward dollars was set,
+      // future order placements and payments from the account will keep on failing with an error from RPG.
+      // Resetting to 0 will avoid this
       cy.redeemRewardsDollars(0)
     })
 

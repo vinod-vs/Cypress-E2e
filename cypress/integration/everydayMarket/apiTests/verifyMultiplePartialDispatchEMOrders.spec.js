@@ -149,7 +149,7 @@ TestFilter(['EDM-API'], () => {
   })
 })
 
-function verifyOrderProjectionDetails(shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
+function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId, orderReference, partialDispatchNumber) {
   cy.log('Partial Dispatch :' + partialDispatchNumber + ':: Tracking ID ::' + trackingId)
   // After dispatch, Invoke the order api and verify the projection content is updated acordingly
   cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
