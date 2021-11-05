@@ -32,7 +32,6 @@ TestFilter(['EDM-API'], () => {
 
     it('RP-5215 - Instore Return On Partially Shipped Order', () => {
       const testData = tests.VerifyInstoreReturnOnPartiallyShippedEDMOrder
-      let marketRefundId
       let totalMarketRefundAmount
       let orderId
       let orderReference
@@ -40,7 +39,6 @@ TestFilter(['EDM-API'], () => {
       let edmInvoiceId
       const shopperId = shoppers.emAccount2.shopperId
       const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
-      let trackingId
       let lineItemLegacyId
       const dispatchQty = 1
       let encodedInvoiceId
