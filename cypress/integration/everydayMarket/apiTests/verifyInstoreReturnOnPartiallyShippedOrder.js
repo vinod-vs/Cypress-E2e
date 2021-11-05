@@ -214,8 +214,6 @@ TestFilter(['EDM-API'], () => {
                     // Invoke OQS TMO api and validate it against the projection
                     lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
                   })
-
-                  // end
                 })
               })
             })
