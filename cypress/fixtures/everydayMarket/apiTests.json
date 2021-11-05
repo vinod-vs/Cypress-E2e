@@ -155,5 +155,26 @@
       }
     ],
     "paymentType": "PAYPAL_ONLY"    
+  },
+  "VerifyInstoreReturnOnPartiallyShippedEDMOrder": {
+    "searchTerm": "treats",
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:12345",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    },
+    "items": [
+      {
+        "quantity": 2,
+        "isEDMProduct": "true"
+      },
+      {
+        "stockCode": "",
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "paymentType": "CREDIT_CARD_ONLY"
   }
 }
