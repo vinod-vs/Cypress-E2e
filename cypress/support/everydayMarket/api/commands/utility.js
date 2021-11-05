@@ -12,6 +12,7 @@ import digitalPaymentRequest from '../../../../fixtures/payment/digitalPayment.j
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import * as lib from './commonHelpers'
+import '../../../login/api/commands/login'
 import '../../../search/api/commands/search'
 import '../../../checkout/api/commands/navigateToCheckout'
 import '../../../checkout/api/commands/redeemRewardsDollars'

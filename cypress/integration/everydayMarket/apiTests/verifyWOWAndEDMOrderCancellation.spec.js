@@ -213,9 +213,9 @@ TestFilter(['EDM-API'], () => {
             lib.verifyCompleteRefundDetailsWithRetry(testData.orderId, wowRefund, 0, 0, 0)
 
             // Invoke OQS TMO api and validate it against the projection
-            //Old trader order will be in Cancelled state, Will be an WOW + MP Order and will have all the WOW items as well
+            // Old trader order will be in Cancelled state, Will be an WOW + MP Order and will have all the WOW items as well
             lib.verifyOQSOrderStatus(testData.orderId, 'Cancelled', false, testData, true)
-            //New trader order will be in Received state, Will be an MP ONLY Order and will NOT have all the WOW items in it
+            // New trader order will be in Received state, Will be an MP ONLY Order and will NOT have all the WOW items in it
             lib.verifyOQSOrderStatus(finalProjection.orderId, 'Received', true, { ...testData, items: [] }, false)
           })
         })

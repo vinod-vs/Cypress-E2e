@@ -50,5 +50,11 @@ declare namespace Cypress {
     getAllRefundPaymentsByRefundId(refundId: number): any;
     findCCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
+    loginViaUI(email: string, password: string): any;
+    selectTopMenu(menuToSelect: string): any;
+    selectOrderManagementSubMenu(menuToSelect: string): any;
+    searchOrder(orderId: string): any;
+    loginToSMAndSearchOrder(loginDetails: any, orderId: string): any
+    validateOrderDetailsOnSM(isMarketOnly: boolean): any
   }
 }
