@@ -76,7 +76,7 @@ TestFilter(['EDM-API'], () => {
           lineItemLegacyId = response.invoices[0].lineItems[0].legacyId
           encodedLineItem = response.invoices[0].lineItems[0].lineItemId
           encodedInvoiceId = response.invoices[0].invoiceId
-          
+
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId + ' , EncodedInvoiceId: ' + encodedInvoiceId + ' , EncodedLineItemLegacyId: ' + encodedLineItem)
           // Verify the projection details
           lib.verifyInitialOrderDetails(response, testData, shopperId)
@@ -155,8 +155,7 @@ TestFilter(['EDM-API'], () => {
                   //  verify the response status in graphQL endpoint
                   cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
                     expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
-                  }) // end of refund request return 
-                  // start
+                  })
                   // Verify Order Projection details
                   cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
                     function: function (response) {
@@ -190,7 +189,7 @@ TestFilter(['EDM-API'], () => {
                       const totalDispatchAmount = Math.floor(Number(testData.edmTotal)) - Math.floor(Number(testData.items[0].pricePerItem * dispatchQty))
                       cy.log('totalDispatchAmount: ' + totalDispatchAmount)
                       const expectedRewardsPoints = totalDispatchAmount + Number(testData.rewardPointBefore)
-                      cy.log('Testdata JSON !: ' + JSON.stringify(testData))
+                      cy.log('Testdata JSON: ' + JSON.stringify(testData))
                       cy.log('EDM Total: ' + testData.edmTotal)
                       cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
                       cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
