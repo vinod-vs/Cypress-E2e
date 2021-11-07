@@ -183,11 +183,10 @@ TestFilter(['EDM-API'], () => {
               // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
 
-              // Initiate customer return
+              // Asmin instore return
               const returnRequestLineItem = [{ stockCode: testData.items[0].stockCode, quantity: testData.items[0].quantity, amount: testData.items[0].pricePerItem, reason: 'Item is faulty', weight: 12, notes: 'Customer Return from EM Test Automation_Full_Return' }]
               cy.log(returnRequestLineItem)
-
-              
+             
               cy.refundRequestCreateUsingInitiatedBy(encodedEdmInvoiceId, encodedEdmLineitemId,testData.items[0].quantity,true,"ADMIN").then((response) => {
                 // Verify Order Projection details
                 cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -256,7 +255,7 @@ TestFilter(['EDM-API'], () => {
                    expect(response.invoices[0].returns.length).to.be.equal(0)
                     // Verify the MP and shipping invoices are available for the customer
                     cy.verifyOrderInvoice(testData)
-                    // Verify "Total Refund Amount" after Customer Return
+                    // Verify "Total Refund Amount" after refund approved by Admin
                     lib.verifyRefundDetails(testData.orderId, totalMarketRefundAmount, testData.edmDeliveryCharges)
 
                     // Verify the reward points are credited to customers card after EDM dispatch
