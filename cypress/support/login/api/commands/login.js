@@ -17,6 +17,7 @@ Cypress.Commands.add('loginWithNewShopperViaApi', () => {
       "password": signUpDetails.password
     }
     cy.signUpViaApi(signUpDetails).then((response) => {
+      cy.wrap(response.body.ShopperId).as('shopperId')
       cy.log('Shopper Id is: ' + response.body.ShopperId)
       cy.loginViaApi(shopper).then((response) => {
         return response.body

@@ -39,6 +39,7 @@ parameters:
     values:
       - b2c
       - b2b
+      - edm
 
 trigger:
   - main

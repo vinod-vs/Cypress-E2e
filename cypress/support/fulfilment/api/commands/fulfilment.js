@@ -123,13 +123,19 @@ function buildWindowRequest () {
 function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
   let x, y
   const timesArr = []
+  let startTime
+
+  const daysResp = windowResponse.body.Days
+  if (daysResp.length === 0) {
+    throw new Error('No windows found for window type: ' + selectedWindowType)
+  }
 
   days:
   for (x = windowResponse.body.Days.length - 1; x >= 0; x--) {
-    const day = windowResponse.body.Days[x]
+    const day = daysResp[x]
     if (day.Available === true) {
       for (y in day.Times) {
-        const time = windowResponse.body.Days[x].Times[y]
+        const time = daysResp[x].Times[y]
         switch (selectedWindowType) {
           case windowType.FLEET_DELIVERY:
             if (time.Available === true && time.IsExpress === false && time.IsCrowdSourced === false) {
@@ -149,13 +155,31 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
           case windowType.ECO:
             if (time.Available === true && time.IsEcoWindow === true) {
               timesArr.push(time)
-              break
             }
+            break
+          case windowType.MORNING:
+            startTime = new Date(time.StartDateTime).getHours()
+            if (time.Available === true && time.IsCrowdSourced === false && (startTime < 12)) {
+              timesArr.push(time)    
+            }
+            break
+          case windowType.EVENING:
+            startTime = new Date(time.StartDateTime).getHours()
+            if (time.Available === true && time.IsCrowdSourced === false && (startTime >= 17)) {
+              timesArr.push(time)  
+            }
+            break
+          case windowType.LIQUOR_RESTRICTED:
+            startTime = new Date(time.StartDateTime).getHours()
+            if (time.Available === true && (startTime < 6)) {
+              timesArr.push(time)
+            }
+            break     
           default: // pick up/DTB - neither have window types
             if (time.Available === true) {
               timesArr.push(time)
-              break
             }
+            break
         }
       }
 
@@ -246,6 +270,29 @@ Cypress.Commands.add('getFulfilmentWindowViaApi', (selectedWindowType) => {
       getAvailableWindowsByWindowType(response, selectedWindowType).then((availWindows) => {
         if (availWindows.length === 0) {
           throw ('No windows found for window type: ' + selectedWindowType)
+        } else {
+          return selectRandomWindow(availWindows)
+        }
+      })
+    })
+  })
+})
+
+Cypress.Commands.add('getRandomAvailableWindowViaApi', (addressId, areaId, suburbId, fulfilmentType, selectedWindowType) => {
+  timeSlotParams = {
+    addressId: addressId,
+    areaId: areaId,
+    suburbId: suburbId,
+    fulfilmentMethod: fulfilmentType
+  }
+  cy.buildQueryString(timeSlotParams).then((queryString) => {
+    cy.api({
+      method: 'GET',
+      url: Cypress.env('windowsEndpoint') + queryString
+    }).then((response) => {
+      getAvailableWindowsByWindowType(response, selectedWindowType).then((availWindows) => {
+        if (availWindows.length === 0) {
+          throw new Error('No windows found for window type: ' + selectedWindowType)
         } else {
           return selectRandomWindow(availWindows)
         }

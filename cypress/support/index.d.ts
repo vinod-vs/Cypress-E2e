@@ -1,3 +1,5 @@
+type RetryOptions = import('cypress/types/utilities/retryOptions').RetryOptions;
+
 declare namespace Cypress {
   interface Chainable {
     // Cypress custom commands
@@ -24,10 +26,35 @@ declare namespace Cypress {
     placeOrderViaApiWithAddedCreditCard(creditCardDetails: any, platform: string): any;
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
+    setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;
+    checkIfElementExists(element: any): any;
+    selectRandomElement(): any;
+    getBootstrapResponse(): any;
+    getRandomAvailableWindowViaApi(addressId: string, areaId: string, suburbId: string, fulfilmentType: string, windowType: string): any;
+    getDayOfWeek(date: Date): any;
+    formatToAmPm(time: any): any;
     loginViaUi(shopper: any): any;
     searchBillingAddressViaApi(address: string): any;
     setBillingAddressViaApi(addressId: number): any;
     loginWithNewShopperViaApi(): any;
     adminLoginViaUi(loginDetails: any): any;
+    selectRandomWindowInCheckout(fulfilmentType: string, fulfilmentWindow: string): any;
+    removeNewLineCarriageReturn(initialText: string): string;
+    prepareAnySingleLineItemEdmOrder(searchTerm: string, purchaseQty: number): void;
+    redeemRewardsDollars(redeemAmount: number): any;
+    placeOrderUsingCreditCard(): any;
+    placeOrderUsingCreditCardAndGiftCard(): any;
+    ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId: number, orderId: number, retryOptions: RetryOptions): any;
+    cancelLineItemInInvoice(encodedInvoiceId: string, encodedLineItemId: string, quantity: number, dispatched: boolean): any;
+    getAllRefundsByOrderId(traderOrderId: number): any;
+    getAllRefundPaymentsByRefundId(refundId: number): any;
+    findCCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
+    findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
+    loginViaUI(email: string, password: string): any;
+    selectTopMenu(menuToSelect: string): any;
+    selectOrderManagementSubMenu(menuToSelect: string): any;
+    searchOrder(orderId: string): any;
+    loginToSMAndSearchOrder(loginDetails: any, orderId: string): any
+    validateOrderDetailsOnSM(isMarketOnly: boolean): any
   }
 }
