@@ -37,12 +37,17 @@ describe('[UI] Verify Order details in MyOrders for order placed for B2C custome
             const orderValue = response.Order.orderValue
             const deliveryDate = response.Order.deliveryDate
             const orderDate = response.Order.orderDate
+            
+            cy.loginViaUi(shopper[1])
+            cy.navigateToMyOrdersPage()
+            cy.verifyMyLatestOrder(orderId, orderValue, deliveryDate, orderDate )
+
             })
         // login via UI into same account
-        cy.loginViaUi(shopper[1])
+       // cy.loginViaUi(shopper[1])
         // Navigate to My order page through My account
-        cy.navigateToMyOrdersPage()
-        cy.verifyMyLatestOrder(orderId, orderValue, deliveryDate, orderDate )
+        //cy.navigateToMyOrdersPage()
+        //cy.verifyMyLatestOrder(orderId, orderValue, deliveryDate, orderDate )
         //Assert if the order number which we saved earlier is present in the My orders page
         // Verify the Delivery date, 
         //verify delivery total
