@@ -13,7 +13,7 @@ import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOr
 import CreateB2CDeliveryOrderPaidViaCreditCard from '../../../support/shared/api/commands/createOrder'
 import '../../../support/orders/api/commands/cancelOrder'
 
-TestFilter(['B2C-API'], () => {
+TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Cancel placed order for B2C customer', () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null })
