@@ -22,6 +22,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 import shipment from '../../../fixtures/everydayMarket/shipment.json'
+import { initiatorType } from '../../../support/everydayMarket/common/refundRequestInitiatorType.ts'
 
 TestFilter(['EDM-API'], () => {
   describe('[API] RP-5215 - Instore Return On Partially Shipped Order', () => {
@@ -31,7 +32,7 @@ TestFilter(['EDM-API'], () => {
     })
 
     it('RP-5215 - Instore Return On Partially Shipped Order', () => {
-      const testData = tests.VerifyInstoreReturnOnPartiallyShippedEDMOrder
+      const testData = tests.GenericWOWPlusEDMCCPaymentTestData
       let totalMarketRefundAmount
       let orderId
       let orderReference
@@ -43,6 +44,7 @@ TestFilter(['EDM-API'], () => {
       const dispatchQty = 1
       let encodedInvoiceId
       let encodedLineItem
+      const initiator = initiatorType.ADMIN
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
@@ -132,7 +134,7 @@ TestFilter(['EDM-API'], () => {
               expect(response.invoices[0].shipments[0].shippedItems[0].stockCode).is.equal(testData.items[0].stockCode)
               expect(response.invoices[0].shipments[0].shippedItems[0].quantity).is.equal(dispatchQty)
               // Create a Instore Return initiated by ADMIN
-              cy.refundRequestCreateInitiatedBy(encodedInvoiceId, encodedLineItem, dispatchQty, true, 'ADMIN').then((response) => {
+              cy.refundRequestCreateInitiatedBy(encodedInvoiceId, encodedLineItem, dispatchQty, true, initiator).then((response) => {
                 expect(response.data.refundRequestCreate.refundRequest.status).to.equals('AWAITING')
 
                 // Verify the projections
