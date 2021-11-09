@@ -1,6 +1,5 @@
 export enum refundRequestInitiatorType {
-    SELLER = "SELLER",
-    BUYER = "BUYER",
-    ADMIN = "ADMIN"
-  }
-  
+  SELLER = "SELLER",
+  BUYER = "BUYER",
+  ADMIN = "ADMIN"
+}

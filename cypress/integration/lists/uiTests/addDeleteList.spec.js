@@ -8,7 +8,7 @@ import '../../../support/lists/ui/commands/addDeleteList'
 import '../../../support/logout/api/commands/logout'
 
 const faker = require('faker')
-TestFilter(['B2B-UI'], () => {
+TestFilter(['B2B', 'UI', 'P0'], () => {
   describe.skip('[UI] Create a list and delete the list in B2B', () => {
     // pre-requisite to clear all cookies before login
     before(() => {

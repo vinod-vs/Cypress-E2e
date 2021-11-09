@@ -251,7 +251,7 @@ Cypress.Commands.add('customerReturn', (edmInvoiceId, orderReference, returnRequ
   })
 })
 
-Cypress.Commands.add('refundRequestCreateUsingInitiatedBy', (encodedInvoiceId, encodedLineItemId, quantity, dispatched,initiatedBy) => {
+Cypress.Commands.add('refundRequestCreateInitiatedBy', (encodedInvoiceId, encodedLineItemId, quantity, dispatched, initiator) => {
   let mutation = String(`mutation{
         refundRequestCreate(input: 
           {
@@ -261,12 +261,11 @@ Cypress.Commands.add('refundRequestCreateUsingInitiatedBy', (encodedInvoiceId, e
               reason: "Automation Reason: I don't want this"
               quantity: QUANTITY
               dispatched: DISPATCHED_VALUE
-
             }
             notes: [{
               note: "Automation refundRequestCreate note: I don't want this"
             }]
-            initiatedBy:INITIATED_BY
+            initiatedBy: INITIATED_BY
           })
         {
           refundRequest{
@@ -284,7 +283,8 @@ Cypress.Commands.add('refundRequestCreateUsingInitiatedBy', (encodedInvoiceId, e
   mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
   mutation = String(mutation).replace('QUANTITY', quantity)
   mutation = String(mutation).replace('DISPATCHED_VALUE', dispatched)
-  mutation = String(mutation).replace('INITIATED_BY', initiatedBy)
+  mutation = String(mutation).replace('INITIATED_BY', initiator)
+
   cy.api({
     method: 'POST',
     headers: {
@@ -306,11 +306,3 @@ Cypress.Commands.add('refundRequestCreateUsingInitiatedBy', (encodedInvoiceId, e
   })
 })
 
-Cypress.Commands.add('adminInstoreReturn', (encodedInvoiceId, encodedLineItemId, quantity, dispatched,initiatedBy) => {
-  let encodedRefundRequestId
-  cy.refundRequestCreateUsingInitiatedBy(encodedInvoiceId, encodedLineItemId, quantity, dispatched,initiatedBy).then((response) => {
-    encodedRefundRequestId = response.data.refundRequestCreate.refundRequest.id
-    cy.log('encodedRefundRequestId: ' + encodedRefundRequestId)
-    cy.refundRequestReturn(encodedRefundRequestId)
-  })
-})

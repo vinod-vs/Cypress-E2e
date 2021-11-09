@@ -9,7 +9,7 @@ const faker = require('faker/locale/en_AU')
 const dateNow = new Date()
 const moment = require('moment')
 
-TestFilter(['B2C-API'], () =>{
+TestFilter(['B2C', 'API', 'P0'], () =>{
     describe('Rocket orderID is created,saved and published successfully',()=>{
         before(() => {
             cy.clearCookies({ domain: null })

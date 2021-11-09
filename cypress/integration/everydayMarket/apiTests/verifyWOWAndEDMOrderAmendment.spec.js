@@ -14,7 +14,7 @@ import '../../../support/orders/api/commands/amendOrder'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 import * as commonLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })

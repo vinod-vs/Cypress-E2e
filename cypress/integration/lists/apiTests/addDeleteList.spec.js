@@ -16,7 +16,7 @@ import '../../../support/lists/api/commands/getProductsInList'
 
 const faker = require('faker')
 
-TestFilter(['API'], () => {
+TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
   describe('[API] Add a new list, add items in the list and delete the list', () => {
     before(() => {
       cy.clearCookies({ domain: null })

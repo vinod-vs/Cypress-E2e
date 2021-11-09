@@ -25,7 +25,7 @@ let productStockCode
 let productPrice
 let supplyLimit
 
-TestFilter(['B2B-API'], () => {
+TestFilter(['B2B', 'API', 'P0'], () => {
   describe('[API] Place a delivery order on Woolworths at Work website using Openpay', () => {
     before(() => {
       cy.clearCookies({ domain: null })

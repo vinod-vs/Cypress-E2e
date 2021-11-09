@@ -21,9 +21,9 @@ import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
-import { initiatorType } from '../../../support/everydayMarket/common/refundRequestInitiatorType.ts'
+import { refundRequestInitiatorType } from '../../../support/everydayMarket/common/refundRequestInitiatorType'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5218  Create Admin isntore return on full Everyday Market items invoice ', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -41,7 +41,7 @@ TestFilter(['EDM-API'], () => {
       const shopperId = shoppers.emAccount2.shopperId
       const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
       let totalMarketRefundAmount
-      const initiator = initiatorType.ADMIN
+      const initiator = refundRequestInitiatorType.ADMIN
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
@@ -189,7 +189,7 @@ TestFilter(['EDM-API'], () => {
               const returnRequestLineItem = [{ stockCode: testData.items[0].stockCode, quantity: testData.items[0].quantity, amount: testData.items[0].pricePerItem, reason: 'Item is faulty', weight: 12, notes: 'Customer Return from EM Test Automation_Full_Return' }]
               cy.log(returnRequestLineItem)
              
-              cy.refundRequestCreateUsingInitiatedBy(encodedEdmInvoiceId, encodedEdmLineitemId,testData.items[0].quantity,true,initiator).then((response) => {
+              cy.refundRequestCreateInitiatedBy(encodedEdmInvoiceId, encodedEdmLineitemId,testData.items[0].quantity,true,initiator).then((response) => {
                 // Verify Order Projection details
                 cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
                   function: function (response) {
