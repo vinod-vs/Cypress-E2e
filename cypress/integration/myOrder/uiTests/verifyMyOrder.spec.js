@@ -42,22 +42,18 @@ describe('[UI] Verify Order details in MyOrders for order placed for B2C custome
             myDeliveryDate = response.Order.deliveryDate
             myOrderDate = response.Order.orderDate
             cy.log('Before call', myOrderId, myOrderValue, myDeliveryDate, myOrderDate)
-
+        
+            // login via UI into same account
             cy.loginViaUi(shopper[1])
+        
+            // Navigate to My order page through My account
             cy.navigateToMyOrdersPage()
+            
+            //Assert if the order details which we saved earlier is present in the My orders page            
             cy.verifyMyLatestOrder(myOrderId, myOrderValue, myDeliveryDate, myOrderDate)
 
             })
-        // login via UI into same account
-       // cy.loginViaUi(shopper[1])
-        // Navigate to My order page through My account
-        //cy.navigateToMyOrdersPage()
-        //cy.verifyMyLatestOrder(orderId, orderValue, deliveryDate, orderDate )
-        //Assert if the order number which we saved earlier is present in the My orders page
-        // Verify the Delivery date, 
-        //verify delivery total
-        //verify Track my order link
-        //verify 'view order details' link 
+
       })
   })
 
