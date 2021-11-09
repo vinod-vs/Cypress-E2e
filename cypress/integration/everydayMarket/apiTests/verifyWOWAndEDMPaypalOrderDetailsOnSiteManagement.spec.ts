@@ -17,7 +17,7 @@ import "../../../support/everydayMarket/ui/commands/siteManagementValidationHelp
 import tests from "../../../fixtures/everydayMarket/apiTests.json";
 import smLogins from '../../../fixtures/siteManagement/loginDetails.json'
 
-TestFilter(['EDM-HYBRID'], () => {
+TestFilter(['EDM', 'EDM-HYBRID'], () => {
   describe("[API]  RP-5339 - Create and WOW + EDM order and verify both the order details on SM", () => {
     before(() => {
       cy.clearCookies({ domain: null });
