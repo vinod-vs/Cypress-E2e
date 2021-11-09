@@ -24,7 +24,7 @@ import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers
 import shipment from '../../../fixtures/everydayMarket/shipment.json'
 import { refundRequestInitiatorType } from '../../../support/everydayMarket/common/refundRequestInitiatorType'
 
-TestFilter(['EDM','API'], () => {
+TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5215 - Instore Return On Partially Shipped Order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
