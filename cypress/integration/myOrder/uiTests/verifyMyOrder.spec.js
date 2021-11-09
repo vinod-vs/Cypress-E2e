@@ -23,6 +23,10 @@ describe('[UI] Verify Order details in MyOrders for order placed for B2C custome
         cy.clearLocalStorage({ domain: null })
 
     })
+    let myOrderId
+    let myOrderValue
+    let myDeliveryDate
+    let myOrderDate
 
     it('Place an order via api for B2C customer, then verify the order details in MyOrders UI', () => {
        //Login via api
@@ -33,14 +37,15 @@ describe('[UI] Verify Order details in MyOrders for order placed for B2C custome
         orderPlaced.placeOrderForB2CUser(shopper[1], addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
           digitalPayment, confirmOrderParameter)
           .then((response) => {
-            const orderId = response.Order.orderId
-            const orderValue = response.Order.orderValue
-            const deliveryDate = response.Order.deliveryDate
-            const orderDate = response.Order.orderDate
-            
+            myOrderId = response.Order.orderId
+            myOrderValue = response.Order.orderValue
+            myDeliveryDate = response.Order.deliveryDate
+            myOrderDate = response.Order.orderDate
+            cy.log('Before call', myOrderId, myOrderValue, myDeliveryDate, myOrderDate)
+
             cy.loginViaUi(shopper[1])
             cy.navigateToMyOrdersPage()
-            cy.verifyMyLatestOrder(orderId, orderValue, deliveryDate, orderDate )
+            cy.verifyMyLatestOrder(myOrderId, myOrderValue, myDeliveryDate, myOrderDate)
 
             })
         // login via UI into same account
