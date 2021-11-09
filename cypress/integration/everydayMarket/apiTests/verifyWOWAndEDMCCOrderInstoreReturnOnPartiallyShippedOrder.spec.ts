@@ -22,7 +22,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 import shipment from '../../../fixtures/everydayMarket/shipment.json'
-import { initiatorType } from '../../../support/everydayMarket/common/refundRequestInitiatorType'
+import { refundRequestInitiatorType } from '../../../support/everydayMarket/common/refundRequestInitiatorType'
 
 TestFilter(['EDM','API'], () => {
   describe('[API] RP-5215 - Instore Return On Partially Shipped Order', () => {
@@ -44,7 +44,7 @@ TestFilter(['EDM','API'], () => {
       const dispatchQty = 1
       let encodedInvoiceId
       let encodedLineItem
-      const initiator = initiatorType.ADMIN
+      const initiator = refundRequestInitiatorType.ADMIN
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
