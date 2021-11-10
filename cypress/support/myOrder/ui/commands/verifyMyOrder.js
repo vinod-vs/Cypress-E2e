@@ -6,10 +6,14 @@ Cypress.Commands.add('navigateToMyOrdersPage', () => {
 })
 
 Cypress.Commands.add('verifyMyLatestOrder', (orderId, orderValue, deliveryDate, orderDate) => {
-    cy.log(orderId)
-    cy.log(orderValue)
-    cy.log(deliveryDate)
-    cy.log(orderDate)
+
+  // To Do
+  // Need to convert parameter datetime format to be same as UI first.
+
+  // To Do
+  // Consider refresh page for a period time until the newly creatd order shows up in my order list.
+  // If waiting times out, test failed dues to newly created order doesn't show up on the page.
+
   onMyOrderPage.getMyOrderNumber().should('contain.text', orderId)
   onMyOrderPage.getOrderDateString().should('contain.text', orderDate)
   onMyOrderPage.getOrderTotalString().should('contain.text', orderValue)
