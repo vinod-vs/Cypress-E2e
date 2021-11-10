@@ -21,16 +21,21 @@ parameters:
   - name: tags
     displayName: Test Tags
     type: string
-    default: API/UI
+    default: E2E
     values:
-      - API/UI
-      - B2C-API
-      - EDM-API
-      - EDM-UI
-      - B2B-API
-      - B2B-UI
       - API
       - UI
+      - B2C
+      - B2B
+      - P0
+      - P1
+      - P2
+      - P3
+      - E2E
+      - EDM
+      - Checkout
+      - SM
+      - Login
 
   - name: fileConfig
     displayName: Config File Name
@@ -61,7 +66,7 @@ jobs:
         displayName: "Run B2C Tests"
       - script: |
           npm install
-          npm test -- --env tags=B2C-API/API/B2C-UI,fileConfig=b2c --browser ${{ parameters.browser }}
+          npm test -- --env tags=B2C-P0,fileConfig=b2c --browser ${{ parameters.browser }}
           npm run allure:generate
         displayName: "Npm install and run B2C tests"
 
@@ -177,7 +182,7 @@ jobs:
         displayName: "Run B2B Tests"
       - script: |
           npm install
-          npm test -- --env tags=B2B-API/B2B-UI/API,fileConfig=b2b --browser ${{ parameters.browser }}
+          npm test -- --env tags=B2B-P0,fileConfig=b2b --browser ${{ parameters.browser }}
           npm run allure:generate
         displayName: "Npm install and run B2B tests"
 
@@ -276,7 +281,7 @@ jobs:
       - script: |
           npm install
           npm install -g browserstack-cypress-cli
-          npx browserstack-cypress run --sync --env "tags=B2B-UI,fileConfig=b2b"
+          npx browserstack-cypress run --sync --env "tags=B2B-UI-P0,fileConfig=b2b"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2B tests on BrowserStack"
 
@@ -314,7 +319,7 @@ jobs:
       - script: |
           npm install
           npm install -g browserstack-cypress-cli
-          npx browserstack-cypress run --sync --env "tags=B2C-UI,fileConfig=b2c"
+          npx browserstack-cypress run --sync --env "tags=B2C-UI-P0,fileConfig=b2c"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2C tests on BrowserStack"
 

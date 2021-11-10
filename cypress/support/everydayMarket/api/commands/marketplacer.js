@@ -250,3 +250,59 @@ Cypress.Commands.add('customerReturn', (edmInvoiceId, orderReference, returnRequ
     return response.body
   })
 })
+
+Cypress.Commands.add('refundRequestCreateInitiatedBy', (encodedInvoiceId, encodedLineItemId, quantity, dispatched, initiator) => {
+  let mutation = String(`mutation{
+        refundRequestCreate(input: 
+          {
+            invoiceId: "ENCODED_INVOICE_ID",
+            lineItems: {
+              lineItemId: "ENCODED_LINEITEM_ID"
+              reason: "Automation Reason: I don't want this"
+              quantity: QUANTITY
+              dispatched: DISPATCHED_VALUE
+            }
+            notes: [{
+              note: "Automation refundRequestCreate note: I don't want this"
+            }]
+            initiatedBy: INITIATED_BY
+          })
+        {
+          refundRequest{
+            id
+            status
+            cashAmountCents
+            refundAmountCents
+            cashAmountFormatted
+          }errors{
+            field
+            messages
+          }
+        }
+      }`).replace('ENCODED_INVOICE_ID', encodedInvoiceId)
+  mutation = String(mutation).replace('ENCODED_LINEITEM_ID', encodedLineItemId)
+  mutation = String(mutation).replace('QUANTITY', quantity)
+  mutation = String(mutation).replace('DISPATCHED_VALUE', dispatched)
+  mutation = String(mutation).replace('INITIATED_BY', initiator)
+
+  cy.api({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: {
+      bearer: Cypress.env('marketplacerGQLApiKey')
+
+    },
+    url: Cypress.env('marketplacerGQLEndpoint'),
+    body: {
+      query: mutation
+    }
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+    expect(response.body.data.refundRequestCreate.errors).to.be.null
+    expect(response.body.data.refundRequestCreate.refundRequest.status).to.equals('AWAITING')
+    return response.body
+  })
+})
+

@@ -11,7 +11,7 @@ import '../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import '../../../support/orderPaymentService/api/commands/refunds'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5110 - EM | Refunds | Verify refunds happens to the right payment mode for market orders placed via CC + RD + GC', () => {
     before(() => {
       cy.clearCookies({ domain: null })

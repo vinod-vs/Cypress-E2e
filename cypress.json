@@ -67,7 +67,6 @@
         "rpgEndpoint": "https://test.api-wr.com/",
         "rpgFinaliseEndpoint": "wx/v1/loyalty/partners/transactions/finalise",        
         "rpgQueryEndpoint": "wx/v1/loyalty/partners/cards/query",
-        "tags": "API/UI",
         "oqsKeyCloakUrl": "https://platk8saae.uat.wx-d.net/rhel-sso/realms/Trader/protocol/openid-connect/token",
         "oqsEndpoint": "https://dxk8saae.uat.wx-d.net/orders-es/",
         "oqsGetOrderStatusEndpoint": "api/orders/TRADER_ORDER_ID/status",
