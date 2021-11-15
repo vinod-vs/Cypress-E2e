@@ -66,6 +66,10 @@ export class SearchResultsPage {
   getProductSavedNotification () {
     return cy.get('shared-toast')
   }
+
+  getHaveYouForgottenContinueToCheckoutButton () {
+    return cy.get('wow-have-you-forgotten-container .continue-button')
+  }
 }
 
 export const onSearchResultsPage = new SearchResultsPage()
