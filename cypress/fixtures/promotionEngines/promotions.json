@@ -1,0 +1,60 @@
+{
+  "ClassicProductPromotions": [{
+    "stockcode": "192674",
+     "SalePrice" :"4.2"
+     },
+    {
+      "stockcode": "211377",
+     "SalePrice" :"12.5"
+    }],
+    "ProductPromotions": [{
+      "stockcode": "211377",
+       "SalePrice" :"12.5"
+       },
+      {
+        "stockcode": "211377",
+       "SalePrice" :"12.5"
+      }],
+      "DeferredProductPromotions": [{
+        "stockcode": "211377",
+         "TotalRewardsPointsEarned" :"12.5"
+         },
+        {
+          "stockcode": "211377",
+         "TotalRewardsPointsEarned" :"12.5"
+        }],
+        "DeferredSpendStretchPromotions": [{
+          "stockcode": "211377",
+           "TotalRewardsPointsEarned" :"100"
+           },
+          {
+            "stockcode": "211377",
+           "TotalRewardsPointsEarned" :"200"
+          }],
+          "DeferredOrderPromotions": [{
+            "stockcode": "211377",
+             "TotalRewardsPointsEarned" :"100"
+             },
+            {
+              "stockcode": "211377",
+             "TotalRewardsPointsEarned" :"200"
+            }],
+            "OrderPromotions": [{
+              "stockcode": "211377",
+               "SalePrice" :"100"
+               },
+              {
+                "stockcode": "211377",
+               "SalePrice" :"200"
+              }],
+              "CouponPromotions": [{
+                "stockcode": "211377",
+                "CouponCode":"10%OFFSUBTOTAL",
+                 "SalePrice" :"100"
+                 },
+                {
+                  "stockcode": "211377",
+                  "CouponCode":"10%OFFSUBTOTAL",
+                 "SalePrice" :"200"
+                }]
+}
