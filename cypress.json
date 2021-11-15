@@ -24,6 +24,7 @@
         "deliveryOptionsEndpoint": "/apis/ui/Delivery/Options",
         "deliveryInfoEndpoint": "/apis/ui/Delivery/DeliveryInfo",
         "clearTrolleyEndpoint": "apis/ui/Trolley/Clear",
+        "removeItemsEndpoint": "/apis/ui/Trolley/RemoveItems",
         "addItemsToTrolleyEndpoint": "apis/ui/Trolley/Items",
         "navigateToCheckoutEndpoint": "apis/ui/Checkout",
         "checkoutRedeemRewardsDollarsEndpoint": "apis/ui/Checkout/WoolworthsRewards/Redeem",

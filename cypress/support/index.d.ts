@@ -54,7 +54,17 @@ declare namespace Cypress {
     selectTopMenu(menuToSelect: string): any;
     selectOrderManagementSubMenu(menuToSelect: string): any;
     searchOrder(orderId: string): any;
-    loginToSMAndSearchOrder(loginDetails: any, orderId: string): any
-    validateOrderDetailsOnSM(isMarketOnly: boolean): any
+    loginToSMAndSearchOrder(loginDetails: any, orderId: string): any;
+    validateOrderDetailsOnSM(isMarketOnly: boolean): any;
+    addAvailableEDMItemsToTrolley(searchTerm: string, quantity: number): void;
+    addAvailableNonRestrictedWowItemsToTrolley(searchTerm: string): void;
+    amendOrder(traderOrderId: number): any;
+    getExpectedCCCardDetails(): void;
+    getCCPaymentInstrumentId(creditCardPaymentResponse: any): any;
+    addGiftCardToAccount(giftCardRequest: any): any;
+    getGCPaymentInstrumentId(giftCardPaymentResponse: any): any;
+    zero(): any;
+    removeItems(unavailableItemsArr: any): any;
+    orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
   }
 }

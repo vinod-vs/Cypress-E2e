@@ -138,6 +138,16 @@ TestFilter(['EDM', 'API'], () => {
         // Partial seller cancellation - mark the last item as OOS via Marketplacer
         cy.cancelLineItemInInvoice(data.invoices[0].invoiceId, data.invoices[0].lineItems[0].lineItemId, cancelledQty, false)
           .then(() => {
+            cy.orderEventsApiWithRetry(req.orderReference, {
+              function: function (response) {
+                if (response.body.pagination.total < 14) {
+                  throw new Error('Event not updated yet')
+                }
+              },
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
+            })
+
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
                 if (response.body.invoices[0].wowStatus !== 'Shipped') {

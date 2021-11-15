@@ -8,6 +8,7 @@ import digitalPaymentRequest from '../../../../fixtures/payment/digitalPayment.j
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import giftCardRequest from '../../../../fixtures/payment/giftCard.json'
 import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
+import removeItemsRequestBody from '../../../../fixtures/sideCart/removeItems.json'
 import './utility'
 import '../../../search/api/commands/search'
 import '../../../checkout/api/commands/navigateToCheckout'
@@ -17,14 +18,16 @@ import '../../../payment/api/commands/giftCard'
 import '../../../payment/api/commands/paypal'
 import '../../../sideCart/api/commands/addItemsToTrolley'
 import '../../../sideCart/api/commands/clearTrolley'
+import '../../../sideCart/api/commands/removeItems'
 import '../../../payment/api/commands/digitalPayment'
 import '../../../payment/api/commands/zero'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../invoices/api/commands/commands'
 import '../../../fulfilment/api/commands/fulfilment'
 import '../../../utilities/api/apiUtilities'
+import '../../../utilities/ui/utility'
 
-let instrumentIdsArr = []
+let instrumentIdsArr: any[] = []
 
 Cypress.Commands.add('prepareAnySingleLineItemEdmOrder', (searchTerm, quantity) => {
   // Set fulfilment using the new /windows endpoint
@@ -49,19 +52,46 @@ Cypress.Commands.add('prepareAnySingleLineItemWowAndEdmOrder', (searchTerm, quan
   cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
 })
 
-Cypress.Commands.add('completeOrderAmendment', (traderOrderId) => {
+Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
   // Start amending the WOW portion of the order
   cy.amendOrder(traderOrderId)
 
   // Set fulfilment using the new /windows endpoint
   cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
 
-  // TO-DO: To improve in case existing items or fulfilment window is no longer available
-
-  // Place and confirm the order
+  if (doUnavailableItemsExist()) {
+    let req = {...removeItemsRequestBody,
+      Stockcodes: getUnavailableItemsStockcodes()}
+    // Remove unavailable items from trolley
+    cy.removeItems(req)
+    // Add available non-restricted groceries items to trolley again in case total goes below threshold
+    cy.addAvailableNonRestrictedWowItemsToTrolley(searchTerm)
+  }
+  
+  // Place and confirm the order using credit card
   placeOrderUsingCreditCard()
   return payOrder()
 })
+
+function getUnavailableItemsStockcodes() {
+  const unavailableItemsArr: number[] = [] 
+  
+  cy.getBootstrapResponse().then((response: any) => {
+    response.TrolleyRequest.UnavailableItems.filter((item: { Stockcode: number }) => unavailableItemsArr.push(item.Stockcode))
+  })
+
+  return unavailableItemsArr
+}
+
+function doUnavailableItemsExist(): boolean {
+  return cy.getBootstrapResponse().then((response: any) => {
+    if (response.TrolleyRequest.UnavailableItems.length === 0) {
+      return false
+    } else {
+      return true
+    }
+  })
+}
 
 Cypress.Commands.add('placeOrderUsingCreditCard', () => {
   placeOrderUsingCreditCard()
@@ -83,8 +113,8 @@ function placeOrderUsingCreditCard () {
   // Grab Digital pay instrument Id for the test credit card set in the fixture
   cy.get('@ccSessionId').then((ccSessionId) => {
     cy.get('@creditCardToUse').then((creditCardToUse) => {
-      cy.creditcardPayment(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response) => {
-        cy.getCCPaymentInstrumentId(response).then((id) => {
+      cy.creditcardPayment(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response: any) => {
+        cy.getCCPaymentInstrumentId(response).then((id: number) => {
           instrumentIdsArr.push(id)
         }) 
       })
@@ -102,9 +132,9 @@ function placeOrderUsingGiftCard () {
   }
 
   // Tokenize the new gift card
-  cy.addGiftCardToAccount(giftCardReq).then((response) => {
+  cy.addGiftCardToAccount(giftCardReq).then((response: any) => {
     // Grab Digital pay instrument Id for the test gift card
-    cy.getGCPaymentInstrumentId(response).then((id) => {
+    cy.getGCPaymentInstrumentId(response).then((id: number) => {
       instrumentIdsArr.push(id)
     })
   })
@@ -113,7 +143,7 @@ function placeOrderUsingGiftCard () {
 function payOrder () {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
-  cy.get('@balanceToPay').then((amount) => {
+  cy.get('@balanceToPay').then((amount: any) => {
     if (amount > 0) {
       if (instrumentIdsArr.length == 1) {
         // Pay using 1 main payment instrument only, e.g. credit card or PayPal
