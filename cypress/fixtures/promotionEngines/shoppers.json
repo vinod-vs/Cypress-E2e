@@ -1,8 +1,8 @@
 {
     "PESAccount1": {
-      "email": "pes-automation@woolworths.com.au",
-      "password": "Woolies123",
-      "shopperId": "8387512",
+      "email": "pes-auto1@woolworths.com.au",
+      "password": "woolies123",
+      "shopperId": "8464504",
       "platform": "B2C"
     }
    }
