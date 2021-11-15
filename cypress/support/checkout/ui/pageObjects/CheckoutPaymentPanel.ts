@@ -44,7 +44,7 @@ export class CheckoutPaymentPanel{
     }
 
     getPromoCodeToggleButton () {
-        return this.getPromoCodeContainer().find('.promo-code-apply-button button')
+        return this.getPromoCodeContainer().find('.toggle-button')
     }
 
     getPromoCodeEnterTextbox () {
@@ -177,6 +177,36 @@ export class CheckoutPaymentPanel{
             }   
         })
         this.getPlaceOrderButton().click()
+    }
+
+    RedeemRewardsDollars (dollarAmount: number) {
+        this.getRewardsDollarsToggleButton()
+        .invoke('attr', 'aria-pressed')
+        .then(attributeValue => {
+            if(attributeValue?.includes('false')){
+                this.getRewardsDollarsToggleButton().click()
+            }
+        })
+
+        var currentAmount = 0
+        while(currentAmount < dollarAmount) {
+            this.getRewardsDollarsIncreaseButton().click()
+            currentAmount = currentAmount + 10
+        }
+
+        this.getRewardsDollarUseButton().click()
+    }
+
+    AddPromoCode (promoCode: string) {
+        this.getPromoCodeToggleButton()
+        .invoke('attr', 'aria-pressed')
+        .then(attributeValue => {
+            if(attributeValue?.includes('false')){
+                this.getPromoCodeToggleButton().click()
+            }
+        })
+        this.getPromoCodeEnterTextbox().type(promoCode)
+        this.getPromoCodeApplyButton().click()
     }
     //#endregion
 
