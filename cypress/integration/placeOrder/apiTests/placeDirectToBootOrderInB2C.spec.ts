@@ -21,7 +21,7 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 
-TestFilter(['B2C-API'], () => {
+TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Place a Direct to boot order in B2C platform using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })

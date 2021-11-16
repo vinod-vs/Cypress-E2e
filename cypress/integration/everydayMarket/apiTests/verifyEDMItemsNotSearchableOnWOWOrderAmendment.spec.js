@@ -23,7 +23,7 @@ import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 import searchRequest from '../../../fixtures/search/productSearch.json'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5152 - EM | Amend grocery order and verify Everyday Market products are not searchable and addable to cart', () => {
     before(() => {
       cy.clearCookies({ domain: null })

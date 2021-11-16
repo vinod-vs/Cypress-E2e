@@ -18,7 +18,7 @@ import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 import * as refundsLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM-API'], () => {
+TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -138,6 +138,16 @@ TestFilter(['EDM-API'], () => {
         // Partial seller cancellation - mark the last item as OOS via Marketplacer
         cy.cancelLineItemInInvoice(data.invoices[0].invoiceId, data.invoices[0].lineItems[0].lineItemId, cancelledQty, false)
           .then(() => {
+            cy.orderEventsApiWithRetry(req.orderReference, {
+              function: function (response) {
+                if (response.body.pagination.total < 14) {
+                  throw new Error('Event not updated yet')
+                }
+              },
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
+            })
+
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
                 if (response.body.invoices[0].wowStatus !== 'Shipped') {

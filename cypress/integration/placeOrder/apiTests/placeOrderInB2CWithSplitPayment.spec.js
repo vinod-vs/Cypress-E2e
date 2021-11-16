@@ -21,7 +21,7 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/logout/api/commands/logout'
 
-TestFilter(['B2C-API'], () => {
+TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API]Place an order on B2C Platform via split payment (Credit Card & Gift Card)', () => {
     before(() => {
       cy.clearCookies({ domain: null })

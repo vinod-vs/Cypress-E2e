@@ -7,7 +7,6 @@ import "../../../support/siteManagement/ui/commands/homepage";
 import "../../../support/siteManagement/ui/commands/orderManagement";
 import "../../../support/everydayMarket/api/commands/orderApi";
 import shoppers from "../../../fixtures/everydayMarket/shoppers.json";
-import TestFilter from "../../../support/TestFilter";
 import "../../../support/invoices/api/commands/commands";
 import "../../../support/refunds/api/commands/commands";
 import "../../../support/everydayMarket/api/commands/orderApi";
@@ -18,7 +17,7 @@ import "../../../support/everydayMarket/ui/commands/siteManagementValidationHelp
 import tests from "../../../fixtures/everydayMarket/apiTests.json";
 import smLogins from '../../../fixtures/siteManagement/loginDetails.json'
 
-TestFilter(["EDM-HYBRID"], () => {
+TestFilter(['EDM', 'EDM-HYBRID'], () => {
   describe("[API]  RP-5339 - Create and WOW + EDM order and verify both the order details on SM", () => {
     before(() => {
       cy.clearCookies({ domain: null });
