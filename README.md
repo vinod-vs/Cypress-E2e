@@ -64,12 +64,14 @@ More info can be found at the [standard js docs](https://standardjs.com/)
 
 # For having TAGS in your test suite, please use the steps below:
 * Write the test suite within this:
-    TestFilter(['API'], () => {
+    TestFilter(['API', 'B2C'], () => {
         describe('[API] Place a delivery order in B2C platform using Credit Card', () => {}
     }
-Here "API" is the tag for this test suite mentioned inside the 'TestFilter'.
+Here "API", "B2C" are the tags for this test suite mentioned inside the 'TestFilter'.
 * For running the tests with tags, use the CLI parameter like this:
     --env tags=API/UI (this example will run test suits having 'API' or 'UI' tags)
+    --env tags=API-B2C/UI-B2B (this example will run test suits having both 'API' and 'B2C' tags, or run tests having both 'UI' and 'B2B' tags)
+    --env tags=B2C-UI-P0 (this example will run test suites having all 'B2C', 'UI' and 'P0' tags)
     
 # For dynamically modifying configuration values and environment variables from your plugins file (https://docs.cypress.io/api/plugins/configuration-api#Usage)
 * Create a new configuration file under "../cypress/config-files" folder

@@ -5,7 +5,7 @@ import b2bShoppers from '../../../fixtures/login/b2bShoppers.json'
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 
-TestFilter(['B2C-API'], () => {
+TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Perform Login', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -28,7 +28,7 @@ TestFilter(['B2C-API'], () => {
   })
 })
 
-TestFilter(['B2B-API'], () => {
+TestFilter(['B2B', 'API', 'P0'], () => {
   describe('[API] Perform Login', () => {
     before(() => {
       cy.clearCookies({ domain: null })

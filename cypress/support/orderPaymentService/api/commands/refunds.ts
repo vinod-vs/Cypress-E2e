@@ -24,14 +24,10 @@ Cypress.Commands.add('getAllRefundPaymentsByRefundId', (refundId) => {
 
 Cypress.Commands.add('findCCRefundPayment', (refundPaymentsDetails, refundAmount) => {
   // Credit card will be refunded as credit card, otherwise store credit
-  return cy.wrap(refundPaymentsDetails.results
-          .filter((result: { type: string; total: any }) => (result.type == 'CreditCard' || result.type == 'StoreCreditCCFail') && result.total == refundAmount)
-          .shift())
+  return cy.wrap(refundPaymentsDetails.results.some((result: { type: string; total: number }) => (result.type === 'CreditCard' || result.type === 'StoreCreditCCFail') && result.total === refundAmount))
 })
 
 Cypress.Commands.add('findSCRefundPayment', (refundPaymentsDetails, refundAmount) => {
-  return cy.wrap(refundPaymentsDetails.results
-          .filter((result: { type: string; total: any }) => result.type == 'StoreCredit' && result.total == refundAmount)
-          .shift())
+  return cy.wrap(refundPaymentsDetails.results.some((result: { type: string; total: number }) => result.type === 'StoreCredit' && result.total === refundAmount))
 })
 

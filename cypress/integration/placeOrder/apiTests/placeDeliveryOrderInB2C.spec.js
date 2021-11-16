@@ -18,7 +18,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 
-TestFilter(['B2C-API'], () => {
+TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })

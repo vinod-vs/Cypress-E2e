@@ -4,7 +4,7 @@ import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/expressionOfInterest/api/commands/navigateExpressionOfInterestPage'
 
-TestFilter(['B2B-API'], () => {
+TestFilter(['B2B', 'API', 'P0'], () => {
   describe('[API] Navigate Woolworths at Work Expression of Interest page', () => {
     before(() => {
       cy.clearCookies({ domain: null })

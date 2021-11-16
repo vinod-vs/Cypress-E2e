@@ -7,7 +7,7 @@ import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 
-TestFilter(['API'], () => {
+TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
   describe('[API] Search product', () => {
     before(() => {
       cy.clearCookies({ domain: null })

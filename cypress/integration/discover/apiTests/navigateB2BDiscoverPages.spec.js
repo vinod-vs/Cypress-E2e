@@ -6,7 +6,7 @@ import b2bDiscoverPages from '../../../fixtures/b2bDiscoverPages/b2bDiscoverPage
 import '../../../support/login/api/commands/login'
 import '../../../support/discover/api/commands/navigateDiscoverPages'
 
-TestFilter(['B2B-API'], () => {
+TestFilter(['B2B', 'API', 'P0'], () => {
   describe('[API] Navigate Woolworths at Work Discover pages', () => {
     before(() => {
       cy.clearCookies({ domain: null })
