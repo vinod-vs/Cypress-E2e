@@ -14,6 +14,7 @@ declare namespace Cypress {
     clearTrolley(): any;
     addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm: string, priceThreshold: number): void;
     addAvailableNonRestrictedWowItemsToTrolley(searchTerm: string):any;
+    addAvailableItemsToTrolley(searchTerm: string, count: number):any;
     navigateToCheckout(): any;
     navigatingToCreditCardIframe(): any;
     creditcardPayment(cardDetails: any, sessionHeader: any): any;
@@ -29,7 +30,7 @@ declare namespace Cypress {
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
     setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;
     checkIfElementExists(element: any): any;
-    selectRandomElement(): any;
+    selectRandomElement (): any;
     getBootstrapResponse(): any;
     getRandomAvailableWindowViaApi(addressId: string, areaId: string, suburbId: string, fulfilmentType: string, windowType: string): any;
     getDayOfWeek(date: Date): any;
