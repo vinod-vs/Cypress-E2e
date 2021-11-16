@@ -12,8 +12,7 @@ let timeSlotParams
 let fulfilmentRequest
 let selectedFulfilmentType
 let selectedWindow
-let daysResp
-let counteri
+
 
 Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
   selectedFulfilmentType = fulfilmentType.DELIVERY
