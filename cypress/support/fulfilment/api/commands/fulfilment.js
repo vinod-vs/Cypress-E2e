@@ -12,6 +12,8 @@ let timeSlotParams
 let fulfilmentRequest
 let selectedFulfilmentType
 let selectedWindow
+let daysResp
+let counteri
 
 Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
   selectedFulfilmentType = fulfilmentType.DELIVERY
@@ -46,13 +48,10 @@ Cypress.Commands.add('searchPickupDTBStores', (storeType, searchTerm) => {
       method: 'GET',
       url: Cypress.env('pickupSearchEndpoint'),
       qs: { postcode: postCode, fulfilmentMethods: storeType }
-    })
-      .then((response) => {
-        const store = response.body[0]
-
+    }).then((response) => {
+        const store = response.body[2]
         addressId = store.AddressId
         fulfilmentAreaId = store.AreaId
-
         fulfilmentData.location = store.AddressText
         return response.body
       })
@@ -138,45 +137,45 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
         const time = daysResp[x].Times[y]
         switch (selectedWindowType) {
           case windowType.FLEET_DELIVERY:
-            if (time.Available === true && time.IsExpress === false && time.IsCrowdSourced === false) {
+            if (time.Available === true && time.IsExpress === false && time.IsCrowdSourced === false && time.NormalAllocationStatus ==='') {
               timesArr.push(time)
             }
             break
           case windowType.CROWD_DELIVERY:
-            if (time.Available === true && time.IsCrowdSourced === true) {
+            if (time.Available === true && time.IsCrowdSourced === true && time.NormalAllocationStatus ==='') {
               timesArr.push(time)
             }
             break
           case windowType.DELIVERY_NOW:
-            if (time.Available === true && time.IsExpress === true) {
+            if (time.Available === true && time.IsExpress === true && time.NormalAllocationStatus ==='') {
               timesArr.push(time)
               break days
             }
           case windowType.ECO:
-            if (time.Available === true && time.IsEcoWindow === true) {
+            if (time.Available === true && time.IsEcoWindow === true && time.NormalAllocationStatus ==='') {
               timesArr.push(time)
             }
             break
           case windowType.MORNING:
             startTime = new Date(time.StartDateTime).getHours()
-            if (time.Available === true && time.IsCrowdSourced === false && (startTime < 12)) {
+            if (time.Available === true && time.IsCrowdSourced === false && (startTime < 12) && time.NormalAllocationStatus ==='') {
               timesArr.push(time)    
             }
             break
           case windowType.EVENING:
             startTime = new Date(time.StartDateTime).getHours()
-            if (time.Available === true && time.IsCrowdSourced === false && (startTime >= 17)) {
+            if (time.Available === true && time.IsCrowdSourced === false && (startTime >= 17) && time.NormalAllocationStatus ==='') {
               timesArr.push(time)  
             }
             break
           case windowType.LIQUOR_RESTRICTED:
             startTime = new Date(time.StartDateTime).getHours()
-            if (time.Available === true && (startTime < 6)) {
+            if (time.Available === true && (startTime < 6) && time.NormalAllocationStatus ==='') {
               timesArr.push(time)
             }
             break     
           default: // pick up/DTB - neither have window types
-            if (time.Available === true) {
+            if (time.Available === true && time.NormalAllocationStatus ==='') {
               timesArr.push(time)
             }
             break
