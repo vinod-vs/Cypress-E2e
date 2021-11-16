@@ -7,16 +7,15 @@ import TestFilter from '../../../support/TestFilter'
 
 
 
-TestFilter(['PES-API'], () => {
+TestFilter(['PES','API'], () => {
 
   describe('[API] Verify Classic Product Promotions', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
-    })
-
-    after(() => {
-      cy.clearTrolley()
+      cy.clearTrolley().then((response:any) => {
+        expect(response).to.have.property('TrolleyItemCount',0)
+      })
     })
 
     it('Verify the Classic Product promotion price is applied for the item - $OFF', () => {
