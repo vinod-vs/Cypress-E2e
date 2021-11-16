@@ -13,11 +13,15 @@ TestFilter(['PES','API'], () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
+    })
 
+    beforeEach(()=>{
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
+    })
+    afterEach(()=>{
       cy.clearTrolley().then((response:any) => {
         expect(response).to.have.property('TrolleyItemCount',0)
       })
