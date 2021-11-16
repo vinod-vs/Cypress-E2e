@@ -5,20 +5,12 @@ import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import TestFilter from '../../../support/TestFilter'
 
-const searchTerm = '192674'
-const platform = Cypress.env('b2cPlatform')
-
 TestFilter(['PES-API'], () => {
   describe('[API] Verify Classic Product Promotions', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-
-    after(() => {
-      cy.clearTrolley()
-    })
-
 
     it('Verify the Classic Product promotion price is applied for the item - $OFF', () => {
       // Login using shopper saved in the fixture and verify it's successful
@@ -58,6 +50,7 @@ TestFilter(['PES-API'], () => {
               expect(response.AvailableItems[0].SalePrice).to.be.eqls(promotions.ClassicProductPromotions[2].SalePrice)
           })
         })
+
         it('Verify the ClassicProduct promotion price is applied for the item - Packaged Price' , () => {
           // Login using shopper saved in the fixture and verify it's successful
           cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
@@ -69,7 +62,7 @@ TestFilter(['PES-API'], () => {
             promotions.ClassicProductPromotions[3].Quantity).then((response:any)=> {
               expect(response.AvailableItems[0].SalePrice).to.be.eqls(promotions.ClassicProductPromotions[3].SalePrice)
           })
-    })
+        })
   })
 })
      
