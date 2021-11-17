@@ -38,8 +38,9 @@ declare namespace Cypress {
     setBillingAddressViaApi(addressId: number): any;
     loginWithNewShopperViaApi(): any;
     adminLoginViaUi(loginDetails: any): any;
+    setFulfilmentLocationWithoutWindow(fulfilmentType: string, locationSearch: string | number): any;
     selectRandomWindowInCheckout(fulfilmentType: string, fulfilmentWindow: string): any;
-    removeNewLineCarriageReturn(initialText: string): string;
+    removeNewLineCarriageReturn(initialText: string): Cypress.Chainable<string>;
     prepareAnySingleLineItemEdmOrder(searchTerm: string, purchaseQty: number): void;
     redeemRewardsDollars(redeemAmount: number): any;
     placeOrderUsingCreditCard(): any;
@@ -50,6 +51,8 @@ declare namespace Cypress {
     getAllRefundPaymentsByRefundId(refundId: number): any;
     findCCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
+    removeDateOrdinals(text: string): string;
+    addAvailableRestrictedWowItemsToTrolley(type: string, count: number): void;
     loginViaUI(email: string, password: string): any;
     selectTopMenu(menuToSelect: string): any;
     selectOrderManagementSubMenu(menuToSelect: string): any;

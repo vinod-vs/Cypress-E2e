@@ -24,11 +24,11 @@ Cypress.Commands.add('getDOB', (element) => {
   } else {
     dob.setFullYear(dob.getFullYear() + Math.floor(Math.random() * 40) - 60)
   }
-  dob = (appendZeroes(dob.getDay() + 1)) + '/' + appendZeroes(dob.getMonth() + 1) + '/' + dob.getFullYear()
-  return cy.wrap(dob)
+  let dobStr = (appendZeroes(dob.getDay() + 1)) + '/' + appendZeroes(dob.getMonth() + 1) + '/' + dob.getFullYear()
+  return cy.wrap(dobStr)
 })
 
-function appendZeroes (n) {
+function appendZeroes (n: number) {
   if (n <= 9) {
     return '0' + n
   }
@@ -72,7 +72,7 @@ Cypress.Commands.add('getBootstrapResponse', () => {
   cy.api({
     method: 'GET',
     url: Cypress.env('bootstrapEndpoint')
-  }).then((response) => {
+  }).then((response: any) => {
     return response.body
   })
 })
@@ -90,6 +90,29 @@ Cypress.Commands.add('formatToAmPm', (date) => {
 })
 
 Cypress.Commands.add('removeNewLineCarriageReturn', (text) => {
-  return text.replace("(\\r?\\n)+", " ")
+ return cy.wrap(text.replace('(\\r?\\n)+',  ''))
 })
+
+Cypress.Commands.add('removeDateOrdinals', (text) => {
+  return text.replace('st|nd|rd|th', '')
+})
+
+
+/*
+ * TODO: Look into why this isn't working as a Custom Command. For now, implement as a standard function 
+*/
+export function setComponentBase(elLocator: Cypress.Chainable<JQuery<HTMLElement>>, tagName: string) {
+  return elLocator.then(($locator) => {
+    console.log('$Loc is: ' , $locator)
+    if ($locator.prop('tagName').toLowerCase() !== tagName) {
+      cy.log('IN IF')
+      return elLocator.find(tagName);
+    } else { 
+      cy.log('IN ELSE')
+      return elLocator;
+    }  
+  })
+}
+
+
 
