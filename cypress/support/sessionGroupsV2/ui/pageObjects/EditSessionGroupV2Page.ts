@@ -17,7 +17,7 @@ class EditSessionGroupV2Page {
     }
 
     getAddAttribute () {
-        return cy.get('[href="javascript: $.Criteria.Add()"]')
+        return cy.get('a:contains("Add Attribute")')
     }
 
     getAttributeGroupOption (groupName:string) {
