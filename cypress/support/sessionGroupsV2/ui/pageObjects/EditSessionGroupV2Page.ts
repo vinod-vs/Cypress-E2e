@@ -17,7 +17,7 @@ class EditSessionGroupV2Page {
     }
 
     getAddAttribute () {
-        return cy.get('a:contains("Add Attribute")')
+        return cy.get('[href="javascript: $.Criteria.Add()"]')
     }
 
     getAttributeGroupOption (groupName:string) {
@@ -30,6 +30,14 @@ class EditSessionGroupV2Page {
 
     getAddedAttribute(groupName:string, attributeName:string) {
         return cy.contains(groupName + '.' + attributeName)
+    }
+
+    getGroupList() {
+        return cy.get('#GroupList')
+    }
+
+    getAttributeList() {
+        return cy.get('#AttributeList')
     }
 
 }
