@@ -28,6 +28,10 @@ class EditSessionGroupV2Page {
         return cy.get('[value="' + attributeName + '"]')
     }
 
+    getAddedAttribute(groupName:string, attributeName:string) {
+        return cy.contains(groupName + '.' + attributeName)
+    }
+
 }
 
 export const editSessionGroupV2Page = new EditSessionGroupV2Page();
