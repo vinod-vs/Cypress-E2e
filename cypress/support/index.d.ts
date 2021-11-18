@@ -69,5 +69,6 @@ declare namespace Cypress {
     zero(): any;
     removeItems(unavailableItemsArr: any): any;
     orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
+    addGiftingDetails(message: string, sender: string, recipient: string): any;
   }
 }
