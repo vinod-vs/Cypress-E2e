@@ -26,86 +26,29 @@ import '../../../checkout/api/commands/confirmOrder'
 import '../../../invoices/api/commands/commands'
 import '../../../fulfilment/api/commands/fulfilment'
 import '../../../utilities/api/apiUtilities'
+import '../../../gifting/api/commands/gifting'
 import { paymentType } from './paymentType'
 
-Cypress.Commands.add('getRegularDeliveryTimeSlot', (testData) => {
-  let addressId
-  let deliveryAddressId
-  let deliveryAreaId
-  let deliverySuburbId
-  let timeSlotId
-  let windowDate
-
-  cy.searchDeliveryAddress(testData.address).then((response) => {
-    expect(response.Response[0].Id).to.not.be.empty
-    expect(response.Response[0].Id).to.not.be.null
-    addressId = response.Response[0].Id
-    testData.addressId = addressId
-    cy.log('addressId: ' + addressId)
-
-    cy.addDeliveryAddressForAddressId(addressId).then((response) => {
-      expect(response.Address.AddressId).to.greaterThan(0)
-      expect(response.Address.AddressId).to.not.be.null
-      expect(response.Address.AreaId).to.greaterThan(0)
-      expect(response.Address.AreaId).to.not.be.null
-      expect(response.Address.SuburbId).to.greaterThan(0)
-      expect(response.Address.SuburbId).to.not.be.null
-      deliveryAddressId = response.Address.AddressId
-      testData.deliveryAddressId = deliveryAddressId
-      deliveryAreaId = response.Address.AreaId
-      testData.deliveryAreaId = deliveryAreaId
-      deliverySuburbId = response.Address.SuburbId
-      testData.deliverySuburbId = deliverySuburbId
-      cy.log('deliveryAddressId: ' + deliveryAddressId + ', deliveryAreaId: ' + deliveryAreaId + ', deliverySuburbId: ' + deliverySuburbId)
-
-      cy.deliveryTimeSlotForAddress(deliveryAddressId, deliveryAreaId, deliverySuburbId).then((response) => {
-        expect(response).to.have.length.greaterThan(0)
-
-        let x
-        for (x in response) {
-          let found = false
-          if (response[x].Available === true) {
-            cy.log(response[x].AbsoluteDateText + ' AVAILABLE FOR DELIVERY')
-            let y
-            for (y in response[x].Times) {
-              if (response[x].Times[y].Available === true &&
-                response[x].Times[y].IsReserved === false &&
-                response[x].Times[y].IsExpress === false &&
-                response[x].Times[y].IsKeptOpenForRewardsPlus === false &&
-                response[x].Times[y].EligibleForDeliverySaver === false &&
-                response[x].Times[y].IsCrowdSourced === false &&
-                response[x].Times[y].IsExclusive === false &&
-                response[x].Times[y].IsEcoWindow === false) {
-                timeSlotId = response[x].Times[y].Id
-                windowDate = response[x].Date
-                cy.log(response[x].Times[y].TimeWindow + ' IS A REGULAR AVAILABLE SLOT')
-                found = true
-                timeSlotId = response[x].Times[y].Id
-                testData.timeSlotId = timeSlotId
-                windowDate = response[x].Date
-                testData.windowDate = windowDate
-                testData.deliveryDateText = response[x].AbsoluteDateText
-                testData.deliveryTimeText = response[x].Times[y].TimeWindow
-                testData.wowDeliveryCharges = response[x].Times[y].SalePrice
-                cy.log('deliveryDateText: ' + testData.deliveryDateText + ' , deliveryTimeText: ' + testData.deliveryTimeText + ' , wowDeliveryCharges: ' + testData.wowDeliveryCharges)
-                break
-              } else {
-                cy.log(response[x].Times[y].TimeWindow + ' IS A REGULAR NON-AVAILABLE SLOT')
-              }
-            }
-          } else {
-            cy.log(response[x].AbsoluteDateText + ' NOT AVAILABLE FOR DELIVERY')
-          }
-          if (found === true) { break }
-        }
-        cy.log('deliveryTimeSlotForAddress: timeSlotId: ' + timeSlotId + ', windowDate: ' + windowDate)
-      })
+Cypress.Commands.add('searchForProducts', (testData, item) => {
+  if (item.searchTerm != null && item.searchTerm != undefined) {
+    searchRequest.SearchTerm = item.searchTerm
+    cy.log('Searching for item specific search term: ' + searchRequest.SearchTerm)
+    cy.productSearch(searchRequest).as('productSearchResults').then((productSearchResponse) => {
+      console.log(productSearchResponse)
+      expect(productSearchResponse.SearchResultsCount).to.be.greaterThan(0)
     })
-  })
+  } else {
+    searchRequest.SearchTerm = testData.searchTerm
+    cy.log('Searching for default search term: ' + searchRequest.SearchTerm)
+    cy.productSearch(searchRequest).as('productSearchResults').then((productSearchResponse) => {
+      console.log(productSearchResponse)
+      expect(productSearchResponse.SearchResultsCount).to.be.greaterThan(0)
+    })
+  }
 })
 
-Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchResponse, testData) => {
-  const response = productSearchResponse
+Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
+  // Add the desired products to cart
   const items = testData.items
   let totalQuantity = new Number(0)
   let totalWowQuantity = new Number(0)
@@ -113,37 +56,42 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
   let wowTotal = new Number(0)
   let edmTotal = new Number(0)
   items.forEach(item => {
-    let x
-    if (item.isEDMProduct === 'false') {
-      let wowStockCode = 0
-      let wowQuantity = 0
-      const minWowOrderThreshold = item.minWowOrderThreshold
-      const bufferWowQuantity = item.bufferWowQuantity
+    // Search for the required product
+    cy.searchForProducts(testData, item)
 
-      for (x in response.Products) {
-        if (response.Products[x].Products[0].Price !== null &&
-          response.Products[x].Products[0].IsInStock === true &&
-          response.Products[x].Products[0].IsMarketProduct === false &&
-          response.Products[x].Products[0].SupplyLimit >= 50) {
+    cy.get('@productSearchResults').then((response) => {
+      // Add required WOW items to cart
+      let x
+      if (item.isEDMProduct === 'false') {
+        cy.log('Adding a WOW product')
+        const minWowOrderThreshold = item.minWowOrderThreshold
+        const bufferWowQuantity = item.bufferWowQuantity
+        // Get available WOW product only
+        const wowProducts = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley)
+        expect(wowProducts.length).to.be.greaterThan(0)
+
+        // Add available WOW product to cart
+        for (x in wowProducts) {
+          const product = wowProducts[x].Products[0]
+          let wowQuantity = new Number(0)
+          let wowStockCode = new Number(0)
+          // Determine wow item quantity
           if (item.quantity > 0) {
             wowQuantity = item.quantity
             cy.log('Using wowQuantity from testdata: ' + wowQuantity)
           } else {
-            wowQuantity = minWowOrderThreshold / response.Products[x].Products[0].Price
+            wowQuantity = minWowOrderThreshold / product.Price
             wowQuantity = Math.floor(wowQuantity) + bufferWowQuantity
             cy.log('Using Calculated wowQuantity: ' + wowQuantity)
           }
-          if (response.Products[x].Products[0].Price !== null &&
-            response.Products[x].Products[0].IsInStock === true &&
-            response.Products[x].Products[0].IsMarketProduct === false &&
-            response.Products[x].Products[0].SupplyLimit >= wowQuantity) {
-            wowStockCode = response.Products[x].Products[0].Stockcode
-            cy.log('WOWProduct: ' + wowStockCode + ' , SupplyLimit: ' + response.Products[x].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[x].Products[0].Price + ' , Quantity: ' + wowQuantity)
+          if (product.SupplyLimit >= wowQuantity) {
+            wowStockCode = product.Stockcode
+            cy.log('WOWProduct: ' + wowStockCode + ' , SupplyLimit: ' + product.SupplyLimit + ' , PerItemPrice: ' + product.Price + ' , Quantity: ' + wowQuantity)
             addItemsBodyWow.StockCode = wowStockCode
             addItemsBodyWow.Quantity = wowQuantity
             item.stockCode = wowStockCode
             item.quantity = wowQuantity
-            item.pricePerItem = response.Products[x].Products[0].Price
+            item.pricePerItem = product.Price
             totalWowQuantity = totalWowQuantity + wowQuantity
             totalQuantity = totalQuantity + wowQuantity
             wowTotal = Number.parseFloat(Number(item.quantity) * Number(item.pricePerItem)).toFixed(2)
@@ -153,49 +101,52 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (productSearchRe
               expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(totalQuantity))
               expect(response.Totals.WoolworthsSubTotal).to.be.equal(Number(wowTotal))
             })
+            expect(wowStockCode).to.be.greaterThan(0)
             break
           }
         }
       }
-      expect(wowStockCode).to.be.greaterThan(0)
-    }
-    let y
-    if (item.isEDMProduct === 'true') {
-      let mpStockCode = 0
-      const mpQuantity = item.quantity
-      for (y in response.Products) {
-        if (response.Products[y].Products[0].Price !== null &&
-          response.Products[y].Products[0].IsInStock === true &&
-          response.Products[y].Products[0].IsMarketProduct === true &&
-          response.Products[y].Products[0].SupplyLimit >= mpQuantity) {
-          mpStockCode = response.Products[y].Products[0].Stockcode
-          cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price + ' , Quantity: ' + mpQuantity)
+      // Add required EDM items to cart
+      let y
+      if (item.isEDMProduct === 'true') {
+        cy.log('Adding a EDM product')
+        let mpStockCode = 0
+        const mpQuantity = item.quantity
+        // Get available EDM product only
+        const edmProducts = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley)
+        expect(edmProducts.length).to.be.greaterThan(0)
+
+        // Add available EDM product to cart
+        for (y in edmProducts) {
+          const product = edmProducts[y].Products[0]
+          mpStockCode = product.Stockcode
+          cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + product.SupplyLimit + ' , PerItemPrice: ' + product.Price + ' , Quantity: ' + mpQuantity)
           addItemsBodyMp.StockCode = mpStockCode
           addItemsBodyMp.Quantity = mpQuantity
           item.stockCode = mpStockCode
-          item.pricePerItem = response.Products[y].Products[0].Price
-          item.sellerName = response.Products[y].Products[0].AdditionalAttributes['Market.Seller_BusinessName']
+          item.pricePerItem = product.Price
+          item.sellerName = product.AdditionalAttributes['Market.Seller_BusinessName']
           totalEdmQuantity = totalEdmQuantity + mpQuantity
           totalQuantity = totalQuantity + mpQuantity
           edmTotal = Number(Number.parseFloat(Number(item.quantity) * Number(item.pricePerItem)).toFixed(2))
 
           cy.log('Adding MP Item to Cart. Stockcode: ' + mpStockCode + ' , of quantity: ' + mpQuantity)
           cy.addItemsToTrolley(addItemsBodyMp).then((response) => {
-            expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(item.quantity))
+            expect(response.TotalTrolleyItemQuantity).to.be.equal(Number(totalQuantity))
             expect(response.Totals.MarketSubTotal).to.be.equal(Number(edmTotal))
           })
+          expect(mpStockCode).to.be.greaterThan(0)
           break
         }
       }
-      expect(mpStockCode).to.be.greaterThan(0)
-    }
+      testData.wowTotal = wowTotal
+      testData.edmTotal = edmTotal
+      testData.totalQuantity = totalQuantity
+      testData.totalWowQuantity = totalWowQuantity
+      testData.totalEdmQuantity = totalEdmQuantity
+      cy.log('wowTotal: ' + wowTotal + ' , edmTotal: ' + edmTotal + ' , totalQuantity: ' + totalQuantity + ' , totalWowQuantity: ' + totalWowQuantity + ' , totalEdmQuantity: ' + totalEdmQuantity)
+    })
   })
-  testData.wowTotal = wowTotal
-  testData.edmTotal = edmTotal
-  testData.totalQuantity = totalQuantity
-  testData.totalWowQuantity = totalWowQuantity
-  testData.totalEdmQuantity = totalEdmQuantity
-  cy.log('wowTotal: ' + wowTotal + ' , edmTotal: ' + edmTotal + ' , totalQuantity: ' + totalQuantity + ' , totalWowQuantity: ' + totalWowQuantity + ' , totalEdmQuantity: ' + totalEdmQuantity)
 })
 
 Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, testData) => {
@@ -214,12 +165,12 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
   })
 
   // Search for the desired products and add them to cart
-  searchRequest.SearchTerm = testData.searchTerm
-  cy.productSearch(searchRequest).then((response) => {
-    expect(response.SearchResultsCount).to.be.greaterThan(0)
+  cy.getTestProductFromProductSearchResponse(testData)
 
-    cy.getTestProductFromProductSearchResponse(response, testData)
-  })
+  // If gift order, add the gifting message
+  if (testData.isAGiftOrder) {
+    cy.addGiftingDetails('message', 'sender', 'recipient').as('giftingResponse')
+  }
 
   // Checkout and Pay the order using the right payment method
   cy.payTheOrder(testData).then((response) => {

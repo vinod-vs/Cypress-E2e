@@ -4,6 +4,8 @@ import fullDispatchAnInvoiceRequest from '../../../../fixtures/everydayMarket/ma
 import partialDispatchOfLineItemsInInvoice from '../../../../fixtures/everydayMarket/marketplacer/partialDispatchOfLineItemsInInvoice.json'
 import CustomerReturnRequest from '../../../../fixtures/everydayMarket/returns.json'
 
+import { getInvoiceDetailsQuery } from './marketplacerGqlQueries'
+
 Cypress.Commands.add('fullDispatchAnInvoice', (decodedInvoiceId, postageTrackingnumber, postageCarrier, sellerName) => {
   const apiKey = getApiKeyForSeller(sellerName)
   const endPoint = String(Cypress.env('marketplacerFullDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)
@@ -33,6 +35,8 @@ const getApiKeyForSeller = (sellerName) => {
       return Cypress.env('marketplacerPetCultureAPIKey')
     case 'BigWTest':
       return Cypress.env('marketplacerBigWTestAPIKey')
+    case 'Healthy Life':
+      return Cypress.env('marketplacerHealthyLifeAPIKey')
     default:
       return Cypress.env('marketplacerPetCultureAPIKey')
   }
@@ -306,3 +310,25 @@ Cypress.Commands.add('refundRequestCreateInitiatedBy', (encodedInvoiceId, encode
   })
 })
 
+Cypress.Commands.add('getInvoiceDetails', (encodedInvoiceId) => {
+  cy.api({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: {
+      bearer: Cypress.env('marketplacerGQLApiKey')
+
+    },
+    url: Cypress.env('marketplacerGQLEndpoint'),
+    body: {
+      query: getInvoiceDetailsQuery,
+      variables: {
+        id: encodedInvoiceId
+      }
+    }
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+    return response.body
+  })
+})

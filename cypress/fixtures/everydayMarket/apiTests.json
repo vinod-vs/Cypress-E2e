@@ -155,6 +155,27 @@
       }
     ],
     "paymentType": "PAYPAL_ONLY"    
-  }
-  
+  },
+  "GiftWOWPlusEDMPPPaymentTestData": {
+    "searchTerm": "treats",
+    "isAGiftOrder": true,
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:12345",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    },
+    "items": [
+      {
+        "quantity": 2,
+        "isEDMProduct": "true",
+        "searchTerm": "1073745302"
+      },
+      {
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "paymentType": "PAYPAL_ONLY"    
+  }  
 }
