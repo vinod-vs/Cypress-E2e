@@ -1,37 +1,55 @@
 export class myOrderPage {
     getMyAccountButton () {
+        cy.wait(Cypress.config("fiveSecondWait"));// new change
         return cy.get('div.coreHeader-loginWrapper > span.coreHeader-loginText').contains('My Account')
     }
     
-    getMyOrdersLink () {
+    getMyOrdersLink () { 
         return cy.get('nav.navigation-items').find('a').eq(2).contains('My orders')
     }
 
-    getMyOrderNumber() {
-        return cy.get('wow-my-orders-list-container').eq(0).find('wow-my-orders-list-item > div > div.details-container.order > span.details-content')
+    getMyOrdersListContainer() {//new method
+        return cy.get('wow-my-orders-list-container > div.my-orders-list-container')
     }
 
-    getOrderDateString() {
-       // return cy.get('div.content transparent > wow-my-orders-list-container').eq(0).find('section.date').contains('span.content')
-       return cy.get('wow-my-orders-list-container').eq(0).find('div> div.header > section.date > span.content')
+    getMyOrdersListContainerItems(orderId) {//changed
+        //return cy.get('wow-my-orders-list-container > div.my-orders-list-container > wow-my-orders-list-item > div')
+        return this.getMyOrdersListContainer().find('wow-my-orders-list-item > div').filter(`:contains(${orderId})`)
     }
 
-    getOrderTotalString() {
-        return cy.get('wow-my-orders-list-container').eq(0).find('div> div.header > section.total > span.content')
+    getMyOrdersContainerHeader(){//changed
+        return this.getMyOrdersListContainer().find('div.header')
     }
 
-    getDeliveryDateString() {
-        return cy.get('wow-my-orders-list-container').eq(0).find('wow-my-orders-list-item > div > div.details-container.delivery > span.details-content')
+    getMyOrderNumber(orderId) { // new change
+        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.order > span.details-content').contains(orderId)
     }
 
-    getTrackMyOderLink() {
-        return cy.get('wow-my-orders-list-container').eq(0).find('wow-my-orders-list-item > div > div.order-links-container > a.auto_my-orders-tmo-link.button')
+    getOrderDateString(orderDate) {
+       return this.getMyOrdersContainerHeader().find('section.date > span.content').should('contain.text', orderDate)
+    }
+
+    getOrderTotalString(orderValue) {
+        return this.getMyOrdersContainerHeader().find('section.total > span.content').should('contain.text', orderValue)
+    }
+
+    getDeliveryDateString(orderId, deliveryDate) {
+        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.delivery > span.details-content').should('contain.text', deliveryDate)
+    }
+
+    getTrackMyOrderLink() {
+        return this.getMyOrdersListContainerItems().find('div.order-links-container > a.auto_my-orders-tmo-link.button').should('contain.text', ' Track my order ') 
     }
 
     getViewOrderDetailsLink() {
-        return cy.get('wow-my-orders-list-container').eq(0).find('wow-my-orders-list-item > div > div.order-links-container > a.order-links.view-order-link')
+        return this.getMyOrdersListContainerItems().find('div.order-links-container > a.order-links.view-order-link').should('contain.text', 'View order details')
+    }
+    // general actions
+    myAccountActions () {
+       this.getMyAccountButton().click()
+       this.getMyOrdersLink().click()
     }
 
     }
     
-    export const onMyOrderPage = new myOrderPage()
+    export const onMyOrderPage = new myOrderPage() // make the interaction public

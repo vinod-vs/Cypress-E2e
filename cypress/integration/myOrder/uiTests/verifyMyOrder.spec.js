@@ -14,10 +14,11 @@ import CreateB2CDeliveryOrderPaidViaCreditCard from '../../../support/shared/api
 import '../../../support/myOrder/ui/commands/verifyMyOrder'
 import '../../../support/login/api/commands/login'
 import '../../../support/login/ui/commands/login'
+import { onMyOrderPage } from '../../../support/myOrder/ui/pageObjects/myOrderPage'
 
 //TestFilter(['B2C-UI'], () => {
 describe('[UI] Verify Order details in MyOrders for order placed for B2C customer', () => {
-    beforeEach('open application', () => {
+    before('open application', () => {
   
         cy.clearCookies({ domain: null })
         cy.clearLocalStorage({ domain: null })
@@ -37,27 +38,40 @@ describe('[UI] Verify Order details in MyOrders for order placed for B2C custome
         orderPlaced.placeOrderForB2CUser(shopper[1], addressSearchBody, searchBody, addItemsBody, creditCardPayment, creditcardSessionHeader,
           digitalPayment, confirmOrderParameter)
           .then((response) => {
-            // const orderId = response.Order.orderId
-            // const orderValue = response.Order.orderValue
-            // const deliveryDate = response.Order.deliveryDate
-            // const orderDate = response.Order.orderDate
-            let myOrderId = response.Order.OrderId
-            let myOrderValue = response.Order.TotalIncludingGst
-            let myDeliveryDate = response.Order.DeliveryDate
-            let myOrderDate = response.Order.Createddate
+            const orderId = response.Order.orderId
+            const orderValue = response.Order.orderValue
+            const deliveryDate = response.Order.deliveryDate
+            const orderDate = response.Order.orderDate
+            // let myOrderId = response.Order.OrderId
+            // let myOrderValue = response.Order.TotalIncludingGst
+            // let myDeliveryDate = response.Order.DeliveryDate
+            // let myOrderDate = response.Order.Createddate
             // cy.log('Before call', orderId, orderValue, deliveryDate, orderDate)
-            cy.log(myOrderId)
-            cy.log(myOrderValue)
-            cy.log(myDeliveryDate)
-            cy.log(myOrderDate)
+            cy.log(orderId)
+            cy.log(orderValue)
+            cy.log(deliveryDate)
+            cy.log(orderDate)
             // login via UI into same account
             cy.loginViaUi(shopper[1])// try without this
         
             // Navigate to My order page through My account
-            cy.navigateToMyOrdersPage()
+           // cy.navigateToMyOrdersPage()
+           onMyOrderPage.myAccountActions()
             
             //Assert if the order details which we saved earlier is present in the My orders page            
-            cy.verifyMyLatestOrder(myOrderId, myOrderValue, myDeliveryDate, myOrderDate)
+           // cy.verifyMyLatestOrder(orderId, orderValue, deliveryDate, orderDate)
+           onMyOrderPage.getMyOrderNumber('140087505')
+           onMyOrderPage.getOrderDateString('Sun, 21 November')
+           onMyOrderPage.getDeliveryDateString('140087505', 'Sat, 27 November')
+           //onMyOrderPage.getOrderTotalString(orderValue)
+          
+           // onMyOrderPage.getOrderDateString(orderDate).should('contain.text', orderDate)
+          // onMyOrderPage.getOrderTotalString(orderValue).should('contain.text', orderValue)
+          // onMyOrderPage.getDeliveryDateString(deliveryDate).should('contain.text', deliveryDate)
+          //  onMyOrderPage.getTrackMyOrderLink().should('contain.text', ' Track my order ') 
+          //  onMyOrderPage.getViewOrderDetailsLink().should('contain.text', 'View order details')
+           onMyOrderPage.getTrackMyOrderLink()
+           onMyOrderPage.getViewOrderDetailsLink()
 
             })
 

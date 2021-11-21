@@ -1,5 +1,12 @@
+[
 {
     "email": "amorales1+cypress@woolworths.com.au",
     "password": "Password1",
     "platform": "B2C"
+},
+{
+    "email": "simran@yopmail.com",
+    "password": "Test@123",
+    "platform": "B2C"
 }
+]
