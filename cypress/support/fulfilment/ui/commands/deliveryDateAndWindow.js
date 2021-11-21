@@ -1,5 +1,5 @@
 import { onDeliveryDateAndWindowPage } from '../pageObjects/DeliveryDateAndWindowPage.ts'
-import { CheckoutTimeSlotSelector } from '../../../checkout/ui/components/CheckoutTimeSlotSelector'
+import { CheckoutTimeSlotSelector } from '../../../checkout/ui/components/feature/CheckoutTimeSlotSelector'
 import '../../../utilities/ui/utility'
 import { windowType } from '../../../../../cypress/fixtures/checkout/fulfilmentWindowType.js'
 
