@@ -1,4 +1,4 @@
-import { setComponentBase } from '../../../../../support/utilities/ui/utility'
+import { setComponentBase } from '../../../../support/utilities/ui/utility'
 
 export class TextArea {
   private sharedTextAreaTag = 'shared-textarea'

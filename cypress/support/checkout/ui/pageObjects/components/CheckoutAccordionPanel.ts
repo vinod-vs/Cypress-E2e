@@ -1,10 +1,6 @@
-import { Button } from "../components/shared/Button";
+import { Button } from '../../../../shared/ui/pageObjects/Button'
 
 export abstract class CheckoutAccordionPanel {
-
-  constructor(elLocator: Cypress.Chainable<JQuery<HTMLElement>>) {
-    elLocator.find('section').as('panelBase')
-  }
 
   private cancelBtn(): Button {
     return new Button(cy.get('@panelBase').find('.auto_checkout-accordion-panel-button__cancel'))
