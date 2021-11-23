@@ -7,41 +7,41 @@ export class myOrderPage {
         return cy.get('nav.navigation-items').find('a').eq(2).contains('My orders')
     }
 
-    getMyOrdersListContainer() {//new method
-        return cy.get('wow-my-orders-list-container > div.my-orders-list-container')
+    getMyOrdersListContainer(orderId) {//new method
+        return cy.get('wow-my-orders-list-container > div.my-orders-list-container').filter(`:contains(${orderId})`)
     }
 
     getMyOrdersListContainerItems(orderId) {//changed
         //return cy.get('wow-my-orders-list-container > div.my-orders-list-container > wow-my-orders-list-item > div')
-        return this.getMyOrdersListContainer().find('wow-my-orders-list-item > div').filter(`:contains(${orderId})`)
+        return this.getMyOrdersListContainer(orderId).find('wow-my-orders-list-item > div')
     }
 
-    getMyOrdersContainerHeader(){//changed
-        return this.getMyOrdersListContainer().find('div.header')
+    getMyOrdersContainerHeader(orderId){//changed
+        return this.getMyOrdersListContainer(orderId).find('div.header')
     }
 
     getMyOrderNumber(orderId) { // new change
-        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.order > span.details-content').contains(orderId)
+        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.order > span.details-content').should('contain', orderId)
     }
 
-    getOrderDateString(orderDate) {
-       return this.getMyOrdersContainerHeader().find('section.date > span.content').should('contain.text', orderDate)
+    getOrderDateString(orderId, orderDate) {
+       return this.getMyOrdersContainerHeader(orderId).find('section.date > span.content').should('contain.text', orderDate)
     }
 
-    getOrderTotalString(orderValue) {
-        return this.getMyOrdersContainerHeader().find('section.total > span.content').should('contain.text', orderValue)
+    getOrderTotalString(orderId, orderValue) {
+        return this.getMyOrdersContainerHeader(orderId).find('section.total > span.content').should('contain.text', orderValue)
     }
 
     getDeliveryDateString(orderId, deliveryDate) {
         return this.getMyOrdersListContainerItems(orderId).find('div.details-container.delivery > span.details-content').should('contain.text', deliveryDate)
     }
 
-    getTrackMyOrderLink() {
-        return this.getMyOrdersListContainerItems().find('div.order-links-container > a.auto_my-orders-tmo-link.button').should('contain.text', ' Track my order ') 
+    getTrackMyOrderLink(orderId) {
+        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.auto_my-orders-tmo-link.button').should('contain.text', ' Track my order ') 
     }
 
-    getViewOrderDetailsLink() {
-        return this.getMyOrdersListContainerItems().find('div.order-links-container > a.order-links.view-order-link').should('contain.text', 'View order details')
+    getViewOrderDetailsLink(orderId) {
+        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.order-links.view-order-link').should('contain.text', 'View order details')
     }
     // general actions
     myAccountActions () {

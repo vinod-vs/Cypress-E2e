@@ -79,18 +79,18 @@ describe('[UI] Verify Order details in MyOrders for order placed for B2C custome
             
             //Assert if the order details which we saved earlier is present in the My orders page            
            // cy.verifyMyLatestOrder(orderId, orderValue, deliveryDate, orderDate)
-           onMyOrderPage.getMyOrderNumber('140087540')
-           onMyOrderPage.getOrderDateString('Mon, 22 November')
-           onMyOrderPage.getDeliveryDateString('140087540', 'Sun, 28 November')
-           //onMyOrderPage.getOrderTotalString(orderValue)
+           onMyOrderPage.getMyOrderNumber('140088024')
+           onMyOrderPage.getOrderDateString('140088024', 'Tue, 23 November')
+           onMyOrderPage.getDeliveryDateString('140088024', 'Mon, 29 November')
+           //onMyOrderPage.getOrderTotalString('140087971', orderValue)
           
            // onMyOrderPage.getOrderDateString(orderDate).should('contain.text', orderDate)
           // onMyOrderPage.getOrderTotalString(orderValue).should('contain.text', orderValue)
           // onMyOrderPage.getDeliveryDateString(deliveryDate).should('contain.text', deliveryDate)
           //  onMyOrderPage.getTrackMyOrderLink().should('contain.text', ' Track my order ') 
           //  onMyOrderPage.getViewOrderDetailsLink().should('contain.text', 'View order details')
-           onMyOrderPage.getTrackMyOrderLink()
-           onMyOrderPage.getViewOrderDetailsLink()
+           onMyOrderPage.getTrackMyOrderLink('140088024')
+           onMyOrderPage.getViewOrderDetailsLink('140088024')
 
             })
 
