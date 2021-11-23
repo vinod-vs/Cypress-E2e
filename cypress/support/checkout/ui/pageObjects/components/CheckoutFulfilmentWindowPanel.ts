@@ -1,9 +1,9 @@
-import { Button } from "../components/shared/Button";
-import { CheckoutTimeSlotSelector } from "../components/feature/CheckoutTimeSlotSelector";
-import { Notification } from "../components/shared/Notification";
-import { TextArea } from "../components/shared/TextArea";
-import { TextBox } from "../components/shared/TextBox";
-import { ToggleSwitch } from "../components/shared/ToggleSwitch";
+import { Button } from "../../../../shared/ui/pageObjects/Button";
+import { CheckoutTimeSlotSelector } from "./CheckoutTimeSlotSelector";
+import { Notification } from "../../../../shared/ui/pageObjects/Notification";
+import { TextArea } from "../../../../shared/ui/pageObjects/TextArea";
+import { TextBox } from "../../../../shared/ui/pageObjects/TextBox";
+import { ToggleSwitch } from "../../../../shared/ui/pageObjects/ToggleSwitch";
 import { CheckoutAccordionPanel } from "./CheckoutAccordionPanel";
 
 export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
@@ -28,10 +28,6 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
 
   private chilled = 'chilled';
   private restricted = 'restricted';
-
-  constructor() {
-    super(cy.get('.auto_checkout-accordion-panel__time'))
-  }
 
 
   /**
