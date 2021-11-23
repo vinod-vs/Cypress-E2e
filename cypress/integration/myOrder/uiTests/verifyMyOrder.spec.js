@@ -36,7 +36,7 @@ import '../../../support/address/api/commands/searchSetValidateAddress'
   // const platform = Cypress.env('b2cPlatform') // second approach
 
 describe('[UI] Verify Order details in MyOrders for order placed for B2C customer', () => {
-    before('open application', () => {
+    beforeEach('open application', () => {
   
         cy.clearCookies({ domain: null })
         cy.clearLocalStorage({ domain: null })
