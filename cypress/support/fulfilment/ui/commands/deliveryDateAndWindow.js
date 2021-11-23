@@ -1,5 +1,5 @@
 import { onDeliveryDateAndWindowPage } from '../pageObjects/DeliveryDateAndWindowPage.ts'
-import { CheckoutTimeSlotSelector } from '../../../checkout/ui/components/CheckoutTimeSlotSelector'
+import { onCheckoutPage } from '../../../checkout/ui/pageObjects/CheckoutPage'
 import '../../../utilities/ui/utility'
 import { windowType } from '../../../../../cypress/fixtures/checkout/fulfilmentWindowType.js'
 
@@ -27,8 +27,6 @@ Cypress.Commands.add('selectDeliveryDateAndWindow', (tradingAccAddress) => {
 })
 
 Cypress.Commands.add('selectRandomWindowInCheckout', (fulfilmentType, fulfilmentWindowType) => {
-  let timeSelector = new CheckoutTimeSlotSelector();
-
   cy.getBootstrapResponse().then((response) => {
     const areaId = response.GetDeliveryInfoRequest.Address.AreaId
     const addressId = response.GetDeliveryInfoRequest.Address.AddressId
@@ -54,21 +52,21 @@ Cypress.Commands.add('selectRandomWindowInCheckout', (fulfilmentType, fulfilment
       if (dayToSelect === today || dayToSelect === tomorrow) {
         cy.formatToAmPm(windowStartDate).then(($startTime) => {
           cy.formatToAmPm(windowEndDate).then(($endTime) => {
-            timeSelector.selectWindow(dayToSelect, $startTime + ' to ' + $endTime)
+            onCheckoutPage.onCheckoutWindowTimePanel.onCheckoutTimeSlotSelector.selectWindow(dayToSelect, $startTime + ' to ' + $endTime)
           }) 
         })
       } else { // Named days, e.g. Wednesday
         cy.getDayOfWeek(windowStartDate).then((day) => {
           cy.formatToAmPm(windowStartDate).then(($startTime) => {
             cy.formatToAmPm(windowEndDate).then(($endTime) => {
-              timeSelector.selectWindow(day, $startTime + ' to ' + $endTime)
+              onCheckoutPage.onCheckoutWindowTimePanel.onCheckoutTimeSlotSelector.selectWindow(day, $startTime + ' to ' + $endTime)
             }) 
           })
         })  
       }
     } else if (fulfilmentWindowType === windowType.DELIVERY_NOW) {
       dayToSelect = today
-      timeSelector.selectWindow(dayToSelect, window.TimeWindow)
+      onCheckoutPage.onCheckoutWindowTimePanel.onCheckoutTimeSlotSelector.selectWindow(dayToSelect, window.TimeWindow)
     }
   })
 })

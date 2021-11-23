@@ -1,5 +1,5 @@
 import signUpDetails from '../../../../fixtures/signUp/signUpDetails.json'
-import '../../../utilities/ui/utility.js'
+import '../../../utilities/ui/utility'
 
 Cypress.Commands.add('signUpViaApi', (userInfo) => {
   cy.api({ url: '/' }).then((response) => {

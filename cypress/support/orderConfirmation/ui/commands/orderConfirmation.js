@@ -1,13 +1,11 @@
-import ConfirmationPage from '../pageObjects/ConfirmationPage'
-
-const confirmationPage = new ConfirmationPage()
+import onOrderConfirmationPage from '../pageObjects/OrderConfirmationPage'
 
 Cypress.Commands.add('verifyOrderConfirmation', () => {
   // Verify order confirmation page
   cy.log('Order placed! Order details: ' + cy.url())
-  confirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')
+  onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')
   cy.url().should('include', '/confirmation')
-  confirmationPage.getOrderConfirmationHeader().then(function (element) {
+  onOrderConfirmationPage.getOrderConfirmationHeader().then(function (element) {
     cy.log(element.text())
   })
 

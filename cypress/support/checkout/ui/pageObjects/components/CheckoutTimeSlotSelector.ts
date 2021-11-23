@@ -1,5 +1,5 @@
-import '../../../utilities/ui/utility.js'
-import fulfilmentData from '../../../../fixtures/checkout/fulfilmentData.json'
+import '../../../../utilities/ui/utility'
+import fulfilmentData from '../../../../../fixtures/checkout/fulfilmentData.json'
 
 /**
  * CheckoutTimeSlotSelector component is a representation of the fulfilment window selection component for Pick up &
@@ -92,7 +92,7 @@ export class CheckoutTimeSlotSelector {
    */
   public selectWindow(day: string, time: any) {
     this.getDayEl(day).click();
-    cy.get(this.timeSpan).filter(`:contains(${time})`).closest(this.timeSlot).click();
+    cy.get(this.timeSpan).filter(`:contains(${time})`).closest(this.timeSlot).click();    
   }
 
   /**
@@ -102,7 +102,9 @@ export class CheckoutTimeSlotSelector {
    */
   public getSelectedWindowTime(): Cypress.Chainable<string> {
     return this.getSelectedWindowEl().find(this.timeSpan).invoke('text').then(text => {
-      fulfilmentData.window = cy.removeNewLineCarriageReturn(text).trim();
+      cy.removeNewLineCarriageReturn(text).then((crText) => {
+        fulfilmentData.window = crText.trim()
+      })
     })
   }
  
