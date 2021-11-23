@@ -179,7 +179,7 @@ Cypress.Commands.add('addAvailableItemsToTrolley', (searchTerm, quantity) => {
     .then((searchResponse) => {
       const product = searchResponse.Products
       // Filter search results by IsMarketProduct = true and IsAvailable = true
-        .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
+        .filter(searchProduct => searchProduct.Products[0].IsAvailable)
       // Pick the first result
         .shift()
       const productStockcode = product.Products[0].Stockcode
