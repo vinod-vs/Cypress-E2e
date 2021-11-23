@@ -16,6 +16,14 @@
           "stockcode": 726244,
            "SalePrice" :30,
            "Quantity":2
+           },{
+            "stockcode": 763646,
+             "SalePrice" :16,
+             "Quantity":1
+           },{
+            "stockcode": 748809,
+             "SalePrice" :16,
+             "Quantity":1
            }],
     "ProductPromotions": [{
       "stockcode": "211377",

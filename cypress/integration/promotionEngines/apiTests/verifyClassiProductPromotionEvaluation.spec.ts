@@ -60,6 +60,17 @@ TestFilter(['PES','API'], () => {
               expect(response.AvailableItems[0].SalePrice).to.be.eqls(promotions.ClassicProductPromotions[3].SalePrice)
               })              
             })
+
+            it('Verify the ClassicProduct promotion price is applied for the item - ProductGroup - $OFF', () => {
+      
+              // Set the Delivery address and add the items to Trolley
+              cy.addAvailableItemsToTrolley(promotions.ClassicProductPromotions[4].stockcode.toString(),promotions.ClassicProductPromotions[4].Quantity).then((response:any)=> {
+                expect(response.AvailableItems[0].SalePrice).to.be.eqls(promotions.ClassicProductPromotions[4].SalePrice)
+                })  
+                cy.addAvailableItemsToTrolley(promotions.ClassicProductPromotions[5].stockcode.toString(),promotions.ClassicProductPromotions[5].Quantity).then((response:any)=> {
+                  expect(response.AvailableItems[0].SalePrice).to.be.eqls(promotions.ClassicProductPromotions[5].SalePrice)
+                  })             
+              })
     })
   
 })
