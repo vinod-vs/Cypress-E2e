@@ -12,6 +12,7 @@
         "loginEndpoint": "apis/ui/login/loginwithcredential",
         "logoutEndpoint": "apis/ui/Logout",
         "signUpEndpoint": "apis/ui/signup",
+        "2FAEndpoint": "api/v3/ui/authentication/otp",
         "productSearchEndpoint": "apis/ui/Search/products",
         "addressEndpoint": "/apis/ui/address",
         "addressSearchEndpoint": "apis/ui/address/search",

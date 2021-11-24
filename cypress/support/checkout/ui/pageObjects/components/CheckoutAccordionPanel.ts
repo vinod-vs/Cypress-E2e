@@ -2,16 +2,22 @@ import { Button } from '../../../../shared/ui/pageObjects/Button'
 
 export abstract class CheckoutAccordionPanel {
 
+  panelBaseLocatorString:string
+
+  constructor(elLocator: string) {
+    this.panelBaseLocatorString = elLocator
+  }
+
   private cancelBtn(): Button {
-    return new Button(cy.get('@panelBase').find('.auto_checkout-accordion-panel-button__cancel'))
+    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__cancel'))
   }
 
   private saveBtn(): Button {
-    return new Button(cy.get('@panelBase').find('.auto_checkout-accordion-panel-button__submit'))
+    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__submit'))
   }
 
   private changeBtn(): Button {
-    return new Button(cy.get('@panelBase').find('.auto_checkout-accordion-panel-button__change'))
+    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__change'))
   }
 
   public abstract isAccordionActiveAndEditable(): void;
@@ -33,6 +39,6 @@ export abstract class CheckoutAccordionPanel {
   }
 
   public getPanelHeadingText(): Cypress.Chainable<string> {
-    return cy.get('@panelBase').find('.panel-heading-text').invoke('text');
+    return cy.get('panelBaseLocatorString').find('.panel-heading-text').invoke('text');
   }
 }

@@ -29,6 +29,9 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
   private chilled = 'chilled';
   private restricted = 'restricted';
 
+  constructor() {
+    super('.auto_checkout-accordion-panel__time')
+  }
 
   /**
    * Overridden method from abstract base. Checks if the accordion panel is in an active
