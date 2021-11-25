@@ -13,7 +13,6 @@ declare namespace Cypress {
     completeWindowFulfilmentViaApi(): any;
     clearTrolley(): any;
     addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm: string, priceThreshold: number): void;
-    addAvailableNonRestrictedWowItemsToTrolley(searchTerm: string):any;
     addAvailableQuantityLimitedItemsToTrolley(searchTerm: string, quantity:number):any;
     navigateToCheckout(): any;
     navigatingToCreditCardIframe(): any;
