@@ -1,7 +1,8 @@
-import { onDeliveryDateAndWindowPage } from '../pageObjects/DeliveryDateAndWindowPage.ts'
+import { onDeliveryDateAndWindowPage } from '../pageObjects/DeliveryDateAndWindowPage'
 import { onCheckoutPage } from '../../../checkout/ui/pageObjects/CheckoutPage'
 import '../../../utilities/ui/utility'
-import { windowType } from '../../../../../cypress/fixtures/checkout/fulfilmentWindowType.js'
+import { windowType } from '../../../../../cypress/fixtures/checkout/fulfilmentWindowType'
+import '../../../../support/shared/api/commands/bootstrap'
 
 Cypress.Commands.add('selectDeliveryDateAndWindow', (tradingAccAddress) => {
   // Wait for the FMS page to load before checking whether shopping Preferences is saved

@@ -68,15 +68,6 @@ Cypress.Commands.add('generateRandomString', () => {
   return cy.wrap(text)
 })
 
-Cypress.Commands.add('getBootstrapResponse', () => {
-  cy.api({
-    method: 'GET',
-    url: Cypress.env('bootstrapEndpoint')
-  }).then((response: any) => {
-    return response.body
-  })
-})
-
 Cypress.Commands.add('formatToAmPm', (date) => {
   let hours = date.getHours()
   let minutes = date.getMinutes()

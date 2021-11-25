@@ -1,6 +1,10 @@
 import digitalPayment from '../../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
+import '../../../../support/checkout/api/commands/navigateToCheckout'
+import '../../../../support/payment/api/commands/creditcard'
+import '../../../../support/payment/api/commands/digitalPayment'
+import '../../../../support/checkout/api/commands/confirmOrder'
 
 Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: any, platform: string) => {
   cy.navigateToCheckout().then((response: any) => {
@@ -21,7 +25,14 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: 
   })
 
   cy.digitalPay(digitalPayment).then((response: any) => {
-    confirmOrderParameter.placedOrderId = response.PlacedOrderId
+    if (response.PlacedOrderId === null) {
+      const errors = response.OrderPlacementErrors
+      const type = errors[0].Type
+      const message = errors[0].Message
+      throw new Error ('Error on Payment: ' + 'Type is: ' + type + '. Message is: ' + message)
+    } else {
+      confirmOrderParameter.placedOrderId = response.PlacedOrderId
+    }
   })
 
   cy.confirmOrder(confirmOrderParameter).then((response: any) => {

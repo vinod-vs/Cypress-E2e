@@ -26,6 +26,7 @@ import '../../../invoices/api/commands/commands'
 import '../../../fulfilment/api/commands/fulfilment'
 import '../../../utilities/api/apiUtilities'
 import '../../../utilities/ui/utility'
+import '../../../shared/api/commands/bootstrap'
 
 let instrumentIdsArr: any[] = []
 
