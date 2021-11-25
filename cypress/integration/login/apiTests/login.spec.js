@@ -19,9 +19,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         }
       }, () => {
         cy.loginViaApi(b2cShoppers[n]).then((response) => {
-          expect(response).to.have.property('LoginResult', 'Success')
-
-          cy.getCookie('w-rctx').should('exist')
+          cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
         })
       })
     })

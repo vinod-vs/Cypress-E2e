@@ -30,7 +30,9 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     })
 
     it('Should place a Pick up order using a credit card', () => {
-      cy.loginWithNewShopperViaApi()
+      cy.loginWithNewShopperViaApi().then((response)=> {
+        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+      })
 
       cy.searchBillingAddressViaApi(addressSearchBody.search).then((response) => {
         cy.setBillingAddressViaApi(response.body.Response[0].Id)  

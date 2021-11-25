@@ -30,7 +30,9 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     })
 
     it('Should place a split payment order via Credit Card & Gift Card', () => {
-      cy.loginWithNewShopperViaApi()
+      cy.loginWithNewShopperViaApi().then((response)=> {
+        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+      })
         
       cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0)

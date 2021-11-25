@@ -12,7 +12,6 @@
         "loginEndpoint": "apis/ui/login/loginwithcredential",
         "logoutEndpoint": "apis/ui/Logout",
         "signUpEndpoint": "apis/ui/signup",
-        "2FAEndpoint": "api/v3/ui/authentication/otp",
         "productSearchEndpoint": "apis/ui/Search/products",
         "addressEndpoint": "/apis/ui/address",
         "addressSearchEndpoint": "apis/ui/address/search",
@@ -74,7 +73,10 @@
         "oqsKeyCloakUrl": "https://platk8saae.uat.wx-d.net/rhel-sso/realms/Trader/protocol/openid-connect/token",
         "oqsEndpoint": "https://dxk8saae.uat.wx-d.net/orders-es/",
         "oqsGetOrderStatusEndpoint": "api/orders/TRADER_ORDER_ID/status",
-        "bootstrapEndpoint": "/api/ui/v2/bootstrap"
+        "bootstrapEndpoint": "/api/ui/v2/bootstrap",
+        "otpEndpoint": "/api/v3/ui/authentication/otp",
+        "otpValidationSwitch": true,
+        "otpStaticCode": "123456" 
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,

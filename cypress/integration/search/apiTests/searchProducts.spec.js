@@ -17,7 +17,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
     it('Search product', () => {
       if (Cypress.env('fileConfig') === 'b2c') {
         cy.loginViaApi(b2cShopper).then((response) => {
-          expect(response).to.have.property('LoginResult', 'Success')
+          cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
         })
       } else if (Cypress.env('fileConfig') === 'b2b') {
         cy.loginViaApi(b2bShopper).then((response) => {

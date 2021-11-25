@@ -70,5 +70,7 @@ declare namespace Cypress {
     removeItems(unavailableItemsArr: any): any;
     orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
     addGiftingDetails(message: string, sender: string, recipient: string): any;
+    postOneTimePasswordRequest(oneTimePassword: string): any;
+    validate2FALoginStatus(userCredentialLoginResponse: any, otpValidationSwitch: boolean, otpCode: string): any;
   }
 }
