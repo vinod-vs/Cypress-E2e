@@ -173,7 +173,7 @@ Cypress.Commands.add('addAvailableEDMItemsToTrolley', (searchTerm, quantity) => 
     })
 })
 
-Cypress.Commands.add('addAvailableItemsToTrolley', (searchTerm, quantity) => {
+Cypress.Commands.add('addAvailableQuantityLimitedItemsToTrolley', (searchTerm, quantity) => {
   // Search product by overriding the SearchTerm attribute in the search body request fixture
   cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
     .then((searchResponse) => {
