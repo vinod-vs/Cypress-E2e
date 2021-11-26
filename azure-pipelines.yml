@@ -46,6 +46,14 @@ parameters:
       - b2b
       - edm
 
+  - name: otpValidationSwitch
+    displayName: One Time Password Validation Switch
+    type: string
+    default: false
+    values:
+      - true
+      - false
+
 trigger:
   - main
 
