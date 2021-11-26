@@ -75,7 +75,7 @@
         "oqsGetOrderStatusEndpoint": "api/orders/TRADER_ORDER_ID/status",
         "bootstrapEndpoint": "/api/ui/v2/bootstrap",
         "otpEndpoint": "/api/v3/ui/authentication/otp",
-        "otpValidationSwitch": true,
+        "otpValidationSwitch": false,
         "otpStaticCode": "123456" 
     },
     "viewportHeight": 1080,
