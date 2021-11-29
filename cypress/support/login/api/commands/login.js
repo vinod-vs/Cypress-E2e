@@ -39,6 +39,14 @@ Cypress.Commands.add('postOneTimePasswordRequest', (oneTimePassword) => {
   })
 })
 
+//this is only for B2C at the moment
+Cypress.Commands.add('loginViaApiWith2FA', (shopper, otpValidationSwitch, otpCode) => {
+  cy.loginViaApi(shopper).then((response) => {
+    cy.validate2FALoginStatus(response, otpValidationSwitch, otpCode)
+  })
+})
+
+//this is only for B2C at the moment
 Cypress.Commands.add('validate2FALoginStatus', (userCredentialLoginResponse, otpValidationSwitch, otpCode) => {
   if(otpValidationSwitch) {
     expect(userCredentialLoginResponse).to.have.property('LoginResult', 'PartialSuccess')

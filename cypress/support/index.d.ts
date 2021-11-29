@@ -72,5 +72,6 @@ declare namespace Cypress {
     addGiftingDetails(message: string, sender: string, recipient: string): any;
     postOneTimePasswordRequest(oneTimePassword: string): any;
     validate2FALoginStatus(userCredentialLoginResponse: any, otpValidationSwitch: boolean, otpCode: string): any;
+    loginViaApiWith2FA(shopper: any, otpValidationSwitch: boolean, otpCode: string): any;
   }
 }
