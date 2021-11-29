@@ -9,5 +9,6 @@
   "idLikeToBeSentTheCatalogue":false,
   "dateOfBirth":"",
   "mobilePhone":"",
-  "typeOfDeliveryMethod":"DecideLater"
+  "typeOfDeliveryMethod":"DecideLater",
+  "enableEmailVerificationFE":false
 }

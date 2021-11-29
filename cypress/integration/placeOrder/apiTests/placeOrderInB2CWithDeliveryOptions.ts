@@ -29,9 +29,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
-      cy.loginWithNewShopperViaApi().then((response: any)=> {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-      })
+      cy.loginWithNewShopperViaApi()
     })
 
     it('Should place an order with leave unattended selected', () => {

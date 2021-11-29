@@ -29,9 +29,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     })
 
     it('Should place a Direct to boot order using credit card', () => {
-      cy.loginWithNewShopperViaApi().then((response: any)=> {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-      })
+      cy.loginWithNewShopperViaApi()
 
       cy.searchBillingAddressViaApi(addressSearchBody.search).then((response: any) => {
         cy.setBillingAddressViaApi(response.body.Response[0].Id)  

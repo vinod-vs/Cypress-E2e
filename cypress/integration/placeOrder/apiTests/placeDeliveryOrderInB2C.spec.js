@@ -26,9 +26,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     })
 
     it('Should place an order using credit card', () => {
-      cy.loginWithNewShopperViaApi().then((response)=> {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-      })
+      cy.loginWithNewShopperViaApi()
 
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
         expect(response.Response[0].Id).to.not.be.empty
