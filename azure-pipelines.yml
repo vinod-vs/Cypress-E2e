@@ -46,6 +46,14 @@ parameters:
       - b2b
       - edm
 
+  - name: otpValidationSwitch
+    displayName: One Time Password Validation Switch
+    type: string
+    default: false
+    values:
+      - true
+      - false
+
 trigger:
   - main
 
@@ -66,7 +74,7 @@ jobs:
         displayName: "Run B2C Tests"
       - script: |
           npm install
-          npm test -- --env tags=B2C-P0,fileConfig=b2c --browser ${{ parameters.browser }}
+          npm test -- --env tags=B2C-P0,fileConfig=b2c,otpValidationSwitch=true --browser ${{ parameters.browser }}
           npm run allure:generate
         displayName: "Npm install and run B2C tests"
 
@@ -319,7 +327,7 @@ jobs:
       - script: |
           npm install
           npm install -g browserstack-cypress-cli
-          npx browserstack-cypress run --sync --env "tags=B2C-UI-P0,fileConfig=b2c"
+          npx browserstack-cypress run --sync --env "tags=B2C-UI-P0,fileConfig=b2c,otpValidationSwitch=true"
           chmod +x ./poll-build-status.sh
         displayName: "Npm install and run B2C tests on BrowserStack"
 
