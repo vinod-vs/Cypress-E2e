@@ -16,8 +16,8 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
     searchBody.SearchTerm = 'Health & Beauty'
     return cy.loginViaApi(shopper)
       .then((response) => {
-        expect(response).to.have.property('LoginResult', 'Success')
-      }).then(() => {
+        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+             
         return cy.searchDeliveryAddress(addressSearchBody).then(() => {
           cy.addDeliveryAddress().then(() => {
             cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then(() => {
@@ -28,12 +28,11 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
 
                     for (x in response.Products) {
                       if (response.Products[x].Products[0].Price !== null &&
-                                                response.Products[x].Products[0].IsInStock === true &&
-                                                response.Products[x].Products[0].ProductRestrictionMessage === null &&
-                                                response.Products[x].Products[0].Price >= 10 &&
-                                                response.Products[x].Products[0].SupplyLimit >= 5 &&
-                                                response.Products[x].Products[0].ProductWarningMessage === null) { productStockCode = response.Products[x].Products[0].Stockcode }
-                                               
+                          response.Products[x].Products[0].IsInStock === true &&
+                          response.Products[x].Products[0].ProductRestrictionMessage === null &&
+                          response.Products[x].Products[0].Price >= 10 &&
+                          response.Products[x].Products[0].SupplyLimit >= 5 &&
+                          response.Products[x].Products[0].ProductWarningMessage === null) { productStockCode = response.Products[x].Products[0].Stockcode }                                
                     }
 
                     addItemsBody.StockCode = productStockCode

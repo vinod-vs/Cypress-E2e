@@ -60,7 +60,6 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           loginDetails.email = signUpDetails.emailAddress
           cy.loginViaApi(loginDetails).then((response) => {
             expect(response).to.have.property('LoginResult', 'Success')
-
             cy.getCookie('w-rctx').should('exist')
           })
 

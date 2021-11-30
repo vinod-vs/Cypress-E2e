@@ -25,3 +25,37 @@ Cypress.Commands.add('loginWithNewShopperViaApi', () => {
     })
   })
 })
+
+Cypress.Commands.add('postOneTimePasswordRequest', (oneTimePassword) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('otpEndpoint'),
+    body: {
+      OneTimePin: oneTimePassword,
+      UpdatePrimaryContact: null,
+    },
+  }).then((response) => {
+    return response.body
+  })
+})
+
+//this is only for B2C at the moment
+Cypress.Commands.add('loginViaApiWith2FA', (shopper, otpValidationSwitch, otpCode) => {
+  cy.loginViaApi(shopper).then((response) => {
+    cy.validate2FALoginStatus(response, otpValidationSwitch, otpCode)
+  })
+})
+
+//this is only for B2C at the moment
+Cypress.Commands.add('validate2FALoginStatus', (userCredentialLoginResponse, otpValidationSwitch, otpCode) => {
+  if(otpValidationSwitch) {
+    expect(userCredentialLoginResponse).to.have.property('LoginResult', 'PartialSuccess')
+    cy.postOneTimePasswordRequest(otpCode).then((otpAuthResponse) => {
+      expect(otpAuthResponse).to.have.property('Successful', true)
+    })
+  }
+  else{
+    expect(userCredentialLoginResponse).to.have.property('LoginResult', 'Success')
+  }
+  cy.getCookie('w-rctx').should('exist')
+})

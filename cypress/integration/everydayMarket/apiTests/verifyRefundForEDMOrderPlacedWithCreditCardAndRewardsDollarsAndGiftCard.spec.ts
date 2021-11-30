@@ -26,7 +26,9 @@ TestFilter(['EDM', 'API'], () => {
       let req: any
 
       // Login using shopper saved in the fixture and verify it's successful
-      cy.loginViaApi(shopper).its('LoginResult').should('eq', 'Success')
+      cy.loginViaApi(shopper).then((response: any) => {
+        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+      })
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search

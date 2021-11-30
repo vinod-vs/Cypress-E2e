@@ -1,16 +1,19 @@
 [{
         "email": "myb2bcustomer@yopmail.com",
         "password": "test1234",
-        "platform": "B2C"
+        "platform": "B2C",
+        "type": "business"
     },
     {
         "email": "myb2ccustomer@yopmail.com",
         "password": "test1234",
-        "platform": "B2C"
+        "platform": "B2C",
+        "type": "personal"
     },
     {
         "email": "pk+biz@woolworths.com.au",
         "password": "test123",
-        "platform": "B2C"
+        "platform": "B2C",
+        "type": "business"
     }
 ]
