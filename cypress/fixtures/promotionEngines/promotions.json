@@ -1,7 +1,7 @@
 {
   "ClassicProductPromotions": [{
-    "stockcode": 374699,
-    "SalePrice" :14.99,
+    "stockcode": 741301,
+    "SalePrice" :17,
     "Quantity":1
   },{
     "stockcode": 5292,
@@ -26,7 +26,7 @@
   }],
   "ProductPromotions": [{
     "stockcode": 566745	,
-    "SalePrice" :5.30,
+    "SalePrice" :2,
     "Quantity" :1
   },{
     "stockcode": 726244,
