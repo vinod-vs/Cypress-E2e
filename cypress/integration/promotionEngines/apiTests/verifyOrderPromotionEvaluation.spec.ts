@@ -9,7 +9,7 @@ import TestFilter from '../../../support/TestFilter'
 
 
 
-TestFilter(['PES','API'], () => {
+TestFilter(['B2C','PES','API'], () => {
 
   describe('[API] Verify Order Promotions', () => {
     before(() => {
@@ -21,6 +21,7 @@ TestFilter(['PES','API'], () => {
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
         expect(response).to.have.property('LoginResult', 'Success')
+        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
 
@@ -62,7 +63,7 @@ TestFilter(['PES','API'], () => {
       it('Verify the Order promotion is applied on the Everyday market Delivery Fee - %OFF', () => {
 
         // Set the Delivery address and add the items to Trolley
-        cy.addAvailableEDMItemsToTrolley(promotions.OrderPromotions[2].searchTerm,4)
+        cy.addAvailableEDMItemsToTrolley(promotions.OrderPromotions[2].stockcode,4)
         cy.navigateToCheckout().then((response:any) => {
           expect(response.Model.Order.MarketShippingFees).to.have.property('MarketShippingFeeBeforeDiscount',(promotions.OrderPromotions[2].MarketShippingFeeBeforeDiscount))
           expect(response.Model.Order.MarketShippingFees).to.have.property('MarketShippingFeeDiscount',(promotions.OrderPromotions[2].MarketShippingFeeDiscount))
