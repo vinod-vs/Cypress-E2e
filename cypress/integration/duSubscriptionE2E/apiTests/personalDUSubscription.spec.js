@@ -59,7 +59,8 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           // Login with the newly created customer
           loginDetails.email = signUpDetails.emailAddress
           cy.loginViaApi(loginDetails).then((response) => {
-            cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+            expect(response).to.have.property('LoginResult', 'Success')
+            cy.getCookie('w-rctx').should('exist')
           })
 
           // Test a new user is eligible for a delivery saver plan
