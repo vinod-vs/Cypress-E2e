@@ -45,8 +45,10 @@
     "TotalRewardsPointsEarned" :"12.5"
   }],
   "DeferredSpendStretchPromotions": [{
-    "stockcode": "211377",
-    "TotalRewardsPointsEarned" :"100"
+     "searchTerm": "bakery",
+          "stockcode": "22342",
+          "SalePrice" :45,
+          "Quantity":1
   },{
     "stockcode": "211377",
     "TotalRewardsPointsEarned" :"200"
@@ -58,13 +60,27 @@
     "stockcode": "211377",
     "TotalRewardsPointsEarned" :"200"
   }],
-  "OrderPromotions": [{
-    "stockcode": "211377",
-    "SalePrice" :"100"
-  },{
-    "stockcode": "211377",
-    "SalePrice" :"200"
-  }],
+  "OrderPromotions": [  {
+    "searchTerm": "health",
+    "stockcode": 217378,
+    "OrderDiscountWithoutTeamDiscount":10,
+                "DeliveryFeeDiscount":10,
+                "Subtotal":200 
+              },
+              {
+              "searchTerm": "health",
+              "stockcode": 211377,
+              "OrderDiscountWithoutTeamDiscount":5,
+              "DeliveryFeeDiscount":5,
+              "Subtotal":50 
+              },
+              {
+                "searchTerm": "health",
+                "stockcode": 1073745925,
+                "MarketShippingFeeBeforeDiscount":10,
+                "MarketShippingFeeDiscount":0.5,
+                "Subtotal":20 
+         }],
   "CouponPromotions": [{
     "stockcode": "211377",
     "CouponCode":"10%OFFSUBTOTAL",
