@@ -3,7 +3,7 @@ Cypress.Commands.add('setPurchaseOrderCode', (poNumber) => {
     method: 'POST',
     url: Cypress.env('purchaseOrderCodeEndpoint'),
     body: poNumber
-  }).then((response) => {
+  }).then((response: any) => {
     return response
   })
 })
