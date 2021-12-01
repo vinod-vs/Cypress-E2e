@@ -1,67 +1,69 @@
 {
   "ClassicProductPromotions": [{
-    "stockcode": 374699,
-     "SalePrice" :14.99,
-     "Quantity":1
-     },
-     {
-      "stockcode": 5292,
-       "SalePrice" :6,
-       "Quantity":1
-       },{
-        "stockcode": 140694,
-         "SalePrice" :23,
-         "Quantity":2
-         },{
-          "stockcode": 726244,
-           "SalePrice" :30,
-           "Quantity":2
-           },{
-            "stockcode": 763646,
-             "SalePrice" :16,
-             "Quantity":1
-           },{
-            "stockcode": 748809,
-             "SalePrice" :16,
-             "Quantity":1
-           }],
-    "ProductPromotions": [{
-      "stockcode": "211377",
-       "SalePrice" :"12.5"
-       },
-      {
-        "stockcode": "211377",
-       "SalePrice" :"12.5"
-      }],
-      "DeferredProductPromotions": [{
-        "stockcode": "211377",
-         "TotalRewardsPointsEarned" :"12.5"
-         },
-        {
-          "stockcode": "211377",
-         "TotalRewardsPointsEarned" :"12.5"
-        }],
-        "DeferredSpendStretchPromotions": [{
-          "stockcode": "211377",
-           "TotalRewardsPointsEarned" :"100"
-           },
-          {
-            "stockcode": "211377",
-           "TotalRewardsPointsEarned" :"200"
-          }],
-          "DeferredOrderPromotions": [{
-            "stockcode": "211377",
-             "TotalRewardsPointsEarned" :"100"
-             },
-            {
-              "stockcode": "211377",
-             "TotalRewardsPointsEarned" :"200"
-            }],
-            "OrderPromotions": [
-              {
-                "searchTerm": "health",
-                "stockcode": 217378,
-                "OrderDiscountWithoutTeamDiscount":10,
+    "stockcode": 741301,
+    "SalePrice" :17,
+    "Quantity":1
+  },{
+    "stockcode": 5292,
+    "SalePrice" :6,
+    "Quantity":1
+  },{
+    "stockcode": 140694,
+    "SalePrice" :23,
+    "Quantity":2
+  },{
+    "stockcode": 726244,
+    "SalePrice" :30,
+    "Quantity":2
+  },{
+    "stockcode": 763646,
+    "SalePrice" :16,
+    "Quantity":1
+  },{
+    "stockcode": 748809,
+    "SalePrice" :16,
+    "Quantity":1
+  }],
+  "ProductPromotions": [{
+    "stockcode": 566745	,
+    "SalePrice" :2,
+    "Quantity" :1
+  },{
+    "stockcode": 726244,
+    "SalePrice" :30 ,
+    "Quantity" :2
+  },{
+    "stockcode": 211375,
+    "SalePrice" :0 ,
+    "Quantity" :1
+  }],
+  "DeferredProductPromotions": [{
+    "stockcode": "211377",
+    "TotalRewardsPointsEarned" :"12.5"
+  },{
+    "stockcode": "211377",
+    "TotalRewardsPointsEarned" :"12.5"
+  }],
+  "DeferredSpendStretchPromotions": [{
+     "searchTerm": "bakery",
+          "stockcode": "22342",
+          "SalePrice" :45,
+          "Quantity":1
+  },{
+    "stockcode": "211377",
+    "TotalRewardsPointsEarned" :"200"
+  }],
+  "DeferredOrderPromotions": [{
+    "stockcode": "211377",
+    "TotalRewardsPointsEarned" :"100"
+  },{
+    "stockcode": "211377",
+    "TotalRewardsPointsEarned" :"200"
+  }],
+  "OrderPromotions": [  {
+    "searchTerm": "health",
+    "stockcode": 217378,
+    "OrderDiscountWithoutTeamDiscount":10,
                 "DeliveryFeeDiscount":10,
                 "Subtotal":200 
               },
@@ -78,16 +80,14 @@
                 "MarketShippingFeeBeforeDiscount":10,
                 "MarketShippingFeeDiscount":0.5,
                 "Subtotal":20 
-                }],
-               "CouponPromotions": [{
-                "stockcode": "211377",
-                "CouponCode":"10%OFFSUBTOTAL",
-                 "SalePrice" :"100"
-                 },
-                {
-                  "stockcode": "211377",
-                  "CouponCode":"10%OFFSUBTOTAL",
-                 "SalePrice" :"200"
-                }]
-               
+         }],
+  "CouponPromotions": [{
+    "stockcode": "211377",
+    "CouponCode":"10%OFFSUBTOTAL",
+    "SalePrice" :"100"
+  },{
+    "stockcode": "211377",
+    "CouponCode":"10%OFFSUBTOTAL",
+    "SalePrice" :"200"
+  }]
 }
