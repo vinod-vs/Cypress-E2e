@@ -1,10 +1,10 @@
 {
   "ClassicProductPromotions": [{
-    "stockcode": 741301,
-    "SalePrice" :17,
+    "stockcode": 725090,
+    "SalePrice" :12,
     "Quantity":1
   },{
-    "stockcode": 5292,
+    "stockcode": 691495,
     "SalePrice" :6,
     "Quantity":1
   },{
@@ -12,25 +12,25 @@
     "SalePrice" :23,
     "Quantity":2
   },{
-    "stockcode": 726244,
-    "SalePrice" :30,
+    "stockcode": 571823,
+    "SalePrice" :70,
     "Quantity":2
   },{
-    "stockcode": 763646,
-    "SalePrice" :16,
+    "stockcode": 839069,
+    "SalePrice" :11.50,
     "Quantity":1
   },{
-    "stockcode": 748809,
-    "SalePrice" :16,
+    "stockcode": 838986,
+    "SalePrice" :11.50,
     "Quantity":1
   }],
   "ProductPromotions": [{
-    "stockcode": 566745	,
-    "SalePrice" :2,
+    "stockcode": 778194	,
+    "SalePrice" :12,
     "Quantity" :1
   },{
     "stockcode": 726244,
-    "SalePrice" :30 ,
+    "SalePrice" :28.8 ,
     "Quantity" :2
   },{
     "stockcode": 211375,
@@ -38,12 +38,20 @@
     "Quantity" :1
   }],
   "DeferredProductPromotions": [{
-    "stockcode": "211377",
-    "TotalRewardsPointsEarned" :"12.5"
-  },{
-    "stockcode": "211377",
-    "TotalRewardsPointsEarned" :"12.5"
-  }],
+    "stockcode": 228390,
+    "Quantity":1,
+    "TotalRewardsPointsEarned" :110
+    },
+   {
+     "stockcode": 838986,
+     "Quantity":1,
+     "TotalRewardsPointsEarned" :212
+   },
+   {
+     "stockcode": 1073745925,
+     "Quantity":1,
+     "TotalRewardsPointsEarned" :16
+   }],
   "DeferredSpendStretchPromotions": [{
      "searchTerm": "drinks",
           "stockcode": "7475",
