@@ -45,13 +45,15 @@
     "TotalRewardsPointsEarned" :"12.5"
   }],
   "DeferredSpendStretchPromotions": [{
-     "searchTerm": "bakery",
-          "stockcode": "22342",
-          "SalePrice" :45,
-          "Quantity":1
+     "searchTerm": "drinks",
+          "stockcode": "7475",
+          "TotalRewardsPointsEarned" :422,
+          "Quantity":4
   },{
-    "stockcode": "211377",
-    "TotalRewardsPointsEarned" :"200"
+    "searchTerm": "pantry",
+    "stockcode": "9591",
+    "TotalRewardsPointsEarned" :66,
+    "Quantity":2
   }],
   "DeferredOrderPromotions": [{
     "stockcode": "211377",
@@ -60,10 +62,11 @@
     "stockcode": "211377",
     "TotalRewardsPointsEarned" :"200"
   }],
-  "OrderPromotions": [  {
-    "searchTerm": "health",
-    "stockcode": 217378,
-    "OrderDiscountWithoutTeamDiscount":10,
+  "OrderPromotions": 
+  [{
+     "searchTerm": "health",
+     "stockcode": 217378,
+                "OrderDiscountWithoutTeamDiscount":10,
                 "DeliveryFeeDiscount":10,
                 "Subtotal":200 
               },
