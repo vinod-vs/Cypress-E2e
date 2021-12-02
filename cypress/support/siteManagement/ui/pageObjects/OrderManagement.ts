@@ -110,7 +110,46 @@ export class OrderManagement {
   getCommonItemsTableItemTotalString() {
     return 'td[class="total-column"]';
   }
+
+  getRefundCheckboxForStockcode(stockcode) {
+    let checkbocLoc = "input[class*='refund-checkbox'][name*='"+stockcode+"']"
+    return cy.get(checkbocLoc);
+  }
   
+  getRefundReasonFieldForStockcode(stockcode) {
+    let refundReasonLoc = "select[class='refund-edit-reason'][name*='"+stockcode+"']"
+    return cy.get(refundReasonLoc);
+  }
+
+  getRefundCommentFieldForStockcode(stockcode) {
+    let refundCommentLoc = "input[class='refund-edit-comment'][name*='"+stockcode+"']"
+    return cy.get(refundCommentLoc);
+  }
+
+  getRefundQuantityFieldForStockcode(stockcode) {
+    let refundQuantityLoc = "input[class='refund-edit-amount'][name*='"+stockcode+"-Payment].Quantity']"
+    return cy.get(refundQuantityLoc);
+  }
+
+  getRefundSaveButton() {
+    return cy.get("input[name='SaveButton']")
+  }
+
+  getRefundApproveButton() {
+    return cy.get("input[name='ApproveButton']")
+  }
+
+  getRefundShippingFeeCheckbox() {
+    return cy.get("input[class*='refund-checkbox'][name*='RefundLine[-2-0]']")
+  }
+
+  getRefundShippingFeeReasonField() {
+    return cy.get("select[class='refund-edit-reason'][name*='RefundLines[-2-0-Payment].ReasonID']")
+  }
+
+  getRefundShippingFeeCommentField() {
+    return cy.get("input[class='refund-edit-comment'][name*='RefundLines[-2-0-Payment].Comment']")
+  }
 
 }
 

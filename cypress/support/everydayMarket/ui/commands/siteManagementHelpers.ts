@@ -10,4 +10,5 @@ Cypress.Commands.add("loginToSMAndSearchOrder", (loginDetails, orderId) => {
   cy.selectOrderManagementSubMenu(OrderManagementMenu.CUSTOMER_SEARCH);
   cy.wait(Cypress.config("fiveSecondWait"));
   cy.searchOrder(orderId);
+  cy.wait(Cypress.config("tenSecondWait"));
 });

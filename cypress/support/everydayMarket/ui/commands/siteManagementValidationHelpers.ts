@@ -1,7 +1,6 @@
 import { onOrderManagement } from "../../../../support/siteManagement/ui/pageObjects/OrderManagement";
 
 Cypress.Commands.add("validateOrderDetailsOnSM", (isMarketOnly) => {
-  cy.wait(Cypress.config("fiveSecondWait")); //Required for page to load. Else element verifications will fail
   cy.get("@finalProjection").then((finalProjection) => {
     // Verify common details for woth WOW & EDM orders
     //Verify order reference
@@ -18,7 +17,7 @@ Cypress.Commands.add("validateOrderDetailsOnSM", (isMarketOnly) => {
       //Verify WOW order details
       //TODO verify wow item details
       onOrderManagement.getWOWTab().click();
-      cy.wait(Cypress.config("fiveSecondWait")); //Required for page to load. Else element verifications will fail
+      cy.wait(Cypress.config("tenSecondWait")); //Required for page to load. Else element verifications will fail
       onOrderManagement
         .getWOWTabOrderId()
         .parent()
@@ -28,7 +27,7 @@ Cypress.Commands.add("validateOrderDetailsOnSM", (isMarketOnly) => {
 
     //Verify EDM order details
     onOrderManagement.getEDMTab().click();
-    cy.wait(Cypress.config("fiveSecondWait")); //Required for page to load. Else element verifications will fail
+    cy.wait(Cypress.config("tenSecondWait")); //Required for page to load. Else element verifications will fail
 
     //Verify common details
     onOrderManagement
@@ -163,3 +162,5 @@ Cypress.Commands.add("validateOrderDetailsOnSM", (isMarketOnly) => {
       .should("contain", finalProjection.shippingAmount);
   });
 });
+
+
