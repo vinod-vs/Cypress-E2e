@@ -33,9 +33,12 @@
     "SalePrice" :28.8 ,
     "Quantity" :2
   },{
-    "stockcode": 211375,
-    "SalePrice" :0 ,
-    "Quantity" :1
+    "stockcode": 211374,
+    "Quantity" :1,
+    "SalePrice1" :0,
+    "CreditsUsed1":20,
+    "SalePrice2" :20,
+    "CreditsUsed2":0
   }],
   "DeferredProductPromotions": [{
     "stockcode": 228390,
@@ -50,7 +53,7 @@
    {
      "stockcode": 1073745925,
      "Quantity":1,
-     "TotalRewardsPointsEarned" :16
+     "TotalRewardsPointsEarned" :10
    }],
   "DeferredSpendStretchPromotions": [{
      "searchTerm": "drinks",

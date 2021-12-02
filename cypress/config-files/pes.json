@@ -13,6 +13,7 @@
         "duCancelSubscriptionEndpoint":"api/v3/ui/deliverysaver/subscription/cancel",
         "setSystemDateEndpoint":"api/v3/ui/deliverysaver/subscription/systemdate",
         "duSubscriptionTestDataFilePath":"cypress/fixtures/duSubscription/duSubscriptionTestData",
+        "redeemRewardsCreditsEndpoint":"apis/ui/UserPreferences/RedeemRewardsCredits",
         "rocketUserName":"OrderServiceUser",
         "rocketPassword":"5e1ac07575224be090b46082e1bfb1f2",
         "rocketOrderURL":"https://dxk8saae.uat.wx-d.net/orders-api/Orders",
