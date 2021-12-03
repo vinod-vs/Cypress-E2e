@@ -7,7 +7,6 @@ import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import TestFilter from '../../../support/TestFilter'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
-//import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/fulfilment/api/commands/fulfilment'
@@ -25,7 +24,7 @@ const searchTerm = 'Fish'
 const trolleyThreshold = 50.00
 const platform = Cypress.env('b2bPlatform')
 
-TestFilter(['B2B' ,'API', 'P0','Test'], () => {
+TestFilter(['B2B' ,'API', 'P0'], () => {
   describe('[API] Place a delivery order on Woolworths at Work website using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -42,20 +41,6 @@ TestFilter(['B2B' ,'API', 'P0','Test'], () => {
 
         expect(response.Response[0].Id).to.not.be.null
       })
-
-    /* cy.addDeliveryAddress().then((response: any) => {
-        expect(response.Address.AddressId).to.greaterThan(0)
-
-        expect(response.Address.AddressId).to.not.be.null
-
-        expect(response.Address.AreaId).to.greaterThan(0)
-
-        expect(response.Address.AreaId).to.not.be.null
-
-        expect(response.Address.SuburbId).to.greaterThan(0)
-
-        expect(response.Address.SuburbId).to.not.be.null
-      })*/
 
       cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response: any) => {
         expect(response[0].AddressId).to.not.be.null
