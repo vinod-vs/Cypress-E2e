@@ -111,5 +111,15 @@
     "DollarOFF":2,
     "SubtotalCouponCodeDollarOFF":"2$OFFSUBTOTALAUTO",
     "DeliveryFeeCouponCodeDollarOFF":"2$OFFDELIVERYFEEAUTO"    
+  },{
+    "searchTerm":"Health",
+    "Quantity":2,
+    "PercentOFF":0.1,
+    "MarketShippingFeeCouponCode":"10%OFFMARKETSHIPPINGFEE"
+  },{
+    "searchTerm":"30011",
+    "Quantity": 1,
+    "ClassicProductPromoCouponCode":"4$OFFCOUPON",
+    "DollarOFF":4 
   }]
 }

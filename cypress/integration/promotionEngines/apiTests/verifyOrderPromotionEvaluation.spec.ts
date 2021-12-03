@@ -43,9 +43,9 @@ TestFilter(['B2C','PES','API'], () => {
       // Set the Delivery address and add the items to Trolley
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(promotions.OrderPromotions[0].searchTerm,(promotions.OrderPromotions[0].Subtotal))
       cy.navigateToCheckout().then((response:any) => {
-        const SubTotaloff = ((response.Model.Order.Subtotal) * 0.1) + (<number>promotions.OrderPromotions[1].OrderDiscountWithoutTeamDiscount)
+        const SubTotaloff = parseFloat((((response.Model.Order.Subtotal) * 0.1) + (<number>promotions.OrderPromotions[1].OrderDiscountWithoutTeamDiscount)).toFixed(2))
         expect(response.Model.Order.Subtotal).to.be.greaterThan(promotions.OrderPromotions[0].Subtotal)
-        expect(response.Model.Order.OrderDiscountWithoutTeamDiscount.toString()).to.be.eqls(SubTotaloff.toFixed(2))
+        expect(response.Model.Order.OrderDiscountWithoutTeamDiscount).to.be.eqls(SubTotaloff)
         expect(response.Model.Order).to.have.property('DeliveryFeeDiscount',(promotions.OrderPromotions[1].DeliveryFeeDiscount))
       })
     })
