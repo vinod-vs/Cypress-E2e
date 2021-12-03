@@ -67,11 +67,18 @@
     "Quantity":2
   }],
   "DeferredOrderPromotions": [{
+    "searchTerm": "beauty",
     "stockcode": "211377",
-    "TotalRewardsPointsEarned" :"100"
+    "TotalRewardsPointsEarned" :2000,
+    "Subtotal":200,
+    "Quantity":3,
+    "BeingEarned":1
   },{
+    "searchTerm": "pantry",
     "stockcode": "211377",
-    "TotalRewardsPointsEarned" :"200"
+    "TotalRewardsPointsEarned" :"200",
+    "Subtotal":50,
+    "Quantity":2
   }],
   "OrderPromotions": 
   [{

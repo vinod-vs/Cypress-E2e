@@ -1,15 +1,15 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
-import eventsRequest from '../../../fixtures/everydayMarket/events.json'
-import search from '../../../fixtures/everydayMarket/search.json'
-import TestFilter from '../../../support/TestFilter'
-import '../../../support/login/api/commands/login'
-import '../../../support/everydayMarket/api/commands/orderApi'
-import '../../../support/everydayMarket/api/commands/marketplacer'
-import '../../../support/everydayMarket/api/commands/orderPlacementHelpers'
-import '../../../support/orderPaymentService/api/commands/refunds'
+import shoppers from '../../../../fixtures/everydayMarket/shoppers.json'
+import eventsRequest from '../../../../fixtures/everydayMarket/events.json'
+import search from '../../../../fixtures/everydayMarket/search.json'
+import TestFilter from '../../../../support/TestFilter'
+import '../../../../support/login/api/commands/login'
+import '../../../../support/everydayMarket/api/commands/orderApi'
+import '../../../../support/everydayMarket/api/commands/marketplacer'
+import '../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
+import '../../../../support/orderPaymentService/api/commands/refunds'
 
 TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5110 - EM | Refunds | Verify refunds happens to the right payment mode for market orders placed via CC + RD + GC', () => {
