@@ -96,12 +96,13 @@
                 "Subtotal":20 
          }],
   "CouponPromotions": [{
-    "stockcode": "211377",
-    "CouponCode":"10%OFFSUBTOTAL",
-    "SalePrice" :"100"
-  },{
-    "stockcode": "211377",
-    "CouponCode":"10%OFFSUBTOTAL",
-    "SalePrice" :"200"
+    "searchTerm":"Fruits",
+    "Quantity":10,
+    "PercentOFF":0.1,
+    "SubtotalCouponCodePercentOFF":"10%OFFSUBTOTALAUTO",
+    "DeliveryFeeCouponCodePercentOFF":"10%OFFDELIVERYFEEAUTO",
+    "DollarOFF":2,
+    "SubtotalCouponCodeDollarOFF":"2$OFFSUBTOTALAUTO",
+    "DeliveryFeeCouponCodeDollarOFF":"2$OFFDELIVERYFEEAUTO"    
   }]
 }
