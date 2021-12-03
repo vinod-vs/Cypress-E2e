@@ -77,8 +77,9 @@ declare namespace Cypress {
     postOneTimePasswordRequest(oneTimePassword: string): any;
     validate2FALoginStatus(userCredentialLoginResponse: any, otpValidationSwitch: boolean, otpCode: string): any;
     loginViaApiWith2FA(shopper: any, otpValidationSwitch: boolean, otpCode: string): any;
-
     createARefund(stockcode: any, refundReason: string, refundComment: string, refundQuantity: number): any;
     refundShippingFee(refundReason: string, refundComment: string): any;
+    setPurchaseOrderCode(purchaseOrderCode: any): any;
+    openPayDigitalPay(openPayPayment: any): any;
   }
 }

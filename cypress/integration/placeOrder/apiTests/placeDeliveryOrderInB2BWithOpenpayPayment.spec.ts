@@ -1,13 +1,13 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shopper from '../../../fixtures/login/b2bLogin.json'
+import shoppers from '../../../fixtures/login/b2bShoppers.json'
 import searchBody from '../../../fixtures/search/productSearch.json'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import addItemsBody from '../../../fixtures/sideCart/addItemsToTrolley.json'
 import openPayPayment from '../../../fixtures/payment/openPayPayment.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
-import purchaseOrderCode from '../../../fixtures/payment/purchaseOrderCode'
+import purchaseOrderCode from '../../../fixtures/payment/purchaseOrderCode.json'
 import TestFilter from '../../../support/TestFilter'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/login/api/commands/login'
@@ -33,17 +33,17 @@ TestFilter(['B2B', 'API', 'P0'], () => {
     })
 
     it('Should place an order on Woolworths at Work website using OpenPay as payment option', () => {
-      cy.loginViaApi(shopper).then((response) => {
+      cy.loginViaApi(shoppers[3]).then((response: any) => {
         cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
 
-      cy.searchDeliveryAddress(addressSearchBody).then((response) => {
+      cy.searchDeliveryAddress(addressSearchBody).then((response: any) => {
         expect(response.Response[0].Id).to.not.be.empty
 
         expect(response.Response[0].Id).to.not.be.null
       })
 
-      cy.addDeliveryAddress().then((response) => {
+      cy.addDeliveryAddress().then((response: any) => {
         expect(response.Address.AddressId).to.greaterThan(0)
 
         expect(response.Address.AddressId).to.not.be.null
@@ -57,99 +57,33 @@ TestFilter(['B2B', 'API', 'P0'], () => {
         expect(response.Address.SuburbId).to.not.be.null
       })
 
-      cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then((response) => {
+      cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then((response: any) => {
         expect(response.Id).to.greaterThan(0)
       })
 
-      cy.completeWindowFulfilmentViaApi().then((response) => {
+      cy.completeWindowFulfilmentViaApi().then((response: any) => {
         expect(response).to.have.property('IsSuccessful', true)
       })
 
-      cy.clearTrolley().then((response) => {
+      cy.clearTrolley().then((response: any) => {
         expect(response).to.have.property('TrolleyItemCount', 0)
 
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
-      searchBody.SearchTerm = 'Fish'
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('fish', 30.0)
 
-      cy.productSearch(searchBody).then((response) => {
-        expect(response.SearchResultsCount).to.be.greaterThan(0)
-
-        let x
-
-        for (x in response.Products) {
-          if (response.Products[x].Products[0].Price !== null &&
-                        response.Products[x].Products[0].IsInStock === true &&
-                        response.Products[x].Products[0].ProductRestrictionMessage === null &&
-                        response.Products[x].Products[0].ProductWarningMessage === null) {
-            productStockCode = response.Products[x].Products[0].Stockcode
-
-            productPrice = response.Products[x].Products[0].InstorePrice
-
-            supplyLimit = response.Products[x].Products[0].SupplyLimit
-
-            break
-          }
-        }
-
-        addItemsBody.StockCode = productStockCode
-
-        if (productPrice >= 3 && supplyLimit >= 10) {
-          addItemsBody.Quantity = 10
-        } else if (productPrice < 3 && supplyLimit >= 30) {
-          addItemsBody.Quantity = 30
-        }
-      })
-
-      cy.addItemsToTrolley(addItemsBody).then((response) => {
-        expect(response.TotalTrolleyItemQuantity).to.be.eqls(addItemsBody.Quantity)
-
-        expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
-
-        cy.wrap(response.Totals.WoolworthsSubTotal).as('cartSubTotal')
-      })
-
-      cy.get('@cartSubTotal').then(cartSubTotal => {
-        if (cartSubTotal < 30) {
-          searchBody.SearchTerm = 'Bread Rolls'
-
-          cy.productSearch(searchBody).then((response) => {
-            expect(response.SearchResultsCount).to.be.greaterThan(0)
-
-            let x
-
-            for (x in response.Products) {
-              if (response.Products[x].Products[0].Price !== null && response.Products[x].Products[0].IsInStock === true) {
-                productStockCode = response.Products[x].Products[0].Stockcode
-
-                productPrice = response.Products[x].Products[0].InstorePrice
-
-                break
-              }
-            }
-            addItemsBody.StockCode = productStockCode
-
-            if (productPrice >= 3) {
-              addItemsBody.Quantity = 10
-            } else {
-              addItemsBody.Quantity = 30
-            }
-          })
-        }
-      })
-
-      cy.navigateToCheckout().then((response) => {
+      cy.navigateToCheckout().then((response: any) => {
         expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
 
         openPayPayment.openpayAmount = response.Model.Order.BalanceToPay
       })
 
-      cy.setPurchaseOrderCode(purchaseOrderCode).then((response) => {
+      cy.setPurchaseOrderCode(purchaseOrderCode).then((response: any) => {
         expect(response.status).to.eq(200)
       })
 
-      cy.openPayDigitalPay(openPayPayment).then((response) => {
+      cy.openPayDigitalPay(openPayPayment).then((response: any) => {
         expect(response.TransactionReceipt).to.not.be.null
 
         expect(response.PlacedOrderId).to.not.be.null
@@ -157,7 +91,7 @@ TestFilter(['B2B', 'API', 'P0'], () => {
         confirmOrderParameter.placedOrderId = response.PlacedOrderId
       })
 
-      cy.confirmOrder(confirmOrderParameter).then((response) => {
+      cy.confirmOrder(confirmOrderParameter).then((response: any) => {
         expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
 
         cy.log('This is the order id: ' + response.Order.OrderId)
