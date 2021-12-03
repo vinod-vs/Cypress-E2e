@@ -88,3 +88,27 @@ We are running only UI tests in BrowserStack for both B2C and B2B. BrowserStack 
 Locally if you want to run your test(s) in BrowserStack, please use this command:\
 `npx browserstack-cypress run --sync --env "fileConfig=b2b,tags=B2B-API" --spec "cypress/integration/login/apiTests/login.spec.js"`\
 More info: [Run your Cypress tests] (https://www.browserstack.com/docs/automate/cypress)
+
+# For 2FA validation on UAT
+Since 2FA feature has been turned on in UAT env globally, framework has been updated to allow entering static or dynamic one time password via API or UI login.
+Below 2 settings are added to cypress.json 
+  - "otpValidationSwitch": true 
+  - "otpStaticCode": "123456"  
+Test scripts will do 2FA validation based on setting 'otpValidationSwitch' value.
+* while writing API tests for any existing b2c user login, simply call cy.loginViaApiWith2FA() by passing in shopperdetails, otpValidationSwitch value and static code value.
+* for any new b2c user sign up and login via API, simply call cy.loginWithNewShopperViaApi()
+* for UI tests remains the same still using cy.loginViaUi() by passing in the shopper details
+
+# Mailosaur email service integration
+Now we have integrated with Mailosaur email service. If your tests need get email information (like subject, content, etc), highly suggest to create your test account with given Mailosaur server domain address.
+Below 3 settings are added to cypress.json
+  - "mailosaur_serverId": "82f8rhkb"
+  - "mailosaur_serverDomain": "82f8rhkb.mailosaur.net"
+  - "MAILOSAUR_API_KEY": "MQfxmYlGMOb00wv0"
+For your email related test, you might want
+  1. register your test account on test environment with mailosaur domain (eg, john.hawkins@82f8rhkb.mailosaur.net)
+  2. use command like below to get email infor or validation: 
+    cy.getMailosaurEmailByEmailAddress(emailAddress).then(email => {
+        expect(email.subject).to.equal('Reset your password')
+    })
+More info: [How to test email and SMS with Cypress] (https://mailosaur.com/docs/frameworks-and-tools/cypress/)

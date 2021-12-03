@@ -22,6 +22,7 @@ declare namespace Cypress {
     logOutViaApi(): void;
     setSignUpDetails(): any;
     signUpViaApi(signUpDetails: any): any;
+    signUpViaApiWith2FA(signUpDetails: any): any;
     setDeliveryOptionsViaApi(deliveryOptions: any): any;
     setFulfilmentLocationWithWindow(fulfilmentType: string, addressSearchBody: any, windowType: string): any;
     placeOrderViaApiWithAddedCreditCard(creditCardDetails: any, platform: string): any;

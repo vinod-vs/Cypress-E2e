@@ -12,16 +12,29 @@ Cypress.Commands.add('loginViaApi', (shopper) => {
 
 Cypress.Commands.add('loginWithNewShopperViaApi', () => {
   cy.setSignUpDetails().then((signUpDetails) => {
-    const shopper = {
-      "email": signUpDetails.emailAddress,
-      "password": signUpDetails.password
-    }
-    cy.signUpViaApi(signUpDetails).then((response) => {
-      cy.wrap(response.body.ShopperId).as('shopperId')
-      cy.log('Shopper Id is: ' + response.body.ShopperId)
-      cy.loginViaApi(shopper).then((response) => {
-        return response.body
+
+    if(Cypress.env('otpValidationSwitch')){
+      cy.signUpViaApiWith2FA(signUpDetails).then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.not.have.property('ShopperId', 0)
+        cy.log('Shopper Id is: ' + response.body.ShopperId)
       })
+    }
+    else{
+      cy.signUpViaApi(signUpDetails).then((response) => {
+        cy.log('Shopper Id is: ' + response.body.ShopperId)
+      })
+    }
+
+    let shopperDetails = 
+      {
+        email: signUpDetails.emailAddress,
+        password: signUpDetails.password
+      }
+    
+    cy.loginViaApi(shopperDetails).then((response) => {
+      expect(response).to.have.property('LoginResult', 'Success')
+      cy.getCookie('w-rctx').should('exist')
     })
   })
 })

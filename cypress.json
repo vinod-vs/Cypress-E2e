@@ -75,8 +75,11 @@
         "oqsGetOrderStatusEndpoint": "api/orders/TRADER_ORDER_ID/status",
         "bootstrapEndpoint": "/api/ui/v2/bootstrap",
         "otpEndpoint": "/api/v3/ui/authentication/otp",
-        "otpValidationSwitch": false,
-        "otpStaticCode": "123456" 
+        "otpValidationSwitch": true,
+        "otpStaticCode": "123456",
+        "mailosaur_serverId": "82f8rhkb",
+        "mailosaur_serverDomain": "82f8rhkb.mailosaur.net",
+        "MAILOSAUR_API_KEY": "MQfxmYlGMOb00wv0"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,
