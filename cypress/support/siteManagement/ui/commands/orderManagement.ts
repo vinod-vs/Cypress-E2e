@@ -23,7 +23,7 @@ Cypress.Commands.add("searchOrder", (orderId) => {
 
 Cypress.Commands.add(
   "createARefund",
-  (stockcode, refundReason, refundComment, refundQuantity) => {
+  (stockcode, refundReason, refundComment, refundQuantity, goodwillAmount) => {
     //Fill refund details
     onOrderManagement.getRefundCheckboxForStockcode(stockcode).click();
     onOrderManagement
@@ -37,17 +37,27 @@ Cypress.Commands.add(
       .getRefundQuantityFieldForStockcode(stockcode)
       .type(refundQuantity);
 
+      if(goodwillAmount>0) {
+        onOrderManagement.getGoodWillField().clear()
+        onOrderManagement.getGoodWillField().type(goodwillAmount)
+      }
+
     //Click save and approve
     onOrderManagement.getRefundSaveButton().click();
     onOrderManagement.getRefundApproveButton().click();
   }
 );
 
-Cypress.Commands.add("refundShippingFee", (refundReason, refundComment) => {
+Cypress.Commands.add("refundShippingFee", (refundReason, refundComment, goodwillAmount) => {
   //Fill refund details
   onOrderManagement.getRefundShippingFeeCheckbox().click();
   onOrderManagement.getRefundShippingFeeReasonField().select(refundReason);
   onOrderManagement.getRefundShippingFeeCommentField().type(refundComment);
+
+  if(goodwillAmount>0) {
+    onOrderManagement.getGoodWillField().clear()
+    onOrderManagement.getGoodWillField().type(goodwillAmount)
+  }
 
   //Click save and approve
   onOrderManagement.getRefundSaveButton().click();

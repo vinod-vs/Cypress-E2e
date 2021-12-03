@@ -22,13 +22,13 @@ import "../../../../support/orderPaymentService/api/commands/refunds";
 import * as lib from "../../../../support/everydayMarket/api/commands/commonHelpers";
 
 TestFilter(["EDM", "EDM-HYBRID"], () => {
-  describe("[API]  RP-5038 - EM | SM | Create CHUB refunds for Everyday Market items via Site Management", () => {
+  describe("[API]  RP-5038 - EM | SM | Create CHUB refunds for Everyday Market items via Site Management + goodwill", () => {
     before(() => {
       cy.clearCookies({ domain: null });
       cy.clearLocalStorage({ domain: null });
     });
 
-    it("[API]  RP-5038 - EM | SM | Create CHUB refunds for Everyday Market items via Site Management", () => {
+    it("[API]  RP-5038 - EM | SM | Create CHUB refunds for Everyday Market items via Site Management + goodwill", () => {
       const testData = tests.GenericWOWPlusEDMPPPaymentTestData;
       let orderId: any;
       let orderReference: any;
@@ -38,6 +38,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber;
       let refundReason = "Damaged Item";
       let refundComment = "Automation Refund Comment";
+      const goodwillAmount = 15
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
@@ -329,7 +330,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
         }
       );
 
-      //Login to SM and create a refund. Then verify the order details
+      //Login to SM and create a product refund. Add a good will too. Then verify the order details
       cy.get("@finalProjection").then((firstFinalProjection) => {
         cy.loginToSMAndSearchOrder(smLogins, orderId);
         cy.validateOrderDetailsOnSM(false);
@@ -337,7 +338,8 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
           firstFinalProjection.invoices[0].lineItems[0].stockCode,
           refundReason,
           refundComment,
-          1
+          1,
+          goodwillAmount
         );
 
         //Verify the refund details are updated in the projection and events
@@ -644,6 +646,8 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       });
 
       //Verify the refund details and OQS status after CHUB refund
+      //Adding a small wait so that the refunds stauts turns to completed. Else it'll be in pending state
+      cy.wait(Cypress.config("fiveSecondWait"));
       cy.get("@newFinalProjection")
         .as("finalProjection")
         .then((newFinalProjection) => {
@@ -684,9 +688,9 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                 finalProjection.invoices[0].lineItems[0].salePrice
               );
               expect(refundsDetails.refunds[0].total).to.be.equal(
-                finalProjection.invoices[0].lineItems[0].salePrice
-              );
-              expect(refundsDetails.refunds[0].goodwillAmount).to.be.equal(0);
+                (Number(Number.parseFloat(Number(finalProjection.invoices[0].lineItems[0].salePrice) + Number(goodwillAmount)).toFixed(2)))
+              );              
+              expect(refundsDetails.refunds[0].goodwillAmount).to.be.equal(goodwillAmount);
               cy.getAllRefundPaymentsByRefundId(
                 refundsDetails.refunds[0].id
               ).as("refundPaymentsDetails");
@@ -696,7 +700,8 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                     "RefundPaymentsDetails: " +
                       JSON.stringify(refundPaymentsDetails)
                   );
-                  expect(refundPaymentsDetails.results.length).to.be.equal(1);
+                  expect(refundPaymentsDetails.results.length).to.be.equal(2);
+                  //Verify product refund
                   expect(refundPaymentsDetails.results[0].type).to.be.equal(
                     "PayPal"
                   );
@@ -708,7 +713,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                   );
                   expect(
                     refundPaymentsDetails.results[0].noOfAttempts
-                  ).to.be.gte(1);
+                  ).to.be.equal(1);
                   expect(
                     refundPaymentsDetails.results[0].paymentSource
                   ).to.be.equal("Payment");
@@ -717,6 +722,24 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                   expect(
                     refundPaymentsDetails.results[0].completedOrderPaymentType
                   ).to.be.equal("PayPal");
+                  //Verify goodwill refund
+                  expect(refundPaymentsDetails.results[1].type).to.be.equal(
+                    "StoreCredit"
+                  );
+                  expect(refundPaymentsDetails.results[1].total).to.be.equal(
+                    goodwillAmount
+                  );
+                  expect(refundPaymentsDetails.results[1].status).to.be.equal(
+                    "Processed"
+                  );
+                  expect(
+                    refundPaymentsDetails.results[1].paymentSource
+                  ).to.be.equal("Goodwill");
+                  expect(refundPaymentsDetails.results[1].isStoreCredit).to.be
+                    .true;
+                  expect(
+                    refundPaymentsDetails.results[1].completedOrderPaymentType
+                  ).to.be.equal("StoreCredit");
                 }
               );
             });

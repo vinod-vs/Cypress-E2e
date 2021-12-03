@@ -81,5 +81,7 @@ declare namespace Cypress {
     refundShippingFee(refundReason: string, refundComment: string): any;
     setPurchaseOrderCode(purchaseOrderCode: any): any;
     openPayDigitalPay(openPayPayment: any): any;
+    createARefund(stockcode: any, refundReason: string, refundComment: string, refundQuantity: number, goodwillAmount: number): any;
+    refundShippingFee(refundReason: string, refundComment: string, goodwillAmount: number): any;
   }
 }
