@@ -151,6 +151,11 @@ export class OrderManagement {
     return cy.get("input[class='refund-edit-comment'][name*='RefundLines[-2-0-Payment].Comment']")
   }
 
+  getGoodWillField() {
+    return cy.get(".goodwill-total")
+  }
+  
+
 }
 
 export const onOrderManagement = new OrderManagement();
