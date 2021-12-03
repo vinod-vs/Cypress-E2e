@@ -25,7 +25,7 @@ const trolleyThreshold = 50.00
 const platform = Cypress.env('b2bPlatform')
 
 TestFilter(['B2B' ,'API', 'P0'], () => {
-  describe('[API] Place a delivery order on Woolworths at Work website using Credit Card', () => {
+  describe('[API] Place a pickup order on Woolworths at Work website using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
