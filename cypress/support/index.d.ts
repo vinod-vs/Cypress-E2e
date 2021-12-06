@@ -53,6 +53,8 @@ declare namespace Cypress {
     cancelLineItemInInvoice(encodedInvoiceId: string, encodedLineItemId: string, quantity: number, dispatched: boolean): any;
     getAllRefundsByOrderId(traderOrderId: number): any;
     getAllRefundPaymentsByRefundId(refundId: number): any;
+    getAllRefundsByOrderIdWithRetry(traderOrderId: number, retryOptions: any): any;
+    getAllRefundPaymentsByRefundIdWithRetry(refundId: number, retryOptions: any): any;
     findCCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     removeDateOrdinals(text: string): string;

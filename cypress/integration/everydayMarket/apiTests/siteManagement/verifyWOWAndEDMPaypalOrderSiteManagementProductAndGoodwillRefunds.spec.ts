@@ -38,7 +38,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber;
       let refundReason = "Damaged Item";
       let refundComment = "Automation Refund Comment";
-      const goodwillAmount = 15
+      const goodwillAmount = 15;
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
@@ -594,7 +594,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
 
             // After dispatch, Invoke the events api and verify the events are updated acordingly
             cy.orderEventsApiWithRetry(orderReference, {
-              function: function (response) {
+              function: function (response: any) {
                 if (
                   !response.body.data.some(
                     (element) => element.domainEvent === "RefundCompleted"
@@ -646,8 +646,6 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       });
 
       //Verify the refund details and OQS status after CHUB refund
-      //Adding a small wait so that the refunds stauts turns to completed. Else it'll be in pending state
-      cy.wait(Cypress.config("fiveSecondWait"));
       cy.get("@newFinalProjection")
         .as("finalProjection")
         .then((newFinalProjection) => {
@@ -668,7 +666,22 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             );
 
             // Verify refund details using the payment services
-            cy.getAllRefundsByOrderId(testData.orderId).as("refundsDetails");
+            cy.getAllRefundsByOrderIdWithRetry(testData.orderId, {
+              function: function (response: any) {
+                if (response.body.refunds[0].status !== "Completed") {
+                  cy.log(
+                    "Refund status was not Completed instead it was " +
+                      response.body.refunds[0].status
+                  );
+                  throw new Error(
+                    "Refund status was not Completed instead it was " +
+                      response.body.refunds[0].status
+                  );
+                }
+              },
+              retries: Cypress.env("marketApiRetryCount"),
+              timeout: Cypress.env("marketApiTimeout"),
+            }).as("refundsDetails");
             cy.get("@refundsDetails").then((refundsDetails: any) => {
               cy.log("Refund details: " + JSON.stringify(refundsDetails));
               expect(refundsDetails.refunds.length).to.be.equal(1);
@@ -688,11 +701,44 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                 finalProjection.invoices[0].lineItems[0].salePrice
               );
               expect(refundsDetails.refunds[0].total).to.be.equal(
-                (Number(Number.parseFloat(Number(finalProjection.invoices[0].lineItems[0].salePrice) + Number(goodwillAmount)).toFixed(2)))
-              );              
-              expect(refundsDetails.refunds[0].goodwillAmount).to.be.equal(goodwillAmount);
-              cy.getAllRefundPaymentsByRefundId(
-                refundsDetails.refunds[0].id
+                Number(
+                  Number.parseFloat(
+                    Number(finalProjection.invoices[0].lineItems[0].salePrice) +
+                      Number(goodwillAmount)
+                  ).toFixed(2)
+                )
+              );
+              expect(refundsDetails.refunds[0].goodwillAmount).to.be.equal(
+                goodwillAmount
+              );
+
+              cy.getAllRefundPaymentsByRefundIdWithRetry(
+                refundsDetails.refunds[0].id,
+                {
+                  function: function (response: any) {
+                    if (
+                      !(
+                        response.body.results[0].type === "PayPal" &&
+                        response.body.results[0].status === "Processed"
+                      )
+                    ) {
+                      cy.log(
+                        "First refund was not Paypal instead it was " +
+                          response.body.results[0].type +
+                          " and status was not  Processed instead it was " +
+                          response.body.results[0].status
+                      );
+                      throw new Error(
+                        "First refund was not Paypal instead it was " +
+                          response.body.results[0].type +
+                          " and status was not  Processed instead it was " +
+                          response.body.results[0].status
+                      );
+                    }
+                  },
+                  retries: Cypress.env("marketApiRetryCount"),
+                  timeout: Cypress.env("marketApiTimeout"),
+                }
               ).as("refundPaymentsDetails");
               cy.get("@refundPaymentsDetails").then(
                 (refundPaymentsDetails: any) => {
