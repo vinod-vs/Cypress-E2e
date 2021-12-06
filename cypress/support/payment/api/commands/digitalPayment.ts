@@ -3,7 +3,7 @@ Cypress.Commands.add('digitalPay', (digitalPayment) => {
     method: 'POST',
     url: Cypress.env('digitalPaymentEndpoint'),
     body: digitalPayment
-  }).then((response) => {
+  }).then((response: any) => {
     return response.body
   })
 })
@@ -18,7 +18,7 @@ Cypress.Commands.add('getDigitalPaymentInstruments', () => {
   cy.api({
     method: 'GET',
     url: Cypress.env('digitalPaymentInstrumentsEndpoint')
-  }).then((response) => {
+  }).then((response: any) => {
     expect(response.status).to.eq(200)
     return response.body
   })
