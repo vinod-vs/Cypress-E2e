@@ -1,18 +1,18 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import eventsRequest from '../../../fixtures/everydayMarket/events.json'
-import search from '../../../fixtures/everydayMarket/search.json'
-import TestFilter from '../../../support/TestFilter'
-import '../../../support/login/api/commands/login'
-import '../../../support/everydayMarket/api/commands/orderApi'
-import '../../../support/everydayMarket/api/commands/marketplacer'
-import '../../../support/everydayMarket/api/commands/orderPlacementHelpers'
-import '../../../support/rewards/api/commands/rewards'
-import '../../../support/refunds/api/commands/commands'
-import '../../../support/orders/api/commands/amendOrder'
-import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
-import * as commonLib from '../../../support/everydayMarket/api/commands/commonHelpers'
+import eventsRequest from '../../../../fixtures/everydayMarket/events.json'
+import search from '../../../../fixtures/everydayMarket/search.json'
+import TestFilter from '../../../../support/TestFilter'
+import '../../../../support/login/api/commands/login'
+import '../../../../support/everydayMarket/api/commands/orderApi'
+import '../../../../support/everydayMarket/api/commands/marketplacer'
+import '../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
+import '../../../../support/rewards/api/commands/rewards'
+import '../../../../support/refunds/api/commands/commands'
+import '../../../../support/orders/api/commands/amendOrder'
+import * as lib from '../../../../support/everydayMarket/api/commands/validationHelpers'
+import * as commonLib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
@@ -56,7 +56,7 @@ TestFilter(['EDM', 'API'], () => {
           },
           retries: Cypress.env('marketApiRetryCount'),
           timeout: 10000
-        }) 
+        })
 
         // Call Market Order API and validate the data
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {

@@ -7,7 +7,7 @@ import TestFilter from '../../../support/TestFilter'
 
 
 
-TestFilter(['PES','API'], () => {
+TestFilter(['B2C','PES','API'], () => {
 
   describe('[API] Verify Classic Product Promotions', () => {
     before(() => {
@@ -19,6 +19,7 @@ TestFilter(['PES','API'], () => {
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
         expect(response).to.have.property('LoginResult', 'Success')
+        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
 

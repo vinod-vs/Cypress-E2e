@@ -1,78 +1,123 @@
 {
   "ClassicProductPromotions": [{
-    "stockcode": 374699,
-     "SalePrice" :14.99,
-     "Quantity":1
-     },
-     {
-      "stockcode": 5292,
-       "SalePrice" :6,
-       "Quantity":1
-       },{
-        "stockcode": 140694,
-         "SalePrice" :23,
-         "Quantity":2
-         },{
-          "stockcode": 726244,
-           "SalePrice" :30,
-           "Quantity":2
-           },{
-            "stockcode": 763646,
-             "SalePrice" :16,
-             "Quantity":1
-           },{
-            "stockcode": 748809,
-             "SalePrice" :16,
-             "Quantity":1
-           }],
-    "ProductPromotions": [{
-      "stockcode": "211377",
-       "SalePrice" :"12.5"
-       },
-      {
-        "stockcode": "211377",
-       "SalePrice" :"12.5"
-      }],
-      "DeferredProductPromotions": [{
-        "stockcode": "211377",
-         "TotalRewardsPointsEarned" :"12.5"
-         },
-        {
-          "stockcode": "211377",
-         "TotalRewardsPointsEarned" :"12.5"
-        }],
-        "DeferredSpendStretchPromotions": [{
-          "stockcode": "211377",
-           "TotalRewardsPointsEarned" :"100"
-           },
-          {
-            "stockcode": "211377",
-           "TotalRewardsPointsEarned" :"200"
-          }],
-          "DeferredOrderPromotions": [{
-            "stockcode": "211377",
-             "TotalRewardsPointsEarned" :"100"
-             },
-            {
-              "stockcode": "211377",
-             "TotalRewardsPointsEarned" :"200"
-            }],
-            "OrderPromotions": [{
-              "stockcode": "211377",
-               "SalePrice" :"100"
-               },
-              {
-                "stockcode": "211377",
-               "SalePrice" :"200"
-              }],
-              "CouponPromotions": [{
-                "stockcode": "211377",
-                "CouponCode":"10%OFFSUBTOTAL",
-                 "SalePrice" :"100"
-                 },
-                {
-                  "stockcode": "211377",
-                  "CouponCode":"10%OFFSUBTOTAL",
-                 "SalePrice" :"200"
-                }]
+    "stockcode": 725090,
+    "SalePrice" :12,
+    "Quantity":1
+  },{
+    "stockcode": 691495,
+    "SalePrice" :6,
+    "Quantity":1
+  },{
+    "stockcode": 140694,
+    "SalePrice" :23,
+    "Quantity":2
+  },{
+    "stockcode": 571823,
+    "SalePrice" :70,
+    "Quantity":2
+  },{
+    "stockcode": 839069,
+    "SalePrice" :11.50,
+    "Quantity":1
+  },{
+    "stockcode": 838986,
+    "SalePrice" :11.50,
+    "Quantity":1
+  }],
+  "ProductPromotions": [{
+    "stockcode": 778194	,
+    "SalePrice" :12,
+    "Quantity" :1
+  },{
+    "stockcode": 726244,
+    "SalePrice" :28.8 ,
+    "Quantity" :2
+  },{
+    "stockcode": 211374,
+    "Quantity" :1,
+    "SalePrice1" :0,
+    "CreditsUsed1":20,
+    "SalePrice2" :20,
+    "CreditsUsed2":0
+  }],
+  "DeferredProductPromotions": [{
+    "stockcode": 228390,
+    "Quantity":1,
+    "TotalRewardsPointsEarned" :110
+    },
+   {
+     "stockcode": 838986,
+     "Quantity":1,
+     "TotalRewardsPointsEarned" :212
+   },
+   {
+     "stockcode": 1073745925,
+     "Quantity":1,
+     "TotalRewardsPointsEarned" :10
+   }],
+  "DeferredSpendStretchPromotions": [{
+     "searchTerm": "drinks",
+     "stockcode": "7475",
+     "TotalRewardsPointsEarned" :422,
+     "Quantity":4
+  },{
+    "searchTerm": "pantry",
+    "stockcode": "438614",
+    "TotalRewardsPointsEarned" :330,
+    "Quantity":1
+  }],
+  "DeferredOrderPromotions": [{
+    "searchTerm": "beauty",
+    "stockcode": "815301",
+    "TotalRewardsPointsEarned" :2000,
+    "Subtotal":40,
+    "Quantity":1,
+    "BeingEarned":2
+  },{
+    "searchTerm": "pantry",
+    "stockcode": "211377",
+    "TotalRewardsPointsEarned" :"200",
+    "Subtotal":50,
+    "Quantity":2
+  }],
+  "OrderPromotions": 
+  [{
+     "searchTerm": "health",
+     "stockcode": 217378,
+     "OrderDiscountWithoutTeamDiscount":10,
+     "DeliveryFeeDiscount":10,
+     "Subtotal":200 
+    },{
+      "searchTerm": "health",
+      "stockcode": 211377,
+      "OrderDiscountWithoutTeamDiscount":5,
+      "DeliveryFeeDiscount":5,
+      "Subtotal":50 
+    },{
+      "searchTerm": "health",
+      "stockcode": 1073745925,
+      "MarketShippingFeeBeforeDiscount":10,
+      "MarketShippingFeeDiscount":0.5,
+      "Subtotal":20 
+  }],
+  "CouponPromotions": [{
+    "searchTerm":"Fruits",
+    "Quantity":10,
+    "PercentOFF":0.1,
+    "SubtotalCouponCodePercentOFF":"10%OFFSUBTOTALAUTO",
+    "DeliveryFeeCouponCodePercentOFF":"10%OFFDELIVERYFEEAUTO",
+    "DollarOFF":2,
+    "SubtotalCouponCodeDollarOFF":"2$OFFSUBTOTALAUTO",
+    "DeliveryFeeCouponCodeDollarOFF":"2$OFFDELIVERYFEEAUTO"    
+  },{
+    "searchTerm":"Health",
+    "Quantity":2,
+    "PercentOFF":0.1,
+    "MarketShippingFeeCouponCode":"10%OFFMARKETSHIPPINGFEE"
+  },{
+    "searchTerm":"30011",
+    "Quantity": 1,
+    "ClassicProductPromoCouponCode":"4$OFFCOUPON",
+    "DollarOFF":4 
+  }]
 }

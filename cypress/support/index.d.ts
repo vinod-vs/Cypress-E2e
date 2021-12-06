@@ -45,6 +45,9 @@ declare namespace Cypress {
     removeNewLineCarriageReturn(initialText: string): Cypress.Chainable<string>;
     prepareAnySingleLineItemEdmOrder(searchTerm: string, purchaseQty: number): void;
     redeemRewardsDollars(redeemAmount: number): any;
+    redeemRewardsCredits(enabled: boolean): any;
+    addPromotionCode(promoCode: string): any;
+    removePromotionCode(promoCode: string): any;
     placeOrderUsingCreditCard(): any;
     placeOrderUsingCreditCardAndGiftCard(): any;
     ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId: number, orderId: number, retryOptions: RetryOptions): any;
@@ -78,5 +81,11 @@ declare namespace Cypress {
     postOneTimePasswordRequest(oneTimePassword: string): any;
     validate2FALoginStatus(userCredentialLoginResponse: any, otpValidationSwitch: boolean, otpCode: string): any;
     loginViaApiWith2FA(shopper: any, otpValidationSwitch: boolean, otpCode: string): any;
+    createARefund(stockcode: any, refundReason: string, refundComment: string, refundQuantity: number): any;
+    refundShippingFee(refundReason: string, refundComment: string): any;
+    setPurchaseOrderCode(purchaseOrderCode: any): any;
+    openPayDigitalPay(openPayPayment: any): any;
+    createARefund(stockcode: any, refundReason: string, refundComment: string, refundQuantity: number, goodwillAmount: number): any;
+    refundShippingFee(refundReason: string, refundComment: string, goodwillAmount: number): any;
   }
 }

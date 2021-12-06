@@ -178,7 +178,7 @@ Cypress.Commands.add('addAvailableQuantityLimitedItemsToTrolley', (searchTerm, q
   cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
     .then((searchResponse) => {
       const product = searchResponse.Products
-      // Filter search results by IsMarketProduct = true and IsAvailable = true
+      // Filter search results by IsAvailable = true
         .filter(searchProduct => searchProduct.Products[0].IsAvailable)
       // Pick the first result
         .shift()
