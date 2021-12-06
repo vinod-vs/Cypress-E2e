@@ -87,5 +87,6 @@ declare namespace Cypress {
     openPayDigitalPay(openPayPayment: any): any;
     createARefund(stockcode: any, refundReason: string, refundComment: string, refundQuantity: number, goodwillAmount: number): any;
     refundShippingFee(refundReason: string, refundComment: string, goodwillAmount: number): any;
+    getMailosaurEmailByEmailAddress(mailosaurEmailAddress: string): any;
   }
 }
