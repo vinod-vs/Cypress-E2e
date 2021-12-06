@@ -44,6 +44,9 @@ declare namespace Cypress {
     removeNewLineCarriageReturn(initialText: string): Cypress.Chainable<string>;
     prepareAnySingleLineItemEdmOrder(searchTerm: string, purchaseQty: number): void;
     redeemRewardsDollars(redeemAmount: number): any;
+    redeemRewardsCredits(enabled: boolean): any;
+    addPromotionCode(promoCode: string): any;
+    removePromotionCode(promoCode: string): any;
     placeOrderUsingCreditCard(): any;
     placeOrderUsingCreditCardAndGiftCard(): any;
     ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId: number, orderId: number, retryOptions: RetryOptions): any;
