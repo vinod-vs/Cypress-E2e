@@ -123,7 +123,7 @@ function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
 
     expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
 
-    if (totalPrice > totalThreshold) {
+    if (totalPrice >= totalThreshold) {
       break
     }
   }

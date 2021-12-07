@@ -119,5 +119,15 @@
     "Quantity": 1,
     "ClassicProductPromoCouponCode":"4$OFFCOUPON",
     "DollarOFF":4 
+  }],
+  "TigerOffers" : [{
+    "stockcode": 312270,
+    "minSpend" :5,
+    "minQty":0.2,
+    "TotalRewardsPointsEarned" :156
+  },{
+    "stockcode" :370388,
+    "minQty" :1,
+    "TotalRewardsPointsEarned" : 214
   }]
 }
