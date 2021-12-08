@@ -91,5 +91,9 @@ declare namespace Cypress {
     createARefund(stockcode: any, refundReason: string, refundComment: string, refundQuantity: number, goodwillAmount: number): any;
     refundShippingFee(refundReason: string, refundComment: string, goodwillAmount: number): any;
     getMailosaurEmailByEmailAddress(mailosaurEmailAddress: string): any;
+    searchOrder(orderId: string): any;
+    searchAnOrderOnSM(orderId: string): any;
+    authorizeGiftingService(): any;
+    generateANewGiftCard(giftCardAmount: number): any;
   }
 }

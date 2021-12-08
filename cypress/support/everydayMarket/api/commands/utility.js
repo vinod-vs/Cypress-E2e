@@ -22,6 +22,7 @@ import '../../../sideCart/api/commands/addItemsToTrolley'
 import '../../../sideCart/api/commands/clearTrolley'
 import '../../../payment/api/commands/digitalPayment'
 import '../../../payment/api/commands/zero'
+import '../../../payment/api/commands/giftCard'
 import '../../../checkout/api/commands/confirmOrder'
 import '../../../invoices/api/commands/commands'
 import '../../../fulfilment/api/commands/fulfilment'
@@ -152,7 +153,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
 Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, testData) => {
   // Login
   cy.loginViaApi(shopperDetails).then((response) => {
-    cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+    //cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
   })
 
   // Set fulfilment using the new /windows endpoint
@@ -214,6 +215,30 @@ Cypress.Commands.add('payTheOrder', (testData) => {
       break
     case paymentType.CREDIT_CARD_PLUS_REWARDS:
       // TODO
+      break
+    case paymentType.PAYPAL_PLUS_REWARDS_PLUS_GIFTCARD:
+      // Redeem $10 from rewards
+      cy.redeemRewardsDollars(10)
+      // Checkout
+      cy.navigateToCheckout().as('checkoutResponse').then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      })
+      // Get gift card paymentInstrumentId
+      cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(10)
+      // Pay with paypal and GC of $10
+      cy.get('@checkoutResponse').then((checkoutResponse) => {
+        cy.get('@giftcardPaymentInstrumentId').then((giftcardPaymentInstrumentId) => {
+          // payment[0] is for PP. It's paymentInstrumentId is set by the command payWithLinkedPaypalAccount at payments[0] position.
+          // payment[1] is for GC
+          const payments = [{ amount: checkoutResponse.Model.Order.BalanceToPay - 10, paymentInstrumentId: 0, stepUpToken: 'tokenise-stepup-token' }, { amount: 10, paymentInstrumentId: giftcardPaymentInstrumentId, stepUpToken: 'tokenise-stepup-token' }]
+          digitalPaymentRequest.payments = payments
+          cy.log('giftcardPaymentInstrumentId: ' + giftcardPaymentInstrumentId)
+          cy.log('payments: ' + JSON.stringify(payments))
+          // digitalPaymentRequest.payments[0].amount = checkoutResponse.Model.Order.BalanceToPay
+          cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
+          cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
+        })
+      })
       break
     default: // default is CREDIT_CARD_ONLY
       cy.payByCreditCard()

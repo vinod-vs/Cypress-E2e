@@ -1,0 +1,12 @@
+{
+    "TransactionTypeId": "305",
+    "InputType": "3",
+    "NumberOfCards": "1",
+    "Cards": [
+      {
+        "CardProgramGroupName": "Wish eGift Card",
+        "Amount": "1000",
+        "DesignCode": "WWQ556PRM001"
+      }
+    ]
+  }
