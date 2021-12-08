@@ -32,8 +32,10 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       it(`Should subscribe for a new delivery unlimited plan ${plan.Name} for ${plan.SubscriberType}`, () => {
         signUpDetails.firstName = faker.name.firstName()
         signUpDetails.lastName = faker.name.lastName()
-        signUpDetails.emailAddress = faker.internet.email()
+       //signUpDetails.emailAddress = faker.internet.email() 
+        signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
         signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
+        signUpDetails.idLikeToReceiveEmailsAboutProductsAndServices = true
         cy.getDOB('personal').then((value) => {
           signUpDetails.dateOfBirth = value
         })
@@ -44,7 +46,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.clearLocalStorage({ domain: null })
 
         // Signing Up as a new User
-        cy.signUpViaApi(signUpDetails).then((response) => {
+        cy.signUpViaApiWith2FA(signUpDetails).then((response) => {
           expect(response.status).to.eq(200)
           expect(response.body).to.have.property('Success', true)
           expect(response.body.ShopperId).to.be.above(0)
@@ -115,11 +117,12 @@ TestFilter(['B2C', 'API', 'P0'], () => {
               })
             })
           })
-          signUpDetails.shopperId = shopperId
-          signUpDetails.planId = plan.PlanId
-          signUpDetails.planPrice = plan.Price
-          signUpDetails.createdTime = new Date().toLocaleString()
+          //signUpDetails.shopperId = shopperId
+          //signUpDetails.planId = plan.PlanId
+          //signUpDetails.planPrice = plan.Price
+          //signUpDetails.createdTime = new Date().toLocaleString()
           cy.writeTestDataUsed(`${Cypress.env('duSubscriptionTestDataFilePath')}/personalSubscriptionUsedData.json`, signUpDetails)
+          cy.wait(2000)
         })
       })
     })

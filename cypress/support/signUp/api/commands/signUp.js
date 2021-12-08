@@ -17,6 +17,7 @@ Cypress.Commands.add('signUpViaApiWith2FA', (userInfo) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('ShopperId', 0)
   }).then(()=>{
+    cy.wait(50000)
     cy.getMailosaurEmailByEmailAddress(userInfo.emailAddress).then(email => {
       cy.log("Your otp is: " + email.subject.substr(0, 6))
       userInfo.hasOptSent = true
@@ -38,7 +39,7 @@ Cypress.Commands.add('setSignUpDetails', () => {
   signUpDetails.idLikeToReceiveEmailsAboutProductsAndServices = true
   cy.getDOB('personal').then((value)=> {
     signUpDetails.dateOfBirth = value
-  })
+  })  
 
   return cy.wrap(signUpDetails)  
 })
