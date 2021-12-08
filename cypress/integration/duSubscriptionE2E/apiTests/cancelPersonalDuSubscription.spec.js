@@ -38,7 +38,6 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         signUpDetails.lastName = faker.name.lastName()
         signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
         signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-        signUpDetails.idLikeToReceiveEmailsAboutProductsAndServices = true
         cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
         })

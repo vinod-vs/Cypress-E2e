@@ -32,7 +32,6 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       it(`Should subscribe for a new delivery unlimited plan ${plan.Name} for ${plan.SubscriberType}`, () => {
         signUpDetails.firstName = faker.name.firstName()
         signUpDetails.lastName = faker.name.lastName()
-        //signUpDetails.emailAddress = faker.internet.email()
         signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
         signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
         signUpDetails.idLikeToReceiveEmailsAboutProductsAndServices = true
