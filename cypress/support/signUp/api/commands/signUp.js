@@ -11,13 +11,14 @@ Cypress.Commands.add('signUpViaApi', (userInfo) => {
   })
 })
 
-Cypress.Commands.add('signUpViaApiWith2FA', (userInfo) => {
+Cypress.Commands.add('signUpViaApiWith2FA', (userInfo) => { 
   userInfo.enableEmailVerificationFE = true
+  userInfo.hasOptSent=null
+  userInfo.oneTimePin=null
   cy.signUpViaApi(userInfo).then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('ShopperId', 0)
   }).then(()=>{
-    cy.wait(50000)
     cy.getMailosaurEmailByEmailAddress(userInfo.emailAddress).then(email => {
       cy.log("Your otp is: " + email.subject.substr(0, 6))
       userInfo.hasOptSent = true

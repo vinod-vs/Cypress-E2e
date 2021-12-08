@@ -117,12 +117,12 @@ TestFilter(['B2C', 'API', 'P0'], () => {
               })
             })
           })
-          //signUpDetails.shopperId = shopperId
-          //signUpDetails.planId = plan.PlanId
-          //signUpDetails.planPrice = plan.Price
-          //signUpDetails.createdTime = new Date().toLocaleString()
+          signUpDetails.shopperId = shopperId
+          signUpDetails.planId = plan.PlanId
+          signUpDetails.planPrice = plan.Price
+          signUpDetails.createdTime = new Date().toLocaleString()
           cy.writeTestDataUsed(`${Cypress.env('duSubscriptionTestDataFilePath')}/personalSubscriptionUsedData.json`, signUpDetails)
-          cy.wait(2000)
+          cy.wait(1000)
         })
       })
     })
