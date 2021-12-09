@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /// <reference types="cypress" />
-import giftingAuthorizeRequest from "../../../../fixtures/giftingService/authorize.json";
-import generateGiftCardRequest from "../../../../fixtures/giftingService/generateGiftcard.json";
+import gifCardAuthorizeRequest from "../../../../fixtures/giftCardService/authorize.json";
+import generateGiftCardRequest from "../../../../fixtures/giftCardService/generateGiftcard.json";
 
 Cypress.Commands.add("authorizeGiftingService", () => {
   cy.api({
@@ -10,8 +10,8 @@ Cypress.Commands.add("authorizeGiftingService", () => {
       "Content-Type": "application/json;charset=UTF-8 ",
       DateAtClient: new Date(Date.now()).toLocaleString().split(",")[0],
     },
-    body: giftingAuthorizeRequest,
-    url: Cypress.env("giftingServiceEndpoint") + "/authorize",
+    body: gifCardAuthorizeRequest,
+    url: Cypress.env("giftCardServiceEndpoint") + "/authorize",
   }).then((response: any) => {
     expect(response.status).to.eq(200);
     expect(response.body.ResponseMessage).to.eq("Transaction successful.");
@@ -37,7 +37,7 @@ Cypress.Commands.add("generateANewGiftCard", (giftCardAmount) => {
         bearer: giftingServiceAuthToken.AuthToken,
       },
       body: generateGiftCardRequest,
-      url: Cypress.env("giftingServiceEndpoint") + "/gc/transactions",
+      url: Cypress.env("giftCardServiceEndpoint") + "/gc/transactions",
     }).then((response: any) => {
       expect(response.status).to.eq(200);
       expect(response.body.ResponseMessage).to.eq("Transaction successful.");

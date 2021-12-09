@@ -234,7 +234,6 @@ Cypress.Commands.add('payTheOrder', (testData) => {
           digitalPaymentRequest.payments = payments
           cy.log('giftcardPaymentInstrumentId: ' + giftcardPaymentInstrumentId)
           cy.log('payments: ' + JSON.stringify(payments))
-          // digitalPaymentRequest.payments[0].amount = checkoutResponse.Model.Order.BalanceToPay
           cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
           cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
         })

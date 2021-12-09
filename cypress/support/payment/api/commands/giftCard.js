@@ -1,5 +1,5 @@
 import giftCardDetails from '../../../../fixtures/payment/giftCard.json'
-import "../../../../support/gifting/api/commands/giftingService";
+import "../../../giftCardService/api/commands/giftCardService";
 
 Cypress.Commands.add('addGiftCardToAccount', (cardRequest) => {
   cy.request({
