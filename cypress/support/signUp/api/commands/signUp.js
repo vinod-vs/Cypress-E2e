@@ -11,8 +11,10 @@ Cypress.Commands.add('signUpViaApi', (userInfo) => {
   })
 })
 
-Cypress.Commands.add('signUpViaApiWith2FA', (userInfo) => {
+Cypress.Commands.add('signUpViaApiWith2FA', (userInfo) => { 
   userInfo.enableEmailVerificationFE = true
+  userInfo.hasOptSent=null
+  userInfo.oneTimePin=null
   cy.signUpViaApi(userInfo).then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('ShopperId', 0)
@@ -38,7 +40,7 @@ Cypress.Commands.add('setSignUpDetails', () => {
   signUpDetails.idLikeToReceiveEmailsAboutProductsAndServices = true
   cy.getDOB('personal').then((value)=> {
     signUpDetails.dateOfBirth = value
-  })
+  })  
 
   return cy.wrap(signUpDetails)  
 })
