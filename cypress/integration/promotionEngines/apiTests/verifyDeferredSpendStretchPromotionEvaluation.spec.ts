@@ -20,7 +20,6 @@ TestFilter(['B2C','PES','API'], () => {
     beforeEach(()=>{
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
-        expect(response).to.have.property('LoginResult', 'Success')
         cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
