@@ -112,3 +112,4 @@ For your email related test, you might want
         expect(email.subject).to.equal('Reset your password')
     })
 More info: [How to test email and SMS with Cypress] (https://mailosaur.com/docs/frameworks-and-tools/cypress/)
+
