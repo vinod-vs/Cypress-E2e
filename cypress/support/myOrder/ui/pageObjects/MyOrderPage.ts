@@ -20,7 +20,7 @@ export class MyOrderPage {
     }
 
     getMyOrderNumber(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.order > span.details-content').should('contain', orderId)
+        return this.getMyOrdersListContainerItems(orderId).should('be.visible').find('div.details-container.order > span.details-content').should('contain', orderId)
     }
 
     getOrderDateString(orderId: string, orderDate: string) {
