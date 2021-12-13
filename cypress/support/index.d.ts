@@ -81,6 +81,8 @@ declare namespace Cypress {
     completeOrderAmendment(orderId: number, searchTerm: string): any;
     getUnavailableStockCodes(): any;
     addGiftingDetails(message: string, sender: string, recipient: string): any;
+    setPackagingOption(option: string): any;
+    getPackagingOptions(): any;
     postOneTimePasswordRequest(oneTimePassword: string): any;
     validate2FALoginStatus(userCredentialLoginResponse: any, otpValidationSwitch: boolean, otpCode: string): any;
     loginViaApiWith2FA(shopper: any, otpValidationSwitch: boolean, otpCode: string): any;
