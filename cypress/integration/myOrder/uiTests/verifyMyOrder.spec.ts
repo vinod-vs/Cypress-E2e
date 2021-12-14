@@ -57,7 +57,7 @@ TestFilter(['B2C', 'UI'], () => {
         const deliverydate = dayjs(orderDeliveryDate).format('D MMMM')
 
       // login via UI into same account
-        cy.loginViaUi(shopper[1])// try without this
+        cy.loginViaUi(shopper[1], false)
         cy.wait(15000)
       //Navigate to My order page through My account  
         onMyOrderPage.myAccountActions()  
