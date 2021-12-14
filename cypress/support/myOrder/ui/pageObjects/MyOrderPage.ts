@@ -20,27 +20,27 @@ export class MyOrderPage {
     }
 
     getMyOrderNumber(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).should('be.visible').find('div.details-container.order > span.details-content').should('contain', orderId)
+        return this.getMyOrdersListContainerItems(orderId).should('be.visible').find('div.details-container.order > span.details-content')
     }
 
-    getOrderDateString(orderId: string, orderDate: string) {
-       return this.getMyOrdersContainerHeader(orderId).find('section.date > span.content').should('contain.text', orderDate)
+    getOrderDateString(orderId: string) {
+       return this.getMyOrdersContainerHeader(orderId).find('section.date > span.content')
     }
 
-    getOrderTotalString(orderId: string, orderValue: any) {
-        return this.getMyOrdersContainerHeader(orderId).find('section.total > span.content').should('contain.text', orderValue)
+    getOrderTotalString(orderId: string) {
+        return this.getMyOrdersContainerHeader(orderId).find('section.total > span.content')
     }
 
-    getDeliveryDateString(orderId: string, deliveryDate: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.delivery > span.details-content').should('contain.text', deliveryDate)
+    getDeliveryDateString(orderId: string) {
+        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.delivery > span.details-content')
     }
 
     getTrackMyOrderLink(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.auto_my-orders-tmo-link.button').should('contain.text', ' Track my order ') 
+        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.auto_my-orders-tmo-link.button')
     }
 
     getViewOrderDetailsLink(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.order-links.view-order-link').should('contain.text', 'View order details')
+        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.order-links.view-order-link')
     }
     // Actions - Click on the My account Button and then My orders Link
 

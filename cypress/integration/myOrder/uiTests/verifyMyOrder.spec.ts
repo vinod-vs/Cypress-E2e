@@ -23,7 +23,7 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/login/ui/commands/login'
 
-TestFilter(['B2C', 'UI', 'MyOrder', 'P1'], () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
     const searchTerm = 'Kitchen'
     const trolleyThreshold = 50.00
     const platform = Cypress.env('b2cPlatform')
@@ -43,7 +43,6 @@ TestFilter(['B2C', 'UI', 'MyOrder', 'P1'], () => {
       // Place an order via api
         cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
         cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
-        deliveryOptions.CanLeaveUnattended = true
         cy.setDeliveryOptionsViaApi(deliveryOptions)
         
         cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
@@ -62,12 +61,12 @@ TestFilter(['B2C', 'UI', 'MyOrder', 'P1'], () => {
       //Navigate to My order page through My account  
         onMyOrderPage.myAccountActions()  
       //Verify the Order details on My Orders page is same as the saved order details 
-        onMyOrderPage.getMyOrderNumber(orderId)
-        onMyOrderPage.getOrderTotalString(orderId, orderTotal) 
-        onMyOrderPage.getOrderDateString(orderId, createdDate)
-        onMyOrderPage.getDeliveryDateString(orderId, deliverydate)
-        onMyOrderPage.getTrackMyOrderLink(orderId)
-        onMyOrderPage.getViewOrderDetailsLink(orderId)
+        onMyOrderPage.getMyOrderNumber(orderId).should('contain', orderId)
+        onMyOrderPage.getOrderTotalString(orderId).should('contain.text', orderTotal)
+        onMyOrderPage.getOrderDateString(orderId).should('contain.text', createdDate)
+        onMyOrderPage.getDeliveryDateString(orderId).should('contain.text', deliverydate)
+        onMyOrderPage.getTrackMyOrderLink(orderId).should('contain.text', ' Track my order ') 
+        onMyOrderPage.getViewOrderDetailsLink(orderId).should('contain.text', 'View order details')
 
         })
 
