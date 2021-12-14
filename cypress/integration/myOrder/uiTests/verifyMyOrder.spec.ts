@@ -23,7 +23,7 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/login/ui/commands/login'
 
-TestFilter(['B2C', 'UI'], () => {
+TestFilter(['B2C', 'UI', 'MyOrder', 'P1'], () => {
     const searchTerm = 'Kitchen'
     const trolleyThreshold = 50.00
     const platform = Cypress.env('b2cPlatform')
@@ -57,7 +57,7 @@ TestFilter(['B2C', 'UI'], () => {
         const deliverydate = dayjs(orderDeliveryDate).format('D MMMM')
 
       // login via UI into same account
-        cy.loginViaUi(shopper[1])// try without this
+        cy.loginViaUi(shopper[1])
         cy.wait(15000)
       //Navigate to My order page through My account  
         onMyOrderPage.myAccountActions()  
