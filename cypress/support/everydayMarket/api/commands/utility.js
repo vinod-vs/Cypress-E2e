@@ -304,7 +304,7 @@ Cypress.Commands.add('payByCreditCard', (checkBalanceToPay) => {
   })
   cy.getExpectedCCCardDetails()
   cy.get('@creditCardToUse').then((creditCardToUse) => {
-    cy.creditcardPayment(creditCardToUse, creditcardSessionHeader).then((response) => {
+    cy.creditcardTokenisation(creditCardToUse, creditcardSessionHeader).then((response) => {
       cy.log('creditcardPaymentResponse: ' + JSON.stringify(response))
       expect(response.status.responseText).to.be.eqls('ACCEPTED')
       cy.getPaymentInstrumentId(response)
