@@ -153,7 +153,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
 Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, testData) => {
   // Login
   cy.loginViaApi(shopperDetails).then((response) => {
-    //cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+    // cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
   })
 
   // Set fulfilment using the new /windows endpoint
@@ -211,10 +211,33 @@ Cypress.Commands.add('payTheOrder', (testData) => {
       cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
       break
     case paymentType.CREDIT_CARD_ONLY:
-      cy.payByCreditCard()
+      cy.payByCreditCard(true)
       break
     case paymentType.CREDIT_CARD_PLUS_REWARDS:
       // TODO
+      break
+    case paymentType.CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD:
+      // Redeem $10 from rewards
+      cy.redeemRewardsDollars(10)
+      // Checkout
+      cy.navigateToCheckout().as('checkoutResponse').then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      })
+      // Get gift card paymentInstrumentId
+      cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(10)
+      // Pay with paypal and GC of $10
+      cy.get('@checkoutResponse').then((checkoutResponse) => {
+        cy.get('@giftcardPaymentInstrumentId').then((giftcardPaymentInstrumentId) => {
+          // payment[0] is for CC. It's paymentInstrumentId is set by the command payByCreditCard at payments[0] position.
+          // payment[1] is for GC
+          const payments = [{ amount: checkoutResponse.Model.Order.BalanceToPay - 10, paymentInstrumentId: 0, stepUpToken: 'tokenise-stepup-token' }, { amount: 10, paymentInstrumentId: giftcardPaymentInstrumentId, stepUpToken: 'tokenise-stepup-token' }]
+          digitalPaymentRequest.payments = payments
+          cy.log('giftcardPaymentInstrumentId: ' + giftcardPaymentInstrumentId)
+          cy.log('payments: ' + JSON.stringify(payments))
+          cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
+          cy.payByCreditCard(false)
+        })
+      })
       break
     case paymentType.PAYPAL_PLUS_REWARDS_PLUS_GIFTCARD:
       // Redeem $10 from rewards
@@ -240,7 +263,7 @@ Cypress.Commands.add('payTheOrder', (testData) => {
       })
       break
     default: // default is CREDIT_CARD_ONLY
-      cy.payByCreditCard()
+      cy.payByCreditCard(true)
       break
   }
 
@@ -264,12 +287,14 @@ Cypress.Commands.add('getPaymentInstrumentId', (creditcardPaymentResponse) => {
   cy.wrap(paymentInstrumentId).as('paymentInstrumentId')
 })
 
-Cypress.Commands.add('payByCreditCard', () => {
+Cypress.Commands.add('payByCreditCard', (checkBalanceToPay) => {
   // Checkout
-  cy.navigateToCheckout().then((response) => {
-    expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-    digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
-  })
+  if (checkBalanceToPay) {
+    cy.navigateToCheckout().then((response) => {
+      expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      digitalPaymentRequest.payments[0].amount = response.Model.Order.BalanceToPay
+    })
+  }
 
   // Pay with CC
   cy.log('Using default PaymentType: CREDIT_CARD_ONLY')
@@ -279,7 +304,7 @@ Cypress.Commands.add('payByCreditCard', () => {
   })
   cy.getExpectedCCCardDetails()
   cy.get('@creditCardToUse').then((creditCardToUse) => {
-    cy.creditcardTokenisation(creditCardToUse, creditcardSessionHeader).then((response) => {
+    cy.creditcardPayment(creditCardToUse, creditcardSessionHeader).then((response) => {
       cy.log('creditcardPaymentResponse: ' + JSON.stringify(response))
       expect(response.status.responseText).to.be.eqls('ACCEPTED')
       cy.getPaymentInstrumentId(response)
@@ -341,8 +366,8 @@ Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchRes
   let mpStockCode = 0
   for (y in response.Products) {
     if (response.Products[y].Products[0].Price !== null &&
-      response.Products[y].Products[0].IsInStock === true &&
-      response.Products[y].Products[0].IsMarketProduct === true) {
+            response.Products[y].Products[0].IsInStock === true &&
+            response.Products[y].Products[0].IsMarketProduct === true) {
       mpStockCode = response.Products[y].Products[0].Stockcode
       cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
       // CUP

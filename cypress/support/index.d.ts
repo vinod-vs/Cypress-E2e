@@ -100,5 +100,7 @@ declare namespace Cypress {
     getDigitalPaymentInstruments(): any;
     addCreditCardViaApi(creditCardDetails: Object): any;
     removePaymentInstrument(paymentInstrumentId: string | Cypress.Chainable<string>): any;
+    verifySelfServiceReturnOnSM(returnType: string): any;
+    clickEDMTab(): any;
   }
 }
