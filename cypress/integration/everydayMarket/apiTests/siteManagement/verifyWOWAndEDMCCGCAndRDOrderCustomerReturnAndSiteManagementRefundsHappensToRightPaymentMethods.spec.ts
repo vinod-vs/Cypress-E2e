@@ -23,14 +23,14 @@ import * as lib from "../../../../support/everydayMarket/api/commands/commonHelp
 import { onOrderManagement } from "../../../../support/siteManagement/ui/pageObjects/OrderManagement";
 
 TestFilter(["EDM", "EDM-HYBRID"], () => {
-  describe("[API]  RP-5112 - EM | SM | Refunds | Verify refunds and goodwill from site management happens to the right payment mode for market orders placed with PP + GC + RD ", () => {
+  describe("[API]  RP-5045 - EM | SM | Customer Self Service Return and CHUB Refund Mix scenarios for CC + RD + GC order", () => {
     before(() => {
       cy.clearCookies({ domain: null });
       cy.clearLocalStorage({ domain: null });
     });
 
-    it("[API]  RP-5112 - EM | SM | Refunds | Verify refunds and goodwill from site management happens to the right payment mode for market orders placed with PP + GC + RD ", () => {
-      const testData = tests.GenericWOWPlusEDMPaypalRDAndGCPaymentTestData;
+    it("[API]  RP-5045 - EM | SM | Customer Self Service Return and CHUB Refund Mix scenarios for CC + RD + GC order", () => {
+      const testData = tests.GenericWOWPlusEDMCCRDAndGCPaymentTestData;
       let orderId: any;
       let orderReference: any;
       let edmOrderId: any;
@@ -39,8 +39,19 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber;
       let refundReason = "Damaged Item";
       let refundComment = "Automation Refund Comment";
+      let returnType = "Self-service returns";
       const goodwillAmount = 15;
       const shippingFeeGoodwillAmount = 12;
+      let returnRequestLineItem = [
+        {
+          stockCode: 0,
+          quantity: 1,
+          amount: 0,
+          reason: "Item is faulty",
+          weight: 12,
+          notes: "Customer Return from EM Test Automation_Full_Return",
+        },
+      ];
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
@@ -149,13 +160,15 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             testData.items[0].sellerName
           ).as("invoicesDispatched");
 
-          // After dispatch, Invoke the order api and verify the projection content is updated acordingly
+          // Initiate customer return for 1 quantity
           cy.get("@invoicesDispatched").then((response) => {
+            //Checking the invoice status to be Shipped so that the order is updated as dispatched before I initiate a customer return.
+            //If tried to customer return before, it fails saying 'Items must be dispatched before creating return'
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
               shopperId,
               orderId,
               {
-                function: function (response) {
+                function: function (response: any) {
                   if (response.body.invoices[0].wowStatus !== "Shipped") {
                     cy.log(
                       "wowStatus was " +
@@ -172,170 +185,408 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                 retries: Cypress.env("marketApiRetryCount"),
                 timeout: Cypress.env("marketApiTimeout"),
               }
+            ).then((response) => {
+              //Initiate customer return for 1 quantity
+              returnRequestLineItem[0].stockCode = testData.items[0].stockCode;
+              returnRequestLineItem[0].amount = testData.items[0].pricePerItem;
+              cy.log(returnRequestLineItem);
+              cy.customerReturn(
+                testData.edmOrderId,
+                testData.orderReference,
+                returnRequestLineItem
+              ).as("customerReturn");
+            });
+          });
+
+          // After customer return, Invoke the order api to get the encodedMarketRefundedId for marking the
+          //Item as returned in MP
+          cy.get("@customerReturn").then((response) => {
+            cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
+              shopperId,
+              orderId,
+              {
+                function: function (response) {
+                  if (
+                    response.body.invoices[0].wowStatus !== "Shipped" ||
+                    response.body.invoices[0].refunds.length === 0
+                  ) {
+                    cy.log(
+                      "wowStatus was " +
+                        response.body.invoices[0].wowStatus +
+                        " instead of Shipped and refunds length was " +
+                        response.body.invoices[0].refunds.length
+                    );
+                    throw new Error(
+                      "wowStatus was " +
+                        response.body.invoices[0].wowStatus +
+                        " instead of Shipped and refunds length was " +
+                        response.body.invoices[0].refunds.length
+                    );
+                  }
+                },
+                retries: Cypress.env("marketApiRetryCount"),
+                timeout: Cypress.env("marketApiTimeout"),
+              }
             )
               .as("finalProjection")
               .then((response) => {
-                // Order details
-                lib.verifyCommonOrderDetails(response, testData, shopperId);
-                // Seller details
-                expect(response.invoices[0].seller.sellerId).to.not.be.null;
-                expect(response.invoices[0].seller.sellerName).to.be.equal(
-                  testData.items[0].sellerName
-                );
-                // Invoice details
-                expect(response.invoices[0].invoiceStatus).to.be.equal("SENT");
-                expect(response.invoices[0].wowStatus).to.be.equal("Shipped");
-                expect(response.invoices[0].wowId).to.not.be.null;
-                expect(response.invoices[0].shipments.length).to.be.equal(1);
-                expect(response.invoices[0].lineItems.length).to.be.equal(1);
-                expect(response.invoices[0].legacyId).to.not.be.null;
-                expect(response.invoices[0].legacyIdFormatted).to.not.be.null;
-                expect(response.invoices[0].invoiceTotal).to.be.greaterThan(0);
-                expect(response.invoices[0].updatedTimeStampUtc).to.not.be.null;
-                expect(response.invoices[0].refunds.length).to.be.equal(0);
-                expect(response.invoices[0].orderTrackingStatus).to.be.equal(
-                  "Shipped"
-                );
-                expect(response.invoices[0].pdfLink).to.not.be.null;
-                expect(response.invoices[0].legacyIdFormatted).to.be.equal(
-                  testData.edmOrderId
-                );
-                // Line item details
-                expect(response.invoices[0].lineItems[0].wowId).to.not.be.null;
-                expect(response.invoices[0].lineItems[0].lineItemId).to.not.be
-                  .null;
-                expect(response.invoices[0].lineItems[0].legacyId).to.not.be
-                  .null;
-                expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(
-                  Number(testData.items[0].stockCode)
-                );
-                expect(response.invoices[0].lineItems[0].quantity).to.be.equal(
-                  Number(testData.items[0].quantity)
-                );
-                expect(
-                  response.invoices[0].lineItems[0].quantityPlaced
-                ).to.be.equal(Number(testData.items[0].quantity));
-                expect(
-                  response.invoices[0].lineItems[0].refundableQuantity
-                ).to.be.equal(Number(testData.items[0].quantity));
-                expect(
-                  response.invoices[0].lineItems[0].salePrice
-                ).to.be.greaterThan(0);
-                expect(
-                  response.invoices[0].lineItems[0].totalAmount
-                ).to.be.greaterThan(0);
-                expect(response.invoices[0].lineItems[0].variantId).to.not.be
-                  .null;
-                expect(response.invoices[0].lineItems[0].status).to.be.equal(
-                  "ALLOCATED"
-                );
-                // Shipments
-                expect(response.invoices[0].shipments.length).to.be.equal(1);
-                expect(response.invoices[0].shipments[0].carrier).to.be.equal(
-                  testData.carrier
-                );
-                expect(response.invoices[0].shipments[0].shipmentItemId).to.not
-                  .be.null;
-                expect(response.invoices[0].shipments[0].trackingLink).to.not.be
-                  .null;
-                expect(
-                  response.invoices[0].shipments[0].trackingNumber
-                ).to.be.equal(testData.trackingNumber);
-                expect(response.invoices[0].shipments[0].dispatchedAtUtc).to.not
-                  .be.null;
-                expect(
-                  response.invoices[0].shipments[0].shippedItems.length
-                ).to.be.equal(1);
-                expect(
-                  response.invoices[0].shipments[0].shippedItems[0].variantId
-                ).to.be.equal(response.invoices[0].lineItems[0].variantId);
-                expect(
-                  response.invoices[0].shipments[0].shippedItems[0].stockCode
-                ).to.be.equal(Number(testData.items[0].stockCode));
-                expect(
-                  response.invoices[0].shipments[0].shippedItems[0].quantity
-                ).to.be.equal(Number(testData.items[0].quantity));
-                // Rewards Details
-                // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
-                expect(response.invoices[0].lineItems[0].reward.offerId).to.not
-                  .be.null;
-                expect(
-                  response.invoices[0].lineItems[0].reward
-                    .deferredDiscountAmount
-                ).to.not.be.null;
-                expect(
-                  response.invoices[0].lineItems[0].reward.quantity
-                ).to.be.equal(Number(testData.items[0].quantity));
-
-                // After dispatch, Invoke the events api and verify the events are updated acordingly
-                cy.orderEventsApiWithRetry(orderReference, {
-                  function: function (response) {
-                    if (
-                      !response.body.data.some(
-                        (element) =>
-                          element.domainEvent === "MarketOrderShipmentCreate"
-                      ) ||
-                      !response.body.data.some(
-                        (element) =>
-                          element.domainEvent === "MarketOrderDispatched"
-                      ) ||
-                      !response.body.data.some(
-                        (element) =>
-                          element.domainEvent === "MarketRewardsCredited"
-                      )
-                    ) {
-                      cy.log(
-                        "Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present"
-                      );
-                      throw new Error(
-                        "Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present"
-                      );
-                    }
-                  },
-                  retries: Cypress.env("marketApiRetryCount"),
-                  timeout: Cypress.env("marketApiTimeout"),
-                }).then((response) => {
-                  // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                  lib.verifyEventDetails(
-                    response,
-                    "MarketOrderShipmentCreate",
-                    testData,
-                    shopperId,
-                    1
-                  );
-                  // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                  lib.verifyEventDetails(
-                    response,
-                    "MarketOrderDispatched",
-                    testData,
-                    shopperId,
-                    1
-                  );
-                  // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                  lib.verifyEventDetails(
-                    response,
-                    "MarketRewardsCredited",
-                    testData,
-                    shopperId,
-                    1
-                  );
-                });
+                //Mark the above customer return as returned in MP so that the refund is processed
+                const encodedMarketRefundedId =
+                  response.invoices[0].returns[0].marketRefundId;
+                cy.refundRequestReturn(encodedMarketRefundedId)
+                  .as("markedAsReturned")
+                  .then((response) => {
+                    expect(
+                      response.data.refundRequestReturn.refundRequest.status
+                    ).to.be.equal("RETURNED");
+                  });
               });
-            // Invoke OQS TMO api and validate it against the projection
-            lib.verifyOQSOrderStatus(
-              testData.orderId,
-              "Received",
-              false,
-              testData
-            );
           });
         }
       );
+
+      //Once the customer return is marked as returned in MP, verify the projection and events
+      cy.get("@markedAsReturned").then((response) => {
+        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+          function: function (response) {
+            if (
+              response.body.invoices[0].wowStatus !== "Shipped" ||
+              response.body.invoices[0].refunds[0].status !== "Returned" ||
+              response.body.invoices[0].invoiceStatus !== "REFUNDED"
+            ) {
+              cy.log(
+                "wowStatus was " +
+                  response.body.invoices[0].wowStatus +
+                  " instead of Shipped and refunds status was " +
+                  response.body.invoices[0].refunds[0].status +
+                  " instead of Returned and invoiceStatus was " +
+                  response.body.invoices[0].invoiceStatus +
+                  " instead of REFUNDED"
+              );
+              throw new Error(
+                "wowStatus was " +
+                  response.body.invoices[0].wowStatus +
+                  " instead of Shipped and refunds status was " +
+                  response.body.invoices[0].refunds[0].status +
+                  " instead of Returned and invoiceStatus was " +
+                  response.body.invoices[0].invoiceStatus +
+                  " instead of REFUNDED"
+              );
+            }
+          },
+          retries: Cypress.env("marketApiRetryCount"),
+          timeout: Cypress.env("marketApiTimeout"),
+        })
+          .as("finalProjection")
+          .then((response) => {
+            // Order details
+            lib.verifyCommonOrderDetails(response, testData, shopperId);
+            // Seller details
+            expect(response.invoices[0].seller.sellerId).to.not.be.null;
+            expect(response.invoices[0].seller.sellerName).to.be.equal(
+              testData.items[0].sellerName
+            );
+            // Invoice details
+            expect(response.invoices[0].invoiceStatus).to.be.equal("REFUNDED");
+            expect(response.invoices[0].wowStatus).to.be.equal("Shipped");
+            expect(response.invoices[0].wowId).to.not.be.null;
+            expect(response.invoices[0].shipments.length).to.be.equal(1);
+            expect(response.invoices[0].lineItems.length).to.be.equal(1);
+            expect(response.invoices[0].legacyId).to.not.be.null;
+            expect(response.invoices[0].legacyIdFormatted).to.not.be.null;
+            expect(response.invoices[0].invoiceTotal).to.be.greaterThan(0);
+            expect(response.invoices[0].updatedTimeStampUtc).to.not.be.null;
+            expect(response.invoices[0].refunds.length).to.be.equal(1);
+            expect(response.invoices[0].orderTrackingStatus).to.be.equal(
+              "Cancelled"
+            );
+            expect(response.invoices[0].pdfLink).to.not.be.null;
+            expect(response.invoices[0].legacyIdFormatted).to.be.equal(
+              testData.edmOrderId
+            );
+            // Line item details
+            expect(response.invoices[0].lineItems[0].wowId).to.not.be.null;
+            expect(response.invoices[0].lineItems[0].lineItemId).to.not.be.null;
+            expect(response.invoices[0].lineItems[0].legacyId).to.not.be.null;
+            expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(
+              Number(testData.items[0].stockCode)
+            );
+            expect(response.invoices[0].lineItems[0].quantity).to.be.equal(
+              Number(testData.items[0].quantity)
+            );
+            expect(
+              response.invoices[0].lineItems[0].quantityPlaced
+            ).to.be.equal(Number(testData.items[0].quantity));
+            expect(
+              response.invoices[0].lineItems[0].refundableQuantity
+            ).to.be.equal(1);
+            expect(
+              response.invoices[0].lineItems[0].salePrice
+            ).to.be.greaterThan(0);
+            expect(
+              response.invoices[0].lineItems[0].totalAmount
+            ).to.be.greaterThan(0);
+            expect(response.invoices[0].lineItems[0].variantId).to.not.be.null;
+            expect(response.invoices[0].lineItems[0].status).to.be.equal(
+              "REFUNDED"
+            );
+            // Shipments
+            expect(response.invoices[0].shipments.length).to.be.equal(1);
+            expect(response.invoices[0].shipments[0].carrier).to.be.equal(
+              testData.carrier
+            );
+            expect(response.invoices[0].shipments[0].shipmentItemId).to.not.be
+              .null;
+            expect(response.invoices[0].shipments[0].trackingLink).to.not.be
+              .null;
+            expect(
+              response.invoices[0].shipments[0].trackingNumber
+            ).to.be.equal(testData.trackingNumber);
+            expect(response.invoices[0].shipments[0].dispatchedAtUtc).to.not.be
+              .null;
+            expect(
+              response.invoices[0].shipments[0].shippedItems.length
+            ).to.be.equal(1);
+            expect(
+              response.invoices[0].shipments[0].shippedItems[0].variantId
+            ).to.be.equal(response.invoices[0].lineItems[0].variantId);
+            expect(
+              response.invoices[0].shipments[0].shippedItems[0].stockCode
+            ).to.be.equal(Number(testData.items[0].stockCode));
+            expect(
+              response.invoices[0].shipments[0].shippedItems[0].quantity
+            ).to.be.equal(Number(testData.items[0].quantity));
+            // Rewards Details
+            expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be
+              .null;
+            expect(
+              response.invoices[0].lineItems[0].reward.deferredDiscountAmount
+            ).to.not.be.null;
+            expect(
+              response.invoices[0].lineItems[0].reward.quantity
+            ).to.be.equal(Number(testData.items[0].quantity));
+
+            // Refund
+            expect(response.invoices[0].refunds[0].id).to.not.be.null;
+            expect(response.invoices[0].refunds[0].status).to.be.equal(
+              "Returned"
+            );
+            expect(response.invoices[0].refunds[0].refundAmount).to.be.equal(
+              response.invoices[0].lineItems[0].salePrice
+            );
+            expect(
+              response.invoices[0].refunds[0].recoveredAmount
+            ).to.be.greaterThan(0);
+            expect(response.invoices[0].refunds[0].createdUtc).to.not.be.null;
+            expect(response.invoices[0].refunds[0].updatedUtc).to.not.be.null;
+            expect(response.invoices[0].refunds[0].initiatedBy).to.be.equal(
+              "BUYER"
+            );
+
+            // Refund-> Notes verification
+            expect(response.invoices[0].refunds[0].notes.length).to.be.equal(2);
+            expect(response.invoices[0].refunds[0].notes[0].note).to.be.equal(
+              "Automation refundRequestReturn note: I don't want this"
+            );
+            expect(response.invoices[0].refunds[0].notes[1].note).to.be.equal(
+              "Auto-refund cancellation"
+            );
+            // Refund-> refundItems verification
+            expect(response.invoices[0].refunds[0].refundItems[0].id).to.not.be
+              .null;
+            expect(response.invoices[0].refunds[0].refundItems[0].legacyId).to
+              .not.be.null;
+            expect(response.invoices[0].refunds[0].refundItems[0].reason).equal(
+              returnRequestLineItem[0].reason
+            );
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].quantity
+            ).equal(1);
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].amount
+            ).to.be.greaterThan(0);
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].amount
+            ).to.be.equal(response.invoices[0].lineItems[0].salePrice);
+            // RefundItems ->lineitems
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem.stockCode
+            ).to.be.equal(Number(testData.items[0].stockCode));
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem.lineItemId
+            ).to.not.be.null;
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem
+                .refundableQuantity
+            ).to.be.equal(0);
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem
+                .totalAmount
+            ).to.be.equal(0);
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem
+                .quantityPlaced
+            ).equal(Number(testData.items[0].quantity));
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem.quantity
+            ).equal(Number(testData.items[0].quantity));
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem
+                .totalAmount
+            ).to.be.equal(0);
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem.variantId
+            ).to.not.be.null;
+            expect(
+              response.invoices[0].refunds[0].refundItems[0].lineItem
+                .variantLegacyId
+            ).to.not.be.null;
+
+            //returns
+            expect(response.invoices[0].returns.length).to.be.equal(1);
+            expect(response.invoices[0].returns[0].returnId).to.not.be.null;
+            expect(response.invoices[0].returns[0].marketRefundId).to.not.be
+              .null;
+            expect(response.invoices[0].returns[0].consignmentId).to.not.be
+              .null;
+            expect(response.invoices[0].returns[0].labels.length).to.be.equal(
+              1
+            );
+            expect(response.invoices[0].returns[0].labels[0].url).to.not.be
+              .null;
+            expect(response.invoices[0].returns[0].refundAmount).to.be.equal(
+              response.invoices[0].lineItems[0].salePrice
+            );
+            expect(
+              response.invoices[0].returns[0].returnItems.length
+            ).to.be.equal(1);
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems.length
+            ).to.be.equal(1);
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems[0]
+                .quantity
+            ).to.be.equal(1);
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems[0]
+                .stockCode
+            ).to.be.equal(Number(testData.items[0].stockCode));
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems[0].amount
+            ).to.be.equal(response.invoices[0].lineItems[0].salePrice);
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems[0].reason
+            ).to.be.equal(returnRequestLineItem[0].reason);
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems[0].notes
+            ).to.be.equal(returnRequestLineItem[0].notes);
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems[0]
+                .trackingId
+            ).to.not.be.null;
+            expect(
+              response.invoices[0].returns[0].returnItems[0].lineItems[0]
+                .consignmentId
+            ).to.not.be.null;
+
+            // Verify the events
+            cy.orderEventsApiWithRetry(orderReference, {
+              function: function (response) {
+                if (
+                  !response.body.data.some(
+                    (element) =>
+                      element.domainEvent === "MarketOrderShipmentCreate"
+                  ) ||
+                  !response.body.data.some(
+                    (element) => element.domainEvent === "MarketOrderDispatched"
+                  ) ||
+                  !response.body.data.some(
+                    (element) => element.domainEvent === "MarketRewardsCredited"
+                  ) ||
+                  !response.body.data.some(
+                    (element) => element.domainEvent === "MarketReturnCreated"
+                  ) ||
+                  !response.body.data.some(
+                    (element) => element.domainEvent === "RefundRequestUpdate"
+                  ) ||
+                  !response.body.data.some(
+                    (element) => element.domainEvent === "RefundCompleted"
+                  ) ||
+                  !response.body.data.some(
+                    (element) => element.domainEvent === "MarketOrderRefund"
+                  )
+                ) {
+                  cy.log(
+                    "Expected MarketOrderShipmentCreate, MarketOrderDispatched, MarketRewardsCredited, MarketReturnCreated, RefundRequestUpdate, RefundCompleted, MarketOrderRefund were not present"
+                  );
+                  throw new Error(
+                    "Expected MarketOrderShipmentCreate, MarketOrderDispatched, MarketRewardsCredited, MarketReturnCreated, RefundRequestUpdate, RefundCompleted, MarketOrderRefund were not present"
+                  );
+                }
+              },
+              retries: Cypress.env("marketApiRetryCount"),
+              timeout: Cypress.env("marketApiTimeout"),
+            }).then((response) => {
+              lib.verifyEventDetails(
+                response,
+                "MarketOrderShipmentCreate",
+                testData,
+                shopperId,
+                1
+              );
+              lib.verifyEventDetails(
+                response,
+                "MarketOrderDispatched",
+                testData,
+                shopperId,
+                1
+              );
+              lib.verifyEventDetails(
+                response,
+                "MarketRewardsCredited",
+                testData,
+                shopperId,
+                1
+              );
+              lib.verifyEventDetails(
+                response,
+                "MarketReturnCreated",
+                testData,
+                shopperId,
+                1
+              );
+              lib.verifyEventDetails(
+                response,
+                "RefundRequestUpdate",
+                testData,
+                shopperId,
+                3
+              );
+              lib.verifyEventDetails(
+                response,
+                "RefundCompleted",
+                testData,
+                shopperId,
+                1
+              );
+              lib.verifyEventDetails(
+                response,
+                "MarketOrderRefund",
+                testData,
+                shopperId,
+                1
+              );
+            });
+          });
+        // Invoke OQS TMO api and validate it against the projection
+        lib.verifyOQSOrderStatus(testData.orderId, "Received", false, testData);
+      });
 
       //Login to SM and create a product refund. Add a good will too. Then verify the order details
       cy.get("@finalProjection").then((firstFinalProjection) => {
         cy.loginToSMAndSearchOrder(smLogins, orderId);
         cy.validateOrderDetailsOnSM(false);
+        cy.verifySelfServiceReturnOnSM(returnType)
         //Refund all 3 items with some goodwill
         cy.createARefund(
           firstFinalProjection.invoices[0].lineItems[0].stockCode,
@@ -344,32 +595,27 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
           1,
           goodwillAmount
         );
-        //Search for the order again and refund the shipping fee along with some goodwill
-        cy.searchAnOrderOnSM(orderId);
-        //Switch to EDM TAB
-        cy.clickEDMTab()
-        cy.refundShippingFee(
-          refundReason,
-          refundComment,
-          shippingFeeGoodwillAmount
-        );
+        cy.wait(Cypress.config("fiveSecondWait"));
 
-        //Verify the refund details are updated in the projection and events
+        //Verify the CHUB refund details are updated in the projection and events
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
           function: function (response) {
             if (
               response.body.invoices[0].invoiceStatus !== "REFUNDED" ||
-              response.body.invoices[0].lineItems[0].status !== "REFUNDED"
+              response.body.invoices[0].lineItems[0].status !== "REFUNDED" ||
+              response.body.invoices[0].refunds.length === 1
             ) {
               cy.log(
                 "invoiceStatus was " +
                   response.body.invoices[0].invoiceStatus +
-                  " instead of REFUNDED"
+                  " instead of REFUNDED and refunds length was " +
+                  response.body.invoices[0].refunds.length
               );
               throw new Error(
                 "invoiceStatus was " +
                   response.body.invoices[0].invoiceStatus +
-                  " instead of REFUNDED"
+                  " instead of REFUNDED and refunds length was " +
+                  response.body.invoices[0].refunds.length
               );
             }
           },
@@ -411,7 +657,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             expect(refundedProjection.invoices[0].updatedTimeStampUtc).to.not.be
               .null;
             expect(refundedProjection.invoices[0].refunds.length).to.be.equal(
-              1
+              2
             );
             expect(
               refundedProjection.invoices[0].orderTrackingStatus
@@ -450,7 +696,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             ).to.be.equal(refundedProjection.invoices[0].lineItems[0].quantity);
             // Return
             expect(refundedProjection.invoices[0].returns.length).to.be.equal(
-              0
+              1
             );
             // Line item details
             expect(refundedProjection.invoices[0].lineItems[0].wowId).to.not.be
@@ -495,119 +741,114 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
               refundedProjection.invoices[0].lineItems[0].reward.quantity
             ).to.be.equal(Number(testData.items[0].quantity));
             // Refund
-            expect(refundedProjection.invoices[0].refunds[0].id).to.not.be.null;
+            expect(refundedProjection.invoices[0].refunds[1].id).to.not.be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].status
+              refundedProjection.invoices[0].refunds[1].status
             ).to.be.equal("ChubRefunded");
             expect(
-              refundedProjection.invoices[0].refunds[0].refundAmount
+              refundedProjection.invoices[0].refunds[1].refundAmount
             ).to.be.equal(
               refundedProjection.invoices[0].lineItems[0].salePrice
             );
             expect(
-              refundedProjection.invoices[0].refunds[0].cashAmount
+              refundedProjection.invoices[0].refunds[1].totalAmount
             ).to.be.equal(
               refundedProjection.invoices[0].lineItems[0].salePrice
             );
             expect(
-              refundedProjection.invoices[0].refunds[0].totalAmount
-            ).to.be.equal(
-              refundedProjection.invoices[0].lineItems[0].salePrice
-            );
-            expect(
-              refundedProjection.invoices[0].refunds[0].recoveredAmount
+              refundedProjection.invoices[0].refunds[1].recoveredAmount
             ).to.be.greaterThan(0);
-            expect(refundedProjection.invoices[0].refunds[0].createdUtc).to.not
+            expect(refundedProjection.invoices[0].refunds[1].createdUtc).to.not
               .be.null;
-            expect(refundedProjection.invoices[0].refunds[0].updatedUtc).to.not
+            expect(refundedProjection.invoices[0].refunds[1].updatedUtc).to.not
               .be.null;
-            expect(refundedProjection.invoices[0].refunds[0].refundedUtc).to.not
+            expect(refundedProjection.invoices[0].refunds[1].refundedUtc).to.not
               .be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].initiatedBy
+              refundedProjection.invoices[0].refunds[1].initiatedBy
             ).to.be.equal("ADMIN");
 
             // Refund-> Notes verification
-            expect(refundedProjection.invoices[0].refunds[0].notes[0].id).to.not
+            expect(refundedProjection.invoices[0].refunds[1].notes[0].id).to.not
               .be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].notes[0].note
+              refundedProjection.invoices[0].refunds[1].notes[0].note
             ).to.include("CHUB-auto-refund-create-WowRefundId=");
-            expect(refundedProjection.invoices[0].refunds[0].notes[0].timestamp)
+            expect(refundedProjection.invoices[0].refunds[1].notes[0].timestamp)
               .to.not.be.null;
-            expect(refundedProjection.invoices[0].refunds[0].notes[1].id).to.not
+            expect(refundedProjection.invoices[0].refunds[1].notes[1].id).to.not
               .be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].notes[1].note
+              refundedProjection.invoices[0].refunds[1].notes[1].note
             ).to.be.equal("Auto-return cancellation");
-            expect(refundedProjection.invoices[0].refunds[0].notes[1].timestamp)
+            expect(refundedProjection.invoices[0].refunds[1].notes[1].timestamp)
               .to.not.be.null;
-            expect(refundedProjection.invoices[0].refunds[0].notes[2].id).to.not
+            expect(refundedProjection.invoices[0].refunds[1].notes[2].id).to.not
               .be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].notes[2].note
+              refundedProjection.invoices[0].refunds[1].notes[2].note
             ).to.be.equal("Auto-refund cancellation");
-            expect(refundedProjection.invoices[0].refunds[0].notes[2].timestamp)
+            expect(refundedProjection.invoices[0].refunds[1].notes[2].timestamp)
               .to.not.be.null;
             // Refund-> refundItems verification
-            expect(refundedProjection.invoices[0].refunds[0].refundItems[0].id)
+            expect(refundedProjection.invoices[0].refunds[1].refundItems[0].id)
               .to.not.be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].legacyId
+              refundedProjection.invoices[0].refunds[1].refundItems[0].legacyId
             ).to.not.be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].reason
+              refundedProjection.invoices[0].refunds[1].refundItems[0].reason
             ).equal("Market Payment");
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].quantity
+              refundedProjection.invoices[0].refunds[1].refundItems[0].quantity
             ).equal(1);
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].amount
+              refundedProjection.invoices[0].refunds[1].refundItems[0].amount
             ).to.be.greaterThan(0);
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].amount
+              refundedProjection.invoices[0].refunds[1].refundItems[0].amount
             ).to.be.equal(
               refundedProjection.invoices[0].lineItems[0].salePrice
             );
             // RefundItems ->lineitems
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .stockCode
             ).to.be.equal(Number(testData.items[0].stockCode));
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .lineItemId
             ).to.not.be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .refundableQuantity
             ).to.be.equal(0);
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .totalAmount
             ).to.be.equal(0);
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .quantityPlaced
             ).equal(Number(testData.items[0].quantity));
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .quantity
             ).equal(Number(testData.items[0].quantity));
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .totalAmount
             ).to.be.equal(0);
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .variantId
             ).to.not.be.null;
             expect(
-              refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
+              refundedProjection.invoices[0].refunds[1].refundItems[0].lineItem
                 .variantLegacyId
             ).to.not.be.null;
 
-            // After dispatch, Invoke the events api and verify the events are updated acordingly
+            // Verify the event details
             cy.orderEventsApiWithRetry(orderReference, {
               function: function (response: any) {
                 if (
@@ -632,35 +873,32 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
               retries: Cypress.env("marketApiRetryCount"),
               timeout: Cypress.env("marketApiTimeout"),
             }).then((refundedEvents) => {
-              // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
               lib.verifyEventDetails(
                 refundedEvents,
                 "RefundCompleted",
                 testData,
                 shopperId,
-                1
+                2
               );
-              // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
               lib.verifyEventDetails(
                 refundedEvents,
                 "RefundRequestUpdate",
                 testData,
                 shopperId,
-                3
+                6
               );
-              // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
               lib.verifyEventDetails(
                 refundedEvents,
                 "MarketOrderRefund",
                 testData,
                 shopperId,
-                1
+                2
               );
             });
           });
       });
 
-      //Verify the refund details and OQS status after CHUB refund
+      //Verify the refund details and OQS status after Customer returns and CHUB refund
       cy.get("@newFinalProjection")
         .as("finalProjection")
         .then((newFinalProjection) => {
@@ -668,8 +906,8 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             // Verify refund details on trader my order details page
             lib.verifyRefundDetails(
               testData.orderId,
-              finalProjection.invoices[0].lineItems[0].salePrice,
-              finalProjection.shippingAmount
+              finalProjection.invoices[0].lineItems[0].salePrice * 2,
+              0
             );
 
             //Verify OQS details are updated after the refund from CHUB
@@ -703,14 +941,14 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             cy.get("@refundsDetails").then((refundsDetails: any) => {
               cy.log("Refund details: " + JSON.stringify(refundsDetails));
               expect(refundsDetails.refunds.length).to.be.equal(2);
-              //Verify the first refund of products and goodwill
+              //Verify the first refund because of customer return
               expect(refundsDetails.refunds[0].orderID).to.be.equal(
                 Number(testData.orderId)
               );
               expect(refundsDetails.refunds[0].shopperID).to.be.equal(
                 Number(shopperId)
               );
-              expect(refundsDetails.refunds[0].reasonID).to.be.equal(63);
+              expect(refundsDetails.refunds[0].reasonID).to.be.equal(61);
               expect(refundsDetails.refunds[0].status).to.be.equal("Completed");
               expect(refundsDetails.refunds[0].externalReference).to.be.equal(
                 testData.edmOrderId
@@ -718,17 +956,6 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
               expect(refundsDetails.refunds[0].type).to.be.equal("Payment");
               expect(refundsDetails.refunds[0].refundAmount).to.be.equal(
                 finalProjection.invoices[0].lineItems[0].salePrice
-              );
-              expect(refundsDetails.refunds[0].total).to.be.equal(
-                Number(
-                  Number.parseFloat(
-                    Number(finalProjection.invoices[0].lineItems[0].salePrice) +
-                      Number(goodwillAmount)
-                  ).toFixed(2)
-                )
-              );
-              expect(refundsDetails.refunds[0].goodwillAmount).to.be.equal(
-                goodwillAmount
               );
               //Verify the second refund of shipping fee and goodwill
               expect(refundsDetails.refunds[1].orderID).to.be.equal(
@@ -740,22 +967,22 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
               expect(refundsDetails.refunds[1].reasonID).to.be.equal(63);
               expect(refundsDetails.refunds[1].status).to.be.equal("Completed");
               expect(refundsDetails.refunds[1].externalReference).to.be.equal(
-                "EM0000000"
+                testData.edmOrderId
               );
               expect(refundsDetails.refunds[1].type).to.be.equal("Payment");
               expect(refundsDetails.refunds[1].refundAmount).to.be.equal(
-                finalProjection.shippingAmount
+                finalProjection.invoices[0].lineItems[0].salePrice
               );
               expect(refundsDetails.refunds[1].total).to.be.equal(
                 Number(
                   Number.parseFloat(
-                    Number(finalProjection.shippingAmount) +
-                      Number(shippingFeeGoodwillAmount)
+                    Number(finalProjection.invoices[0].lineItems[0].salePrice) +
+                      Number(goodwillAmount)
                   ).toFixed(2)
                 )
               );
               expect(refundsDetails.refunds[1].goodwillAmount).to.be.equal(
-                shippingFeeGoodwillAmount
+                goodwillAmount
               );
 
               //Verify the product refund and goodwill details
@@ -765,18 +992,18 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                   function: function (response: any) {
                     if (
                       !(
-                        response.body.results[0].type === "PayPal" &&
+                        response.body.results[0].type === "CreditCard" &&
                         response.body.results[0].status === "Processed"
                       )
                     ) {
                       cy.log(
-                        "First refund was not Paypal instead it was " +
+                        "First refund was not CreditCard instead it was " +
                           response.body.results[0].type +
                           " and status was not  Processed instead it was " +
                           response.body.results[0].status
                       );
                       throw new Error(
-                        "First refund was not Paypal instead it was " +
+                        "First refund was not CreditCard instead it was " +
                           response.body.results[0].type +
                           " and status was not  Processed instead it was " +
                           response.body.results[0].status
@@ -793,10 +1020,10 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                     "RefundPaymentsDetails: " +
                       JSON.stringify(refundPaymentsDetails)
                   );
-                  expect(refundPaymentsDetails.results.length).to.be.equal(2);
-                  //Verify product refund
+                  expect(refundPaymentsDetails.results.length).to.be.equal(1);
+                  //Verify customer product refund for the return initiated
                   expect(refundPaymentsDetails.results[0].type).to.be.equal(
-                    "PayPal"
+                    "CreditCard"
                   );
                   expect(refundPaymentsDetails.results[0].total).to.be.equal(
                     finalProjection.invoices[0].lineItems[0].salePrice
@@ -814,47 +1041,29 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                     .false;
                   expect(
                     refundPaymentsDetails.results[0].completedOrderPaymentType
-                  ).to.be.equal("PayPal");
-                  //Verify goodwill refund
-                  expect(refundPaymentsDetails.results[1].type).to.be.equal(
-                    "StoreCredit"
-                  );
-                  expect(refundPaymentsDetails.results[1].total).to.be.equal(
-                    goodwillAmount
-                  );
-                  expect(refundPaymentsDetails.results[1].status).to.be.equal(
-                    "Processed"
-                  );
-                  expect(
-                    refundPaymentsDetails.results[1].paymentSource
-                  ).to.be.equal("Goodwill");
-                  expect(refundPaymentsDetails.results[1].isStoreCredit).to.be
-                    .true;
-                  expect(
-                    refundPaymentsDetails.results[1].completedOrderPaymentType
-                  ).to.be.equal("StoreCredit");
+                  ).to.be.equal("CreditCard");
                 }
               );
 
-              //Verify the shipping refund and goodwill details
+              //Verify the CHUB refund and goodwill details
               cy.getAllRefundPaymentsByRefundIdWithRetry(
                 refundsDetails.refunds[1].id,
                 {
                   function: function (response: any) {
                     if (
                       !(
-                        response.body.results[0].type === "PayPal" &&
+                        response.body.results[0].type === "CreditCard" &&
                         response.body.results[0].status === "Processed"
                       )
                     ) {
                       cy.log(
-                        "First refund was not Paypal instead it was " +
+                        "First refund was not CreditCard instead it was " +
                           response.body.results[0].type +
                           " and status was not  Processed instead it was " +
                           response.body.results[0].status
                       );
                       throw new Error(
-                        "First refund was not Paypal instead it was " +
+                        "First refund was not CreditCard instead it was " +
                           response.body.results[0].type +
                           " and status was not  Processed instead it was " +
                           response.body.results[0].status
@@ -874,10 +1083,10 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                   expect(refundPaymentsDetails.results.length).to.be.equal(2);
                   //Verify product refund
                   expect(refundPaymentsDetails.results[0].type).to.be.equal(
-                    "PayPal"
+                    "CreditCard"
                   );
                   expect(refundPaymentsDetails.results[0].total).to.be.equal(
-                    finalProjection.shippingAmount
+                    finalProjection.invoices[0].lineItems[0].salePrice
                   );
                   expect(refundPaymentsDetails.results[0].status).to.be.equal(
                     "Processed"
@@ -892,13 +1101,13 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
                     .false;
                   expect(
                     refundPaymentsDetails.results[0].completedOrderPaymentType
-                  ).to.be.equal("PayPal");
+                  ).to.be.equal("CreditCard");
                   //Verify goodwill refund
                   expect(refundPaymentsDetails.results[1].type).to.be.equal(
                     "StoreCredit"
                   );
                   expect(refundPaymentsDetails.results[1].total).to.be.equal(
-                    shippingFeeGoodwillAmount
+                    goodwillAmount
                   );
                   expect(refundPaymentsDetails.results[1].status).to.be.equal(
                     "Processed"

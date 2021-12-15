@@ -1,3 +1,5 @@
+import { TwoFactorAuthPage } from "cypress/support/login/ui/pageObjects/TwoStepAuthPage";
+import { OrderManagementMenu } from "cypress/support/siteManagement/ui/commands/OrderManagementMenu";
 import { onOrderManagement } from "../../../../support/siteManagement/ui/pageObjects/OrderManagement";
 
 Cypress.Commands.add("validateOrderDetailsOnSM", (isMarketOnly) => {
@@ -163,4 +165,62 @@ Cypress.Commands.add("validateOrderDetailsOnSM", (isMarketOnly) => {
   });
 });
 
-
+Cypress.Commands.add("verifySelfServiceReturnOnSM", (returnType) => {
+  //Verify the refund/return details against each return in the projection
+  cy.get("@finalProjection").then((finalProjection) => {
+    finalProjection.invoices.forEach(function (invoice: any, i: any) {
+      invoice.returns.forEach(function (returns: any, j: any) {
+        returns.returnItems.forEach(function (returnItems: any, k: any) {
+          returnItems.lineItems.forEach(function (lineItems: any, l: any) {
+            //Verify the returnType
+            onOrderManagement
+              .getRefundDetailsForStockcode(lineItems.stockCode)
+              .as("stockcodeRefundCommonLocator");
+            cy.get("@stockcodeRefundCommonLocator")
+              .find("span")
+              .invoke("text")
+              .should("contain", returnType);
+            //Verify the return reason
+            cy.get("@stockcodeRefundCommonLocator")
+              .find("span")
+              .invoke("text")
+              .should("contain", lineItems.reason);
+            //Verify the return comment
+            cy.get("@stockcodeRefundCommonLocator")
+              .find("span")
+              .invoke("text")
+              .should("contain", lineItems.notes);
+            //Verify the Return tracking ID
+            cy.get("@stockcodeRefundCommonLocator")
+              .find("span a[href*='" + lineItems.trackingId + "']")
+              .invoke("text")
+              .should("contain", invoice.legacyIdFormatted);
+            cy.get("@stockcodeRefundCommonLocator")
+              .find("span a[href*='" + lineItems.trackingId + "']")
+              .then(($a) => {
+                cy.get($a).should("have.attr", "href");
+              });
+            //Verify refund total
+            onOrderManagement
+              .getRefundDetailsTDForStockcode(lineItems.stockCode)
+              .as("stockcodeRefundCommonTDLocator");
+            cy.get("@stockcodeRefundCommonTDLocator")
+              .find(onOrderManagement.getCommonItemsTableItemTotalString())
+              .invoke("text")
+              .should("contain", returns.refundAmount);
+            //Verify refund unit price
+            cy.get("@stockcodeRefundCommonTDLocator")
+              .find(onOrderManagement.getCommonItemsTableUnitPriceString())
+              .invoke("text")
+              .should("contain", lineItems.amount);
+            //Verify refund quantity
+            cy.get("@stockcodeRefundCommonTDLocator")
+              .find(onOrderManagement.getCommonItemsTableReturnQuantityString())
+              .invoke("text")
+              .should("contain", lineItems.quantity);
+          });
+        });
+      });
+    });
+  });
+});

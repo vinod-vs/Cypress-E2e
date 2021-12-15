@@ -101,6 +101,9 @@ export class OrderManagement {
   getCommonItemsTableQuantityString() {
     return 'td[class*="quantity-ordered-column"]';
   }
+  getCommonItemsTableReturnQuantityString() {
+    return 'td[class="quantity-column"]';
+  }
   getCommonItemsTableUnitPriceString() {
     return 'td[class="refund-order-unit-price"]';
   }
@@ -114,6 +117,16 @@ export class OrderManagement {
   getRefundCheckboxForStockcode(stockcode) {
     let checkbocLoc = "input[class*='refund-checkbox'][name*='"+stockcode+"']"
     return cy.get(checkbocLoc);
+  }
+
+  getRefundDetailsForStockcode(stockcode) {
+    let refundDetailsLoc = "tr[class*='" + stockcode + " return'] td[class*='refund-order-stockcode']"    
+    return cy.get(refundDetailsLoc);
+  }
+
+  getRefundDetailsTDForStockcode(stockcode) {
+    let refundDetailsLoc = "tr[class*='" + stockcode + " return']"    
+    return cy.get(refundDetailsLoc);
   }
   
   getRefundReasonFieldForStockcode(stockcode) {
