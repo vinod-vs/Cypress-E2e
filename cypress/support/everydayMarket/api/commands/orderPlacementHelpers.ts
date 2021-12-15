@@ -114,7 +114,7 @@ function placeOrderUsingCreditCard () {
   // Grab Digital pay instrument Id for the test credit card set in the fixture
   cy.get('@ccSessionId').then((ccSessionId) => {
     cy.get('@creditCardToUse').then((creditCardToUse) => {
-      cy.creditcardPayment(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response: any) => {
+      cy.creditcardTokenisation(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response: any) => {
         cy.getCCPaymentInstrumentId(response).then((id: number) => {
           instrumentIdsArr.push(id)
         }) 

@@ -17,7 +17,7 @@ declare namespace Cypress {
     addAvailableQuantityLimitedItemsToTrolley(searchTerm: string, quantity:number):any;
     navigateToCheckout(): any;
     navigatingToCreditCardIframe(): any;
-    creditcardPayment(cardDetails: any, sessionHeader: any): any;
+    creditcardTokenisation(cardDetails: any, sessionHeader: any): any;
     digitalPay(digiPayRequest: any): any;
     confirmOrder(orderDetails: any): any;
     logOutViaApi(): void;
@@ -97,5 +97,8 @@ declare namespace Cypress {
     searchAnOrderOnSM(orderId: string): any;
     authorizeGiftingService(): any;
     generateANewGiftCard(giftCardAmount: number): any;
+    getDigitalPaymentInstruments(): any;
+    addCreditCardViaApi(creditCardDetails: Object): any;
+    removePaymentInstrument(paymentInstrumentId: string | Cypress.Chainable<string>): any;
   }
 }

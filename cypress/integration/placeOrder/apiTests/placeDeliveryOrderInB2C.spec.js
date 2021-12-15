@@ -72,7 +72,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
       })
 
-      cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
+      cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
 
         digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId

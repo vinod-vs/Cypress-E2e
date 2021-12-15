@@ -33,7 +33,7 @@
         "navigateToCheckoutEndpoint": "apis/ui/Checkout",
         "checkoutRedeemRewardsDollarsEndpoint": "apis/ui/Checkout/WoolworthsRewards/Redeem",
         "creditCardIframeEndpoint": "apis/ui/Checkout/DigitalPay/InitializeCreditCardIframe",
-        "creditCardPaymentEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
+        "creditCardTokenisationEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
         "addGiftCardEndpoint": "apis/ui/Checkout/DigitalPay/GiftCard/Tokenize",
         "digitalPaymentEndpoint": "apis/ui/Checkout/DigitalPay/Payment",
         "digitalPaymentInstrumentsEndpoint": "api/v3/ui/checkout/digitalpay/instruments",
@@ -85,7 +85,8 @@
         "mailosaur_serverId": "82f8rhkb",
         "mailosaur_serverDomain": "82f8rhkb.mailosaur.net",
         "MAILOSAUR_API_KEY": "MQfxmYlGMOb00wv0",
-        "giftCardServiceEndpoint": "https://anzuat.qwikcilver.com/QwikCilver/XnP/api/V3"
+        "giftCardServiceEndpoint": "https://anzuat.qwikcilver.com/QwikCilver/XnP/api/V3",
+        "deletePaymentInstrument": "/apis/ui/Checkout/DigitalPay/Instruments/Delete"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,
