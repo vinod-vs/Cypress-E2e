@@ -102,5 +102,6 @@ declare namespace Cypress {
     removePaymentInstrument(paymentInstrumentId: string | Cypress.Chainable<string>): any;
     verifySelfServiceReturnOnSM(returnType: string): any;
     clickEDMTab(): any;
+    productSearch(searchRequest: any): any;
   }
 }
