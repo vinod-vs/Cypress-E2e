@@ -30,8 +30,7 @@ TestFilter(['EDM', 'API'], () => {
     it('RP-5042 | EM | Verify CUP details for different measure type', () => {
       cup.forEach(cupdetails => {
         cy.log('=====VERIFYING CUP DETAILS FOR PRODUCT:' + cupdetails.searchTerm + ' ========')
-        cy.loginViaApi(shoppers.emAccount2).then((response) => {
-          cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+        cy.loginViaApiAndHandle2FA(shoppers.emAccount2).then((response) => {
           serachForEDMproductWithCUPAndVerfiy(cupdetails)
         })
       })
