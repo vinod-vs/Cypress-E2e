@@ -103,5 +103,6 @@ declare namespace Cypress {
     verifySelfServiceReturnOnSM(returnType: string): any;
     clickEDMTab(): any;
     productSearch(searchRequest: any): any;
+    loginViaApiAndHandle2FA(shopper: any): any;
   }
 }

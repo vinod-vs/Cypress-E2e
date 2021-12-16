@@ -152,9 +152,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
 
 Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, testData) => {
   // Login
-  cy.loginViaApi(shopperDetails).then((response) => {
-    // cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-  })
+  cy.loginViaApiAndHandle2FA(shopperDetails)
 
   // Set fulfilment using the new /windows endpoint
   cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)

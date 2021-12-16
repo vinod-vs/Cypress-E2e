@@ -33,9 +33,7 @@ TestFilter(['EDM', 'API'], () => {
       const shopper = shoppers.emAccount2
 
       // Login using shopper saved in the fixture and verify it's successful
-      cy.loginViaApi(shopper).then((response) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-      })
+      cy.loginViaApiAndHandle2FA(shopper)
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search
@@ -75,7 +73,7 @@ TestFilter(['EDM', 'API'], () => {
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
             if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-              !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
               cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
               throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
             }
@@ -122,8 +120,8 @@ TestFilter(['EDM', 'API'], () => {
             cy.orderEventsApiWithRetry(data.orderReference, {
               function: function (response) {
                 if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
                   cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                   throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                 }
@@ -185,8 +183,8 @@ TestFilter(['EDM', 'API'], () => {
             cy.orderEventsApiWithRetry(data.orderReference, {
               function: function (response) {
                 if (!response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
-                  !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
-                  !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
+                                        !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
+                                        !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
                   cy.log('Expected RefundRequestUpdate, RefundRequestUpdate & RefundCompleted were not present')
                   throw new Error('Expected RefundRequestUpdate, RefundRequestUpdate & RefundCompleted were not present')
                 }
