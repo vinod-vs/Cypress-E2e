@@ -26,11 +26,9 @@ TestFilter(['EDM', 'API'], () => {
       const shopper = shoppers.emAccount2
       const nonServicedAddress = '49-51 Murray Street, HOBART TAS 7000'
 
-      // Login using shopper saved in the fixture and verify it's successful
-      cy.loginViaApi(shopper).then((response: any) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-      })
- 
+      // Login using shopper saved in the fixture
+      cy.loginViaApiAndHandle2FA(shopper)
+
       // Set delivery fulfilment to 407 Elizabeth Street, Surry Hills (serviced address)
       cy.setFulfilmentLocationWithoutWindow(fulfilmentType.DELIVERY, addressSearch)
 

@@ -78,7 +78,7 @@ declare namespace Cypress {
     removeItems(unavailableItemsArr: any): any;
     orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
     cancelOrder(orderId: number): any;
-    completeOrderAmendment(orderId: number, searchTerm: string): any;
+    completeOrderAmendment(orderId: number): any;
     getUnavailableStockCodes(): any;
     addGiftingDetails(message: string, sender: string, recipient: string): any;
     setPackagingOption(option: string): any;

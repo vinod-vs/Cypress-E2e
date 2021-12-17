@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
+import shoppers from '../../../../fixtures/everydayMarket/shoppers.json'
 import eventsRequest from '../../../../fixtures/everydayMarket/events.json'
-import search from '../../../../fixtures/everydayMarket/search.json'
 import TestFilter from '../../../../support/TestFilter'
 import '../../../../support/login/api/commands/login'
 import '../../../../support/everydayMarket/api/commands/orderApi'
@@ -26,32 +26,33 @@ TestFilter(['EDM', 'API'], () => {
     })
 
     it('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
+      const shopper = shoppers.emAccount2
+      const searchTerm = 'automation'
       const purchaseQty = 2
       let req
 
-      // Login using a newly signed up shopper
-      cy.loginWithNewShopperViaApi()
+      // Login using shopper saved in the fixture
+      cy.loginViaApiAndHandle2FA(shopper)
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search
-      cy.prepareAnySingleLineItemWowAndEdmOrder(search.searchTerm, purchaseQty)
+      cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
 
-      cy.all(
-        cy.get('@confirmedTraderOrder'),
-        cy.get('@shopperId')
-      ).then(([confirmedOrder, shopperId]) => {
+      cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
         req = {
           ...eventsRequest,
-          shopperId: shopperId,
+          shopperId: shopper.shopperId,
           orderId: confirmedOrder.Order.OrderId,
           orderReference: confirmedOrder.Order.OrderReference
         }
 
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
-            if (response.body.pagination.total < 4) {
-              throw new Error('Event not updated yet')
+            if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
+                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+              cy.log('Expected OrderPlaced & MarketOrderPlaced to be present')
+              throw new Error('Expected OrderPlaced & MarketOrderPlaced to be present')
             }
           },
           retries: Cypress.env('marketApiRetryCount'),
@@ -82,13 +83,14 @@ TestFilter(['EDM', 'API'], () => {
         })
 
         // Amend the WOW part of the order
-        cy.completeOrderAmendment(req.orderId, search.searchTerm).as('confirmedAmendedTraderOrder').then(() => {
+        cy.completeOrderAmendment(req.orderId).as('confirmedAmendedTraderOrder').then(() => {
           // Call the Market Events API and save the events data in an alias
           cy.orderEventsApiWithRetry(req.orderReference, {
             function: function (response) {
-              if (response.body.pagination.total < 5) {
-                throw new Error('Event not updated yet')
-              }
+              if (response.body.data.filter(element => element.domainEvent === 'OrderPlaced').length != 2) {
+              cy.log('Expected OrderPlaced events count to be two')
+              throw new Error('Expected OrderPlaced events count to be two')
+            }
             },
             retries: Cypress.env('marketApiRetryCount'),
             timeout: 10000

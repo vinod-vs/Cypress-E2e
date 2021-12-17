@@ -74,8 +74,8 @@ TestFilter(['EDM', 'API'], () => {
           function: function (response) {
             if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
                             !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
-              cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
-              throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
+              cy.log('Expected OrderPlaced & MarketOrderPlaced to be present')
+              throw new Error('Expected OrderPlaced & MarketOrderPlaced to be present')
             }
           },
           retries: Cypress.env('marketApiRetryCount'),
@@ -122,8 +122,8 @@ TestFilter(['EDM', 'API'], () => {
                 if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
                                     !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
                                     !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
-                  cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
-                  throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
+                  cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited to be present')
+                  throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited to be present')
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
@@ -140,12 +140,19 @@ TestFilter(['EDM', 'API'], () => {
           .then(() => {
             cy.orderEventsApiWithRetry(req.orderReference, {
               function: function (response) {
-                if (response.body.pagination.total < 14) {
-                  throw new Error('Event not updated yet')
+                if (!response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
+                                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
+                                    !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
+                  cy.log('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted to be present')
+                  throw new Error('Expected RefundRequestUpdate, MarketOrderRefund & RefundCompleted to be present')
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
+            }).then((response) => {
+              lib.validateEvents(response, 'RefundRequestUpdate', 3) // Returned, Create, Refunded
+              lib.validateEvents(response, 'MarketOrderRefund', 1)
+              lib.validateEvents(response, 'RefundCompleted', 1)
             })
 
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
@@ -179,23 +186,7 @@ TestFilter(['EDM', 'API'], () => {
               expect(response.invoices[0].shipments[0].shippedItems[0].stockCode).is.equal(data.invoices[0].lineItems[0].stockCode)
               expect(response.invoices[0].shipments[0].shippedItems[0].quantity).is.equal(dispatchQty)
             })
-            // Call the Market Events API and validate the data
-            cy.orderEventsApiWithRetry(data.orderReference, {
-              function: function (response) {
-                if (!response.body.data.some((element) => element.domainEvent === 'RefundRequestUpdate') ||
-                                        !response.body.data.some((element) => element.domainEvent === 'MarketOrderRefund') ||
-                                        !response.body.data.some((element) => element.domainEvent === 'RefundCompleted')) {
-                  cy.log('Expected RefundRequestUpdate, RefundRequestUpdate & RefundCompleted were not present')
-                  throw new Error('Expected RefundRequestUpdate, RefundRequestUpdate & RefundCompleted were not present')
-                }
-              },
-              retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
-            }).then((response) => {
-              lib.validateEvents(response, 'RefundRequestUpdate', 3) // Returned, Create, Refunded
-              lib.validateEvents(response, 'MarketOrderRefund', 1)
-              lib.validateEvents(response, 'RefundCompleted', 1)
-            })
+
             // Validate rewards points to ensure points get accumulated for dispatched items only
             cy.getRewardsCardDetails(rewards.partnerId, rewards.siteId, rewards.posId, rewards.loyaltySiteType, shopper.rewardsCardNumber)
               .its('queryCardDetailsResp').its('pointBalance').as('rewardBalanceAfter')
