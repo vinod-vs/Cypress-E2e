@@ -1,6 +1,5 @@
 import { fulfilmentType } from '../../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../../fixtures/checkout/fulfilmentWindowType.js'
-import fulfilmentData from '../../../../fixtures/checkout/fulfilmentData.json'
 
 let addressId
 let deliveryAddressId
@@ -22,8 +21,6 @@ Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
   }).then((response) => {
     const address = response.body.Response[0]
     deliveryAddressId = address.Id
-
-    fulfilmentData.location = address.AddressText
 
     return address
   })
@@ -50,7 +47,6 @@ Cypress.Commands.add('searchPickupDTBStores', (storeType, searchTerm) => {
         const store = response.body[0]
         addressId = store.AddressId
         fulfilmentAreaId = store.AreaId
-        fulfilmentData.location = store.AddressText
 
         return store
       })
@@ -183,7 +179,7 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
 
       if (timesArr.length > 0) {
         windowDate = day.Date // for fulfilment request
-        fulfilmentData.Day = day // for verification
+        
         break days
       }
     }
@@ -194,8 +190,6 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
 function selectRandomWindow (windowArr) {
   selectedWindow = windowArr[Math.floor(Math.random() * windowArr.length)]
   timeSlotId = selectedWindow.Id
-
-  fulfilmentData.window = selectedWindow
 
   return cy.wrap(selectedWindow)
 }
@@ -242,7 +236,6 @@ Cypress.Commands.add('setFulfilmentWithoutWindowForExistingAddress', (addressTex
         fulfilmentAreaId = address.AreaId
         deliverySuburbId = address.SuburbId
 
-        fulfilmentData.location = address.AddressText
         cy.completeLocationFulfilmentViaApi()
 
         return cy.wrap(address)
