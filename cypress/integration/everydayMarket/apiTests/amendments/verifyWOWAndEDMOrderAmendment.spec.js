@@ -88,9 +88,9 @@ TestFilter(['EDM', 'API'], () => {
           cy.orderEventsApiWithRetry(req.orderReference, {
             function: function (response) {
               if (response.body.data.filter(element => element.domainEvent === 'OrderPlaced').length != 2) {
-              cy.log('Expected OrderPlaced events count to be two')
-              throw new Error('Expected OrderPlaced events count to be two')
-            }
+                cy.log('Expected OrderPlaced events count to be two')
+                throw new Error('Expected OrderPlaced events count to be two')
+              }
             },
             retries: Cypress.env('marketApiRetryCount'),
             timeout: 10000

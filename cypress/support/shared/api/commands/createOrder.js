@@ -17,7 +17,7 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
     return cy.loginViaApi(shopper)
       .then((response) => {
         cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-             
+
         return cy.searchDeliveryAddress(addressSearchBody).then(() => {
           cy.addDeliveryAddress().then(() => {
             cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then(() => {
@@ -32,7 +32,7 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
                           response.Products[x].Products[0].ProductRestrictionMessage === null &&
                           response.Products[x].Products[0].Price >= 10 &&
                           response.Products[x].Products[0].SupplyLimit >= 5 &&
-                          response.Products[x].Products[0].ProductWarningMessage === null) { productStockCode = response.Products[x].Products[0].Stockcode }                                
+                          response.Products[x].Products[0].ProductWarningMessage === null) { productStockCode = response.Products[x].Products[0].Stockcode }
                     }
 
                     addItemsBody.StockCode = productStockCode
@@ -43,7 +43,7 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
                       expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
                       cy.navigateToCheckout().then((response) => {
                         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
-                        cy.log('Balance to pay',response.Model.Order.BalanceToPay)
+                        cy.log('Balance to pay', response.Model.Order.BalanceToPay)
                         cy.navigatingToCreditCardIframe().then((response) => {
                           creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
                         }).then(() => {

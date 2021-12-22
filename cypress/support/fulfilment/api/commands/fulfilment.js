@@ -47,13 +47,13 @@ Cypress.Commands.add('searchPickupDTBStores', (storeType, searchTerm) => {
       url: Cypress.env('pickupSearchEndpoint'),
       qs: { postcode: postCode, fulfilmentMethods: storeType }
     }).then((response) => {
-        const store = response.body[0]
-        addressId = store.AddressId
-        fulfilmentAreaId = store.AreaId
-        fulfilmentData.location = store.AddressText
+      const store = response.body[0]
+      addressId = store.AddressId
+      fulfilmentAreaId = store.AreaId
+      fulfilmentData.location = store.AddressText
 
-        return store
-      })
+      return store
+    })
   })
 })
 
@@ -158,13 +158,13 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
           case windowType.MORNING:
             startTime = new Date(time.StartDateTime).getHours()
             if (time.Available === true && time.IsCrowdSourced === false && (startTime < 12) && time.NormalAllocationStatus === '') {
-              timesArr.push(time)    
+              timesArr.push(time)
             }
             break
           case windowType.EVENING:
             startTime = new Date(time.StartDateTime).getHours()
             if (time.Available === true && time.IsCrowdSourced === false && (startTime >= 17) && time.NormalAllocationStatus === '') {
-              timesArr.push(time)  
+              timesArr.push(time)
             }
             break
           case windowType.LIQUOR_RESTRICTED:
@@ -172,7 +172,7 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
             if (time.Available === true && (startTime < 6) && time.NormalAllocationStatus === '') {
               timesArr.push(time)
             }
-            break     
+            break
           default: // pick up/DTB - neither have window types
             if (time.Available === true && time.NormalAllocationStatus === '') {
               timesArr.push(time)

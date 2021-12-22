@@ -109,7 +109,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
                 expect(response.status).to.eq(200)
                 expect(response.body.Subscription).to.have.property('PlanId', plan.PlanId)
                 expect(response.body.Subscription).to.have.property('ServiceType', plan.ServiceType)
-                expect(response.body.Subscription).to.have.property('Price', plan.Price)          
+                expect(response.body.Subscription).to.have.property('Price', plan.Price)
                 expect(response.body).to.have.property('Errors', null)
                 expect(response.body).to.have.property('HttpStatusCode', 'OK')
                 expect(response.body).to.have.property('ExternalId', shopperId)
