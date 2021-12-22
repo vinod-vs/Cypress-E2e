@@ -32,16 +32,16 @@ TestFilter(["B2B", "API", "P0"], () => {
         expect(response).to.have.property("LoginResult", "Success");
       });
       cy.searchDeliveryAddress(addressSearchBody).then((response: any) => {
-        expect(response.Response[0].Id).to.not.be.empty;
+        expect(response.Id).to.not.be.empty;
 
-        expect(response.Response[0].Id).to.not.be.null;
+        expect(response.Id).to.not.be.null;
       });
 
       cy.searchPickupDTBStores(
         fulfilmentType.PICK_UP,
         storeSearchBody.postCode
       ).then((response: any) => {
-        expect(response[0].AddressId).to.not.be.null;
+        expect(response.AddressId).to.not.be.null;
       });
 
       cy.getFulfilmentWindowViaApi(windowType.PICK_UP).then((response: any) => {
