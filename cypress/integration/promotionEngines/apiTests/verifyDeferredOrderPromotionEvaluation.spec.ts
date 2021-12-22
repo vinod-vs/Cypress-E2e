@@ -30,7 +30,7 @@ TestFilter(['B2C','PES','API'], () => {
     it('Verify the Deferred order promotion is applied and added the reward points- $OFF', () => {
       
       // add the items to Trolley and do checkout
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(promotions.DeferredOrderPromotions[0].stockcode,(promotions.DeferredOrderPromotions[0].Quantity)).then((response:any)=> {
+      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredOrderPromotions[0].stockcode,(promotions.DeferredOrderPromotions[0].Quantity)).then((response:any)=> {
         const TotalRewardPoints =((response.Totals.SubTotal)+(promotions.DeferredOrderPromotions[0].TotalRewardsPointsEarned))
         expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(TotalRewardPoints)
       })

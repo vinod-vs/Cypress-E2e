@@ -37,7 +37,7 @@ export function verifyCommonOrderDetails (response, testData, shopperId) {
 }
 
 export function verifyOrderTotals (testData, confirmOrderResponse) {
-  testData.edmDeliveryCharges = confirmOrderResponse.Order.MarketDeliveryFee
+  testData.edmDeliveryCharges = confirmOrderResponse.Order.MarketShippingFee
   testData.wowDeliveryCharges = confirmOrderResponse.Order.WoolworthsDeliveryFee
   testData.packagingFee = confirmOrderResponse.Order.PackagingFee
   testData.teamDiscount = confirmOrderResponse.Order.TeamDiscount

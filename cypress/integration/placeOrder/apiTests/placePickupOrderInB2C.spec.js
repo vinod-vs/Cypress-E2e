@@ -37,7 +37,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response) => {
-        expect(response[0].AddressId).to.not.be.null
+        expect(response.AddressId).to.not.be.null
       })
 
       cy.getFulfilmentWindowViaApi(windowType.PICK_UP).then((response) => {
