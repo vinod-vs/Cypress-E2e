@@ -37,10 +37,10 @@ Cypress.Commands.add(
       .getRefundQuantityFieldForStockcode(stockcode)
       .type(refundQuantity);
 
-      if(goodwillAmount>0) {
-        onOrderManagement.getGoodWillField().clear()
-        onOrderManagement.getGoodWillField().type(goodwillAmount)
-      }
+    if (goodwillAmount > 0) {
+      onOrderManagement.getGoodWillField().clear();
+      onOrderManagement.getGoodWillField().type(goodwillAmount);
+    }
 
     //Click save and approve
     onOrderManagement.getRefundSaveButton().click();
@@ -48,18 +48,25 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add("refundShippingFee", (refundReason, refundComment, goodwillAmount) => {
-  //Fill refund details
-  onOrderManagement.getRefundShippingFeeCheckbox().click();
-  onOrderManagement.getRefundShippingFeeReasonField().select(refundReason);
-  onOrderManagement.getRefundShippingFeeCommentField().type(refundComment);
+Cypress.Commands.add(
+  "refundShippingFee",
+  (refundReason, refundComment, goodwillAmount) => {
+    //Fill refund details
+    onOrderManagement.getRefundShippingFeeCheckbox().click();
+    onOrderManagement.getRefundShippingFeeReasonField().select(refundReason);
+    onOrderManagement.getRefundShippingFeeCommentField().type(refundComment);
 
-  if(goodwillAmount>0) {
-    onOrderManagement.getGoodWillField().clear()
-    onOrderManagement.getGoodWillField().type(goodwillAmount)
+    if (goodwillAmount > 0) {
+      onOrderManagement.getGoodWillField().clear();
+      onOrderManagement.getGoodWillField().type(goodwillAmount);
+    }
+
+    //Click save and approve
+    onOrderManagement.getRefundSaveButton().click();
+    onOrderManagement.getRefundApproveButton().click();
   }
+);
 
-  //Click save and approve
-  onOrderManagement.getRefundSaveButton().click();
-  onOrderManagement.getRefundApproveButton().click();
+Cypress.Commands.add("clickEDMTab", () => {
+  onOrderManagement.getEDMTab().click();
 });

@@ -16,7 +16,7 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: 
     })
   })
 
-  cy.creditcardPayment(creditCardDetails, creditcardSessionHeader).then((response: any) => {
+  cy.creditcardTokenisation(creditCardDetails, creditcardSessionHeader).then((response: any) => {
     if (platform.toUpperCase() === 'B2C') {
       digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
     } else if (platform.toUpperCase() === 'B2B') {

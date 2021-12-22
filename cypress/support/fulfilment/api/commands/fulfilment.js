@@ -13,7 +13,6 @@ let fulfilmentRequest
 let selectedFulfilmentType
 let selectedWindow
 
-
 Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
   selectedFulfilmentType = fulfilmentType.DELIVERY
   cy.api({
@@ -26,7 +25,7 @@ Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
 
     fulfilmentData.location = address.AddressText
 
-    return response.body
+    return address
   })
 })
 
@@ -52,7 +51,8 @@ Cypress.Commands.add('searchPickupDTBStores', (storeType, searchTerm) => {
         addressId = store.AddressId
         fulfilmentAreaId = store.AreaId
         fulfilmentData.location = store.AddressText
-        return response.body
+
+        return store
       })
   })
 })
@@ -243,11 +243,12 @@ Cypress.Commands.add('setFulfilmentWithoutWindowForExistingAddress', (addressTex
         deliverySuburbId = address.SuburbId
 
         fulfilmentData.location = address.AddressText
-        break
+        cy.completeLocationFulfilmentViaApi()
+
+        return cy.wrap(address)
       }
     }
   })
-  cy.completeLocationFulfilmentViaApi()
 })
 
 Cypress.Commands.add('setFulfilmentWithWindowForExistingAddress', (addressText, windowType) => {

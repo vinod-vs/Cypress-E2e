@@ -36,7 +36,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response: any) => {
-        expect(response[0].AddressId).to.not.be.null
+        expect(response.AddressId).to.not.be.null
       })
 
       cy.getFulfilmentWindowViaApi(windowType.DIRECT_TO_BOOT).then((response: any) => {
@@ -61,7 +61,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         })
       })
 
-      cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response: any) => {
+      cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response: any) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
 
         digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId

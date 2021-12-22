@@ -36,12 +36,19 @@ Cypress.Commands.add('addAvailableNonRestrictedPriceLimitedWowItemsToTrolley', (
 
   cy.productSearch(searchRequestBody).then((searchResponse) => {
     cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
-      getPriceLimitedItemsForTrolleyAddition(itemResponse, totalThreshold).forEach((item) => {
-        return cy.addItemsToTrolley(item)
-      })
-    })
+      const productArr = getPriceLimitedItemsForTrolleyAddition(itemResponse, totalThreshold)
+      addToTrolleyAfterReducingProductProperties(productArr)
+      
+      return cy.wrap(productArr)
+    })   
   })
 })
+
+function addToTrolleyAfterReducingProductProperties (productArr) {
+  productArr.map(({ name, price, isSubstitutable, shopperNotes, ...trolleyProperties }) => trolleyProperties).forEach((item) => {
+    cy.addItemsToTrolley(item) 
+  })
+}
 
 Cypress.Commands.add('addAvailableNonRestrictedWowItemsToTrolley', (searchTerm) => {
   cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm }).then((searchResponse) => {
@@ -62,9 +69,12 @@ Cypress.Commands.add('addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley
 
   cy.productSearch(searchRequestBody).then((searchResponse) => {
     cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
-      getCountLimitedItemsForTrolleyAddition(itemResponse, count).forEach((item) => {
-        cy.addItemsToTrolley(item)
-      })
+
+      cy.log('Adding Available Count Limited...')
+      const productArr = getCountLimitedItemsForTrolleyAddition(itemResponse, count)
+      addToTrolleyAfterReducingProductProperties(productArr)
+
+      return cy.wrap(productArr)
     })
   })
 })
@@ -79,9 +89,10 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
 
       cy.productSearch(searchRequestBody).then((searchResponse) => {
         restrictedProducts = pmRestrictedItems(searchResponse)
-        getCountLimitedItemsForTrolleyAddition(restrictedProducts, count).forEach((item) => {
-          cy.addItemsToTrolley(item)
-        })
+        const productArr = getCountLimitedItemsForTrolleyAddition(restrictedProducts, count)
+        addToTrolleyAfterReducingProductProperties(productArr)
+        
+        return cy.wrap(productArr)
       })
       break
 
@@ -91,9 +102,10 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
 
       cy.productSearch(searchRequestBody).then((searchResponse) => {
         restrictedProducts = groupLimitRetrictedItems(searchResponse)
-        getCountLimitedItemsForTrolleyAddition(restrictedProducts, count).forEach((item) => {
-          cy.addItemsToTrolley(item)
-        })
+        const productArr = getCountLimitedItemsForTrolleyAddition(restrictedProducts, count)
+        addToTrolleyAfterReducingProductProperties(productArr)
+        
+        return cy.wrap(productArr)
       })
       break
 
@@ -103,9 +115,10 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
 
       cy.productSearch(searchRequestBody).then((searchResponse) => {
         restrictedProducts = ageRestrictedItems(searchResponse)
-        getCountLimitedItemsForTrolleyAddition(restrictedProducts, count).forEach((item) => {
-          cy.addItemsToTrolley(item)
-        })
+        const productArr = getCountLimitedItemsForTrolleyAddition(restrictedProducts, count)
+        addToTrolleyAfterReducingProductProperties(productArr)
+        
+        return cy.wrap(productArr)
       })
       break
   }
@@ -129,7 +142,7 @@ function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
   }
   addItemsRequestBody.items = expectedTrolleyItems
 
-  return trolleyArr
+  return expectedTrolleyItems
 }
 
 function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
@@ -160,16 +173,15 @@ Cypress.Commands.add('addAvailableEDMItemsToTrolley', (searchTerm, quantity) => 
   // Search product by overriding the SearchTerm attribute in the search body request fixture
   cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
     .then((searchResponse) => {
-      const edmSearchProduct = searchResponse.Products
+      cy.wrap(searchResponse.Products
       // Filter search results by IsMarketProduct = true and IsAvailable = true
         .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
       // Pick the first result
-        .shift()
-      const edmProductStockcode = edmSearchProduct.Products[0].Stockcode
-
-      // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
-      // in the trolley request body fixture
-      cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmProductStockcode, Quantity: quantity })
+        .shift()).then((edmItem) => {
+          // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
+          // in the trolley request body fixture
+          cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmItem.Products[0].Stockcode, Quantity: quantity })
+        })
     })
 })
 

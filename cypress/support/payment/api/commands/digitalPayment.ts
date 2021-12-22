@@ -23,3 +23,17 @@ Cypress.Commands.add('getDigitalPaymentInstruments', () => {
     return response.body
   })
 })
+
+Cypress.Commands.add('removePaymentInstrument', (paymentInstrumentId: string | Cypress.Chainable) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('deletePaymentInstrument'),
+    body: {
+      paymentInstrumentId: paymentInstrumentId
+    }
+  }).then((response: any) => {
+    expect(response.body.Success).to.eql(true)
+    return response.body
+  })
+})
+

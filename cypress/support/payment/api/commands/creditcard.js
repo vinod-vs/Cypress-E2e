@@ -4,10 +4,22 @@ Cypress.Commands.add('navigatingToCreditCardIframe', () => {
   })
 })
 
-Cypress.Commands.add('creditcardPayment', (creditcardPayment, creditcardSessionHeader) => {
+Cypress.Commands.add('addCreditCardViaApi', (creditCardDetails) => {
+  cy.navigatingToCreditCardIframe().then((response) => {
+    const urlSplit = response.IframeUrl.toString().split('/')
+    const creditCardSessionHeader = {
+      creditcardSessionId: urlSplit[urlSplit.length - 1]
+    }
+    cy.creditcardTokenisation(creditCardDetails, creditCardSessionHeader).then((response) => {
+      return response.body
+    })
+  })
+})
+
+Cypress.Commands.add('creditcardTokenisation', (creditcardPayment, creditcardSessionHeader) => {
   cy.api({
     method: 'POST',
-    url: Cypress.env('creditCardPaymentEndpoint'),
+    url: Cypress.env('creditCardTokenisationEndpoint'),
     headers: {
       Authorization: 'Bearer ' + creditcardSessionHeader.creditcardSessionId
     },

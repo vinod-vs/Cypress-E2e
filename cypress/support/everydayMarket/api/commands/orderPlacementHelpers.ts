@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import addressSearch from '../../../../fixtures/checkout/addressSearch.json'
+import search from '../../../../fixtures/everydayMarket/search.json'
 import { fulfilmentType } from '../../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../../fixtures/checkout/fulfilmentWindowType.js'
 import digitalPaymentRequest from '../../../../fixtures/payment/digitalPayment.json'
@@ -49,11 +50,11 @@ Cypress.Commands.add('prepareAnySingleLineItemWowAndEdmOrder', (searchTerm, quan
   cy.clearTrolley()
 
   // Add both WOW and EDM items to trolley
-  cy.addAvailableNonRestrictedWowItemsToTrolley(searchTerm)
+  cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
   cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
 })
 
-Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
+Cypress.Commands.add('completeOrderAmendment', (traderOrderId) => {
   // Start amending the WOW portion of the order
   cy.amendOrder(traderOrderId)
 
@@ -66,7 +67,7 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId, searchTerm) => {
     // Remove unavailable items from trolley
     cy.removeItems(req)
     // Add available non-restricted groceries items to trolley again in case total goes below threshold
-    cy.addAvailableNonRestrictedWowItemsToTrolley(searchTerm)
+    cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
   }
   
   // Place and confirm the order using credit card
@@ -114,7 +115,7 @@ function placeOrderUsingCreditCard () {
   // Grab Digital pay instrument Id for the test credit card set in the fixture
   cy.get('@ccSessionId').then((ccSessionId) => {
     cy.get('@creditCardToUse').then((creditCardToUse) => {
-      cy.creditcardPayment(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response: any) => {
+      cy.creditcardTokenisation(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response: any) => {
         cy.getCCPaymentInstrumentId(response).then((id: number) => {
           instrumentIdsArr.push(id)
         }) 

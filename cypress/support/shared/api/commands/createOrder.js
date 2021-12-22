@@ -47,7 +47,7 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
                         cy.navigatingToCreditCardIframe().then((response) => {
                           creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
                         }).then(() => {
-                          cy.creditcardPayment(creditCardPayment, creditcardSessionHeader).then((response) => {
+                          cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response) => {
                             digitalPayment.payments[0].paymentInstrumentId = response.itemId
                           }).then(() => {
                             cy.digitalPay(digitalPayment).then((response) => {
