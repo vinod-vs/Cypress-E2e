@@ -29,9 +29,8 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
 
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
-        expect(response.Response[0].Id).to.not.be.empty
-
-        expect(response.Response[0].Id).to.not.be.null
+        expect(response.Id).to.not.be.empty
+        expect(response.Id).to.not.be.null
       })
 
       cy.addDeliveryAddress().then((response) => {
@@ -57,7 +56,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0).then((response) => {
-        expect(response.Totals.WoolworthsSubTotal).to.be.greaterThan(0)
+        expect(response[0].stockcode).to.not.be.null
       })
 
       cy.navigateToCheckout().then((response) => {
