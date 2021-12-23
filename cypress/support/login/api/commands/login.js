@@ -17,6 +17,7 @@ Cypress.Commands.add('loginWithNewShopperViaApi', () => {
         expect(response.status).to.eq(200)
         expect(response.body).to.not.have.property('ShopperId', 0)
         cy.log('Shopper Id is: ' + response.body.ShopperId)
+        cy.wrap(response.body).as('signUpResponse')
       })
     } else {
       cy.signUpViaApi(signUpDetails).then((response) => {
