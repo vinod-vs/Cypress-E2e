@@ -38,15 +38,15 @@ Cypress.Commands.add('addAvailableNonRestrictedPriceLimitedWowItemsToTrolley', (
     cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
       const productArr = getPriceLimitedItemsForTrolleyAddition(itemResponse, totalThreshold)
       addToTrolleyAfterReducingProductProperties(productArr)
-      
+
       return cy.wrap(productArr)
-    })   
+    })
   })
 })
 
 function addToTrolleyAfterReducingProductProperties (productArr) {
   productArr.map(({ name, price, isSubstitutable, shopperNotes, ...trolleyProperties }) => trolleyProperties).forEach((item) => {
-    cy.addItemsToTrolley(item) 
+    cy.addItemsToTrolley(item)
   })
 }
 
@@ -69,7 +69,6 @@ Cypress.Commands.add('addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley
 
   cy.productSearch(searchRequestBody).then((searchResponse) => {
     cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
-
       cy.log('Adding Available Count Limited...')
       const productArr = getCountLimitedItemsForTrolleyAddition(itemResponse, count)
       addToTrolleyAfterReducingProductProperties(productArr)
@@ -91,7 +90,7 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
         restrictedProducts = pmRestrictedItems(searchResponse)
         const productArr = getCountLimitedItemsForTrolleyAddition(restrictedProducts, count)
         addToTrolleyAfterReducingProductProperties(productArr)
-        
+
         return cy.wrap(productArr)
       })
       break
@@ -104,7 +103,7 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
         restrictedProducts = groupLimitRetrictedItems(searchResponse)
         const productArr = getCountLimitedItemsForTrolleyAddition(restrictedProducts, count)
         addToTrolleyAfterReducingProductProperties(productArr)
-        
+
         return cy.wrap(productArr)
       })
       break
@@ -117,7 +116,7 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
         restrictedProducts = ageRestrictedItems(searchResponse)
         const productArr = getCountLimitedItemsForTrolleyAddition(restrictedProducts, count)
         addToTrolleyAfterReducingProductProperties(productArr)
-        
+
         return cy.wrap(productArr)
       })
       break
@@ -178,10 +177,10 @@ Cypress.Commands.add('addAvailableEDMItemsToTrolley', (searchTerm, quantity) => 
         .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
       // Pick the first result
         .shift()).then((edmItem) => {
-          // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
-          // in the trolley request body fixture
-          cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmItem.Products[0].Stockcode, Quantity: quantity })
-        })
+        // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
+        // in the trolley request body fixture
+        cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmItem.Products[0].Stockcode, Quantity: quantity })
+      })
     })
 })
 

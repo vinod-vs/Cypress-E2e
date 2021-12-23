@@ -5,7 +5,6 @@ const TestFilter = (testCaseDefinedTags, runTest) => {
     const groupTagsArray = Cypress.env('tags').split('/')
 
     groupTagsArray.forEach(eachGroupTagsString => {
-
       const tagsArrayForEachGroup = eachGroupTagsString.split('-')
       const isFound = tagsArrayForEachGroup.every((tag) => testCaseDefinedTags.includes(tag))
 
@@ -13,8 +12,7 @@ const TestFilter = (testCaseDefinedTags, runTest) => {
         runTest()
       }
     })
-  }
-  else{
+  } else {
     runTest()
   }
 }

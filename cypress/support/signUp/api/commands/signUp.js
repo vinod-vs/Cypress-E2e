@@ -11,22 +11,32 @@ Cypress.Commands.add('signUpViaApi', (userInfo) => {
   })
 })
 
-Cypress.Commands.add('signUpViaApiWith2FA', (userInfo) => { 
+Cypress.Commands.add('signUpViaApiWith2FA', (userInfo) => {
   userInfo.enableEmailVerificationFE = true
-  userInfo.hasOptSent=null
-  userInfo.oneTimePin=null
+  userInfo.hasOptSent = null
+  userInfo.oneTimePin = null
   cy.signUpViaApi(userInfo).then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('ShopperId', 0)
-  }).then(()=>{
+  }).then(() => {
     cy.getMailosaurEmailByEmailAddress(userInfo.emailAddress).then(email => {
-      cy.log("Your otp is: " + email.subject.substr(0, 6))
+      cy.log('Your otp is: ' + email.subject.substr(0, 6))
       userInfo.hasOptSent = true
       userInfo.oneTimePin = email.subject.substr(0, 6)
       cy.signUpViaApi(userInfo).then((response) => {
         return response
       })
     })
+  })
+})
+
+// This command will retrieve the one time pin using the given email address
+Cypress.Commands.add('get2FACode', (userInfo) => {
+  cy.getMailosaurEmailByEmailAddress(userInfo.emailAddress).then(email => {
+    cy.log('Your otp is: ' + email.subject.substr(0, 6))
+    userInfo.hasOptSent = true
+    userInfo.oneTimePin = email.subject.substr(0, 6)
+    return cy.wrap(userInfo.oneTimePin)
   })
 })
 
@@ -38,9 +48,9 @@ Cypress.Commands.add('setSignUpDetails', () => {
   signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
   signUpDetails.mobilePhone = faker.phone.phoneNumber('0400000000')
   signUpDetails.idLikeToReceiveEmailsAboutProductsAndServices = true
-  cy.getDOB('personal').then((value)=> {
+  cy.getDOB('personal').then((value) => {
     signUpDetails.dateOfBirth = value
-  })  
+  })
 
-  return cy.wrap(signUpDetails)  
+  return cy.wrap(signUpDetails)
 })

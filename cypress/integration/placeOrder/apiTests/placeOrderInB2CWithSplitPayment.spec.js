@@ -31,7 +31,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
 
     it('Should place a split payment order via Credit Card & Gift Card', () => {
       cy.loginWithNewShopperViaApi()
-        
+
       cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0)
 
@@ -48,13 +48,13 @@ TestFilter(['B2C', 'API', 'P0'], () => {
 
       cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response) => {
         expect(response.status.responseText).to.be.eqls('ACCEPTED')
-        
+
         splitPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
       cy.addGiftCardToAccount(giftCard).then((response) => {
         expect(response.status).to.eq(200)
-        
+
         splitPayment.payments[1].paymentInstrumentId = response.body.GiftCard.PaymentInstrumentId
       })
 
@@ -69,7 +69,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
 
         cy.log('This is the order id: ' + response.Order.OrderId)
-      })  
+      })
     })
   })
 })

@@ -10,5 +10,6 @@
   "dateOfBirth":"",
   "mobilePhone":"",
   "typeOfDeliveryMethod":"DecideLater",
-  "enableEmailVerificationFE":false
+  "enableEmailVerificationFE":false,
+  "oneTimePin": ""
 }
