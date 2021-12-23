@@ -61,10 +61,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
         let reloadCount = 0
         const reloadLimit = 10
         const checkAndReload = (orderId: any) => {
-          cy.get('wow-my-orders-list-container > div.my-orders-list-container')
-          .find('div.details-container.order > span.details-content')
-          .invoke('text')
-          .then((text) => {
+          onMyOrderPage.getmyOrderListContainersOnPage().invoke('text').then((text) => {
             if (text.includes(orderId)) {
               cy.log('Order loaded', orderId)
             } 

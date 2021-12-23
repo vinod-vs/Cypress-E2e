@@ -7,6 +7,10 @@ export class MyOrderPage {
         return cy.get('nav.navigation-items').find('a').eq(2).contains('My orders')
     }
 
+    getmyOrderListContainersOnPage(){
+        return cy.get('wow-my-orders-list-container > div.my-orders-list-container').find('div.details-container.order > span.details-content')
+    }
+
     getMyOrdersListContainer(orderId: string) {
         return cy.get('wow-my-orders-list-container > div.my-orders-list-container').filter(`:contains(${orderId})`)
     }
