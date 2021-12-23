@@ -14,7 +14,7 @@ Cypress.Commands.add('loginViaUi', (shopper, validation2FA) => {
 
   onLoginPage.getLoginButton().click()
 
-  if (Cypress.env('otpValidationSwitch') && shopper.type != 'business') {
+  if (validation2FA && shopper.type != 'business') {
     onTwoStepAuthPage.VerifyCode(Cypress.env('otpStaticCode'))
   }
 
