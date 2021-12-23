@@ -104,5 +104,9 @@ declare namespace Cypress {
     clickEDMTab(): any;
     productSearch(searchRequest: any): any;
     loginViaApiAndHandle2FA(shopper: any): any;
+    getDOB(type: string): Cypress.Chainable<string>;
+    signUpPersonalUser(signupdetails: any): any;
+    subscribeToDUMonthlyPersonal(userinfor: any): any;
+    get2FACode(shopper: any): Cypress.Chainable<string>;
   }
 }

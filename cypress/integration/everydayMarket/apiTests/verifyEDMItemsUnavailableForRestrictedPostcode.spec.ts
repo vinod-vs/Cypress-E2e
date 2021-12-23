@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shoppers from '../../../fixtures/everydayMarket/shoppers.json'
 import TestFilter from '../../../support/TestFilter'
 import searchRequestBody from '../../../fixtures/search/productSearch.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
@@ -23,11 +22,10 @@ TestFilter(['EDM', 'API'], () => {
     it('RP-5036 - EM | Verify Everyday Market items not available for restricted postcodes', () => {
       const searchTerm = '1073744438' // Vetalogica Automation (do Not Touch) Vetalogica Hemp Clinicals Skin And Coat Dog Treats - 225g 225g
       const quantity = 2
-      const shopper = shoppers.emAccount2
       const nonServicedAddress = '49-51 Murray Street, HOBART TAS 7000'
 
-      // Login using shopper saved in the fixture
-      cy.loginViaApiAndHandle2FA(shopper)
+      // Sign up for a new shopper
+      cy.loginWithNewShopperViaApi()
 
       // Set delivery fulfilment to 407 Elizabeth Street, Surry Hills (serviced address)
       cy.setFulfilmentLocationWithoutWindow(fulfilmentType.DELIVERY, addressSearch)

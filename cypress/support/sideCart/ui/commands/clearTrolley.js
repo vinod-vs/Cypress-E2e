@@ -57,5 +57,5 @@ Cypress.Commands.add('clickCheckout', () => {
 
 Cypress.Commands.add('verifyEmptyCart', () => {
   // Verify the cart is empty
-  onSideCartPage.checkIfSidecartIsEmpty();
+  onSideCartPage.checkIfSidecartIsEmpty()
 })

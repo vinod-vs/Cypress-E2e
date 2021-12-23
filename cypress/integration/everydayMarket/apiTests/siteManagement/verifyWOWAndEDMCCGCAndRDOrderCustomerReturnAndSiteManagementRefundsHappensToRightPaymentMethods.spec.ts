@@ -597,6 +597,17 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
         );
         cy.wait(Cypress.config("fiveSecondWait"));
 
+        cy.orderEventsApiWithRetry(orderReference, {
+          function: function (response: any) {
+            if (response.body.data.filter((element: { domainEvent: string; }) => element.domainEvent === 'MarketOrderRefund').length != 2) {
+            cy.log('Expected MarketOrderRefund events count to be two')
+            throw new Error('Expected MarketOrderRefund events count to be two')
+          }
+          },
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: 10000
+        })
+
         //Verify the CHUB refund details are updated in the projection and events
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
           function: function (response) {

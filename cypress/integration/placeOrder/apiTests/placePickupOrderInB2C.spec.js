@@ -33,7 +33,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
 
       cy.searchBillingAddressViaApi(addressSearchBody.search).then((response) => {
-        cy.setBillingAddressViaApi(response.body.Response[0].Id)  
+        cy.setBillingAddressViaApi(response.body.Response[0].Id)
       })
 
       cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response) => {

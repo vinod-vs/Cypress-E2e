@@ -38,37 +38,35 @@ module.exports = (on, config) => {
   const file = config.env.fileConfig || 'b2c'
 
   on('task', {
-    connectToMongoDB({mongoURI,mongoDB,mongoDBCollection,filterKey,orderId}) {
-    return new Promise((resolve) => {
-      MongoClient.connect(mongoURI, (err, client) => {
-        if (err) {
-          console.log(`MONGO CONNECTION ERROR: ${err}`)
-          throw err
-        } else {
-          const db = client.db(mongoDB)
-          console.log("Collection --- " + mongoDBCollection + " --- filter is --- "+ filterKey)
-          db.collection(mongoDBCollection).find({}).toArray(function (error, docs) {
-            if (error) {
-              console.log(`Error while fetching documents from collection: ${error}`)
-              client.close()
-              return null  
-            }
-            let docsLength = docs.length
-            for(let i = 0; i < docsLength; i++ ){
-              if(docs[i][filterKey] == orderId){
+    connectToMongoDB ({ mongoURI, mongoDB, mongoDBCollection, filterKey, orderId }) {
+      return new Promise((resolve) => {
+        MongoClient.connect(mongoURI, (err, client) => {
+          if (err) {
+            console.log(`MONGO CONNECTION ERROR: ${err}`)
+            throw err
+          } else {
+            const db = client.db(mongoDB)
+            console.log('Collection --- ' + mongoDBCollection + ' --- filter is --- ' + filterKey)
+            db.collection(mongoDBCollection).find({}).toArray(function (error, docs) {
+              if (error) {
+                console.log(`Error while fetching documents from collection: ${error}`)
                 client.close()
-                resolve(docs[i])
-                return docs[i]
+                return null
               }
-            }       
-          })
-        }
-
+              const docsLength = docs.length
+              for (let i = 0; i < docsLength; i++) {
+                if (docs[i][filterKey] == orderId) {
+                  client.close()
+                  resolve(docs[i])
+                  return docs[i]
+                }
+              }
+            })
+          }
         })
-        
-      });
-    } 
-  }) 
+      })
+    }
+  })
 
   return getConfigurationByFile(file)
 }

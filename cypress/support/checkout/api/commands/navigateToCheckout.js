@@ -27,5 +27,3 @@ Cypress.Commands.add('removePromotionCode', (promoCode) => {
     return response.body
   })
 })
-
-

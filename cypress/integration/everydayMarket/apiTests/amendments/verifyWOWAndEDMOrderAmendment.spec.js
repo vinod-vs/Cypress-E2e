@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shoppers from '../../../../fixtures/everydayMarket/shoppers.json'
 import eventsRequest from '../../../../fixtures/everydayMarket/events.json'
 import TestFilter from '../../../../support/TestFilter'
 import '../../../../support/login/api/commands/login'
@@ -26,27 +25,32 @@ TestFilter(['EDM', 'API'], () => {
     })
 
     it('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
-      const shopper = shoppers.emAccount2
       const searchTerm = 'automation'
       const purchaseQty = 2
+      let shopperId
       let req
 
-      // Login using shopper saved in the fixture
-      cy.loginViaApiAndHandle2FA(shopper)
+      // Sign up for a new shopper
+      cy.loginWithNewShopperViaApi()
+
+      cy.get('@signUpResponse').then((signUpResp) => {
+        shopperId = signUpResp.ShopperId
+      })
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search
       cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
 
+    
       cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
         req = {
           ...eventsRequest,
-          shopperId: shopper.shopperId,
+          shopperId: shopperId,
           orderId: confirmedOrder.Order.OrderId,
           orderReference: confirmedOrder.Order.OrderReference
         }
-
+        
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
             if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
@@ -62,8 +66,9 @@ TestFilter(['EDM', 'API'], () => {
         // Call Market Order API and validate the data
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
           function: function (response) {
-            if (response.body.invoices[0].lineItems[0].status !== 'ALLOCATED') {
-              throw new Error('Still not sent to Marketplacer yet')
+            if (response.body.invoices[0].orderTrackingStatus !== 'Received') {
+              cy.log('Expected orderTrackingStatus to be "Received"')
+              throw new Error('Expected orderTrackingStatus to be "Received"')
             }
           },
           retries: Cypress.env('marketApiRetryCount'),
@@ -88,9 +93,9 @@ TestFilter(['EDM', 'API'], () => {
           cy.orderEventsApiWithRetry(req.orderReference, {
             function: function (response) {
               if (response.body.data.filter(element => element.domainEvent === 'OrderPlaced').length != 2) {
-              cy.log('Expected OrderPlaced events count to be two')
-              throw new Error('Expected OrderPlaced events count to be two')
-            }
+                cy.log('Expected OrderPlaced events count to be two')
+                throw new Error('Expected OrderPlaced events count to be two')
+              }
             },
             retries: Cypress.env('marketApiRetryCount'),
             timeout: 10000
@@ -104,7 +109,8 @@ TestFilter(['EDM', 'API'], () => {
           cy.ordersApiByEdmInvoiceIdWithRetry(invoiceIds, {
             function: function (response) {
               if (response.body[0].orderId !== amendedOrder.Order.OrderId) {
-                throw new Error('Data not updated yet')
+                cy.log('Order ID has not been updated with the latest order amendment ID')
+                throw new Error('Order ID has not been updated with the latest order amendment ID')
               }
             },
             retries: Cypress.env('marketApiRetryCount'),

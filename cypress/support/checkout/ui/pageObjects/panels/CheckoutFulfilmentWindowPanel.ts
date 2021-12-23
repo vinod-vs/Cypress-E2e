@@ -1,9 +1,9 @@
-import { Button } from "../../../../shared/ui/pageObjects/Button";
-import { CheckoutTimeSlotSelector } from "./CheckoutTimeSlotSelector";
-import { Notification } from "../../../../shared/ui/pageObjects/Notification";
-import { TextArea } from "../../../../shared/ui/pageObjects/TextArea";
-import { TextBox } from "../../../../shared/ui/pageObjects/TextBox";
-import { ToggleSwitch } from "../../../../shared/ui/pageObjects/ToggleSwitch";
+import { Button } from "../../../../shared/ui/components/Button";
+import { CheckoutTimeSlotSelector } from "../components/CheckoutTimeSlotSelector";
+import { Notification } from "../../../../shared/ui/components/Notification";
+import { TextArea } from "../../../../shared/ui/components/TextArea";
+import { TextBox } from "../../../../shared/ui/components/TextBox";
+import { ToggleSwitch } from "../../../../shared/ui/components/ToggleSwitch";
 import { CheckoutAccordionPanel } from "./CheckoutAccordionPanel";
 
 export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
@@ -29,8 +29,10 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
   private chilled = 'chilled';
   private restricted = 'restricted';
 
+  inCheckoutTimeSlotSelector = new CheckoutTimeSlotSelector();
+
   constructor() {
-    super('.auto_checkout-accordion-panel__time')
+    super('.auto_checkout-accordion-panel__time');
   }
 
   /**
@@ -389,3 +391,5 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
     })
   }
 }
+
+export const onCheckoutFulfilmentWindowPanel = new CheckoutFulfilmentWindowPanel();

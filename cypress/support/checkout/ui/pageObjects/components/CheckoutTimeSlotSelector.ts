@@ -1,5 +1,4 @@
 import '../../../../utilities/ui/utility'
-import fulfilmentData from '../../../../../fixtures/checkout/fulfilmentData.json'
 
 /**
  * CheckoutTimeSlotSelector component is a representation of the fulfilment window selection component for Pick up &
@@ -103,7 +102,7 @@ export class CheckoutTimeSlotSelector {
   public getSelectedWindowTime(): Cypress.Chainable<string> {
     return this.getSelectedWindowEl().find(this.timeSpan).invoke('text').then(text => {
       cy.removeNewLineCarriageReturn(text).then((crText) => {
-        fulfilmentData.window = crText.trim()
+        return crText.trim()
       })
     })
   }
@@ -114,9 +113,7 @@ export class CheckoutTimeSlotSelector {
    * @returns The selected window cost within a Cypress.Chainable<string> object 
    */
   public getSelectedWindowCost(): Cypress.Chainable<string> {
-    return this.getSelectedWindowEl().find('.window-price').invoke('text').then(text => {
-     fulfilmentData.cost = text;
-   })
+    return this.getSelectedWindowEl().find('.window-price').invoke('text');
   }
 
   /**
@@ -125,8 +122,8 @@ export class CheckoutTimeSlotSelector {
    * @returns The selected window duration within a Cypress.Chainable<string> object
    */
   public getSelectedWindowDuration(): Cypress.Chainable<string> {
-    return this.getSelectedWindowEl().find('.window-length').invoke('text').then(text => {
-      fulfilmentData.duration = text;
-    })
+    return this.getSelectedWindowEl().find('.window-length').invoke('text');
   } 
-} // end class
+}
+
+export const inCheckoutTimeSlotSelector = new CheckoutTimeSlotSelector();
