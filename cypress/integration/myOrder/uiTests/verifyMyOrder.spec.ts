@@ -33,10 +33,8 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
     })
 
     it('Place an order via api for B2C customer, then verify the order details in MyOrders UI', () => {
-        // Login via api using shopper saved in the fixture, Validate 2FA and verify it's successful
-        cy.loginViaApi(b2cRewardsShopper.REAccount1).then((response: any) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-        })
+        // Login via api using new shopper
+        cy.loginWithNewShopperViaApi()
 
       // Place an order via api
         cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
@@ -52,11 +50,9 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
         const createdDate = dayjs(orderCreatedDate).format('D MMMM')
         const deliverydate = dayjs(orderDeliveryDate).format('D MMMM')
 
-      // login via UI into same account
-       cy.loginViaUi(shopper[1], false)
-      //Navigate to My order page through My account  
+      //Navigate to UI - My order page through My account  
         onMyOrderPage.myAccountActions()  
-      
+            
         //wait and reload my order page and check if order exists
         let reloadCount = 0
         const reloadLimit = 10
@@ -66,7 +62,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
               cy.log('Order loaded', orderId)
             } 
             else {
-              cy.wait(1000, { log: false })
+              cy.wait(15000, { log: false })
               reloadCount += 1
               cy.log(`reload **${reloadCount} / ${reloadLimit}**`)
               if (reloadCount > reloadLimit) {
@@ -77,8 +73,24 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
             }
           })
         }
-        checkAndReload(orderId)
 
+        cy.checkIfElementExists('wow-my-orders-list-container').then((orderExists: boolean) => {
+          cy.log('the flag', orderExists)
+          if (orderExists === true){
+            checkAndReload(orderId)
+          }
+          else{
+            cy.wait(15000, { log: false })
+            reloadCount += 1
+            cy.log(`reload **${reloadCount} / ${reloadLimit}**`)
+            if (reloadCount > reloadLimit) {
+              throw new Error('Reload limit reached')
+            }
+            cy.reload()
+            checkAndReload(orderId)
+            }
+  
+        })
        //Verify the Order details on My Orders page is same as the saved order details 
         onMyOrderPage.getMyOrderNumber(orderId).should('contain', orderId)
         onMyOrderPage.getOrderTotalString(orderId).should('contain.text', orderTotal)

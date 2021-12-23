@@ -49,6 +49,7 @@ export class MyOrderPage {
     // Actions - Click on the My account Button and then My orders Link
 
     myAccountActions () {
+       cy.visit("/shop/myaccount/myorders")
        cy.wait(500);
        this.getMyAccountButton().click()
        cy.wait(500);
