@@ -1,4 +1,4 @@
-import { setComponentBase } from '../../../../support/utilities/ui/utility'
+import { setComponentBase } from '../../../utilities/ui/utility'
 
 export class Button {
   private buttonBase = 'buttonBase';

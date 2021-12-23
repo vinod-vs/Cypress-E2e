@@ -125,3 +125,5 @@ export class CheckoutTimeSlotSelector {
     return this.getSelectedWindowEl().find('.window-length').invoke('text');
   } 
 }
+
+export const inCheckoutTimeSlotSelector = new CheckoutTimeSlotSelector();

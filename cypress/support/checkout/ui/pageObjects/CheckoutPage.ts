@@ -1,12 +1,11 @@
-import { CheckoutFulfilmentPanel } from './panels/CheckoutFulfilmentPanel'
-import { CheckoutWindowTimePanel } from './panels/CheckoutWindowTimePanel'
+import { CheckoutFulfilmentSelectionPanel } from './panels/CheckoutFulfilmentSelectionPanel'
+import { CheckoutFulfilmentWindowPanel } from './panels/CheckoutFulfilmentWindowPanel'
 import { CheckoutReviewItemsPanel } from './panels/CheckoutReviewItemsPanel'
 import { CheckoutPaymentPanel } from './panels/CheckoutPaymentPanel'
 
-
 export class CheckoutPage {
-  onCheckoutFulfilmentPanel = new CheckoutFulfilmentPanel();
-  onCheckoutWindowTimePanel = new CheckoutWindowTimePanel();
+  onCheckoutFulfilmentSelectionPanel = new CheckoutFulfilmentSelectionPanel();
+  onCheckoutFulfilmentWindowPanel = new CheckoutFulfilmentWindowPanel();
   onCheckoutReviewItemsPanel = new CheckoutReviewItemsPanel();
   onCheckoutPaymentPanel = new CheckoutPaymentPanel();
 }

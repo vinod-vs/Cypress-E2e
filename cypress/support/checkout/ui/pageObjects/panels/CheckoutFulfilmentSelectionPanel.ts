@@ -1,6 +1,6 @@
 import { SharedAddressSelector } from "cypress/support/shared/ui/pageObjects/SharedAddressSelector";
 
-export class CheckoutFulfilmentPanel extends SharedAddressSelector{
+export class CheckoutFulfilmentSelectionPanel extends SharedAddressSelector{
     getChangeFulfilmentButton(){
         return cy.get('#checkout-fulfilmentPanel .panel-actions-change-button');
     }
@@ -14,4 +14,4 @@ export class CheckoutFulfilmentPanel extends SharedAddressSelector{
     }
 }
 
-export const onCheckoutFulfilmentPanel = new CheckoutFulfilmentPanel();
+export const onCheckoutFulfilmentSelectionPanel = new CheckoutFulfilmentSelectionPanel();

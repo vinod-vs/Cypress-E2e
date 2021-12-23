@@ -1,8 +1,8 @@
-import { Button } from '../../../../shared/ui/pageObjects/Button'
+import { Button } from '../../../../shared/ui/components/Button'
 
 export abstract class CheckoutAccordionPanel {
 
-  panelBaseLocatorString:string
+  panelBaseLocatorString: string
 
   constructor(elLocator: string) {
     this.panelBaseLocatorString = elLocator

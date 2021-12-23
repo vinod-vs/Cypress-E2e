@@ -53,21 +53,21 @@ Cypress.Commands.add('selectRandomWindowInCheckout', (fulfilmentType, fulfilment
       if (dayToSelect === today || dayToSelect === tomorrow) {
         cy.formatToAmPm(windowStartDate).then(($startTime) => {
           cy.formatToAmPm(windowEndDate).then(($endTime) => {
-            onCheckoutPage.onCheckoutWindowTimePanel.onCheckoutTimeSlotSelector.selectWindow(dayToSelect, $startTime + ' to ' + $endTime)
+            onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(dayToSelect, $startTime + ' to ' + $endTime)
           }) 
         })
       } else { // Named days, e.g. Wednesday
         cy.getDayOfWeek(windowStartDate).then((day) => {
           cy.formatToAmPm(windowStartDate).then(($startTime) => {
             cy.formatToAmPm(windowEndDate).then(($endTime) => {
-              onCheckoutPage.onCheckoutWindowTimePanel.onCheckoutTimeSlotSelector.selectWindow(day, $startTime + ' to ' + $endTime)
+              onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(day, $startTime + ' to ' + $endTime)
             }) 
           })
         })  
       }
     } else if (fulfilmentWindowType === windowType.DELIVERY_NOW) {
       dayToSelect = today
-      onCheckoutPage.onCheckoutWindowTimePanel.onCheckoutTimeSlotSelector.selectWindow(dayToSelect, window.TimeWindow)
+      onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(dayToSelect, window.TimeWindow)
     }
   })
 })
