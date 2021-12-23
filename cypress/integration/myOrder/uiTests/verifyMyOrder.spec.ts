@@ -1,12 +1,10 @@
 /// <reference types="cypress" />
 
-
 import TestFilter from '../../../support/TestFilter'
 import shopper from '../../../fixtures/login/b2cLogin.json'
 import b2cRewardsShopper from '../../../fixtures/rewards/b2cRewardsshopper.json'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
-import deliveryOptions from '../../../fixtures/checkout/deliveryOptions.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import { onMyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
@@ -43,8 +41,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
       // Place an order via api
         cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
         cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
-        cy.setDeliveryOptionsViaApi(deliveryOptions)
-        
+     
         cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
       // Save the Order details of the order placed    
         const orderId = confirmOrderResponse.Order.OrderId
@@ -56,11 +53,36 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
         const deliverydate = dayjs(orderDeliveryDate).format('D MMMM')
 
       // login via UI into same account
-        cy.loginViaUi(shopper[1], false)
-        cy.wait(15000)
+       cy.loginViaUi(shopper[1], false)
       //Navigate to My order page through My account  
         onMyOrderPage.myAccountActions()  
-      //Verify the Order details on My Orders page is same as the saved order details 
+      
+        //wait and reload my order page and check if order exists
+        let reloadCount = 0
+        const reloadLimit = 10
+        const checkAndReload = (orderId: any) => {
+          cy.get('wow-my-orders-list-container > div.my-orders-list-container')
+          .find('div.details-container.order > span.details-content')
+          .invoke('text')
+          .then((text) => {
+            if (text.includes(orderId)) {
+              cy.log('Order loaded', orderId)
+            } 
+            else {
+              cy.wait(1000, { log: false })
+              reloadCount += 1
+              cy.log(`reload **${reloadCount} / ${reloadLimit}**`)
+              if (reloadCount > reloadLimit) {
+                throw new Error('Reload limit reached')
+              }
+              cy.reload()
+              checkAndReload(orderId)
+            }
+          })
+        }
+        checkAndReload(orderId)
+
+       //Verify the Order details on My Orders page is same as the saved order details 
         onMyOrderPage.getMyOrderNumber(orderId).should('contain', orderId)
         onMyOrderPage.getOrderTotalString(orderId).should('contain.text', orderTotal)
         onMyOrderPage.getOrderDateString(orderId).should('contain.text', createdDate)
