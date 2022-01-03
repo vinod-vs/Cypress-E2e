@@ -56,6 +56,25 @@ class SessionGroupsV2Page {
         return cy.xpath('//tbody/tr[' + row + ']')
     }
 
+    getTableRowName(row:number) {
+        row = row + 1    
+        return cy.xpath('//tbody/tr[' + row + ']/td[2]/a')
+    }
+
+    getTableRowDescription(row:number) {
+        row = row + 1    
+        return cy.xpath('//tbody/tr[' + row + ']/td[3]')
+    }
+
+    getTableRowDomain(row:number) {
+        row = row + 1    
+        return cy.xpath('//tbody/tr[' + row + ']/td[4]')
+    }
+
+    getLastRowName() {
+        return cy.get('tr').last().get('td').eq(1).get('a')
+    }
+
 }
 
 export const sessionGroupsV2Page = new SessionGroupsV2Page();
