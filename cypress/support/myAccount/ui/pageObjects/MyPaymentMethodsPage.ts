@@ -60,5 +60,9 @@ export class MyPaymentMethodsPage {
   getCreditCardCVVLocatorString() {
     return "#cvv_csv";
   }
+  
+  getSpinner() {
+    return cy.get(".spinner-container.container3");
+  }
 }
 export const onMyPaymentMethodsPage = new MyPaymentMethodsPage();

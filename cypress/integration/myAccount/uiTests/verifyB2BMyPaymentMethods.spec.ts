@@ -4,8 +4,8 @@ import shoppers from "../../../fixtures/myAccount/b2bShoppers.json";
 import creditCard from "../../../fixtures/myAccount/creditCard.json";
 import TestFilter from "../../../support/TestFilter";
 import "../../../support/login/ui/commands/login";
-import "../../../support/myAccount/ui/commands/MyAccount";
-import "../../../support/myAccount/ui/commands/MyPaymentMethods";
+import "../../../support/myAccount/ui/commands/myAccount";
+import "../../../support/myAccount/ui/commands/myPaymentMethods";
 import "../../../support/logout/ui/commands/logout";
 
 TestFilter(["B2B", "UI", "P0"], () => {

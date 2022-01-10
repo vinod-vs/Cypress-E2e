@@ -25,8 +25,8 @@ Cypress.Commands.add("verifyMyPaymentMethodsPage", () => {
 
 Cypress.Commands.add("saveNewCreditCardViaUi", (creditCard) => {
   onMyPaymentMethodsPage.getButtonNewCard().contains("New Credit Card").click();
-  cy.get(".spinner-container.container3").should("be.visible");
-  cy.get(".spinner-container.container3").should("not.exist", {timeout: 5000});
+  onMyPaymentMethodsPage.getSpinner().should("be.visible");
+  onMyPaymentMethodsPage.getSpinner().should("not.exist", {timeout: 5000});
   cy.wait(1000);
   //Add new credit card details
   cy.get(onMyPaymentMethodsPage.getCreditCardIframeLocatorString()).then(
