@@ -217,5 +217,9 @@
       }
     ],
     "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"    
+  },
+  "GenericEMonlyProductTestData": {
+    "searchTerm": "automation",
+    "quantity": 2
   }    
 }
