@@ -8,52 +8,45 @@ export class MyOrderPage {
     }
 
     getmyOrderListContainersOnPage(){
-        return cy.get('wow-my-orders-list-container > div.my-orders-list-container').find('div.details-container.order > span.details-content')
+        return cy.get('wow-my-orders-list-container').find('.order > .details-content')
     }
 
     getMyOrdersListContainer(orderId: string) {
-        return cy.get('wow-my-orders-list-container > div.my-orders-list-container').filter(`:contains(${orderId})`)
+       return cy.get('wow-my-orders-list-container').filter(`:contains(${orderId})`)
     }
 
-    getMyOrdersListContainerItems(orderId: string) {
-        return this.getMyOrdersListContainer(orderId).find('wow-my-orders-list-item > div')
-    }
 
     getMyOrdersContainerHeader(orderId: string){
-        return this.getMyOrdersListContainer(orderId).find('div.header')
+       return this.getMyOrdersListContainer(orderId).find('.header')
     }
 
     getMyOrderNumber(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).should('be.visible').find('div.details-container.order > span.details-content')
+        return this.getMyOrdersListContainer(orderId).find('.order > .details-content')
     }
 
     getOrderDateString(orderId: string) {
-       return this.getMyOrdersContainerHeader(orderId).find('section.date > span.content')
+      return this.getMyOrdersContainerHeader(orderId).find('section.date > .content')
     }
 
     getOrderTotalString(orderId: string) {
-        return this.getMyOrdersContainerHeader(orderId).find('section.total > span.content')
+        return this.getMyOrdersContainerHeader(orderId).find('section.total > .content')
     }
 
     getDeliveryDateString(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.delivery > span.details-content')
+       return this.getMyOrdersListContainer(orderId).find('.delivery > .details-content')
     }
 
     getTrackMyOrderLink(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.auto_my-orders-tmo-link.button')
+        return this.getMyOrdersListContainer(orderId).find('.order-links-container > a.auto_my-orders-tmo-link.button')
     }
 
     getViewOrderDetailsLink(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.order-links.view-order-link')
+       return this.getMyOrdersListContainer(orderId).find('.order-links-container > a.order-links.view-order-link')
     }
-    // Actions - Click on the My account Button and then My orders Link
 
     myAccountActions () {
        cy.visit("/shop/myaccount/myorders")
-       cy.wait(500);
-       this.getMyAccountButton().click()
-       cy.wait(500);
-       this.getMyOrdersLink().click()
+       cy.wait(1000);
     }
 }
     
