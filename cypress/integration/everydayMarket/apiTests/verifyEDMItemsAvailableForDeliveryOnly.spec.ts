@@ -44,7 +44,7 @@ TestFilter(['EDM', 'API'], () => {
       
     // Search and select the PickUp address
     cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response: any) => {
-      expect(response[0].AddressId).to.not.be.null
+      expect(response.AddressId).to.not.be.null
     })
     //Select the Fulfilment Window
     cy.getFulfilmentWindowViaApi(windowType.PICK_UP).then((response: any) => {
