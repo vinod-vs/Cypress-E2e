@@ -1,13 +1,11 @@
 /// <reference types="cypress" />
 
 import TestFilter from '../../../support/TestFilter'
-import shopper from '../../../fixtures/login/b2cLogin.json'
-import b2cRewardsShopper from '../../../fixtures/rewards/b2cRewardsshopper.json'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
-import { onMyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
+import { MyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
 import { default as dayjs } from 'dayjs'
 import '../../../support/login/api/commands/login'
 import '../../../support/delivery/api/commands/options'
@@ -33,7 +31,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
     })
 
     it('Place an order via api for B2C customer, then verify the order details in MyOrders UI', () => {
-        // Login via api using new shopper
+      // Login via api using new shopper
         cy.loginWithNewShopperViaApi()
 
       // Place an order via api
@@ -50,54 +48,19 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
         const createdDate = dayjs(orderCreatedDate).format('D MMMM')
         const deliverydate = dayjs(orderDeliveryDate).format('D MMMM')
 
-      //Navigate to UI - My order page through My account  
-        onMyOrderPage.myAccountActions()  
-            
-        //wait and reload my order page and check if order exists
-        let reloadCount = 0
-        const reloadLimit = 10
-        const checkAndReload = (orderId: any) => {
-          onMyOrderPage.getmyOrderListContainersOnPage().invoke('text').then((text) => {
-            if (text.includes(orderId)) {
-              cy.log('Order loaded', orderId)
-            } 
-            else {
-              cy.wait(15000, { log: false })
-              reloadCount += 1
-              cy.log(`reload **${reloadCount} / ${reloadLimit}**`)
-              if (reloadCount > reloadLimit) {
-                throw new Error('Reload limit reached')
-              }
-              cy.reload()
-              checkAndReload(orderId)
-            }
-          })
-        }
+      //Navigate to UI - My order page 
+        cy.visit("/shop/myaccount/myorders")
+       
+      //Passing the orderId to the Page object constructor 
+        let onMyOrderPage = new MyOrderPage(orderId) 
 
-        cy.checkIfElementExists('wow-my-orders-list-container').then((orderExists: boolean) => {
-          cy.log('the flag', orderExists)
-          if (orderExists === true){
-            checkAndReload(orderId)
-          }
-          else{
-            cy.wait(15000, { log: false })
-            reloadCount += 1
-            cy.log(`reload **${reloadCount} / ${reloadLimit}**`)
-            if (reloadCount > reloadLimit) {
-              throw new Error('Reload limit reached')
-            }
-            cy.reload()
-            checkAndReload(orderId)
-            }
-  
-        })
-       //Verify the Order details on My Orders page is same as the saved order details 
-        onMyOrderPage.getMyOrderNumber(orderId).should('contain', orderId)
-        onMyOrderPage.getOrderTotalString(orderId).should('contain.text', orderTotal)
-        onMyOrderPage.getOrderDateString(orderId).should('contain.text', createdDate)
-        onMyOrderPage.getDeliveryDateString(orderId).should('contain.text', deliverydate)
-        onMyOrderPage.getTrackMyOrderLink(orderId).should('contain.text', ' Track my order ') 
-        onMyOrderPage.getViewOrderDetailsLink(orderId).should('contain.text', 'View order details')
+      //Verify the Order details on My Orders page is same as the saved order details 
+        onMyOrderPage.getMyOrderNumber().should('contain', orderId)
+        onMyOrderPage.getOrderTotalString().should('contain.text', orderTotal)
+        onMyOrderPage.getOrderDateString().should('contain.text', createdDate)
+        onMyOrderPage.getDeliveryDateString().should('contain.text', deliverydate)
+        onMyOrderPage.getTrackMyOrderLink().should('contain.text', ' Track my order ') 
+        onMyOrderPage.getViewOrderDetailsLink().should('contain.text', 'View order details')
 
         })
 
