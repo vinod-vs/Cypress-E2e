@@ -19,7 +19,7 @@ TestFilter(['B2B', 'UI', 'P0'], () => {
     })
     it.skip('Create a list and Delete the list', () => {
       // Login
-      cy.loginViaUi(shoppers[0], Cypress.env('otpValidationSwitch'))
+      cy.loginViaUi(shoppers[0])
 
       // Select Delivery date Window
       cy.selectDeliveryDateAndWindow()

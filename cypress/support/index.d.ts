@@ -36,7 +36,7 @@ declare namespace Cypress {
     getRandomAvailableWindowViaApi(addressId: string, areaId: string, suburbId: string, fulfilmentType: string, windowType: string): any;
     getDayOfWeek(date: Date): any;
     formatToAmPm(time: any): any;
-    loginViaUi(shopper: any, validate2FA: boolean): any;
+    loginViaUi(shopper: any): any;
     searchBillingAddressViaApi(address: string): any;
     setBillingAddressViaApi(addressId: number): any;
     loginWithNewShopperViaApi(): any;

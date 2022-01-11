@@ -3,7 +3,7 @@ import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
 import { onDeliveryDateAndWindowPage } from '../../../fulfilment/ui/pageObjects/DeliveryDateAndWindowPage.ts'
 import { onTwoStepAuthPage } from '../pageObjects/TwoStepAuthPage'
 
-Cypress.Commands.add('loginViaUi', (shopper, validation2FA) => {
+Cypress.Commands.add('loginViaUi', (shopper) => {
   cy.visit('shop/securelogin')
 
   cy.url().should('include', '/securelogin')
@@ -14,7 +14,7 @@ Cypress.Commands.add('loginViaUi', (shopper, validation2FA) => {
 
   onLoginPage.getLoginButton().click()
 
-  if (validation2FA && shopper.type != 'business') {
+  if (Cypress.env('otpValidationSwitch') && shopper.type != 'business') {
     onTwoStepAuthPage.VerifyCode(Cypress.env('otpStaticCode'))
   }
 
