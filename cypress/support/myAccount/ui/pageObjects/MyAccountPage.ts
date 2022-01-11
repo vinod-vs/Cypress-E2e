@@ -10,6 +10,10 @@ export class MyAccountPage {
   getDeliveryUnlimitedSideNavLink () {
     return cy.get('nav[role="navigation"] > a[href*="deliveryunlimited"]')
   }
+
+  getLeftNavigationMenu() {
+    return cy.get('.left-panel a.navigation-link')
+  }
 }
 
 export const onMyAccountPage = new MyAccountPage()

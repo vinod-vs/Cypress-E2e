@@ -18,6 +18,11 @@ export class HomePage {
   getListsLink () {
     return cy.get('a.coreHeaderNav-link[href="/shop/mylists"]')
   }
+
+  getLogoLink () {
+    return cy.get('a[erlabel="homepage icon"]')             
+  }
+
 }
 
 export const onHomePage = new HomePage()

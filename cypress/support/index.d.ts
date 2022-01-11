@@ -108,5 +108,13 @@ declare namespace Cypress {
     signUpPersonalUser(signupdetails: any): any;
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
+    availableDigitalPaymentInstruments(): any;
+    navigateToMyAccountViaUi(): any;
+    navigateToMyPaymentMethodsViaUi(): any;
+    verifyMyPaymentMethodsPage(): any;
+    verifyMyPaymentMethodsNotVisible(): any;
+    logoutViaUi(): any;
+    saveNewCreditCardViaUi(creditCard: any): any;
+    deleteCreditCardViaUi(creditCard: any): any;
   }
 }
