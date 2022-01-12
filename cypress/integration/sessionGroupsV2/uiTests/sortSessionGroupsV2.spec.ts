@@ -21,7 +21,7 @@ TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
             sessionGroupsV2Page.getShowSelect().select(itemsPerPage.toString())
         })
 
-        it('Create Session Groups v2', () => {
+        it('Session Groups v2 Sorting by Default', () => {
 
             for(let i = 0; i < sessionGroupCount; i++) {
                 timeStamp = new Date().toISOString().substr(0, 26)
@@ -36,14 +36,15 @@ TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
                 editSessionGroupV2Page.getAddedAttribute('DigitalPayData', 'IsMigratedToDigitalPay').should('be.visible')
                 editSessionGroupV2Page.getUpdateButton().click()
                 sessionGroupsV2Page.getSessionGroupEntry(sessionGroupNames[i]).should('be.visible')
+                sessionGroupsV2Page.getTableRowName(1).should('have.text', sessionGroupNames[i])
             }
   
         })
 
-        it('Session Groups v2 Sorting by Default', () => {
-            sessionGroupsV2Page.getTableRowName(1).should('have.text', sessionGroupNames[1])
-            sessionGroupsV2Page.getTableRowName(2).should('have.text', sessionGroupNames[0])
-        })
+        //it('Session Groups v2 Sorting by Default', () => {
+            //sessionGroupsV2Page.getTableRowName(1).should('have.text', sessionGroupNames[1])
+            //sessionGroupsV2Page.getTableRowName(2).should('have.text', sessionGroupNames[0])
+        //})
 
         it('Session Groups v2 Sorting by Name', () => {
             sessionGroupsV2Page.getNameHeader().click()
