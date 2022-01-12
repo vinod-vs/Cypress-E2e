@@ -50,15 +50,15 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
 
       //Navigate to UI - My order page 
         cy.visit("/shop/myaccount/myorders")
-       
+        cy.wait(500)
       //Passing the orderId to the Page object constructor 
         let onMyOrderPage = new MyOrderPage(orderId) 
 
       //Verify the Order details on My Orders page is same as the saved order details 
         onMyOrderPage.getMyOrderNumber().should('contain', orderId)
-        onMyOrderPage.getOrderTotalString().should('contain.text', orderTotal)
-        onMyOrderPage.getOrderDateString().should('contain.text', createdDate)
-        onMyOrderPage.getDeliveryDateString().should('contain.text', deliverydate)
+        onMyOrderPage.getOrderTotal().should('contain.text', orderTotal)
+        onMyOrderPage.getOrderDate().should('contain.text', createdDate)
+        onMyOrderPage.getDeliveryDate().should('contain.text', deliverydate)
         onMyOrderPage.getTrackMyOrderLink().should('contain.text', ' Track my order ') 
         onMyOrderPage.getViewOrderDetailsLink().should('contain.text', 'View order details')
 

@@ -15,10 +15,15 @@ export class MyOrderPage {
         let reloadCount = 0
         const reloadLimit = 10
         const checkAndReload = (orderId: any) => {
+        cy.checkIfElementExists('wow-my-orders-list-container').then((orderExists: boolean) => { 
+        cy.log('the flag', orderExists)
+        if (orderExists === true){
         this.getmyOrderListContainersOnPage().invoke('text').then((text) => {
             if (text.includes(this.orderId)) {
                 cy.log('Order loaded', orderId)
             } 
+            })
+            }
             else {
                 cy.wait(15000, { log: false })
                 reloadCount += 1
@@ -66,15 +71,15 @@ export class MyOrderPage {
         return this.getMyOrdersListContainer(this.orderId).find('.order >' + this.detailsContent)
     }
 
-    getOrderDateString() {
+    getOrderDate() {
         return this.getMyOrdersContainerHeader().find('section.date > .content')
     }
 
-    getOrderTotalString() {
+    getOrderTotal() {
         return this.getMyOrdersContainerHeader().find('section.total > .content')
     }
 
-    getDeliveryDateString() {
+    getDeliveryDate() {
         return this.getMyOrdersListContainer(this.orderId).find('.delivery >' + this.detailsContent)
     }
 
