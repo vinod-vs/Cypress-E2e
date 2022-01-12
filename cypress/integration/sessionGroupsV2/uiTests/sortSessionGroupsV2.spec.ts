@@ -37,24 +37,17 @@ TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
                 editSessionGroupV2Page.getAddedAttribute('DigitalPayData', 'IsMigratedToDigitalPay').should('be.visible')
                 editSessionGroupV2Page.getUpdateButton().click()
                 sessionGroupsV2Page.getSessionGroupEntry(sessionGroupNames[i]).should('be.visible')
-                //sessionGroupsV2Page.getTableRowName(1).should('have.text', sessionGroupNames[i])
             }
   
         })
 
         it('Session Groups v2 Sorting by Default', () => {
 
-            sessionGroupsV2Page.getTableRowName(1).invoke('text').as("firstRowName")
             sessionGroupsV2Page.getTableRowName(2).invoke('text').as("secondRowName")
-            cy.get("@firstRowName").then(($firstRowName) => {
-                tableEntries.push($firstRowName.text())
-            })
             cy.get("@secondRowName").then(($secondRowName) => {
-                tableEntries.push($secondRowName.text())
+                sessionGroupsV2Page.getTableRowName(1).should('be.greaterThan',$secondRowName)
             })
-            cy.log(tableEntries[0])
-            cy.log(tableEntries[1])
-
+            
         })
 
         it('Session Groups v2 Sorting by Name', () => {
