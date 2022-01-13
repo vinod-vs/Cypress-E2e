@@ -16,9 +16,19 @@ export class DeliveryUnlimitedLandingPage {
         return cy.get('[for="plan-selection-plan10"] .price-dollars')
     }
 
+    getMonthlyPlanNameSenior () {
+        return cy.get('[for="plan-selection-plan43"] .plan-selection-name')
+    }
+
+    getMonthlyPlanPriceSenior () {
+        return cy.get('[for="plan-selection-plan43"] .price--withPer')
+    }
+
     getMonthlyPlanSection () {
         return cy.get('fieldset > div:nth-of-type(2)')
     }
+
+
 
     getAnnualPlanName () {
         return cy.get('[for="plan-selection-plan9"] .plan-selection-name')
@@ -26,6 +36,18 @@ export class DeliveryUnlimitedLandingPage {
 
     getAnnualPlanPrice () {
         return cy.get('[for="plan-selection-plan60"] .price-dollars')
+    }
+
+    getAnnualPlanNameSenior () {
+        return cy.get('[for="plan-selection-plan44"] .plan-selection-name')
+    }
+
+    getAnnualPlanPriceSenior () {
+        return cy.get('[for="plan-selection-plan44"] .price-dollars')
+    }
+
+    getAnnualPlanSection () {
+        return cy.get('fieldset > div:nth-of-type(3)')
     }
 
     getStartTrialButton () {
