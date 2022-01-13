@@ -21,8 +21,8 @@ TestFilter(['API', 'B2C', 'Checkout', 'P2'], () => {
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Bread', 50.00)
       cy.setPackagingOption(PackagingOptions.ReusableBags).then((response: any) => {
         const packagingSelection = response.PackagingPreferences.filter((preference: any) => preference.Code === PackagingOptions.ReusableBags)
-        expect(packagingSelection.length).to.eql(1)
-        expect(packagingSelection[0].IsSelected).to.eql(true)
+        expect(packagingSelection.length, 'Packaging Selection count').to.eql(1)
+        expect(packagingSelection[0].IsSelected, 'Is Packaging Option selected').to.eql(true)
       })
     })
   })
