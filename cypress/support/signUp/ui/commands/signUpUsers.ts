@@ -21,9 +21,7 @@ Cypress.Commands.add('signUpPersonalUser', (userinfo) => {
   onSignup.getLastName().type(userinfo.lastName)
   onSignup.getEmail().type(userinfo.emailAddress)
   onSignup.getPassword().type(userinfo.password)
-  cy.getDOB('personal').then((value)=> {
-    onSignup.getDateOfBirth().type(value)
-  })
+  onSignup.getDateOfBirth().type(userinfo.dateOfBirth)
   onSignup.getContactNumber().type(userinfo.mobilePhone)
 
   onSignup.getOrderCollectionOptionDeciceLater().should('be.checked')

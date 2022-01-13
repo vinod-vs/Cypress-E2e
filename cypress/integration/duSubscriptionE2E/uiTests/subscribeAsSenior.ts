@@ -9,8 +9,8 @@ import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], () => {
-  describe('[UI] User who is less than 60 years old - Subscribe to Delivery unlimited', () => {
+TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Senior', 'P0'], () => {
+  describe('[UI] User who is greater than 60 years old - Subscribe to Delivery unlimited', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
@@ -19,35 +19,35 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
   
     })
 
-    it('Subscribe to Delivery Unlimited monthly plan - Age less than 60', () => {
+    it('Subscribe to Delivery Unlimited monthly plan - Age greater than 60', () => {
 
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
       signUpDetails.password = 'test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-      cy.getDOB('personal').then((value)=> {
+      cy.getDOB('senior').then((value)=> {
           signUpDetails.dateOfBirth = value
       })
 
       cy.signUpPersonalUser(signUpDetails)
-      cy.subscribeToDUMonthlyPersonal(signUpDetails)
+      cy.subscribeToDUMonthlySenior(signUpDetails)
 
     })
 
-    it('Subscribe to Delivery Unlimited yearly plan - Age less than 60', () => {
+    it('Subscribe to Delivery Unlimited yearly plan - Age greater than 60', () => {
 
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
       signUpDetails.password = 'test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-      cy.getDOB('personal').then((value)=> {
+      cy.getDOB('senior').then((value)=> {
           signUpDetails.dateOfBirth = value
       })
 
       cy.signUpPersonalUser(signUpDetails)
-      cy.subscribeToDUYearlyPersonal(signUpDetails)
+      cy.subscribeToDUYearlySenior(signUpDetails)
 
     })
 

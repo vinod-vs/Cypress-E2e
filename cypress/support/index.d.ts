@@ -117,5 +117,8 @@ declare namespace Cypress {
     logoutViaUi(): any;
     saveNewCreditCardViaUi(creditCard: any): any;
     deleteCreditCardViaUi(creditCard: any): any;
+    subscribeToDUYearlyPersonal(userinfor: any): any;
+    subscribeToDUMonthlySenior(userinfor: any): any;
+    subscribeToDUYearlySenior(userinfor: any): any;
   }
 }
