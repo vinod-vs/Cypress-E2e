@@ -22,6 +22,12 @@
       "rewardsPassword": "testing123Rewards",
       "shopperId": "8457683",
       "platform": "B2C"
+    },
+    "emAccount4ForManic": {
+      "email": "oray+manic1@woolworths.com.au",
+      "password": "testing123",
+      "shopperId": "8475479",
+      "platform": "B2C"
     }
   }
 
