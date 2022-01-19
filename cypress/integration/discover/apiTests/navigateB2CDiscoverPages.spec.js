@@ -1,6 +1,4 @@
 /// <reference types="cypress" />
-
-
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/api/commands/signUp'
 import '../../../support/login/api/commands/login'
@@ -9,7 +7,7 @@ import b2cDiscoverPages from '../../../fixtures/b2cDiscoverPages/b2cDiscoverPage
 import '../../../support/discover/api/commands/navigateDiscoverPages'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
-    describe('[API] Navigate Woolworths at Work Discover pages', () => {
+    describe('[API] Navigate To Discover pages', () => {
         before(() => {
             cy.clearCookies({ domain: null })
             cy.clearLocalStorage({ domain: null })
