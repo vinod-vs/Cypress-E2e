@@ -4,16 +4,16 @@ import { onDeliveryUnlimitedPaymentConfirmation } from '../pageObjects/deliveryU
 import { onMyAccountPage } from '../../../myAccount/ui/pageObjects/MyAccountPage'
 
 /*
-** This command will subscribe a user to Delivery Unlimited monthly plan
+** This command will subscribe a user to Delivery Unlimited yearly plan
 ** Age of the user will be less than 60
 */
-Cypress.Commands.add('subscribeToDUMonthlyPersonal', () => {
+Cypress.Commands.add('subscribeToDUYearlyPersonal', () => {
     onMyAccountPage.getMyAccountHeaderLink().contains('My Account').click()
     onMyAccountPage.getDeliveryUnlimitedSideNavLink().click()
 
     // On DU landing page
-    onDeliveryUnlimitedLanding.getMonthlyPlanName().contains('Monthly')
-    onDeliveryUnlimitedLanding.getMonthlyPlanSection().contains('Monthly').click()
+    onDeliveryUnlimitedLanding.getAnnualPlanName().contains('Annual')
+    onDeliveryUnlimitedLanding.getAnnualPlanSection().contains('Annual').click()
     onDeliveryUnlimitedLanding.getStartTrialButton().click()
     
     // On DU payments page
@@ -34,17 +34,18 @@ Cypress.Commands.add('subscribeToDUMonthlyPersonal', () => {
 })
 
 
+
 /*
-** This command will subscribe a user to Delivery Unlimited monthly plan
+** This command will subscribe a user to Delivery Unlimited yearly plan
 ** Age of the user will be greater than 60
 */
-Cypress.Commands.add('subscribeToDUMonthlySenior', () => {
+Cypress.Commands.add('subscribeToDUYearlySenior', () => {
     onMyAccountPage.getMyAccountHeaderLink().contains('My Account').click()
     onMyAccountPage.getDeliveryUnlimitedSideNavLink().click()
 
     // On DU landing page
-    onDeliveryUnlimitedLanding.getMonthlyPlanNameSenior().contains('Monthly')
-    onDeliveryUnlimitedLanding.getMonthlyPlanSection().contains('Monthly').click()
+    onDeliveryUnlimitedLanding.getAnnualPlanNameSenior().contains('Annual')
+    onDeliveryUnlimitedLanding.getAnnualPlanSection().contains('Annual').click()
     onDeliveryUnlimitedLanding.getStartTrialButton().click()
     
     // On DU payments page

@@ -20,6 +20,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/logout/api/commands/logout'
+import '../../../support/checkout/api/commands/checkoutHelper'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API]Place an order on B2C Platform via split payment (Credit Card & Gift Card)', () => {
@@ -59,16 +60,26 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.digitalPay(splitPayment).then((response) => {
-        expect(response.TransactionReceipt).to.not.be.null
-        expect(response.PlacedOrderId).to.not.be.null
-
-        confirmOrderParameter.placedOrderId = response.PlacedOrderId
+        if (response.PaymentResponses !== null) {
+          cy.get(response.PaymentResponses).each((instrument) => {
+            expect(instrument.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrument.PaymentInstrumentType).to.be.null
+          }).then(() => {
+            checkForOrderPlacementErrorsAndThrow(response).then(() => {
+              expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
+              expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
+                
+              confirmOrderParameter.placedOrderId = response.PlacedOrderId 
+            })
+          })
+        } else {
+          cy.checkForOrderPlacementErrorsAndThrow(response)
+        }       
       })
-
+    
       cy.confirmOrder(confirmOrderParameter).then((response) => {
-        expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
+        expect(response.Order.OrderId, 'Order Placement Id').to.eqls(confirmOrderParameter.placedOrderId)
 
-        cy.log('This is the order id: ' + response.Order.OrderId)
+        cy.log('This is the order id: ' + response.Order.OrderId) 
       })
     })
   })
