@@ -1,0 +1,18 @@
+[
+    {
+        "PageName": "Fresh Ideas For You",
+        "EndPointName": "freshFoodDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Valentine's Day",
+        "EndPointName": "freshDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Fresh",
+        "EndPointName": "mealPlanningDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Meal Planning",
+        "EndPointName": "foodSaversDiscoverPageEndPoint"
+    }
+]
