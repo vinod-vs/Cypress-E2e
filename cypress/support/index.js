@@ -24,6 +24,9 @@ module.exports = {
 
 require('cypress-xpath')
 
+import chaiExclude from 'chai-exclude'
+chai.use(chaiExclude)
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 

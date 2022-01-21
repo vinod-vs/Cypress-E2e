@@ -6,8 +6,6 @@ import { onTwoStepAuthPage } from '../pageObjects/TwoStepAuthPage'
 Cypress.Commands.add('loginViaUi', (shopper) => {
   cy.visit('shop/securelogin')
 
-  cy.url().should('include', '/securelogin')
-
   onLoginPage.getEmailAddress().type(shopper.email)
 
   onLoginPage.getPassword().type(shopper.password)

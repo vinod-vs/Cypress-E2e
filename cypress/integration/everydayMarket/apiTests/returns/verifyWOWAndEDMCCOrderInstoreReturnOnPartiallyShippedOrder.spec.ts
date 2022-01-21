@@ -168,7 +168,7 @@ TestFilter(['EDM', 'API'], () => {
                     timeout: Cypress.env('marketApiTimeout')
                   }).as('finalProjection').then((response) => {
                     expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
-                    expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
+                    expect(response.invoices[0].wowStatus).to.be.equal('PartiallyShipped')
                     expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
                     expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
                     expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
