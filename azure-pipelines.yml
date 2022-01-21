@@ -116,11 +116,11 @@ jobs:
             npm install -g junit-report-merger
             jrm ./cypress/results/mergedreport.xml "./cypress/results/*.xml"
               
-            token=`curl -k --location --request POST 'https://xray.cloud.xpand-it.com/api/v1/authenticate' \
+            token=`curl --location --request POST 'http://xray.cloud.xpand-it.com/api/v1/authenticate' \
             --header 'Content-Type: application/json' \
             --data-raw '{ "client_id": "$(client_id)","client_secret": "$(client_secret)" }'| tr -d '"' `
 
-            curl  -H -k "Content-Type: text/xml" -X POST -H "Authorization: Bearer ${token}" --data @cypress/results/mergedreport.xml 'https://xray.cloud.xpand-it.com/api/v1/import/execution/junit?projectKey=$(project_key)'
+            curl  -H  "Content-Type: text/xml" -X POST -H "Authorization: Bearer ${token}" --data @cypress/results/mergedreport.xml 'http://xray.cloud.xpand-it.com/api/v1/import/execution/junit?projectKey=$(project_key)'
 
       - task: AzureCLI@2
         displayName: "Upload Allure Reports"
