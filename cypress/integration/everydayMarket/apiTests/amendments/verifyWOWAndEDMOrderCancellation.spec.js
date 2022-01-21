@@ -114,6 +114,8 @@ TestFilter(['EDM', 'API'], () => {
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
             }).as('finalProjection').then((response) => {
+              orderId = response.orderId
+
               // Order details
               lib.verifyCommonOrderDetails(response, { ...testData, orderId: response.orderId }, shopperId)
               // Seller details
@@ -176,11 +178,11 @@ TestFilter(['EDM', 'API'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
                 // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', { ...testData, orderId: orderId }, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                lib.verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketOrderDispatched', { ...testData, orderId: orderId }, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketRewardsCredited', { ...testData, orderId: orderId }, shopperId, 1)
               })
             })
           })
@@ -213,8 +215,6 @@ TestFilter(['EDM', 'API'], () => {
             lib.verifyCompleteRefundDetailsWithRetry(testData.orderId, wowRefund, 0, 0, 0)
 
             // Invoke OQS TMO api and validate it against the projection
-            // Old trader order will be in Cancelled state, Will be an WOW + MP Order and will have all the WOW items as well
-            lib.verifyOQSOrderStatus(testData.orderId, 'Cancelled', false, testData, true)
             // New trader order will be in Received state, Will be an MP ONLY Order and will NOT have all the WOW items in it
             lib.verifyOQSOrderStatus(finalProjection.orderId, 'Received', true, { ...testData, items: [] }, false)
           })

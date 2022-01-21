@@ -384,11 +384,14 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             );
 
             // Refund-> Notes verification
-            expect(response.invoices[0].refunds[0].notes.length).to.be.equal(2);
+            expect(response.invoices[0].refunds[0].notes.length).to.be.equal(3);
             expect(response.invoices[0].refunds[0].notes[0].note).to.be.equal(
-              "Automation refundRequestReturn note: I don't want this"
+              "Customer Return from EM Test Automation_Full_Return"
             );
             expect(response.invoices[0].refunds[0].notes[1].note).to.be.equal(
+              "Automation refundRequestReturn note: I don't want this"
+            );
+            expect(response.invoices[0].refunds[0].notes[2].note).to.be.equal(
               "Auto-refund cancellation"
             );
             // Refund-> refundItems verification

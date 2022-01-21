@@ -30,6 +30,7 @@ Cypress.Commands.add('loginWithNewShopperViaApi', () => {
       password: signUpDetails.password
     }
 
+    cy.log('Shopper details: ' + JSON.stringify(shopperDetails))
     cy.loginViaApiAndHandle2FA(shopperDetails)
   })
 })

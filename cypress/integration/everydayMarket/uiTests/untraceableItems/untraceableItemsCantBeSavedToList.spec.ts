@@ -10,7 +10,7 @@ import '../../../../support/login/ui/commands/login'
 import '../../../../support/utilities/ui/utility'
 
 
-TestFilter(['EDM', 'UI', 'MANIC'], () => {
+TestFilter(['MANIC'], () => {
   describe('[UI] RP-5466 - EM | Untraceable items should not be able to be saved to list', () => {
     before(() => {
       cy.clearCookies({ domain: null })
