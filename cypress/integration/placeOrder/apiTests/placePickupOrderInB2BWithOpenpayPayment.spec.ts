@@ -18,7 +18,8 @@ import "../../../support/payment/api/commands/creditcard";
 import "../../../support/payment/api/commands/digitalPayment";
 import "../../../support/payment/api/commands/setPurchaseOrderCode";
 import { fulfilmentType } from "../../../fixtures/checkout/fulfilmentType.js";
-import storeSearchBody from "../../../fixtures/checkout/storeSearch.json";
+import storeSearchBody from "../../../fixtures/checkout/b2bStoreSearch.json";
+import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 
 TestFilter(["B2B", "API", "P0"], () => {
   describe("[API] Place a pickup order on Woolworths at Work website using Openpay", () => {
@@ -71,12 +72,17 @@ TestFilter(["B2B", "API", "P0"], () => {
       });
 
       cy.openPayDigitalPay(openPayPayment).then((response: any) => {
-        expect(response).to.have.property("PartialSuccess", false);
-        expect(response).to.have.property("OrderReference");
-        expect(response.PaymentResponses[0].PaymentInstrumentType).to.be.eq(
-          "Openpay"
-        );
-      });
+        expect(response.TransactionReceipt).to.not.be.null
+        expect(response.PlacedOrderId).to.not.be.null
+        confirmOrderParameter.placedOrderId = response.PlacedOrderId
+      })
+
+      cy.confirmOrder(confirmOrderParameter).then((response: any) => {
+        expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
+
+        cy.log('This is the order id: ' + response.Order.OrderId)
+      })
+
     });
   });
 });
