@@ -122,9 +122,5 @@
     {
         "PageName": "Discovery Garden",
         "EndPointName": "garderDiscoverPageEndPoint"
-    },
-    {
-        "PageName": "Fresh Ideas For You",
-        "EndPointName": "navigateToDiscoverPageEndpoint"
     }
 ]
