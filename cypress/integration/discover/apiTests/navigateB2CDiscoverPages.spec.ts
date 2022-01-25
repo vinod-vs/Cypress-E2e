@@ -14,14 +14,14 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         })
 
         it('Should be able to navigate to all Discover pages', () => {
-            cy.navigateDiscoverPageB2c('b2cDiscoverPageEndPoint').then((response: string | any[]) => {
+            (cy as any).navigateDiscoverPageB2c('b2cDiscoverPageEndPoint').then((response: string | any[]) => {
                 Cypress._.times(response.length, (n) => {
                     expect(response[n].Name).to.eqls(b2cDiscoverPages[n].PageName)
                 })
             })
 
             Cypress._.times(b2cDiscoverPages.length, (n) => {
-                cy.navigateDiscoverPageB2c(b2cDiscoverPages[n].EndPointName)
+                (cy as any).navigateDiscoverPageB2c(b2cDiscoverPages[n].EndPointName)
             })
         })
     })
