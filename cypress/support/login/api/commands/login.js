@@ -44,7 +44,7 @@ Cypress.Commands.add('postOneTimePasswordRequest', (oneTimePassword) => {
       UpdatePrimaryContact: null
     }
   }).then((response) => {
-    return response.body
+    return response
   })
 })
 
