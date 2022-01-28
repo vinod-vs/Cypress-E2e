@@ -68,7 +68,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
         const minWowOrderThreshold = item.minWowOrderThreshold
         const bufferWowQuantity = item.bufferWowQuantity
         // Get available WOW product only
-        const wowProducts = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley)
+        const wowProducts = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley && searchProduct.Products[0].IsForDelivery)
         expect(wowProducts.length).to.be.greaterThan(0)
 
         // Add available WOW product to cart
@@ -114,7 +114,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
         let mpStockCode = 0
         const mpQuantity = item.quantity
         // Get available EDM product only
-        const edmProducts = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley)
+        const edmProducts = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley && searchProduct.Products[0].IsForDelivery)
         expect(edmProducts.length).to.be.greaterThan(0)
 
         // Add available EDM product to cart

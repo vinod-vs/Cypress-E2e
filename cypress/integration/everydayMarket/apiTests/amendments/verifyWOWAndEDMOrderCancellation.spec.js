@@ -39,15 +39,17 @@ TestFilter(['EDM', 'API'], () => {
       let orderReference
       let edmOrderId
       let edmInvoiceId
+      let newOrderId
+      let oldOrderId
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(shopper, testData).as('placedOrderResponse')
 
       // Verify order totals
       cy.get('@placedOrderResponse').then((placedOrderResponse) => {
-        orderId = placedOrderResponse.Order.OrderId.toString()
+        oldOrderId = placedOrderResponse.Order.OrderId.toString()
         orderReference = placedOrderResponse.Order.OrderReference.toString()
-        testData.orderId = orderId
+        testData.orderId = oldOrderId
         testData.orderReference = orderReference
         cy.log('This is the order id: ' + placedOrderResponse.Order.OrderId + ', Order ref: ' + placedOrderResponse.Order.OrderReference)
 
@@ -55,7 +57,7 @@ TestFilter(['EDM', 'API'], () => {
         lib.verifyOrderTotals(testData, placedOrderResponse)
 
         // Invoke the order api and verify the projection content
-        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, oldOrderId, {
           function: function (response) {
             if (response.body.invoices[0].wowStatus !== 'Placed') {
               cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
@@ -78,7 +80,7 @@ TestFilter(['EDM', 'API'], () => {
         cy.orderEventsApiWithRetry(orderReference, {
           function: function (response) {
             if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-              !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
               cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
               throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
             }
@@ -98,7 +100,9 @@ TestFilter(['EDM', 'API'], () => {
         })
 
         // Cancel the above created WOW order
-        cy.cancelOrder(orderId).as('cancelOrder')
+        cy.cancelOrder(oldOrderId).as('cancelOrder')
+        // Waiting so that the new trader order is created. If not sometimes it'll still be associated with the old order id and test fails
+        cy.wait(Cypress.config('fiveSecondWait'))
 
         cy.get('@cancelOrder').then((cancelOrder) => {
           // Verify the MP order remains unchanged by dispatching its items
@@ -114,7 +118,7 @@ TestFilter(['EDM', 'API'], () => {
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
             }).as('finalProjection').then((response) => {
-              orderId = response.orderId
+              newOrderId = response.orderId
 
               // Order details
               lib.verifyCommonOrderDetails(response, { ...testData, orderId: response.orderId }, shopperId)
@@ -168,21 +172,22 @@ TestFilter(['EDM', 'API'], () => {
               cy.orderEventsApiWithRetry(orderReference, {
                 function: function (response) {
                   if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
-                    cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
-                    throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
+                                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                                            !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited') ||
+                                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderAmended')) {
+                    cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched, MarketRewardsCredited & MarketOrderAmendedwere not present')
+                    throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched, MarketRewardsCredited & MarketOrderAmended were not present')
                   }
                 },
                 retries: Cypress.env('marketApiRetryCount'),
                 timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
-                // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', { ...testData, orderId: orderId }, shopperId, 1)
-                // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                lib.verifyEventDetails(response, 'MarketOrderDispatched', { ...testData, orderId: orderId }, shopperId, 1)
-                // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                lib.verifyEventDetails(response, 'MarketRewardsCredited', { ...testData, orderId: orderId }, shopperId, 1)
+                // Verify events related to the old trader orderId
+                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', { ...testData, orderId: oldOrderId }, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketOrderDispatched', { ...testData, orderId: oldOrderId }, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketRewardsCredited', { ...testData, orderId: oldOrderId }, shopperId, 1)
+                // Verify events related to the new trader orderId
+                lib.verifyEventDetails(response, 'MarketOrderAmended', { ...testData, orderId: newOrderId }, shopperId, 1)
               })
             })
           })
@@ -206,10 +211,10 @@ TestFilter(['EDM', 'API'], () => {
           cy.get('@finalProjection').then((finalProjection) => {
             // Verify the MP and shipping invoices are available for the customer
             // TO-DO Verify the invoice content
-            cy.verifyOrderInvoice({ ...testData, orderId: finalProjection.orderId })
+            cy.verifyOrderInvoice({ ...testData, orderId: newOrderId })
 
             const wowRefund = Number.parseFloat(Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges) -
-              Number(testData.teamDiscount) - Number(testData.orderDiscountWithoutTeamDiscount)).toFixed(2)
+                            Number(testData.teamDiscount) - Number(testData.orderDiscountWithoutTeamDiscount)).toFixed(2)
             cy.log('ExpectedWowRefund: ' + wowRefund)
             // Verify just the WOW order is refunded and not the EM order
             lib.verifyCompleteRefundDetailsWithRetry(testData.orderId, wowRefund, 0, 0, 0)
