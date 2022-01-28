@@ -183,9 +183,9 @@ TestFilter(['EDM', 'API'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
                 // Verify events related to the old trader orderId
-                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', { ...testData, orderId: oldOrderId }, shopperId, 1)
-                lib.verifyEventDetails(response, 'MarketOrderDispatched', { ...testData, orderId: oldOrderId }, shopperId, 1)
-                lib.verifyEventDetails(response, 'MarketRewardsCredited', { ...testData, orderId: oldOrderId }, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', { ...testData, orderId: newOrderId }, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketOrderDispatched', { ...testData, orderId: newOrderId }, shopperId, 1)
+                lib.verifyEventDetails(response, 'MarketRewardsCredited', { ...testData, orderId: newOrderId }, shopperId, 1)
                 // Verify events related to the new trader orderId
                 lib.verifyEventDetails(response, 'MarketOrderAmended', { ...testData, orderId: newOrderId }, shopperId, 1)
               })
