@@ -1,0 +1,126 @@
+[
+    {
+        "PageName": "Fresh Ideas For You",
+        "EndPointName": "freshFoodDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Everyday Market",
+        "EndPointName": "everyDayMarketDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Collect Glass Containers",
+        "EndPointName": "collectGlassContainersDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Valentine's Day",
+        "EndPointName": "valentinesDayDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Fresh",
+        "EndPointName": "freshDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Woolies Worth",
+        "EndPointName": "wooliesWorthDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Make Yourself At Home With Woolworths",
+        "EndPointName": "makeYourselfAtHomefreshhomeDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Plant-Based",
+        "EndPointName": "plantBasedDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Baby & Toddler",
+        "EndPointName": "babyToddlerDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Meal Planning",
+        "EndPointName": "mealPlanningDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Healthy Eating",
+        "EndPointName": "healthyEatingDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Discover Coffee",
+        "EndPointName": "coffeeTimeAtWoolworthsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Food Savers",
+        "EndPointName": "foodSaversDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Fresh Food Kids",
+        "EndPointName": "feshFoodKidsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Featured Brands",
+        "EndPointName": "featuredBrandsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Jamie Oliver",
+        "EndPointName": "jamieOliverDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Our Brands",
+        "EndPointName": "ourBrandsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Back to School",
+        "EndPointName": "backToSchoolDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Online Shopping",
+        "EndPointName": "shoppingOnlineDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Everyday Rewards",
+        "EndPointName": "everydayRewardsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Pet Hub",
+        "EndPointName": "petHubDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Sustainability",
+        "EndPointName": "sustainabilityDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Community",
+        "EndPointName": "communityDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Insurance",
+        "EndPointName": "insuranceDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Gift Cards",
+        "EndPointName": "giftCardsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "About Us",
+        "EndPointName": "aboutUsDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Woolworths Metro",
+        "EndPointName": "metroDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Ampol Woolworths Metro",
+        "EndPointName": "metroPetrolDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Woolworths Petrol",
+        "EndPointName": "petrolDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Disney+ OoshiesTM",
+        "EndPointName": "disneyPlusOosheysDiscoverPageEndPoint"
+    },
+    {
+        "PageName": "Discovery Garden",
+        "EndPointName": "garderDiscoverPageEndPoint"
+    }
+]
