@@ -72,7 +72,7 @@ function returnCUPprice (cupTestdata) {
         break
       case 'length':
         adjustmentValue = adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata)
-        break
+        break       
       default:
         adjustmentValue = 1
     }
@@ -148,7 +148,7 @@ function adjustItemsizeToComparativeSizeForDiffLengthComb (cupTestdata) {
   let adjustmentValue = Number(0)
   cy.log('itemunit: ' + cupTestdata.itemUnit + ' , comparativeUnit: ' + cupTestdata.comparativeUnit)
   if (cupTestdata.itemUnit == 'MM' && cupTestdata.comparativeUnit == 'CM') {
-    adjustmentValue = 100
+    adjustmentValue = 10
   }
 
   if (cupTestdata.itemUnit == 'MM' && cupTestdata.comparativeUnit == 'M') {
@@ -156,19 +156,19 @@ function adjustItemsizeToComparativeSizeForDiffLengthComb (cupTestdata) {
   }
 
   if (cupTestdata.itemUnit == 'CM' && cupTestdata.comparativeUnit == 'MM') {
-    adjustmentValue = 0.001
+    adjustmentValue = 0.1
   }
 
   if (cupTestdata.itemUnit == 'CM' && cupTestdata.comparativeUnit == 'M') {
-    adjustmentValue = 1000
+    adjustmentValue = 100
   }
 
   if (cupTestdata.itemUnit == 'M' && cupTestdata.comparativeUnit == 'CM') {
-    adjustmentValue = 0.0001
+    adjustmentValue = 0.01
   }
 
   if (cupTestdata.itemUnit == 'M' && cupTestdata.comparativeUnit == 'MM') {
-    adjustmentValue = 0.00001
+    adjustmentValue = 0.001
   }
   cy.log('adjustmentValue:' + adjustmentValue)
 
@@ -191,6 +191,7 @@ function verifyCupValues (cupTestdata) {
 
   // cup price
   expect(Number(cupTestdata.cupPrice)).to.be.equal(expCupPrice)
+  
   // hasCupPrice
   expect(cupTestdata.hasCupPrice).to.be.equal(true)
   // CupMeasure
