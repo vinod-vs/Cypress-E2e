@@ -224,3 +224,22 @@ Cypress.Commands.add("verifySelfServiceReturnOnSM", (returnType) => {
     });
   });
 });
+
+Cypress.Commands.add("performReIssueOnWowOrderOnSM", (isMarketOnly) => {
+  cy.get("@finalProjection").then((finalProjection) => {
+  // Verify common details for woth WOW & EDM orders
+  // Verify OrderReference Number on the Order Management SM UI
+  if (isMarketOnly === false) {
+  onOrderManagement.getOrderReference().parent().invoke("text").should("contain", finalProjection.orderReference);
+  // Click on "Woolworths Order" Tab
+  onOrderManagement.getWOWTab().click();
+  cy.wait(Cypress.config("tenSecondWait")); //Required for page to load. Else element verifications will fail
+  // Verify Wow 'OrderID' Under the "Woolworths Order" Tab
+  onOrderManagement.getWOWTabOrderId().parent().invoke("text").should("contain", finalProjection.orderId);
+  //Verify Wow 'OrderStatus' is 'Dispatched' Under the "Woolworths Order" Tab
+  onOrderManagement.getWOWTabOrderStatus().parent().invoke("text").should("contain", 'Dispatched');
+  } //  if (isMarketOnly === false) - ENDS
+
+
+  });
+});

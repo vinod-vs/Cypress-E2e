@@ -20,6 +20,7 @@
     "devDependencies": {
         "@bahmutov/cy-api": "^1.5.0",
         "@shelex/cypress-allure-plugin": "^2.3.5",
+        "@types/node": "^17.0.10",
         "allure-commandline": "^2.13.8",
         "browserstack-cypress-cli": "^1.9.0",
         "chai-exclude": "^2.1.0",
@@ -52,5 +53,12 @@
             "expect",
             "assert"
         ]
+    },
+    "dependencies": {
+        "fs": "0.0.1-security",
+        "xml": "^1.0.1",
+        "xml-formatter": "^2.6.0",
+        "xml2js": "^0.4.23",
+        "xml2json": "^0.12.0"
     }
 }
