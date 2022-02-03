@@ -51,7 +51,11 @@ TestFilter(['B2B' ,'API', 'P0'], () => {
       })
 
       cy.completeWindowFulfilmentViaApi().then((response: any) => {
-        expect(response).to.have.property('IsSuccessful', true)
+        if (!response.IsSuccessful) {
+          cy.completeWindowFulfilmentViaApi().then((newResponse: any) => {
+            expect(newResponse).to.have.property("IsSuccessful", true)
+          })
+        }
       })
 
       cy.clearTrolley().then((response: any) => {
