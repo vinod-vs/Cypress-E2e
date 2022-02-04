@@ -5,7 +5,7 @@
 export class Signup {
   
   getPageTitle () {
-    return cy.get('.signupForm-headerTitle')
+    return cy.get('//form[@id="signupForm"]//h3[@class="signupForm-headerTitle"]')
   }
 
   getFirstName () {
@@ -25,19 +25,19 @@ export class Signup {
   }
 
   getDateOfBirth () {
-    return cy.get('#signupForm .signupForm-inputWrapper:nth-child(6) .ng-invalid:nth-of-type(1) [type]')
+    return cy.get('shared-textbox[name="DateOfBirth"] > input[name="DateOfBirth"]')
   }
 
   getContactNumber () {
-    return cy.get('input[name="mobilePhone"]')
+    return cy.get('shared-textbox[name="MobilePhone"] > input[name="MobilePhone"]')
   }
 
   getShoppingOnbehalfBusinessSelection () {
-    return cy.get('.signupForm-isBusiness .iconNoti-Confirmation_Tick_Thick')
+    return cy.get('.signupForm-shoppingOfBusinessCheckBox .iconNoti-Confirmation_Tick_Thick')
   }
 
   getBusinessABN () {
-    return cy.get('shared-abn [type]')
+    return cy.get('shared-textbox[label="ABN*"] > input[name="Abn"]')
   }
 
   getBusinessEntityName () {
@@ -97,7 +97,11 @@ export class Signup {
   }
 
   getSubmitButton () {
-    return cy.get('.primary-legacy')
+    return cy.get('shared-button > .full-width.l.m.mobile-full-width.success')
+  }
+
+  getCancelButton () {
+    return cy.get('.button.button--large.signupForm-cancel')
   }
 }
 
