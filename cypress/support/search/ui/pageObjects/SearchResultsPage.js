@@ -1,6 +1,6 @@
 export class SearchResultsPage {
   getIncreaseQuantityButton () {
-    return cy.get('.iconAct-Add_Plus')
+    return cy.get('.cartControls-incrementButton')
   }
 
   getProductPrice () {
