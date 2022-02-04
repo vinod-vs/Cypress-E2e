@@ -7,15 +7,14 @@ import { values } from 'cypress/types/lodash'
 
 /*
 ** This command will sign up new user to Woolworths online
-** Age of the user will be less than 60
+** Age of the user can be either less than 60 or greater than 60
 */
 Cypress.Commands.add('signUpPersonalUser', (userinfo) => {
 
-  cy.visit((Cypress.env('uat') + 'shop/signup'))
+  cy.visit((Cypress.env('uat') + '/shop/signup/one-login'))
 
   Cypress.env('url')
-  onSignup.getPageTitle().should('contain.text', "Sign Up")
-
+  
   // Assign values to the 'userinfo' data structure and submit the sign-up form
   onSignup.getFirstName().type(userinfo.firstName)
   onSignup.getLastName().type(userinfo.lastName)
@@ -24,8 +23,6 @@ Cypress.Commands.add('signUpPersonalUser', (userinfo) => {
   onSignup.getDateOfBirth().type(userinfo.dateOfBirth)
   onSignup.getContactNumber().type(userinfo.mobilePhone)
 
-  onSignup.getOrderCollectionOptionDeciceLater().should('be.checked')
-  onSignup.getReceiveFreeSampleSelctionYes().should('be.checked')
   onSignup.getTermsAndConditions().click()
   onSignup.getSubmitButton().click()
 
