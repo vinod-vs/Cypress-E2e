@@ -72,3 +72,101 @@ Cypress.Commands.add('checkAndGetGiftCardPaymentInstrumentWithExpectedBalance', 
     cy.wrap(giftcardPaymentInstrumentId).as('giftcardPaymentInstrumentId')
   })
 })
+
+//This command is to generate gift cards(s) for payment
+Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
+  const maxAmount = 500
+  let cardsRequired
+  let lastCardValue
+
+  //Calculate num of cards and amount in last card
+  if(expectedGiftCardBalance >= maxAmount){
+    let remainder = expectedGiftCardBalance%maxAmount
+    if (remainder === 0){
+      cardsRequired = expectedGiftCardBalance/maxAmount  
+      lastCardValue = maxAmount                          
+    }else{
+      cardsRequired = (Math.floor(expectedGiftCardBalance/maxAmount)) + 1    
+      lastCardValue = Math.round(remainder*10)/10  
+    }
+  }else{
+    cardsRequired = 1
+    lastCardValue = expectedGiftCardBalance
+  }
+  cy.log('Number of cards required is '+cardsRequired)
+
+  const giftcardPaymentInstrumentIds = []
+
+  //Create Each Card, Link it to Account, add it to the above return array
+  for(let i=1;i<=cardsRequired;i++){
+    cy.log('Adding multiple gift card num '+i)
+    
+    //Set New Card Value  
+    let newCardValue
+    if(i<cardsRequired){
+      newCardValue = 500
+    }else if(i===cardsRequired){
+      newCardValue = lastCardValue  // $57.7 in our case
+    }
+
+    //Generate New Card
+    cy.generateANewGiftCard(newCardValue).as('newGiftCard')
+    
+    //Get Giftcard details and Add to account
+    cy.get('@newGiftCard').then((newGiftCard) => {
+      giftCardDetails.cardNumber = newGiftCard.Cards[0].CardNumber
+      giftCardDetails.pinCode = newGiftCard.Cards[0].CardPin
+      const newCardSuffix = (giftCardDetails.cardNumber).slice(-4)
+
+      // Add the new gift card to account
+      cy.addGiftCardToAccount(giftCardDetails)
+      cy.log('Added newly created gift card to account: ' + JSON.stringify(giftCardDetails))
+
+      // Get all giftcards 
+      cy.getDigitalPaymentInstruments().as('paymentInstrumentsResponse')
+      cy.get('@paymentInstrumentsResponse').then((paymentInstruments) => {
+        expect(paymentInstruments.GiftCard).to.not.be.null
+        expect(paymentInstruments.GiftCard).to.not.be.empty
+        expect(paymentInstruments.GiftCard.Enabled).to.be.equal(true)
+        expect(paymentInstruments.GiftCard.Instruments.length).to.be.greaterThan(0)
+
+        //Get Gift card payment instruments of the user
+        const giftcardPaymentInstruments = paymentInstruments.GiftCard.Instruments.filter(instrument => instrument.Allowed && !instrument.Expired)
+
+        for(let i=0;i<giftcardPaymentInstruments.length;i++){
+          if(giftcardPaymentInstruments[i].CardSuffix==newCardSuffix){
+            giftcardPaymentInstrumentIds.push({"InstrumentId":giftcardPaymentInstruments[i].PaymentInstrumentId, "amount":newCardValue})
+            cy.log("Adding gift card with Payment instrumetn ID " +giftcardPaymentInstruments[i].PaymentInstrumentId + "and amount "+newCardValue)
+            break
+          }
+        }
+      })
+    })
+  }
+  cy.wrap(giftcardPaymentInstrumentIds).as('giftcardPaymentInstrumentIds')
+  cy.log(giftcardPaymentInstrumentIds)
+})
+
+//This command is to make payment using giftcards only
+Cypress.Commands.add('payWithGiftCard', (digitalPaymentRequest) => {
+  // Get all payment instruments for the logged in user
+  cy.getDigitalPaymentInstruments().as('paymentInstrumentsResponse')
+
+  // Verify that there are the linked Gift cards
+  cy.get('@paymentInstrumentsResponse').then((paymentInstruments) => {
+    expect(paymentInstruments.GiftCard).to.not.be.null
+    expect(paymentInstruments.GiftCard).to.not.be.empty
+    expect(paymentInstruments.GiftCard.Enabled).to.be.equal(true)
+    expect(paymentInstruments.GiftCard.Instruments.length).to.be.greaterThan(0)
+
+    // Pay using Gift cards 
+    cy.api({
+      method: 'POST',
+      url: Cypress.env('digitalPaymentEndpoint'),
+      body: digitalPaymentRequest
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      return response.body
+    })
+  })
+})

@@ -221,5 +221,11 @@
   "GenericEMonlyProductTestData": {
     "searchTerm": "automation",
     "quantity": 2
+  },
+  "VerifyEDMItemsGCLimit": {
+    "searchTerm": "Mutli Variant-reversible Bed",
+    "quantity": 46,
+    "giftCardValue": 5057.7,
+    "paymentType": "GIFTCARD_ONLY"
   }    
 }

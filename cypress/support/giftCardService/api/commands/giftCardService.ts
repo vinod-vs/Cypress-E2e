@@ -10,7 +10,7 @@ Cypress.Commands.add("authorizeGiftingService", () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8 ",
-      DateAtClient: dateAtClient,
+      "DateAtClient": dateAtClient,
     },
     body: gifCardAuthorizeRequest,
     url: Cypress.env("giftCardServiceEndpoint") + "/authorize",
@@ -32,7 +32,7 @@ Cypress.Commands.add("generateANewGiftCard", (giftCardAmount) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=UTF-8 ",
-        DateAtClient: dateAtClient,
+        "DateAtClient": dateAtClient,
         TransactionId: Number(Math.floor(Math.random() * 100000)),
       },
       auth: {

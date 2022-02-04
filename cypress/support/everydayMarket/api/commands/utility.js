@@ -260,6 +260,31 @@ Cypress.Commands.add('payTheOrder', (testData) => {
         })
       })
       break
+      case paymentType.GIFTCARD_ONLY:
+        
+        // Checkout
+        cy.navigateToCheckout().as('checkoutResponse').then((response) => {
+          expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+        })
+        // Generate multiple giftcards and get array of gift card paymentInstrumentIds
+        cy.generateGiftCards(testData.giftCardValue)
+      
+        // Pay with Gift Card
+        cy.get('@checkoutResponse').then((checkoutResponse) => {
+          cy.get('@giftcardPaymentInstrumentIds').then((giftcardPaymentInstrumentIds) => {
+            const payments = []
+            for(let i=0;i<giftcardPaymentInstrumentIds.length;i++){
+              payments.push({amount: giftcardPaymentInstrumentIds[i].amount, paymentInstrumentId: giftcardPaymentInstrumentIds[i].InstrumentId, stepUpToken: 'tokenise-stepup-token'})
+            }
+    
+            digitalPaymentRequest.payments = payments
+            //cy.log('giftcardPaymentInstrumentId: ' + giftcardPaymentInstrumentId)
+            cy.log('payments: ' + JSON.stringify(payments))
+            cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
+            cy.payWithGiftCard(digitalPaymentRequest).as('paymentResponse')
+          })
+        })
+        break
     default: // default is CREDIT_CARD_ONLY
       cy.payByCreditCard(true)
       break

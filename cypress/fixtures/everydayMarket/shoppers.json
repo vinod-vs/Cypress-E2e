@@ -28,6 +28,13 @@
       "password": "testing123",
       "shopperId": "8475479",
       "platform": "B2C"
+    },
+    "emAccount5ForBlaze": {
+      "email": "dmudigonda+blaze1@woolworths.com.au",
+      "password": "testing123",
+      "rewardsCardNumber": "9355125618274",
+      "shopperId": "8481276",
+      "platform": "B2C"
     }
   }
 
