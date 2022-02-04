@@ -13,7 +13,8 @@
    "hasCupPrice":"true",
    "cupString":"",
    "measureType":"volume"
-   },{
+   },
+   {
      "searchTerm": "Calcium Ascorbate",
      "basePrice":19.95,
      "salePrice":15.95,
@@ -43,4 +44,34 @@
      "hasCupPrice":"true",
      "cupString":"" , 
      "measureType":"weight"
+   },
+   {
+    "searchTerm": "Coat Dog Treats",
+    "basePrice":31.49,
+    "salePrice":"",
+    "cupCalcBasedOn":"basePrice",
+    "itemSize": 2,
+    "itemUnit": "SQ",
+    "comparativeSize": 3,
+    "comparativeUnit": "SQ",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":"" , 
+    "measureType":"area"
+   },
+   {
+    "searchTerm": "Mutli Variant-reversible Bed",
+    "basePrice":109.95,
+    "salePrice":"",
+    "cupCalcBasedOn":"basePrice",
+    "itemSize": 2.5,
+    "itemUnit": "M",
+    "comparativeSize": 4,
+    "comparativeUnit": "CM",
+    "cupPrice":0,
+    "cupMeasure":"",
+    "hasCupPrice":"true",
+    "cupString":"" , 
+    "measureType":"length"
    }]
