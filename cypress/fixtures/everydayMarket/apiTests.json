@@ -222,6 +222,14 @@
     "searchTerm": "automation",
     "quantity": 2
   },
+  "GenericStockCodeSearch": {
+    "searchTerm": "1073745302",
+    "quantity": 1,
+    "VendorName": "Healthy Life",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    }   
+  },
   "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
     "searchTerm": "automation",
     "carrier": "Australia Post",

@@ -24,7 +24,7 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
-      signUpDetails.password = 'test1234'
+      signUpDetails.password = 'Test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
       cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
@@ -40,7 +40,7 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
-      signUpDetails.password = 'test1234'
+      signUpDetails.password = 'Test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
       cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
