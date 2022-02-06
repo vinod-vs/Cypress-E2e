@@ -123,5 +123,8 @@ declare namespace Cypress {
     subscribeToDUMonthlySenior(userinfor: any): any;
     subscribeToDUYearlySenior(userinfor: any): any;
     fetchProductDataOnPDP(searchTerm: any): any;
+    generateGiftCards(expectedGiftCardBalance: any): any;
+    payWithGiftCard(digitalPaymentRequest: any): any;
+    addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
   }
 }
