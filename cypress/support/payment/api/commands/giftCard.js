@@ -75,7 +75,7 @@ Cypress.Commands.add('checkAndGetGiftCardPaymentInstrumentWithExpectedBalance', 
 
 //This command is to generate gift cards(s) for payment
 Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
-  const maxAmount = 500
+  const maxAmount = 1000
   let cardsRequired
   let lastCardValue
 
@@ -87,7 +87,7 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
       lastCardValue = maxAmount                          
     }else{
       cardsRequired = (Math.floor(expectedGiftCardBalance/maxAmount)) + 1    
-      lastCardValue = Math.round(remainder*10)/10  
+      lastCardValue = Math.round(remainder*100)/100 
     }
   }else{
     cardsRequired = 1
@@ -99,16 +99,16 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
 
   //Create Each Card, Link it to Account, add it to the above return array
   for(let i=1;i<=cardsRequired;i++){
-    cy.log('Adding multiple gift card num '+i)
+    cy.log('Adding gift card num '+i)
     
     //Set New Card Value  
     let newCardValue
     if(i<cardsRequired){
-      newCardValue = 500
+      newCardValue = maxAmount
     }else if(i===cardsRequired){
-      newCardValue = lastCardValue  // $57.7 in our case
+      newCardValue = lastCardValue
     }
-
+    cy.log("Card value is "+newCardValue)
     //Generate New Card
     cy.generateANewGiftCard(newCardValue).as('newGiftCard')
     
@@ -116,10 +116,12 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
     cy.get('@newGiftCard').then((newGiftCard) => {
       giftCardDetails.cardNumber = newGiftCard.Cards[0].CardNumber
       giftCardDetails.pinCode = newGiftCard.Cards[0].CardPin
-      const newCardSuffix = (giftCardDetails.cardNumber).slice(-4)
 
       // Add the new gift card to account
-      cy.addGiftCardToAccount(giftCardDetails)
+      cy.addGiftCardToAccount(giftCardDetails).then((response) => {
+        cy.log("Payment instrument id is "+ response.body.GiftCard.PaymentInstrumentId)
+        giftcardPaymentInstrumentIds.push({"InstrumentId":response.body.GiftCard.PaymentInstrumentId, "amount":newCardValue})
+      })
       cy.log('Added newly created gift card to account: ' + JSON.stringify(giftCardDetails))
 
       // Get all giftcards 
@@ -129,19 +131,8 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
         expect(paymentInstruments.GiftCard).to.not.be.empty
         expect(paymentInstruments.GiftCard.Enabled).to.be.equal(true)
         expect(paymentInstruments.GiftCard.Instruments.length).to.be.greaterThan(0)
-
-        //Get Gift card payment instruments of the user
-        const giftcardPaymentInstruments = paymentInstruments.GiftCard.Instruments.filter(instrument => instrument.Allowed && !instrument.Expired)
-
-        for(let i=0;i<giftcardPaymentInstruments.length;i++){
-          if(giftcardPaymentInstruments[i].CardSuffix==newCardSuffix){
-            giftcardPaymentInstrumentIds.push({"InstrumentId":giftcardPaymentInstruments[i].PaymentInstrumentId, "amount":newCardValue})
-            cy.log("Adding gift card with Payment instrumetn ID " +giftcardPaymentInstruments[i].PaymentInstrumentId + "and amount "+newCardValue)
-            break
-          }
-        }
       })
-    })
+    }) 
   }
   cy.wrap(giftcardPaymentInstrumentIds).as('giftcardPaymentInstrumentIds')
   cy.log(giftcardPaymentInstrumentIds)

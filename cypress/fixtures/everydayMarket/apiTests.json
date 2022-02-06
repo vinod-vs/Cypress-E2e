@@ -243,9 +243,13 @@
     "paymentType": "CREDIT_CARD_ONLY"
   },
   "VerifyEDMItemsGCLimit": {
-    "searchTerm": "Mutli Variant-reversible Bed",
-    "quantity": 46,
-    "giftCardValue": 5057.7,
+    "searchTerm": "1073741981",
+    "minCartValue": "5500",
+    "items": [
+      {
+        "isEDMProduct": "true"
+      }
+    ],
     "paymentType": "GIFTCARD_ONLY"
   }   
 }
