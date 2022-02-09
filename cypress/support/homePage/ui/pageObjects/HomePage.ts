@@ -1,10 +1,10 @@
 export class HomePage {
     getMyAccount () {
-      return cy.get('#header-panel a.coreHeader-signupButton')
+      return cy.get('.coreHeader-profile-content .coreHeader-profile-text')
     }
   
     getSearchHeader () {
-      return cy.get('#headerSearch')
+      return cy.get('.headerSearch-searchBox')
     }
   
     getClearSearchHeader () {

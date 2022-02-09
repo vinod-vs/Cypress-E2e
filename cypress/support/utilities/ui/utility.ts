@@ -5,13 +5,11 @@ Cypress.Commands.add('getTextFromElement', (element) => {
   })
 })
 
-Cypress.Commands.add('checkIfElementExists', (element) => {
+Cypress.Commands.add('checkIfElementExists', (elementLocatorString) => {
   cy.get('body').then($body => {
-    if ($body.find(element).length > 0) {
-      // cy.log('checkIfElementExists: Element: ' + element + ' , Exist: True')
+    if ($body.find(elementLocatorString).length > 0) {
       return true
     } else {
-      // cy.log('checkIfElementExists: Element: ' + element + ' , Exist: False')
       return false
     }
   })

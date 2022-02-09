@@ -157,7 +157,14 @@ export class CheckoutPaymentPanel{
     }
 
     PayWithNewCreditCard (cardNumber: string, expiryMonth: number, expiryYear: number, cvv: number) {
-        this.getAddNewCreditCardButton().click()
+        cy.checkIfElementExists('.creditCards-add-button').then((exist:boolean) => {
+            if(!exist){
+                this.getCreditCardInstrumentToggleButton().click()
+            }
+            else{
+                this.getAddNewCreditCardButton().click()
+            }
+        })
         this.AddNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
         this.getPlaceOrderButton().click()
     }

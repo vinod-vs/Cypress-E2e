@@ -30,7 +30,7 @@ declare namespace Cypress {
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
     setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;
-    checkIfElementExists(element: any): any;
+    checkIfElementExists(elementLocatorString: any): any;
     selectRandomElement(): any;
     getBootstrapResponse(): any;
     getRandomAvailableWindowViaApi(addressId: string, areaId: string, suburbId: string, fulfilmentType: string, windowType: string): any;
