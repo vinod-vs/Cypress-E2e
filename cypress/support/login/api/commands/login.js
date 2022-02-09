@@ -60,7 +60,7 @@ Cypress.Commands.add('validate2FALoginStatus', (userCredentialLoginResponse, otp
   if (otpValidationSwitch) {
     expect(userCredentialLoginResponse).to.have.property('LoginResult', 'PartialSuccess')
     cy.postOneTimePasswordRequest(otpCode).then((otpAuthResponse) => {
-      expect(otpAuthResponse).to.have.property('Successful', true)
+      expect(otpAuthResponse.body).to.have.property('Successful', true)
     })
   } else {
     expect(userCredentialLoginResponse).to.have.property('LoginResult', 'Success')
