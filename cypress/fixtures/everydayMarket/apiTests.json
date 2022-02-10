@@ -249,5 +249,15 @@
       }
     ],
     "paymentType": "CREDIT_CARD_ONLY"
-  }  
+  },
+  "VerifyEDMItemsGCLimit": {
+    "searchTerm": "1073741981",
+    "minCartValue": "5500",
+    "items": [
+      {
+        "isEDMProduct": "true"
+      }
+    ],
+    "paymentType": "GIFTCARD_ONLY"
+  }   
 }

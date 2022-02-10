@@ -125,5 +125,8 @@ declare namespace Cypress {
     checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balance: any): any;
     placeOrderViaApiWithPaymentRequest(request: any): Cypress.Chainable<number>;
     fetchProductDataOnPDP(searchTerm: any): any;
+    generateGiftCards(expectedGiftCardBalance: any): any;
+    payWithGiftCard(digitalPaymentRequest: any): any;
+    addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
   }
 }
