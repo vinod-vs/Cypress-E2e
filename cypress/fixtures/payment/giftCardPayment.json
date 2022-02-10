@@ -1,0 +1,11 @@
+{
+  "accountAmount": 0,
+  "accountPassword": null,
+  "openpayAmount": 0,
+  "payments": [
+    {
+      "paymentInstrumentId": "",
+      "amount": 0.0
+    }
+  ]
+}
