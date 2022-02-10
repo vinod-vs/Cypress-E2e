@@ -104,7 +104,15 @@ export class SearchResultsPage {
     })
 
     this.getSortByDropdownButton().click({force: true})
+
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('productSearchEndpoint'),
+    }).as('productSearch')
+
     cy.get('.sort-by-dropdown ul').contains('Price High to Low').click()
+    
+    cy.wait('@productSearch')
 
     let searchResultPageStartIndex = 1
     this.getAllPageNumberElements().last().then(lastPageNumberElement => {
@@ -123,12 +131,6 @@ export class SearchResultsPage {
       if(len > 0){
         this.getAllAddToCartButtons().first().parents('.cartControls').then(cartControls => {
           cy.wrap(cartControls).find('.cartControls-addCart').click({force: true})
-          cy.wait(1000)
-          cy.checkIfElementExists('shared-coach-mark').then(result => {
-            if(result){
-              cy.get('shared-coach-mark').contains('Ok, got it').click()
-            }
-          })
           cy.wrap(cartControls).find('.cartControls-quantityInput').clear().type(bulkAddingQuantity).type('{enter}')
         })
 
