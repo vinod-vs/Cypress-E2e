@@ -97,6 +97,10 @@ export class CheckoutPaymentPanel{
         return this.getAmountElementByPaymentTitle('Service fee discount')
     }
 
+    getPaymentDeliveryFeeAmountElement () {
+        return this.getAmountElementByPaymentTitle('Delivery fee')
+    }
+
     getPaymentDeliveryFeeDiscountAmountElement () {
         return this.getAmountElementByPaymentTitle('Delivery fee discount')
     }
