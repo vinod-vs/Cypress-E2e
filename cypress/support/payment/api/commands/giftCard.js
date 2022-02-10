@@ -48,6 +48,8 @@ Cypress.Commands.add('checkAndGetGiftCardPaymentInstrumentWithExpectedBalance', 
       cy.get('@newGiftCard').then((newGiftCard) => {
         giftCardDetails.cardNumber = newGiftCard.Cards[0].CardNumber
         giftCardDetails.pinCode = newGiftCard.Cards[0].CardPin
+        cy.log('New GC Number is: ' + giftCardDetails.cardNumber)
+        cy.log('New GC PIN is: ' + giftCardDetails.pinCode)
         // Add the new gift card to account
         cy.addGiftCardToAccount(giftCardDetails)
         cy.log('Added newly created gift card to account: ' + JSON.stringify(giftCardDetails))
@@ -60,7 +62,7 @@ Cypress.Commands.add('checkAndGetGiftCardPaymentInstrumentWithExpectedBalance', 
           expect(paymentInstruments.GiftCard.Instruments.length).to.be.greaterThan(0)
 
           const giftcardPaymentInstruments = paymentInstruments.GiftCard.Instruments.filter(instrument => instrument.Allowed && !instrument.Expired && instrument.Balance >= expectedGiftCardBalance)
-          giftcardPaymentInstrumentId = giftcardPaymentInstruments[0].PaymentInstrumentId
+          giftcardPaymentInstrumentId = giftcardPaymentInstruments[0].PaymentInstrumentId  
         })
       })
     } else {
@@ -68,7 +70,7 @@ Cypress.Commands.add('checkAndGetGiftCardPaymentInstrumentWithExpectedBalance', 
       cy.log('There are ' + giftcardPaymentInstruments.length + ' gift cards with the expected balance of ' + expectedGiftCardBalance + ' . So, returning/using the first.')
       giftcardPaymentInstrumentId = giftcardPaymentInstruments[0].PaymentInstrumentId
     }
-    cy.log('giftcardPaymentInstrumentId: ' + giftcardPaymentInstrumentId)
-    cy.wrap(giftcardPaymentInstrumentId).as('giftcardPaymentInstrumentId')
+    cy.log('Gift Card PaymentInstrumentId is: ' + giftcardPaymentInstrumentId)
+    cy.wrap(giftcardPaymentInstrumentId).as('giftcardPaymentInstrumentId')  
   })
 })
