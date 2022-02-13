@@ -90,6 +90,7 @@
         "digitalPaymentInstrumentsAvailableEndpoint": "/api/v3/ui/checkout/digitalpay/instruments?isForPaymentAgreement=false",
         "productDetailsEndpoint": "/apis/ui/product/detail",
         "wowDispatchUpdateCompletedOrderEndpoint": "/api/OrderManagementApi/UpdateCompletedOrder",
+        "editPersonalDetails":"/apis/ui/myaccount/PersonalDetails",
         "wowDispatchUpdateCompletedOrderApiKey": "NM04TQg7kV1P8f8jo2NYwOlh8q6sg1zI"
     },
     "viewportHeight": 1080,
