@@ -1,9 +1,9 @@
-import shoppers from '../../../fixtures/promotionEngines/shoppers.json'
-import promotions from '../../../fixtures/promotionEngines/promotions.json'
-import '../../../support/login/api/commands/login'
-import '../../../support/sideCart/api/commands/clearTrolley'
-import '../../../support/sideCart/api/commands/addItemsToTrolley'
-import TestFilter from '../../../support/TestFilter'
+import shoppers from '../../../../fixtures/promotionEngines/shoppers.json'
+import promotions from '../../../../fixtures/promotionEngines/promotions.json'
+import '../../../../support/login/api/commands/login'
+import '../../../../support/sideCart/api/commands/clearTrolley'
+import '../../../../support/sideCart/api/commands/addItemsToTrolley'
+import TestFilter from '../../../../support/TestFilter'
 
 
 

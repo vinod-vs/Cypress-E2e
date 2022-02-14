@@ -1,10 +1,10 @@
-import shoppers from '../../../fixtures/promotionEngines/shoppers.json'
-import promotions from '../../../fixtures/promotionEngines/promotions.json'
-import '../../../support/login/api/commands/login'
-import '../../../support/sideCart/api/commands/clearTrolley'
-import '../../../support/sideCart/api/commands/addItemsToTrolley'
-import '../../../support/checkout/api/commands/navigateToCheckout'
-import TestFilter from '../../../support/TestFilter'
+import shoppers from '../../../../fixtures/promotionEngines/shoppers.json'
+import promotions from '../../../../fixtures/promotionEngines/promotions.json'
+import '../../../../support/login/api/commands/login'
+import '../../../../support/sideCart/api/commands/clearTrolley'
+import '../../../../support/sideCart/api/commands/addItemsToTrolley'
+import '../../../../support/checkout/api/commands/navigateToCheckout'
+import TestFilter from '../../../../support/TestFilter'
 
 TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
 
@@ -16,8 +16,8 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
 
     beforeEach(() => {
       // Login using shopper saved in the fixture and verify it's successful
-      cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+      cy.loginViaApi(shoppers.PESBusinessAccount).then((response: any) => {
+        //cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
 
