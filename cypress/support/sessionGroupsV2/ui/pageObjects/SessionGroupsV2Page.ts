@@ -71,10 +71,6 @@ class SessionGroupsV2Page {
         return cy.xpath('//tbody/tr[' + row + ']/td[4]')
     }
 
-    getLastRowName() {
-        return cy.get('tr').last().get('td').eq(1).get('a')
-    }
-
 }
 
 export const sessionGroupsV2Page = new SessionGroupsV2Page();
