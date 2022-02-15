@@ -8,7 +8,7 @@ export class LoginPage {
   }
 
   getLoginButton () {
-    return cy.get('.primary-legacy').contains('Login')
+    return cy.get('.success').contains('Login')
   }
 }
 

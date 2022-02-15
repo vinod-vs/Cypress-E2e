@@ -204,6 +204,20 @@ export class SideCartPage {
       .parents('.cart-item-details')
   }
   // #endregion
-}
+  
+  getAllRemoveItemButtonsForItemsUnderNotification () {
+    return cy.get('.notification-group').find('.cart-item-remove-button')
+  }
 
+  removeAllItemsUnderNotificationGroupsFromCart(){
+    onSideCartPage.getViewCartButton().click()
+    cy.wait(500)
+    cy.checkIfElementExists('.notification-group').then((existanceNG: boolean) => {
+      if(existanceNG===true){
+        onSideCartPage.getAllRemoveItemButtonsForItemsUnderNotification().click({ multiple: true })
+      }
+    })
+    onSideCartPage.getCloseSideCartButton().click()
+  }
+}
 export const onSideCartPage = new SideCartPage()

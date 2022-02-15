@@ -13,7 +13,7 @@ Cypress.Commands.add('clearTrolley', (shopper) => {
     } else {
       cy.log('Cart has some items.  Cart Value: ' + cartAmount + '. Removing them.')
       onSideCartPage.getViewCartButton().click()
-      onSideCartPage.getClearEntireCartLink().click()
+      onSideCartPage.getClearEntireCartLink().click({force: true})
       cy.wait(Cypress.config('oneSecondWait'))
       onSideCartPage.getConfirmClearCartLink().click()
       cy.wait(Cypress.config('oneSecondWait'))
