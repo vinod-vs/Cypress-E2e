@@ -99,7 +99,13 @@
       "MarketShippingFeeBeforeDiscount":10,
       "MarketShippingFeeDiscount":0.5,
       "Subtotal":20 
-  }],
+  },{
+    "searchTerm": "health",
+    "stockcode": 683857,
+    "OrderDiscountWithoutTeamDiscount":5,
+    "DeliveryFeeDiscount":5,
+    "Subtotal":60 
+}],
   "CouponPromotions": [{
     "searchTerm":"Fruits",
     "Quantity":10,

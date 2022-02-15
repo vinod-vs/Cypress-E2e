@@ -33,7 +33,7 @@ TestFilter(['B2B' ,'API', 'P0'], () => {
 
     it('Should place an order on Woolworths at Work website using Credit Card as payment option', () => {
       cy.loginViaApi(shopper).then((response: any) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+        expect(response).to.have.property("LoginResult", "Success");
       })
 
       cy.searchDeliveryAddress(addressSearchBody).then((response: any) => {
@@ -51,7 +51,11 @@ TestFilter(['B2B' ,'API', 'P0'], () => {
       })
 
       cy.completeWindowFulfilmentViaApi().then((response: any) => {
-        expect(response).to.have.property('IsSuccessful', true)
+        if (!response.IsSuccessful) {
+          cy.completeWindowFulfilmentViaApi().then((newResponse: any) => {
+            expect(newResponse).to.have.property("IsSuccessful", true)
+          })
+        }
       })
 
       cy.clearTrolley().then((response: any) => {

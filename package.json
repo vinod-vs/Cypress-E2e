@@ -20,13 +20,16 @@
     "devDependencies": {
         "@bahmutov/cy-api": "^1.5.0",
         "@shelex/cypress-allure-plugin": "^2.3.5",
+        "@types/node": "^17.0.10",
         "allure-commandline": "^2.13.8",
         "browserstack-cypress-cli": "^1.9.0",
+        "chai-exclude": "^2.1.0",
         "cypress": "^8.2.0",
         "cypress-iframe": "^1.0.1",
         "cypress-mailosaur": "^2.5.1",
         "cypress-multi-reporters": "^1.4.0",
         "cypress-xpath": "^1.6.2",
+        "dayjs": "^1.10.7",
         "faker": "^5.5.3",
         "junit-report-merger": "^1.0.0",
         "mocha-junit-reporter": "^2.0.2",
@@ -50,5 +53,12 @@
             "expect",
             "assert"
         ]
+    },
+    "dependencies": {
+        "fs": "0.0.1-security",
+        "xml": "^1.0.1",
+        "xml-formatter": "^2.6.0",
+        "xml2js": "^0.4.23",
+        "xml2json": "^0.12.0"
     }
 }

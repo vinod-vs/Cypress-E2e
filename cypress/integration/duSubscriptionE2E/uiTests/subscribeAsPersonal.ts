@@ -3,12 +3,13 @@
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/ui/commands/signUpUsers'
 import '../../../support/duSubscription/ui/commands/subscribePersonalMothly'
+import '../../../support/duSubscription/ui/commands/subscribePersonalYearly'
 import '../../../support/utilities/ui/utility'
 import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['UI', 'B2C', 'Personal DU Subscription Monthly', 'P0'], () => {
+TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], () => {
   describe('[UI] User who is less than 60 years old - Subscribe to Delivery unlimited', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
@@ -23,7 +24,7 @@ TestFilter(['UI', 'B2C', 'Personal DU Subscription Monthly', 'P0'], () => {
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
-      signUpDetails.password = 'test1234'
+      signUpDetails.password = 'Test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
       cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
@@ -33,6 +34,23 @@ TestFilter(['UI', 'B2C', 'Personal DU Subscription Monthly', 'P0'], () => {
       cy.subscribeToDUMonthlyPersonal(signUpDetails)
 
     })
+
+    it('Subscribe to Delivery Unlimited yearly plan - Age less than 60', () => {
+
+      signUpDetails.firstName = faker.name.firstName()
+      signUpDetails.lastName = faker.name.lastName()
+      signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
+      signUpDetails.password = 'Test1234'
+      signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
+      cy.getDOB('personal').then((value)=> {
+          signUpDetails.dateOfBirth = value
+      })
+
+      cy.signUpPersonalUser(signUpDetails)
+      cy.subscribeToDUYearlyPersonal(signUpDetails)
+
+    })
+
   })
 
 })

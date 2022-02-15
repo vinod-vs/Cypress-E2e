@@ -8,6 +8,7 @@ var sessionGroupName: string
 var timeStamp: string
 var sessionGroupCount: number = 2
 var sessionGroupNames: string[] = new Array(sessionGroupCount)
+var tableEntries: string[] = new Array(sessionGroupCount)
 var itemsPerPage: number = 5000
 
 TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
@@ -21,7 +22,7 @@ TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
             sessionGroupsV2Page.getShowSelect().select(itemsPerPage.toString())
         })
 
-        it('Create Session Groups v2', () => {
+        it('Session Groups v2 Sorting by Default', () => {
 
             for(let i = 0; i < sessionGroupCount; i++) {
                 timeStamp = new Date().toISOString().substr(0, 26)
@@ -36,13 +37,9 @@ TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
                 editSessionGroupV2Page.getAddedAttribute('DigitalPayData', 'IsMigratedToDigitalPay').should('be.visible')
                 editSessionGroupV2Page.getUpdateButton().click()
                 sessionGroupsV2Page.getSessionGroupEntry(sessionGroupNames[i]).should('be.visible')
+                sessionGroupsV2Page.getTableRowName(1).should('contain', sessionGroupNames[i].substring(0,19))
             }
   
-        })
-
-        it('Session Groups v2 Sorting by Default', () => {
-            sessionGroupsV2Page.getTableRowName(1).should('have.text', sessionGroupNames[1])
-            sessionGroupsV2Page.getTableRowName(2).should('have.text', sessionGroupNames[0])
         })
 
         it('Session Groups v2 Sorting by Name', () => {

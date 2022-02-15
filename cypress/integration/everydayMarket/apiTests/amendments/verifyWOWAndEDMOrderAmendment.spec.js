@@ -101,7 +101,7 @@ TestFilter(['EDM', 'API'], () => {
             timeout: 10000
           }).as('eventsAfterAmendment')
         })
-
+        
         cy.all(
           cy.get('@invoiceIds'),
           cy.get('@confirmedAmendedTraderOrder')
@@ -125,19 +125,17 @@ TestFilter(['EDM', 'API'], () => {
           cy.get('@orderDataBeforeAmendment'),
           cy.get('@orderDataAfterAmendment'),
           cy.get('@eventsAfterAmendment')
-        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {
+        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {  
           // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
           expect({
             ...beforeData,
             orderId: amendedOrder.Order.OrderId
-          }).to.deep.equal(afterData)
+          }).excludingEvery(['status','updatedTimeStampUtc','createdTimeStampUtc']).to.deep.equal(afterData)
 
           // Validate EDM order events after amendment to have 'OrderPlaced' event
           lib.validateEvents(afterEvents, 'OrderPlaced', 2)
 
           // Invoke OQS TMO api and validate it against the projection
-          // Old trader order will be in Cancelled state, Will be an WOW + MP Order and will have all the WOW items as well. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
-          commonLib.verifyOQSOrderStatus(beforeData.orderId, 'Cancelled', false, null, true)
           // New trader order will be in Received state, Will be an WOW + MP Order and will have all the WOW items in it. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
           commonLib.verifyOQSOrderStatus(afterData.orderId, 'Received', false, null, false)
         })

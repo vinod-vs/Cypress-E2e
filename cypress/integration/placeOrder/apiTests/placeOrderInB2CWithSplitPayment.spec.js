@@ -6,7 +6,6 @@ import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import giftCard from '../../../fixtures/payment/giftCard.json'
 import splitPayment from '../../../fixtures/payment/splitCreditGiftCardPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
-import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import TestFilter from '../../../support/TestFilter'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/signUp/api/commands/signUp'
@@ -20,6 +19,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/logout/api/commands/logout'
+import '../../../support/checkout/api/commands/checkoutHelper'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API]Place an order on B2C Platform via split payment (Credit Card & Gift Card)', () => {
@@ -52,24 +52,16 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         splitPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
+      // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
       cy.addGiftCardToAccount(giftCard).then((response) => {
         expect(response.status).to.eq(200)
-
-        splitPayment.payments[1].paymentInstrumentId = response.body.GiftCard.PaymentInstrumentId
-      })
-
-      cy.digitalPay(splitPayment).then((response) => {
-        expect(response.TransactionReceipt).to.not.be.null
-        expect(response.PlacedOrderId).to.not.be.null
-
-        confirmOrderParameter.placedOrderId = response.PlacedOrderId
-      })
-
-      cy.confirmOrder(confirmOrderParameter).then((response) => {
-        expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
-
-        cy.log('This is the order id: ' + response.Order.OrderId)
-      })
+      }).then(() => {
+        cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(0.01).then((response) => {
+          expect(response, 'Gift Card Payment Instrument ID not returned from DigitalPay').to.not.be.null
+          splitPayment.payments[1].paymentInstrumentId = response
+        })
+        cy.placeOrderViaApiWithPaymentRequest(splitPayment)
+      })   
     })
   })
 })

@@ -158,6 +158,7 @@ TestFilter(['EDM', 'API'], () => {
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
                 if (response.body.invoices[0].wowStatus !== 'Shipped') {
+                  cy.log('WOW status is not "Shipped" yet')
                   throw new Error('Still not fully shipped yet')
                 }
               },

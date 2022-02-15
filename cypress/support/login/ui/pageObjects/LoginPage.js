@@ -8,7 +8,7 @@ export class LoginPage {
   }
 
   getLoginButton () {
-    return cy.get('.success').contains('Login')
+    return cy.get('button').contains('Login')
   }
 }
 

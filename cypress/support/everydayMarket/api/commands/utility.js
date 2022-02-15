@@ -68,7 +68,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
         const minWowOrderThreshold = item.minWowOrderThreshold
         const bufferWowQuantity = item.bufferWowQuantity
         // Get available WOW product only
-        const wowProducts = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley)
+        const wowProducts = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley && searchProduct.Products[0].IsForDelivery)
         expect(wowProducts.length).to.be.greaterThan(0)
 
         // Add available WOW product to cart
@@ -114,7 +114,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
         let mpStockCode = 0
         const mpQuantity = item.quantity
         // Get available EDM product only
-        const edmProducts = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley)
+        const edmProducts = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley && searchProduct.Products[0].IsForDelivery)
         expect(edmProducts.length).to.be.greaterThan(0)
 
         // Add available EDM product to cart
@@ -260,6 +260,34 @@ Cypress.Commands.add('payTheOrder', (testData) => {
         })
       })
       break
+      case paymentType.GIFTCARD_ONLY:
+        
+        // Checkout
+        cy.navigateToCheckout().as('checkoutResponse').then((response) => {
+          expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+        })
+      
+        // Pay with Gift Card
+        cy.get('@checkoutResponse').then((checkoutResponse) => {
+
+          const totalCartValue = checkoutResponse.Model.Order.BalanceToPay
+          cy.log("Total Cart Value is "+totalCartValue)
+          // Generate multiple giftcards and get array of gift card paymentInstrumentIds
+          cy.generateGiftCards(totalCartValue)
+
+          cy.get('@giftcardPaymentInstrumentIds').then((giftcardPaymentInstrumentIds) => {
+            const payments = []
+            giftcardPaymentInstrumentIds.forEach(paymentInstrument => {
+              payments.push({amount: paymentInstrument.amount, paymentInstrumentId: paymentInstrument.InstrumentId, stepUpToken: 'tokenise-stepup-token'})
+            });
+    
+            digitalPaymentRequest.payments = payments
+            cy.log('payments: ' + JSON.stringify(payments))
+            cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
+            cy.payWithGiftCard(digitalPaymentRequest).as('paymentResponse')
+          })
+        })
+        break
     default: // default is CREDIT_CARD_ONLY
       cy.payByCreditCard(true)
       break

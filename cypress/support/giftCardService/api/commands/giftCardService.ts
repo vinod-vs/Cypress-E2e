@@ -3,12 +3,14 @@
 import gifCardAuthorizeRequest from "../../../../fixtures/giftCardService/authorize.json";
 import generateGiftCardRequest from "../../../../fixtures/giftCardService/generateGiftcard.json";
 
+const dateAtClient = new Date(Date.now()).toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).split(",")[0]
+
 Cypress.Commands.add("authorizeGiftingService", () => {
   cy.api({
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8 ",
-      DateAtClient: new Date(Date.now()).toLocaleString().split(",")[0],
+      "DateAtClient": dateAtClient,
     },
     body: gifCardAuthorizeRequest,
     url: Cypress.env("giftCardServiceEndpoint") + "/authorize",
@@ -30,7 +32,7 @@ Cypress.Commands.add("generateANewGiftCard", (giftCardAmount) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=UTF-8 ",
-        DateAtClient: new Date(Date.now()).toLocaleString().split(",")[0],
+        "DateAtClient": dateAtClient,
         TransactionId: Number(Math.floor(Math.random() * 100000)),
       },
       auth: {

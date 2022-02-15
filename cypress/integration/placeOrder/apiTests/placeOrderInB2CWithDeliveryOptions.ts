@@ -40,7 +40,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
       cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.CanLeaveOrderUnattended).to.eql(true)
+        expect(confirmOrderResponse.Order.CanLeaveOrderUnattended, 'Can Leave Order Unattended').to.eql(true)
       })
     })
 

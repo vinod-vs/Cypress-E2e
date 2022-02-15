@@ -108,6 +108,9 @@ declare namespace Cypress {
     signUpPersonalUser(signupdetails: any): any;
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
+    performReIssueOnWowOrderOnSM(isMarketOnly: boolean): any;
+    wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
+    checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
     navigateToMyAccountViaUi(): any;
     navigateToMyPaymentMethodsViaUi(): any;
@@ -116,5 +119,18 @@ declare namespace Cypress {
     logoutViaUi(): any;
     saveNewCreditCardViaUi(creditCard: any): any;
     deleteCreditCardViaUi(creditCard: any): any;
+    subscribeToDUYearlyPersonal(userinfor: any): any;
+    subscribeToDUMonthlySenior(userinfor: any): any;
+    subscribeToDUYearlySenior(userinfor: any): any;
+    checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balance: any): any;
+    placeOrderViaApiWithPaymentRequest(request: any): Cypress.Chainable<number>;
+    fetchProductDataOnPDP(searchTerm: any): any;
+<<<<<<< Updated upstream
+    generateGiftCards(expectedGiftCardBalance: any): any;
+    payWithGiftCard(digitalPaymentRequest: any): any;
+    addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
+=======
+    editPersonalDetails(personalDetails: any): any;
+>>>>>>> Stashed changes
   }
 }

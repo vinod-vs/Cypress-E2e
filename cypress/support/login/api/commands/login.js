@@ -30,6 +30,7 @@ Cypress.Commands.add('loginWithNewShopperViaApi', () => {
       password: signUpDetails.password
     }
 
+    cy.log('Shopper details: ' + JSON.stringify(shopperDetails))
     cy.loginViaApiAndHandle2FA(shopperDetails)
   })
 })
@@ -43,7 +44,7 @@ Cypress.Commands.add('postOneTimePasswordRequest', (oneTimePassword) => {
       UpdatePrimaryContact: null
     }
   }).then((response) => {
-    return response.body
+    return response
   })
 })
 
@@ -59,7 +60,7 @@ Cypress.Commands.add('validate2FALoginStatus', (userCredentialLoginResponse, otp
   if (otpValidationSwitch) {
     expect(userCredentialLoginResponse).to.have.property('LoginResult', 'PartialSuccess')
     cy.postOneTimePasswordRequest(otpCode).then((otpAuthResponse) => {
-      expect(otpAuthResponse).to.have.property('Successful', true)
+      expect(otpAuthResponse.body).to.have.property('Successful', true)
     })
   } else {
     expect(userCredentialLoginResponse).to.have.property('LoginResult', 'Success')

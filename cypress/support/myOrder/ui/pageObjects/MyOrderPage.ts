@@ -1,55 +1,94 @@
 export class MyOrderPage {
-    getMyAccountButton () {
-        return cy.get('div.coreHeader-loginWrapper > span.coreHeader-loginText').contains('My Account')
-    }
     
-    getMyOrdersLink () { 
-        return cy.get('nav.navigation-items').find('a').eq(2).contains('My orders')
+    private orderId: string
+    myOrdersList: string
+    private detailsContent = '.details-content'
+
+    constructor(orderId: string) {
+        this.myOrdersList = 'wow-my-orders-list-container';
+        this.orderId = orderId;
+        this.waitandReload();
+
+    }
+    // Logic to wait and reload my order page and check if order exists
+    private waitandReload(){
+        let reloadCount = 0
+        const reloadLimit = 10
+        const checkAndReload = (orderId: any) => {
+        cy.checkIfElementExists('wow-my-orders-list-container').then((orderExists: boolean) => { 
+        cy.log('the flag', orderExists)
+        if (orderExists === true){
+        this.getmyOrderListContainersOnPage().invoke('text').then((text) => {
+            if (text.includes(this.orderId)) {
+                cy.log('Order loaded', orderId)
+            } 
+            })
+            }
+            else {
+                cy.wait(15000, { log: false })
+                reloadCount += 1
+                cy.log(`reload **${reloadCount} / ${reloadLimit}**`)
+                if (reloadCount > reloadLimit) {
+                   throw new Error('Reload limit reached')
+                }
+                cy.reload()
+                checkAndReload(this.orderId)
+                }
+            })
+        }
+        
+        cy.checkIfElementExists('wow-my-orders-list-container').then((orderExists: boolean) => {
+        cy.log('the flag', orderExists)
+        if (orderExists === true){
+            checkAndReload(this.orderId)
+        }
+        else {
+            cy.wait(15000, { log: false })
+            reloadCount += 1
+            cy.log(`reload **${reloadCount} / ${reloadLimit}**`)
+            if (reloadCount > reloadLimit) {
+            throw new Error('Reload limit reached')
+            }
+            cy.reload()
+            checkAndReload(this.orderId)
+            }
+          
+        })
+    }
+    private getmyOrderListContainersOnPage(){
+        return cy.get(this.myOrdersList).find('.order >' + this.detailsContent)
     }
 
-    getMyOrdersListContainer(orderId: string) {
-        return cy.get('wow-my-orders-list-container > div.my-orders-list-container').filter(`:contains(${orderId})`)
+    private getMyOrdersListContainer(orderId: string) {
+        return cy.get(this.myOrdersList).filter(`:contains(${orderId})`)
     }
 
-    getMyOrdersListContainerItems(orderId: string) {
-        return this.getMyOrdersListContainer(orderId).find('wow-my-orders-list-item > div')
+   private getMyOrdersContainerHeader(){
+        return this.getMyOrdersListContainer(this.orderId).find('.header')
     }
 
-    getMyOrdersContainerHeader(orderId: string){
-        return this.getMyOrdersListContainer(orderId).find('div.header')
+    getMyOrderNumber() {
+        return this.getMyOrdersListContainer(this.orderId).find('.order >' + this.detailsContent)
     }
 
-    getMyOrderNumber(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.order > span.details-content').should('contain', orderId)
+    getOrderDate() {
+        return this.getMyOrdersContainerHeader().find('section.date > .content')
     }
 
-    getOrderDateString(orderId: string, orderDate: string) {
-       return this.getMyOrdersContainerHeader(orderId).find('section.date > span.content').should('contain.text', orderDate)
+    getOrderTotal() {
+        return this.getMyOrdersContainerHeader().find('section.total > .content')
     }
 
-    getOrderTotalString(orderId: string, orderValue: any) {
-        return this.getMyOrdersContainerHeader(orderId).find('section.total > span.content').should('contain.text', orderValue)
+    getDeliveryDate() {
+        return this.getMyOrdersListContainer(this.orderId).find('.delivery >' + this.detailsContent)
     }
 
-    getDeliveryDateString(orderId: string, deliveryDate: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.details-container.delivery > span.details-content').should('contain.text', deliveryDate)
+    getTrackMyOrderLink() {
+        return this.getMyOrdersListContainer(this.orderId).find('.auto_my-orders-tmo-link.button')
     }
 
-    getTrackMyOrderLink(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.auto_my-orders-tmo-link.button').should('contain.text', ' Track my order ') 
+    getViewOrderDetailsLink() {
+        return this.getMyOrdersListContainer(this.orderId).find('.view-order-link')
     }
 
-    getViewOrderDetailsLink(orderId: string) {
-        return this.getMyOrdersListContainerItems(orderId).find('div.order-links-container > a.order-links.view-order-link').should('contain.text', 'View order details')
-    }
-    // Actions - Click on the My account Button and then My orders Link
-
-    myAccountActions () {
-       cy.wait(500);
-       this.getMyAccountButton().click()
-       cy.wait(500);
-       this.getMyOrdersLink().click()
-    }
 }
-    
-export const onMyOrderPage = new MyOrderPage() 

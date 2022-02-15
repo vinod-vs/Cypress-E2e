@@ -8,6 +8,11 @@ export class CheckoutPage {
   onCheckoutFulfilmentWindowPanel = new CheckoutFulfilmentWindowPanel();
   onCheckoutReviewItemsPanel = new CheckoutReviewItemsPanel();
   onCheckoutPaymentPanel = new CheckoutPaymentPanel();
+
+  getContinueShoppingLink() {
+    return cy.get('.continue-shopping-link')
+  }
+
 }
 
 export const onCheckoutPage = new CheckoutPage()

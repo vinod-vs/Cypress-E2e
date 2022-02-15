@@ -8,8 +8,10 @@ import '../../../../support/checkout/api/commands/confirmOrder'
 
 Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: any, platform: string) => {
   cy.navigateToCheckout().then((response: any) => {
-    cy.log('Balance To Pay is: ' + response.Model.Order.BalanceToPay)
-    digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
+    const balanceToPay = response.Model.Order.BalanceToPay
+    expect(balanceToPay, 'Balance To Pay').to.be.greaterThan(0)
+
+    digitalPayment.payments[0].amount = balanceToPay
 
     cy.navigatingToCreditCardIframe().then((response: any) => {
       creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
@@ -25,11 +27,8 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: 
   })
 
   cy.digitalPay(digitalPayment).then((response: any) => {
-    if (response.PlacedOrderId === null) {
-      const errors = response.OrderPlacementErrors
-      const type = errors[0].Type
-      const message = errors[0].Message
-      throw new Error ('Error on Payment: ' + 'Type is: ' + type + '. Message is: ' + message)
+    if (response.TransactionReceipt === null || response.PlacedOrderId === null) {
+      cy.checkForOrderPlacementErrorsAndThrow(response)
     } else {
       confirmOrderParameter.placedOrderId = response.PlacedOrderId
     }
@@ -41,3 +40,41 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: 
     return cy.wrap(response)
   })
 })
+
+Cypress.Commands.add('checkForOrderPlacementErrorsAndThrow', (paymentResponse) => {
+  const orderPlacementErrors = paymentResponse.OrderPlacementErrors
+
+  if (orderPlacementErrors !== null) {
+    const type = orderPlacementErrors[0].Type
+    const message = orderPlacementErrors[0].Message
+    throw new Error ('Error on Payment.' + '\n' + 'Type is: ' + type  + '.' + '\n' + 'Message is: ' + message)
+  }
+})
+
+Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
+  cy.digitalPay(paymentRequest).then((response: any) => {
+    if (response.PaymentResponses !== null) {
+      cy.get(response.PaymentResponses).each((instrument: any) => {
+        expect(instrument.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrument.PaymentInstrumentType).to.be.null
+      }).then(() => {
+        cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
+          expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
+          expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
+            
+          confirmOrderParameter.placedOrderId = response.PlacedOrderId 
+        })
+      })
+    } else {
+      cy.checkForOrderPlacementErrorsAndThrow(response)
+    }       
+  })
+
+  cy.confirmOrder(confirmOrderParameter).then((response: any) => {
+    const orderId = response.Order.OrderId
+    expect(orderId, 'Order Placement Id').to.eqls(confirmOrderParameter.placedOrderId)
+
+    cy.log('This is the order id: ' + response.Order.OrderId)
+    
+    return cy.wrap(orderId)
+  })
+}) 

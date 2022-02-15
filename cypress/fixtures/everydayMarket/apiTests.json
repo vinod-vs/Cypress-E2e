@@ -221,5 +221,43 @@
   "GenericEMonlyProductTestData": {
     "searchTerm": "automation",
     "quantity": 2
-  }    
+  },
+  "GenericStockCodeSearch": {
+    "searchTerm": "1073745302",
+    "quantity": 1,
+    "VendorName": "Healthy Life",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    }   
+  },
+  "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
+    "searchTerm": "automation",
+    "carrier": "Australia Post",
+    "trackingNumber": "Automation:12345",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    },
+    "items": [
+      {
+        "quantity": 2,
+        "isEDMProduct": "true"
+      },
+      {
+        "isEDMProduct": "false",
+        "minWowOrderThreshold": 50,
+        "bufferWowQuantity": 5
+      }
+    ],
+    "paymentType": "CREDIT_CARD_ONLY"
+  },
+  "VerifyEDMItemsGCLimit": {
+    "searchTerm": "1073741981",
+    "minCartValue": "5500",
+    "items": [
+      {
+        "isEDMProduct": "true"
+      }
+    ],
+    "paymentType": "GIFTCARD_ONLY"
+  }   
 }

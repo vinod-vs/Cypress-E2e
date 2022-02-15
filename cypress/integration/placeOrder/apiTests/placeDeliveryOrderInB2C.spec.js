@@ -17,6 +17,7 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/checkout/api/commands/checkoutHelper'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
@@ -29,8 +30,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
 
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
-        expect(response.Id).to.not.be.empty
-        expect(response.Id).to.not.be.null
+        expect(response.Id, 'AddressId').to.not.be.null
       })
 
       cy.addDeliveryAddress().then((response) => {
@@ -48,45 +48,54 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then((response) => {
-        expect(response.Id).to.greaterThan(0)
+        expect(response.Id, 'Fulfilment Window ID').to.greaterThan(0)
       })
 
       cy.completeWindowFulfilmentViaApi().then((response) => {
-        expect(response).to.have.property('IsSuccessful', true)
+        expect(response, 'Fulfilment').to.have.property('IsSuccessful', true)
       })
 
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0).then((response) => {
-        expect(response[0].stockcode).to.not.be.null
+        expect(response[0].stockcode, 'At least 1 product added to trolley').to.not.be.null
       })
 
       cy.navigateToCheckout().then((response) => {
-        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+        expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(0)
 
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })
 
       cy.navigatingToCreditCardIframe().then((response) => {
-        expect(response).to.have.property('Success', true)
+        expect(response, 'Credit Card Iframe loading').to.have.property('Success', true)
 
         creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
       })
 
       cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response) => {
-        expect(response.status.responseText).to.be.eqls('ACCEPTED')
+        expect(response.status.responseText, 'Credit Card tokenisation status').to.be.eqls('ACCEPTED')
+        expect(response.status.error, 'Credit Card Tokenisation error').to.be.null
 
         digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
       cy.digitalPay(digitalPayment).then((response) => {
-        expect(response.TransactionReceipt).to.not.be.null
-
-        expect(response.PlacedOrderId).to.not.be.null
-
-        confirmOrderParameter.placedOrderId = response.PlacedOrderId
+        if (response.PaymentResponses !== null) { 
+          expect(response.PaymentResponses[0].ErrorDetail, 'Error Status on Payment Instrument Type of ' + 
+          response.PaymentResponses[0].PaymentInstrumentType).to.be.null
+          
+          cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
+            expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
+            expect(response.PlacedOrderId, 'Placed Order ID').to.not.be.null
+  
+            confirmOrderParameter.placedOrderId = response.PlacedOrderId
+          }) 
+        } else {
+          cy.checkForOrderPlacementErrorsAndThrow(response)
+        }
       })
 
       cy.confirmOrder(confirmOrderParameter).then((response) => {
-        expect(response.Order.OrderId).to.eqls(confirmOrderParameter.placedOrderId)
+        expect(response.Order.OrderId, 'OrderId').to.eqls(confirmOrderParameter.placedOrderId)
 
         cy.log('This is the order id: ' + response.Order.OrderId)
       })
