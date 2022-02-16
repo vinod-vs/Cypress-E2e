@@ -13,7 +13,7 @@ class EditOrderPromotionPage {
     }
 
     getEligibleShoppersInput() {
-        return cy.xpath('//select[contains(@id,\'sessionGroup\')]')
+        return cy.xpath('//*[text()=\'Eligible Shoppers\']/../select')
     }
 
     getQualifyingAmountInput() {
