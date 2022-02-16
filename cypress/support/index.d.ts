@@ -125,12 +125,10 @@ declare namespace Cypress {
     checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balance: any): any;
     placeOrderViaApiWithPaymentRequest(request: any): Cypress.Chainable<number>;
     fetchProductDataOnPDP(searchTerm: any): any;
-<<<<<<< Updated upstream
     generateGiftCards(expectedGiftCardBalance: any): any;
     payWithGiftCard(digitalPaymentRequest: any): any;
     addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
-=======
     editPersonalDetails(personalDetails: any): any;
->>>>>>> Stashed changes
+    verifyEmailNotificationForPersonalDetails():any
   }
 }
