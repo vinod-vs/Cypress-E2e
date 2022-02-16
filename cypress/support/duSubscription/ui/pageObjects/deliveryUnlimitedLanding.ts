@@ -24,6 +24,14 @@ export class DeliveryUnlimitedLandingPage {
         return cy.get('[for="plan-selection-plan43"] .price--withPer')
     }
 
+    getMonthlyPlanNameBusiness () {
+        return cy.get('[for="plan-selection-plan14"] .plan-selection-name')
+    }
+
+    getMonthlyPlanPriceBusiness () {
+        return cy.get('[for="plan-selection-plan14"] .price--withPer')
+    }
+
     getMonthlyPlanSection () {
         return cy.get('fieldset > div:nth-of-type(2)')
     }
@@ -44,6 +52,14 @@ export class DeliveryUnlimitedLandingPage {
 
     getAnnualPlanPriceSenior () {
         return cy.get('[for="plan-selection-plan44"] .price-dollars')
+    }
+
+    getAnnualPlanNameBusiness () {
+        return cy.get('[for="plan-selection-plan13"] .plan-selection-name')
+    }
+
+    getAnnualPlanPriceBusiness () {
+        return cy.get('[for="plan-selection-plan13"] .price--withPer')
     }
 
     getAnnualPlanSection () {
