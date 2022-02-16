@@ -1,3 +1,8 @@
+/* eslint-disable no-unused-expressions */
+/// <reference types="cypress" />
+
+import '../../../utilities/api/apiUtilities'
+
 Cypress.Commands.add('digitalPay', (digitalPayment) => {
   cy.api({
     method: 'POST',
@@ -25,15 +30,23 @@ Cypress.Commands.add('getDigitalPaymentInstruments', () => {
 })
 
 Cypress.Commands.add('removePaymentInstrument', (paymentInstrumentId: string | Cypress.Chainable) => {
-  cy.api({
+  cy.log("Deleting paymentInstrument" + paymentInstrumentId)
+  cy.request({
     method: 'POST',
     url: Cypress.env('deletePaymentInstrument'),
-    body: {
-      paymentInstrumentId: paymentInstrumentId
+    body: {"paymentInstrumentId" : paymentInstrumentId},
+    failOnStatusCode: false
+  }).then((response) => {
+    if(response.body.Success!==true){
+      cy.request({
+        method: 'POST',
+        url: Cypress.env('deletePaymentInstrument'),
+        body: {"paymentInstrumentId" : paymentInstrumentId},
+        failOnStatusCode: false
+      }).then((secondResponse) => {
+        expect(secondResponse.body.Success).to.be.equal(true)
+      })
     }
-  }).then((response: any) => {
-    expect(response.body.Success).to.eql(true)
-    return response.body
   })
 })
 

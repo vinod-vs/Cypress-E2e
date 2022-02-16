@@ -50,3 +50,31 @@ Cypress.Commands.add('checkForOrderPlacementErrorsAndThrow', (paymentResponse) =
     throw new Error ('Error on Payment.' + '\n' + 'Type is: ' + type  + '.' + '\n' + 'Message is: ' + message)
   }
 })
+
+Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
+  cy.digitalPay(paymentRequest).then((response: any) => {
+    if (response.PaymentResponses !== null) {
+      cy.get(response.PaymentResponses).each((instrument: any) => {
+        expect(instrument.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrument.PaymentInstrumentType).to.be.null
+      }).then(() => {
+        cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
+          expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
+          expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
+            
+          confirmOrderParameter.placedOrderId = response.PlacedOrderId 
+        })
+      })
+    } else {
+      cy.checkForOrderPlacementErrorsAndThrow(response)
+    }       
+  })
+
+  cy.confirmOrder(confirmOrderParameter).then((response: any) => {
+    const orderId = response.Order.OrderId
+    expect(orderId, 'Order Placement Id').to.eqls(confirmOrderParameter.placedOrderId)
+
+    cy.log('This is the order id: ' + response.Order.OrderId)
+    
+    return cy.wrap(orderId)
+  })
+}) 

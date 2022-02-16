@@ -105,7 +105,7 @@ declare namespace Cypress {
     productSearch(searchRequest: any): any;
     loginViaApiAndHandle2FA(shopper: any): any;
     getDOB(type: string): Cypress.Chainable<string>;
-    signUpPersonalUser(signupdetails: any): any;
+    signUpUser(signupdetails: any): any;
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
     performReIssueOnWowOrderOnSM(isMarketOnly: boolean): any;
@@ -122,6 +122,16 @@ declare namespace Cypress {
     subscribeToDUYearlyPersonal(userinfor: any): any;
     subscribeToDUMonthlySenior(userinfor: any): any;
     subscribeToDUYearlySenior(userinfor: any): any;
+    checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balance: any): any;
+    placeOrderViaApiWithPaymentRequest(request: any): Cypress.Chainable<number>;
     fetchProductDataOnPDP(searchTerm: any): any;
+    generateGiftCards(expectedGiftCardBalance: any): any;
+    payWithGiftCard(digitalPaymentRequest: any): any;
+    addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
+    editPersonalDetails(personalDetails: any): any;
+    verifyEmailNotificationForPersonalDetails():any
+    signUpBusinessUser(signupdetails: any): any;
+    subscribeToDUMonthlyBusiness(userinfor: any): any;
+    subscribeToDUYearlyBusiness(userinfor: any): any;
   }
 }

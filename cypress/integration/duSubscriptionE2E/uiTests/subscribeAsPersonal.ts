@@ -30,7 +30,7 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
           signUpDetails.dateOfBirth = value
       })
 
-      cy.signUpPersonalUser(signUpDetails)
+      cy.signUpUser(signUpDetails)
       cy.subscribeToDUMonthlyPersonal(signUpDetails)
 
     })
@@ -46,7 +46,7 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
           signUpDetails.dateOfBirth = value
       })
 
-      cy.signUpPersonalUser(signUpDetails)
+      cy.signUpUser(signUpDetails)
       cy.subscribeToDUYearlyPersonal(signUpDetails)
 
     })
