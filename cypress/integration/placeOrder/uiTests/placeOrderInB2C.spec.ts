@@ -64,7 +64,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
       onHomePage.getSearchHeader().click()
       onHomePage.getSearchHeader().type('health').type('{enter}')
 
-      onSearchResultsPage.addAvailableProductsToCartFromSearchResult(500)
+      onSearchResultsPage.addAvailableProductsToCartFromSearchResult(50)
 
       onSideCartPage.getViewCartButton().click()
       onSideCartPage.gotoCheckout()
