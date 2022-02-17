@@ -1,3 +1,5 @@
+import { onSideCartPage } from "cypress/support/sideCart/ui/pageObjects/SideCartPage"
+
 export class SearchResultsPage {
   getIncreaseQuantityButton () {
     return cy.get('.cartControls-incrementButton')
@@ -71,10 +73,6 @@ export class SearchResultsPage {
     return cy.get('shared-toast')
   }
 
-  getHaveYouForgottenContinueToCheckoutButton () {
-    return cy.get('wow-have-you-forgotten-container .continue-button')
-  }
-
   getAllPageNumberElements () {
     return cy.get('.paging-pageNumber')
   }
@@ -87,15 +85,7 @@ export class SearchResultsPage {
     return cy.get('.sort-by-dropdown button')
   }
 
-  continueToCheckout() {
-    cy.checkIfElementExists('wow-have-you-forgotten-container .continue-button').then(result => {
-      if(result){
-        this.getHaveYouForgottenContinueToCheckoutButton().click({force: true})
-      }
-    })
-  }
-
-  addAvailableHighestPriceProductToCartFromSearchResultPages(bulkAddingQuantity)
+  addAvailableProductsToCartFromSearchResult(minSpendThreshold)
   {
     cy.checkIfElementExists('.no-results-primary-text').then(result => {
       if(result == true){
@@ -116,36 +106,74 @@ export class SearchResultsPage {
 
     let searchResultPageStartIndex = 1
     this.getAllPageNumberElements().last().then(lastPageNumberElement => {
-      this.addAvailableProductToCartFromCurrentPage(bulkAddingQuantity, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
+      this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
     })
   }
 
-  addAvailableProductToCartFromCurrentPage(bulkAddingQuantity, currentPageIndex, lastPageIndex)
+  #addAvailableProductsToCartFromCurrentPage(minSpendThreshold, currentPageIndex, lastPageIndex)
   {
     if(currentPageIndex > lastPageIndex)
     {
       throw new Error('All search result products are out of stock or unavailable')
     }
 
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('productSearchEndpoint'),
+    }).as('productSearch')
+
     this.getAllAddToCartButtons().its('length').then(len => {
       if(len > 0){
-        this.getAllAddToCartButtons().first().parents('.cartControls').then(cartControls => {
-          cy.wrap(cartControls).find('.cartControls-addCart').click({force: true})
-          cy.wrap(cartControls).find('.cartControls-quantityInput').clear().type(bulkAddingQuantity).type('{enter}')
-        })
-
-        cy.checkIfElementExists('.shelfProductTile-maxSupplyLimitMessage').then(result => {
-          if(result){
-            cy.get('.shelfProductTile-maxSupplyLimitMessage div').then(atpMessageElement => {
-              let itemsLeftQuantity = atpMessageElement.text().substring(0, atpMessageElement.text().indexOf('item(s) left')).trim()
-              cy.wrap(cartControls).find('.cartControls-quantityInput').clear().type(itemsLeftQuantity).type('{enter}')
-            })
-          }
-        })
+        this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold, 0)
       }
       else{
         this.getGoNextButton().click()
-        this.addAvailableProductToCartFromCurrentPage(bulkAddingQuantity, currentPageIndex + 1, lastPageIndex)
+        cy.wait('@productSearch')
+        this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, currentPageIndex + 1, lastPageIndex)
+      }
+    })
+  }
+
+  #addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+  {
+    this.getAllAddToCartButtons().its('length').then(len => {
+      if(len == 0){
+        this.getGoNextButton().click()
+      }
+
+      this.getAllAddToCartButtons().first().parents('shared-cart-buttons').then(sharedCartButton => {
+        cy.wrap(sharedCartButton).find('.cartControls-addCart').click({force: true})      
+        this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButton)
+      })
+
+      onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+        if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
+          return false
+        }
+        else{
+          this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+        }
+      })
+    })
+  }
+
+  #keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButtonJquery)
+  {
+    cy.wait(200)
+    onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+      if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
+        return false
+      }
+      else{
+        cy.wrap(sharedCartButtonJquery).find('.cartControls-incrementButton').then(incrementButton => {
+          if(!incrementButton.prop('disabled')){
+            cy.wrap(incrementButton).click({force : true})
+            this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButtonJquery)
+          }
+          else{
+            return false
+          } 
+        })      
       }
     })
   }

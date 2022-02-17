@@ -4,11 +4,15 @@ import { onFMSAddressSelector } from '../../../support/fulfilment/ui/pageObjects
 import { onFMSRibbon } from '../../../support/fulfilment/ui/pageObjects/FMSRibbon'
 import { onFMSWindowSelector } from '../../../support/fulfilment/ui/pageObjects/FMSWindowSelector'
 import { onSideCartPage } from '../../../support/sideCart/ui/pageObjects/SideCartPage'
-import {onSearchResultsPage} from '../../../support/search/ui/pageObjects/SearchResultsPage'
+import { onSearchResultsPage } from '../../../support/search/ui/pageObjects/SearchResultsPage'
 import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage'
 import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/CheckoutPage'
 import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage'
+import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage'
 import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
+import addressTestData from '../../../fixtures/checkout/addressSearch.json'
+import storeTestData from '../../../fixtures/checkout/storeSearch.json'
+import creditCardTestData from '../../../fixtures/payment/creditcard.json'
 import TestFilter from '../../../support/TestFilter'
 
 
@@ -36,19 +40,19 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
     it('Place a delivery order with woolworths groceries', () => {
       onFMSAddressSelector.getDeliveryTab().click();
       onFMSAddressSelector.getAddNewDeliveryAddressButton().click();
-      onFMSAddressSelector.searchForNewAddress("407-419 Elizabeth Street, SURRY HILLS  NSW");
+      onFMSAddressSelector.searchForNewAddress(addressTestData.search);
       onFMSAddressSelector.getSaveAndContinueButton().click();
     })
 
     it('Place a pickup order with woolworths groceries', () => {
       onFMSAddressSelector.getPickupTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName("cherrybrook");
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
       onFMSAddressSelector.getSaveAndContinueButton().click();
     })
 
     it('Place a direct to boot order with woolworths groceries', () => {
       onFMSAddressSelector.getDirectToBootTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName("hornsby");
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
       onFMSAddressSelector.getSaveAndContinueButton().click();
     })
 
@@ -58,16 +62,16 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
       onFMSWindowSelector.getContinueShoppingButton().click()
 
       onHomePage.getSearchHeader().click()
-      onHomePage.getSearchHeader().type('bottle').type('{enter}')
+      onHomePage.getSearchHeader().type('health').type('{enter}')
 
-      onSearchResultsPage.addAvailableHighestPriceProductToCartFromSearchResultPages(3)
+      onSearchResultsPage.addAvailableProductsToCartFromSearchResult(500)
 
       onSideCartPage.getViewCartButton().click()
       onSideCartPage.gotoCheckout()
 
-      onSearchResultsPage.continueToCheckout()
+      onHaveYouForgottenPage.continueToCheckout()
 
-      onCheckoutPage.onCheckoutPaymentPanel.PayWithNewCreditCard('4265581110647303', 8, 22, 143)
+      onCheckoutPage.onCheckoutPaymentPanel.PayWithNewCreditCard(creditCardTestData.visa.aa, creditCardTestData.visa.dd, creditCardTestData.visa.ee, creditCardTestData.visa.bb)
 
       // Verify order confirmation page
       onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')

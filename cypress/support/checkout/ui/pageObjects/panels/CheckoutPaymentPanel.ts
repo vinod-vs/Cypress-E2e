@@ -153,14 +153,14 @@ export class CheckoutPaymentPanel{
     //#endregion
 
     //#region - general actions
-    AddNewCreditCardDetails (cardNumber: string, expiryMonth: number, expiryYear: number, cvv: number) {
+    AddNewCreditCardDetails (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
         cy.iframe('.creditCardAdd-iframe').find('#card_number').type(cardNumber)
-        cy.iframe('.creditCardAdd-iframe').find('#expiry_month').type(expiryMonth.toString())
-        cy.iframe('.creditCardAdd-iframe').find('#exp_year').type(expiryYear.toString())
-        cy.iframe('.creditCardAdd-iframe').find('#cvv_csv').type(cvv.toString())
+        cy.iframe('.creditCardAdd-iframe').find('#expiry_month').type(expiryMonth)
+        cy.iframe('.creditCardAdd-iframe').find('#exp_year').type(expiryYear)
+        cy.iframe('.creditCardAdd-iframe').find('#cvv_csv').type(cvv)
     }
 
-    PayWithNewCreditCard (cardNumber: string, expiryMonth: number, expiryYear: number, cvv: number) {
+    PayWithNewCreditCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
         cy.checkIfElementExists('.creditCards-add-button').then((exist:boolean) => {
             if(!exist){
                 this.getCreditCardInstrumentToggleButton().click()
@@ -173,13 +173,13 @@ export class CheckoutPaymentPanel{
         this.getPlaceOrderButton().click()
     }
 
-    PayWithExistingCreditCard (cardNumberLast4Digit: string, cvv: number) {
+    PayWithExistingCreditCard (cardNumberLast4Digit: string, cvv: string) {
         var iframeTitleSelectorString = '[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
         cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText')
         .contains(cardNumberLast4Digit)
         .click()
 
-        cy.iframe(iframeTitleSelectorString).find('#cvv_csv').type(cvv.toString())
+        cy.iframe(iframeTitleSelectorString).find('#cvv_csv').type(cvv)
         this.getPlaceOrderButton().click()
     }
 
