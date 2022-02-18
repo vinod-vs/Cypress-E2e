@@ -12,7 +12,6 @@ import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/Have
 import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
 import addressTestData from '../../../fixtures/checkout/addressSearch.json'
 import storeTestData from '../../../fixtures/checkout/storeSearch.json'
-import creditCardTestData from '../../../fixtures/payment/creditcard.json'
 import TestFilter from '../../../support/TestFilter'
 
 
@@ -71,11 +70,43 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
 
       onHaveYouForgottenPage.continueToCheckout()
 
-      onCheckoutPage.onCheckoutPaymentPanel.PayWithNewCreditCard(creditCardTestData.visa.aa, creditCardTestData.visa.dd, creditCardTestData.visa.ee, creditCardTestData.visa.bb)
+      onCheckoutPage.onCheckoutFulfilmentSelectionPanel.getSummarisedFulfilmentAddressElement().then(address => {
+        cy.wrap(address.text()).as('expectedAddress')
+      })
+
+      onCheckoutPage.onCheckoutFulfilmentWindowPanel.getSummarisedFulfilmentDay().then(fulfilmentDay => {
+        cy.wrap(fulfilmentDay).as('expectedFulfilmentDay')
+      })
+
+      onCheckoutPage.onCheckoutFulfilmentWindowPanel.getSummarisedFulfilmentTime().then(fulfilmentTime => {
+        cy.wrap(fulfilmentTime).as('expectedFulfilmentTime')
+      })
+
+      onCheckoutPage.onCheckoutPaymentPanel.getPaymentTotalAmountElement().then(totalAmount => {
+        cy.wrap(totalAmount.text()).as('expectedTotalAmount')
+      })
+
+      onCheckoutPage.onCheckoutPaymentPanel.PayWithExistingPayPal()
 
       // Verify order confirmation page
       onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')
       cy.url().should('include', '/confirmation')
+
+      cy.get('@expectedAddress').then(expectedAddress => {
+        onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedAddress)
+      })
+
+      cy.get('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
+        onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
+      })
+      
+      cy.get('@expectedFulfilmentTime').then(expectedFulfilmentTime => {
+        onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentTime)
+      })
+
+      cy.get('@expectedTotalAmount').then(expectedTotalAmount => {
+        onOrderConfirmationPage.getOrderPaymentSummaryTotalAmountElement().should('contain.text', expectedTotalAmount)
+      })
     })
   })
 })

@@ -122,8 +122,8 @@ export class SearchResultsPage {
       url: Cypress.env('productSearchEndpoint'),
     }).as('productSearch')
 
-    this.getAllAddToCartButtons().its('length').then(len => {
-      if(len > 0){
+    cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
+      if(result){
         this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold, 0)
       }
       else{
@@ -136,30 +136,31 @@ export class SearchResultsPage {
 
   #addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
   {
-    this.getAllAddToCartButtons().its('length').then(len => {
-      if(len == 0){
+    cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
+      if(!result){
         this.getGoNextButton().click()
       }
-
-      this.getAllAddToCartButtons().first().parents('shared-cart-buttons').then(sharedCartButton => {
-        cy.wrap(sharedCartButton).find('.cartControls-addCart').click({force: true})      
-        this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButton)
-      })
-
-      onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
-        if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
-          return false
-        }
-        else{
-          this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
-        }
-      })
+      else{
+        this.getAllAddToCartButtons().first().parents('shared-cart-buttons').then(sharedCartButton => {
+          cy.wrap(sharedCartButton).find('.cartControls-addCart').click({force: true})      
+          this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButton)
+        })
+  
+        onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+          if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
+            return false
+          }
+          else{
+            this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+          }
+        })
+      }   
     })
   }
 
   #keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButtonJquery)
   {
-    cy.wait(200)
+    cy.wait(1000)
     onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
       if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
         return false

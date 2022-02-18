@@ -59,7 +59,7 @@ declare namespace Cypress {
     getAllRefundPaymentsByRefundIdWithRetry(refundId: number, retryOptions: any): any;
     findCCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
-    removeDateOrdinals(text: string): string;
+    removeDateOrdinals(text: string): any;
     addAvailableRestrictedWowItemsToTrolley(type: string, count: number): void;
     loginViaUI(email: string, password: string): any;
     selectTopMenu(menuToSelect: string): any;
@@ -133,5 +133,6 @@ declare namespace Cypress {
     signUpBusinessUser(signupdetails: any): any;
     subscribeToDUMonthlyBusiness(userinfor: any): any;
     subscribeToDUYearlyBusiness(userinfor: any): any;
+    convertShortWeekDayToLong(shortWeekday: string): any;
   }
 }
