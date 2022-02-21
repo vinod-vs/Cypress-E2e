@@ -42,7 +42,7 @@ function serachForEDMproductWithCUPAndVerfiy (cupTestdata) {
   searchRequest.SearchTerm = cupTestdata.searchTerm
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
-    cy.getEDMProductFromProductSearchResponse(response, cupTestdata).then((response) => {
+    cy.getEDMProductFromProductSearchResponse(response, cupTestdata,'CUP').then((response) => {
       verifyCupValues(cupTestdata)
     })
   })
