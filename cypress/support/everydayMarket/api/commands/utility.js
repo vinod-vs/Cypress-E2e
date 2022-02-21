@@ -70,7 +70,6 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
         // Get available WOW product only
         const wowProducts = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley && searchProduct.Products[0].IsForDelivery)
         expect(wowProducts.length).to.be.greaterThan(0)
-        cy.log("Found wow products")
 
         // Add available WOW product to cart
         for (x in wowProducts) {
