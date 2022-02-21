@@ -1,6 +1,6 @@
 class SessionGroupsV2Page {
     open() {
-        cy.visit('manage/sessiongroupsv2')
+        cy.visit('https://adminuatsite.woolworths.com.au/manage/sessiongroupsv2')
     }
 
     getTableFrame () {

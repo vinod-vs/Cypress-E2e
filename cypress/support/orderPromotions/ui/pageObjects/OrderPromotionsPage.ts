@@ -1,7 +1,7 @@
 class OrderPromotionsPage {
 
     open() {
-        cy.visit('manage/orderpromotions')
+        cy.visit('https://adminuatsite.woolworths.com.au/manage/orderpromotions')
     }
 
     getAddNewOrderPromotion () {
