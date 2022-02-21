@@ -23,10 +23,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
-    beforeEach(() => {
-      cy.visit('shop/securelogin')
-      cy.url().should('include', '/securelogin')
-  
+    beforeEach(() => {  
       cy.loginViaUi(b2cShoppers[3])
       
       onSideCartPage.openSideCart()
