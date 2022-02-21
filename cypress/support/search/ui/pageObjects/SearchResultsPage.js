@@ -1,3 +1,5 @@
+import { onSideCartPage } from "cypress/support/sideCart/ui/pageObjects/SideCartPage"
+
 export class SearchResultsPage {
   getIncreaseQuantityButton () {
     return cy.get('.cartControls-incrementButton')
@@ -25,6 +27,10 @@ export class SearchResultsPage {
 
   getAddToCartByItemLocatorString1 () {
     return '#search-content .product-grid > div .cartControls-addCart'
+  }
+
+  getAllAddToCartButtons () {
+    return cy.get('.cartControls-addButton .cartControls-addCart')
   }
 
   getMarketProductRoundelLocatorString () {
@@ -67,8 +73,110 @@ export class SearchResultsPage {
     return cy.get('shared-toast')
   }
 
-  getHaveYouForgottenContinueToCheckoutButton () {
-    return cy.get('wow-have-you-forgotten-container .continue-button')
+  getAllPageNumberElements () {
+    return cy.get('.paging-pageNumber')
+  }
+
+  getGoNextButton () {
+    return cy.get('.next-marker')
+  }
+
+  getSortByDropdownButton() {
+    return cy.get('.sort-by-dropdown button')
+  }
+
+  addAvailableProductsToCartFromSearchResult(minSpendThreshold)
+  {
+    cy.checkIfElementExists('.no-results-primary-text').then(result => {
+      if(result == true){
+        throw new Error('Unable to find any result')
+      }
+    })
+
+    this.getSortByDropdownButton().click({force: true})
+
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('productSearchEndpoint'),
+    }).as('productSearch')
+
+    cy.get('.sort-by-dropdown ul').contains('Price High to Low').click()
+    
+    cy.wait('@productSearch')
+
+    let searchResultPageStartIndex = 1
+    this.getAllPageNumberElements().last().then(lastPageNumberElement => {
+      this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
+    })
+  }
+
+  #addAvailableProductsToCartFromCurrentPage(minSpendThreshold, currentPageIndex, lastPageIndex)
+  {
+    if(currentPageIndex > lastPageIndex)
+    {
+      throw new Error('All search result products are out of stock or unavailable')
+    }
+
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('productSearchEndpoint'),
+    }).as('productSearch')
+
+    cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
+      if(result){
+        this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold, 0)
+      }
+      else{
+        this.getGoNextButton().click()
+        cy.wait('@productSearch')
+        this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, currentPageIndex + 1, lastPageIndex)
+      }
+    })
+  }
+
+  #addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+  {
+    cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
+      if(!result){
+        this.getGoNextButton().click()
+      }
+      else{
+        this.getAllAddToCartButtons().first().parents('shared-cart-buttons').then(sharedCartButton => {
+          cy.wrap(sharedCartButton).find('.cartControls-addCart').click({force: true})      
+          this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButton)
+        })
+  
+        onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+          if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
+            return false
+          }
+          else{
+            this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+          }
+        })
+      }   
+    })
+  }
+
+  #keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButtonJquery)
+  {
+    cy.wait(1000)
+    onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+      if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
+        return false
+      }
+      else{
+        cy.wrap(sharedCartButtonJquery).find('.cartControls-incrementButton').then(incrementButton => {
+          if(!incrementButton.prop('disabled')){
+            cy.wrap(incrementButton).click({force : true})
+            this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButtonJquery)
+          }
+          else{
+            return false
+          } 
+        })      
+      }
+    })
   }
 }
 
