@@ -1,7 +1,7 @@
 import { SharedAddressSelector } from "cypress/support/shared/ui/pageObjects/SharedAddressSelector";
 
 export class CheckoutFulfilmentSelectionPanel extends SharedAddressSelector{
-    getChangeFulfilmentButton(){
+    getEditFulfilmentButton(){
         return cy.get('#checkout-fulfilmentPanel .panel-actions-change-button');
     }
 
@@ -11,6 +11,10 @@ export class CheckoutFulfilmentSelectionPanel extends SharedAddressSelector{
 
     getCancelButton(){
         return cy.get('.panel-actions-button .reversed-primary');
+    }
+
+    getSummarisedFulfilmentAddressElement(){
+        return cy.get('wow-checkout-fulfilment-summary span')
     }
 }
 

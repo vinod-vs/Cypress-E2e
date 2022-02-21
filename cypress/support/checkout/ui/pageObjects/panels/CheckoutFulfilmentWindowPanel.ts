@@ -145,7 +145,19 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    */
   public getSummarisedFulfilmentDay(): Cypress.Chainable<string> {
     return this.fulfilmentDaySummaryEl().invoke('text').then(($text) => {
-      return cy.removeDateOrdinals($text);
+      if(!$text.includes('Today') && !$text.includes('Tomorrow') && !$text.includes('In approx'))
+      {
+        cy.removeDateOrdinals($text).then((noOrdinals: any) => {
+          let shortWeekdayString = noOrdinals.substring(0, noOrdinals.indexOf(' '))
+          cy.convertShortWeekDayToLong(shortWeekdayString).then((longWeekdayString: any) => {
+            let str = longWeekdayString + ',' + noOrdinals.substring(noOrdinals.indexOf(' '))
+            return str.replace(' of', '')
+          })
+        })
+      }
+      else{
+        return $text
+      }   
     })
   }
 
@@ -158,7 +170,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
   public getSummarisedFulfilmentTime(): Cypress.Chainable<string> { 
     return this.fulfilmentTimeSummaryEl().invoke('text').then(($text) => {
       cy.removeNewLineCarriageReturn($text).then((noCr: any) => {
-        return noCr.split('between')[1].replace('and-', 'to').trim();
+        return noCr.split('between')[1].replace('and-', '-').trim();
       })
     })
   }

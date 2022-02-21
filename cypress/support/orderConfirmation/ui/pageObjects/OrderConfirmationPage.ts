@@ -15,6 +15,10 @@ export class OrderConfirmationPage {
     return cy.contains('Track my order')
   }
 
+  getConfirmationFulfilmentDetailsContentElement () {
+    return cy.get('.confirmation-fulfilment-details__content')
+  }
+
   getOrderNumberElement () {
     return cy.get('.confirmation-fulfilment-details__section-inline-text')
   }

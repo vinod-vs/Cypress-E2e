@@ -9,7 +9,7 @@ export class SideCartPage {
   }
 
   getViewCartButton () {
-    return cy.get('button.headerCheckout-orderHeader')
+    return cy.get('.checkout-button')
   }
 
   getClearEntireCartLink () {
@@ -32,8 +32,8 @@ export class SideCartPage {
     return cy.get('.empty-cart-title')
   }
 
-  getTotalItemsAmountElemnt () {
-    return cy.get('item-count-amount')
+  getTotalItemsQuantityElemnt () {
+    return cy.get('.item-count-amount')
   }
 
   getTotalSavingAmountElement () {
@@ -44,7 +44,7 @@ export class SideCartPage {
     return cy.get('.cartLoyalty-pointsTotal')
   }
 
-  getTotalPriceElement () {
+  getTotalAmountElement () {
     return cy.get('.cart-checkout-total__currency')
   }
 
@@ -55,6 +55,10 @@ export class SideCartPage {
   getOrderSummaryButton () {
     return cy.get('.cart-checkout-summary__heading')
   }
+
+  getTotalAmountElementOnHeader () {
+    return cy.get('#wx-header-checkout-amount')
+  }      
   // #endregion
 
   // #region - Selectors of all products
@@ -136,7 +140,7 @@ export class SideCartPage {
     return this.getUnavailableProductsNotificationPanel().find('p.title')
   }
 
-  getUnavailableProductsNotificationRemoveItemsLink () {
+  getUnavailableProductsNotificationUpdateToContinueLink () {
     return this.getUnavailableProductsNotificationPanel().find('button.linkButton')
   }
   // #endregion
@@ -163,6 +167,13 @@ export class SideCartPage {
   }
 
   gotoCheckout () {
+    cy.wait(500)
+    cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
+      if(result){
+        cy.get('.auto_group-restricted-location button.linkButton').click()
+        cy.wait(500)
+      }
+    })
     this.getCheckoutButton().click()
   }
 
@@ -187,12 +198,24 @@ export class SideCartPage {
   }
 
   removeAllUnavailableItems () {
-    this.getUnavailableProductsNotificationRemoveItemsLink().click()
+    this.getUnavailableProductsNotificationUpdateToContinueLink().click()
   }
 
   removeAllItems () {
-    this.getClearEntireCartLink().click()
-    this.getConfirmClearCartLink().click()
+    cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
+      if(result){
+        cy.get('.auto_group-restricted-location button.linkButton').click()
+        cy.wait(500)
+      }
+    })
+
+    cy.checkIfElementExists('.empty-cart-title').then((exist:boolean) => {
+      if(!exist){
+        this.getClearEntireCartLink().click()
+        this.getConfirmClearCartLink().click()
+        cy.wait(500)
+      }
+    })
   }
   // #endregion
 
