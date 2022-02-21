@@ -70,6 +70,7 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
         // Get available WOW product only
         const wowProducts = response.Products.filter(searchProduct => !searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley && searchProduct.Products[0].IsForDelivery)
         expect(wowProducts.length).to.be.greaterThan(0)
+        cy.log("Found wow products")
 
         // Add available WOW product to cart
         for (x in wowProducts) {
@@ -112,7 +113,9 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
       if (item.isEDMProduct === 'true') {
         cy.log('Adding a EDM product')
         let mpStockCode = 0
-        const mpQuantity = item.quantity
+        let mpQuantity = new Number(0)
+        const minEDMOrderThreshold = item.minEDMOrderThreshold
+        const bufferEDMQuantitiy = item.bufferEDMQuantitiy
         // Get available EDM product only
         const edmProducts = response.Products.filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable && searchProduct.Products[0].IsPurchasable && searchProduct.Products[0].Price !== null && searchProduct.Products[0].IsInStock === true && searchProduct.Products[0].SupplyLimit >= 50 && !searchProduct.Products[0].IsInTrolley && searchProduct.Products[0].IsForDelivery)
         expect(edmProducts.length).to.be.greaterThan(0)
@@ -121,10 +124,20 @@ Cypress.Commands.add('getTestProductFromProductSearchResponse', (testData) => {
         for (y in edmProducts) {
           const product = edmProducts[y].Products[0]
           mpStockCode = product.Stockcode
+          // Determine EDM item quantity
+          if (item.quantity > 0) {
+            mpQuantity = item.quantity
+            cy.log('Using mpQuantity from testdata: ' + mpQuantity)
+          } else {
+            mpQuantity = minEDMOrderThreshold / product.Price
+            mpQuantity = Math.floor(mpQuantity) + bufferEDMQuantitiy
+            cy.log('Using Calculated mpQuantity: ' + mpQuantity)
+          }
           cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + product.SupplyLimit + ' , PerItemPrice: ' + product.Price + ' , Quantity: ' + mpQuantity)
           addItemsBodyMp.StockCode = mpStockCode
           addItemsBodyMp.Quantity = mpQuantity
           item.stockCode = mpStockCode
+          item.quantity = mpQuantity
           item.pricePerItem = product.Price
           item.sellerName = product.AdditionalAttributes['Market.Seller_BusinessName']
           totalEdmQuantity = totalEdmQuantity + mpQuantity

@@ -5,8 +5,6 @@ import shoppers from '../../../../fixtures/everydayMarket/shoppers.json'
 import TestFilter from '../../../../support/TestFilter'
 import '../../../../support/login/api/commands/login'
 import '../../../../support/search/api/commands/search'
-import { fulfilmentType } from '../../../../fixtures/checkout/fulfilmentType.js'
-import addressSearch from '../../../../fixtures/checkout/addressSearch.json'
 import '../../../../support/sideCart/api/commands/clearTrolley'
 import '../../../../support/invoices/api/commands/commands'
 import '../../../../support/refunds/api/commands/commands'
@@ -21,51 +19,26 @@ import '../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../../fixtures/everydayMarket/apiTests.json'
 import '../../../../support/payment/api/commands/giftCard'
-import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'feature'], () => {
-  describe('[API] RP-5476  Verify Everyday Market Order more than 5000 cannot be placed using Gift cards', () => {
+  describe('[API] RP-5475  Verify WOW & EDM Order more than 5000 cannot be placed using Gift cards', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('[API] RP-5476  Verify Everyday Market Order more than 5000 cannot be placed using Gift cards', () => {
-      const testData = tests.VerifyEDMItemsGCLimit
+    it('[API] RP-5476  Verify WOW & EDM Order more than 5000 cannot be placed using Gift cards', () => {
+      const testData = tests.VerifyEDMAndWOWItemsGCLimit
       const shopper = shoppers.emAccount2
       let shopperId = shopper.shopperId
       let orderId
       let orderReference
 
-      //Login using shopper saved in the fixture
-      cy.loginViaApiAndHandle2FA(shopper)
-      
-      // Set delivery fulfilment to 407 Elizabeth Street, Surry Hills - Delivery Address
-      cy.setFulfilmentLocationWithoutWindow(fulfilmentType.DELIVERY, addressSearch)
-       
-      // Clear trolley in case there's any item
-      cy.clearTrolley()
-
-      //Calculate quantity of Items based on Unit Price and total Value
-      cy.addEDMItemsBasedOnMinCartValueToTrolley(testData)
-      cy.get('@finalQty').then((finalQty) => {
-        testData.quantity = finalQty
-      })
-       
-      //Pay the order
-      cy.payTheOrder(testData).then((response) => {
-        confirmOrderRequest.placedOrderId = response.PlacedOrderId
-      })
-      
-      // Confirm the order
-      cy.wait(Cypress.config('fiveSecondWait'))
-      cy.confirmOrder(confirmOrderRequest).then((response) => {
-        expect(response.Order.OrderId).to.eqls(confirmOrderRequest.placedOrderId)
-        expect(response.Order.OrderStatus).to.be.equal('Placed')
+      // Login and place the order from testdata
+      cy.loginAndPlaceRequiredOrderFromTestdata(shopper, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
-        orderReference = response.Order.OrderReference
-        
+        orderReference = response.Order.OrderReference.toString() 
         testData.orderId = orderId
         testData.orderReference = orderReference
 
@@ -81,7 +54,8 @@ TestFilter(['EDM', 'API', 'feature'], () => {
           timeout: 5000
         }).as('finalProjection').then((response) => {
 
-          // Order details
+          // MP Order details
+          cy.log("Checking MP Order details")
           expect(response.orderId).to.equal(Number(orderId))
           expect(response.shopperId).to.be.equal(Number(shopperId))
           expect(response.orderStatus).to.be.equal('FraudRejected')
@@ -93,12 +67,14 @@ TestFilter(['EDM', 'API', 'feature'], () => {
           expect(response.invoices.length).to.be.equal(1)
           expect(response.invoices[0].wowStatus).to.be.equal('Failed')
           expect(response.invoices[0].lineItems[0].totalAmount).to.be.greaterThan(0)
-          expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.quantity))
+          expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
 
+          cy.log("Checking seller details")
           // Seller details
           expect(response.invoices[0].seller.sellerId).to.not.be.null
-          expect(response.invoices[0].seller.sellerName).to.be.equal(testData.sellerName)
+          expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
 
+          cy.log("Verifying invoice details after failed order")
           // Verifying Invoice details after failed order
           expect(response.invoices[0].invoiceStatus).to.be.null
           expect(response.invoices[0].wowStatus).to.be.equal('Failed')
@@ -120,8 +96,8 @@ TestFilter(['EDM', 'API', 'feature'], () => {
           expect(response.invoices[0].lineItems[0].wowId).to.not.be.null
           expect(response.invoices[0].lineItems[0].lineItemId).to.be.null
           expect(response.invoices[0].lineItems[0].legacyId).to.be.equal(0)
-          expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.stockcode))
-          expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.quantity))
+          expect(response.invoices[0].lineItems[0].stockCode).to.be.equal(Number(testData.items[0].stockCode))
+          expect(response.invoices[0].lineItems[0].quantity).to.be.equal(Number(testData.items[0].quantity))
           expect(response.invoices[0].lineItems[0].quantityPlaced).to.be.equal(0)
           expect(response.invoices[0].lineItems[0].refundableQuantity).to.be.equal(0)
           expect(response.invoices[0].lineItems[0].salePrice).to.be.greaterThan(0)
@@ -136,7 +112,7 @@ TestFilter(['EDM', 'API', 'feature'], () => {
           // Rewards Details for line items
           expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
           expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
-          expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.quantity))
+          expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 
           // After Order failed, Invoke the events api and verify the events are updated acordingly
           cy.orderEventsApiWithRetry(testData.orderReference, {
@@ -152,7 +128,7 @@ TestFilter(['EDM', 'API', 'feature'], () => {
             // Verify Market Order is Failed
             lib.verifyEventDetails(response, 'MarketOrderFailed', testData, shopperId, 1)
           })
-
+         
           // Invoke OQS TMO api and validate it against the projection
           cy.getOrderStatus(testData.orderId).then((oqsResponse) => {
             cy.log(JSON.stringify(oqsResponse))
@@ -168,9 +144,18 @@ TestFilter(['EDM', 'API', 'feature'], () => {
               expect(oqsResponse.MarketDeliveryStreet2).to.not.be.null
               expect(oqsResponse.MarketDeliverySuburb).to.not.be.null
               expect(oqsResponse.MarketDeliveryPostCode).to.not.be.null
-              expect(oqsResponse.IsMarketOnly).to.be.equal(true)
+              expect(oqsResponse.IsMarketOnly).to.be.equal(false)
               expect(oqsResponse.MarketOrders.length).to.be.greaterThan(0)
               expect(oqsResponse.CurrentStatus).to.be.equal('Received')
+
+              //Verify WOW Items
+              const wowItems = testData.items.filter(item => item.isEDMProduct === String(false))
+              wowItems.forEach(function (item, k) {
+                expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
+                expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
+                expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
+                expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
+              })
 
               // Verify edm order details
               // Verify the edm products count matches with the invoices count
@@ -215,8 +200,8 @@ TestFilter(['EDM', 'API', 'feature'], () => {
               })
             })
           })
-        })
-      })     
+        })  
+      })
     })  
     
     after(() => {
@@ -228,6 +213,6 @@ TestFilter(['EDM', 'API', 'feature'], () => {
           cy.removePaymentInstrument(instrumentId.InstrumentId)
         });
       }) 
-    })  
+    })
   })
 })

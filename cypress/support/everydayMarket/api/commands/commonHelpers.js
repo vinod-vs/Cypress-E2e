@@ -194,7 +194,7 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
       expect(oqsResponse.MarketDeliveryPostCode).to.not.be.null
       expect(oqsResponse.IsMarketOnly).to.be.equal(isMarketOnly)
       expect(oqsResponse.MarketOrders.length).to.be.greaterThan(0)
-      //expect(oqsResponse.MarketShippingPdfLink).to.be.equal(projection.shippingPdfLink)
+      expect(oqsResponse.MarketShippingPdfLink).to.be.equal(projection.shippingPdfLink)
       expect(oqsResponse.CurrentStatus).to.be.equal(expectedWOWOrderStatus)
 
       // If marketOnly order, verify there are no WOW products
@@ -246,7 +246,9 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
           }
           expect(oqsResponse.MarketOrders[i].Total).to.be.equal(projection.invoices[i].invoiceTotal)
           expect(oqsResponse.MarketOrders[i].MarketShippingFee).to.be.equal(projection.shippingAmount)
-          //expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
+          if(oqsResponse.MarketOrders[i].Status!=='Cancelled'){
+            expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
+          }
           expect(oqsResponse.MarketOrders[i].CreatedDate).to.not.be.null
           expect(oqsResponse.MarketOrders[i].UpdatedDate).to.not.be.null
           expect(oqsResponse.MarketOrders[i].DeliveryInfo).to.not.be.null
