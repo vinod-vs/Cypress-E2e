@@ -381,7 +381,7 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
 })
 
 
-Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, testdata, type) => {
+Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchResponse, testdata, type) => {
   const response = productSearchResponse
   let y
   let mpStockCode = 0

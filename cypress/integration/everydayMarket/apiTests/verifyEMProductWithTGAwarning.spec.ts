@@ -41,7 +41,7 @@ function serachForEDMproductWithTGAAndVerfiy(tgaTestdata) {
   searchRequest.SearchTerm = tgaTestdata
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
-    cy.getEDMProductFromProductSearchResponse(response,TGA,'TGA').then((response) => {
+    cy.searchEMProductAndStashTheResponse(response,TGA,'TGA').then((response) => {
       expect(TGA.productWarningsAct).to.be.equal(TGA.TGAWarning);
     })
   })
