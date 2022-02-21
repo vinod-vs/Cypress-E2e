@@ -395,7 +395,7 @@ Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchRes
       break
     }
   }
-  // expect(mpStockCode).to.be.greaterThan(0)
+
   switch (type) {
     case 'CUP':
     
