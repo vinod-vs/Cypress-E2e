@@ -246,9 +246,7 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
           }
           expect(oqsResponse.MarketOrders[i].Total).to.be.equal(projection.invoices[i].invoiceTotal)
           expect(oqsResponse.MarketOrders[i].MarketShippingFee).to.be.equal(projection.shippingAmount)
-          if(oqsResponse.MarketOrders[i].Status!=='Cancelled'){
-            expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
-          }
+          expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
           expect(oqsResponse.MarketOrders[i].CreatedDate).to.not.be.null
           expect(oqsResponse.MarketOrders[i].UpdatedDate).to.not.be.null
           expect(oqsResponse.MarketOrders[i].DeliveryInfo).to.not.be.null
