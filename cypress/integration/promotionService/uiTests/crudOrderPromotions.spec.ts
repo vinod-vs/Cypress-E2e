@@ -1,11 +1,12 @@
 import TestFilter from '../../../support/TestFilter'
-import {orderPromotionsPage} from '../../../support/orderPromotions/ui/pageObjects/OrderPromotionsPage'
+import { orderPromotionsPage } from '../../../support/orderPromotions/ui/pageObjects/OrderPromotionsPage'
 import loginDetails from '../../../fixtures/siteManagement/loginDetails.json'
 import '../../../support/siteManagement/ui/commands/login'
-import {editOrderPromotionPage} from '../../../support/orderPromotions/ui/pageObjects/EditOrderPromotionPage'
+import { editOrderPromotionPage } from '../../../support/orderPromotions/ui/pageObjects/EditOrderPromotionPage'
+import '../../../support/accessability/accessability'
 
-var orderPromotionName:string
-var timeStamp:string
+var orderPromotionName: string
+var timeStamp: string
 
 TestFilter(['UI', 'B2C', 'Promotions', 'P3', 'OHNO'], () => {
     describe('[UI] Create, Update, Delete Order Promotions', () => {
@@ -15,9 +16,11 @@ TestFilter(['UI', 'B2C', 'Promotions', 'P3', 'OHNO'], () => {
             cy.clearLocalStorage({ domain: null })
             orderPromotionsPage.open()
             cy.adminLoginViaUi(loginDetails)
+            cy.injectAxe()
         })
 
         it('Create Order Promotion', () => {
+            cy.injectAxe()
             timeStamp = new Date().toISOString().substr(0, 26)
             orderPromotionName = "OP " + timeStamp
             orderPromotionsPage.getAddNewOrderPromotion().click()

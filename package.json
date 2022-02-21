@@ -1,64 +1,70 @@
 {
-    "name": "wow-e2e-api-automation",
-    "version": "1.0.0",
-    "description": "E2E Automation Framework",
-    "main": "index.js",
-    "scripts": {
-        "cypress:open": "cypress open",
-        "cypress:run": "cypress run",
-        "cypress:spec": "cypress run --spec",
-        "pretest": "npx standard || true",
-        "test": "cypress run",
-        "browserstackTest": "browserstack-cypress run --sync",
-        "browserstackGenerateReport": "browserstack-cypress generate-report",
-        "allure:open": "allure open",
-        "allure:generate": "allure generate cypress/allure-results --clean",
-        "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
-    },
-    "author": "Test Automation Atom|Autobots Chapter",
-    "license": "ISC",
-    "devDependencies": {
-        "@bahmutov/cy-api": "^1.5.0",
-        "@shelex/cypress-allure-plugin": "^2.3.5",
-        "@types/node": "^17.0.10",
-        "allure-commandline": "^2.13.8",
-        "browserstack-cypress-cli": "^1.9.0",
-        "chai-exclude": "^2.1.0",
-        "cypress": "^8.2.0",
-        "cypress-iframe": "^1.0.1",
-        "cypress-mailosaur": "^2.5.1",
-        "cypress-multi-reporters": "^1.4.0",
-        "cypress-xpath": "^1.6.2",
-        "dayjs": "^1.10.7",
-        "faker": "^5.5.3",
-        "junit-report-merger": "^1.0.0",
-        "mocha-junit-reporter": "^2.0.2",
-        "mochawesome": "^6.2.2",
-        "mochawesome-merge": "^4.2.0",
-        "mochawesome-report-generator": "^5.2.0",
-        "moment": "^2.29.1",
-        "mongodb": "^4.1.2",
-        "standard": "^16.0.4",
-        "ts-loader": "^9.2.6",
-        "typescript": "^4.4.4",
-        "webpack": "^5.64.0"
-    },
-    "standard": {
-        "env": [
-            "mocha"
-        ],
-        "globals": [
-            "cy",
-            "Cypress",
-            "expect",
-            "assert"
-        ]
-    },
-    "dependencies": {
-        "fs": "0.0.1-security",
-        "xml": "^1.0.1",
-        "xml-formatter": "^2.6.0",
-        "xml2js": "^0.4.23",
-        "xml2json": "^0.12.0"
-    }
+  "name": "wow-e2e-api-automation",
+  "version": "1.0.0",
+  "description": "E2E Automation Framework",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:spec": "cypress run --spec",
+    "pretest": "npx standard || true",
+    "test": "cypress run",
+    "browserstackTest": "browserstack-cypress run --sync",
+    "browserstackGenerateReport": "browserstack-cypress generate-report",
+    "allure:open": "allure open",
+    "allure:generate": "allure generate cypress/allure-results --clean",
+    "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
+  },
+  "author": "Test Automation Atom|Autobots Chapter",
+  "license": "ISC",
+  "devDependencies": {
+    "@bahmutov/cy-api": "^1.5.0",
+    "@shelex/cypress-allure-plugin": "^2.3.5",
+    "@types/node": "^17.0.10",
+    "allure-commandline": "^2.13.8",
+    "axe-core": "^4.4.1",
+    "browserstack-cypress-cli": "^1.9.0",
+    "chai-exclude": "^2.1.0",
+    "cypress": "^8.7.0",
+    "cypress-axe": "^0.14.0",
+    "cypress-iframe": "^1.0.1",
+    "cypress-mailosaur": "^2.5.1",
+    "cypress-multi-reporters": "^1.4.0",
+    "cypress-xpath": "^1.6.2",
+    "dayjs": "^1.10.7",
+    "faker": "^5.5.3",
+    "junit-report-merger": "^1.0.0",
+    "mocha-junit-reporter": "^2.0.2",
+    "mochawesome": "^6.2.2",
+    "mochawesome-merge": "^4.2.0",
+    "mochawesome-report-generator": "^5.2.0",
+    "moment": "^2.29.1",
+    "mongodb": "^4.1.2",
+    "standard": "^16.0.4",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.4",
+    "webpack": "^5.64.0"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ],
+    "globals": [
+      "cy",
+      "Cypress",
+      "expect",
+      "assert"
+    ]
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "xml": "^1.0.1",
+    "xml-formatter": "^2.6.0",
+    "xml2js": "^0.4.23",
+    "xml2json": "^0.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation"
+  }
 }

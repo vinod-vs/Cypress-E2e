@@ -10,7 +10,8 @@
     "types": [
       "cypress",
       "cypress-xpath",
-      "node"
+      "node",
+      "cypress-axe"
     ],
     "resolveJsonModule": true,
     "esModuleInterop": true,
