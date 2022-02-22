@@ -6,6 +6,13 @@ import {editOrderPromotionPage} from '../../../support/orderPromotions/ui/pageOb
 
 var orderPromotionName:string
 var timeStamp:string
+var startDate:string = '27/01/2022'
+var endDate:string = '30/01/2030'
+var qualifyingAmount:string = '10000.00'
+var target:string = 'Grocery Subtotal'
+var discountType:string = '% - Percent Off'
+var discountAmount:string = '5.00'
+var sessionGroup:string = 'DO-NOT-DELETE-CYPRESS-UI-SESSION-GROUP'
 
 TestFilter(['UI', 'B2C', 'Promotions', 'P3', 'OHNO'], () => {
     describe('[UI] Create, Update, Delete Order Promotions', () => {
@@ -22,15 +29,15 @@ TestFilter(['UI', 'B2C', 'Promotions', 'P3', 'OHNO'], () => {
             orderPromotionName = "OP " + timeStamp
             orderPromotionsPage.getAddNewOrderPromotion().click()
             editOrderPromotionPage.getNameInput().type(orderPromotionName)
-            editOrderPromotionPage.getStartDateInput().type('27/01/2022{enter}')
-            editOrderPromotionPage.getEndDateInput().type('30/01/2030{enter}')
-            editOrderPromotionPage.getEligibleShoppersInput().select('JV Session Group 202110220832')
+            editOrderPromotionPage.getStartDateInput().type(startDate + '{enter}')
+            editOrderPromotionPage.getEndDateInput().type(endDate + '{enter}')
+            editOrderPromotionPage.getEligibleShoppersInput().select(sessionGroup)
             editOrderPromotionPage.getQualifyingAmountInput().clear()
-            editOrderPromotionPage.getQualifyingAmountInput().type('10000.00')
-            editOrderPromotionPage.getTargetInput().select('Grocery Subtotal')
-            editOrderPromotionPage.getDiscountTypeInput().select('% - Percent Off')
+            editOrderPromotionPage.getQualifyingAmountInput().type(qualifyingAmount)
+            editOrderPromotionPage.getTargetInput().select(target)
+            editOrderPromotionPage.getDiscountTypeInput().select(discountType)
             editOrderPromotionPage.getAmountInput().clear()
-            editOrderPromotionPage.getAmountInput().type('5.00')
+            editOrderPromotionPage.getAmountInput().type(discountAmount)
             editOrderPromotionPage.getUpdateButton().click()
             orderPromotionsPage.getOrderPromotionEntry(orderPromotionName).should('be.visible')
         })
@@ -41,7 +48,7 @@ TestFilter(['UI', 'B2C', 'Promotions', 'P3', 'OHNO'], () => {
             orderPromotionName = "OP Update " + timeStamp
             editOrderPromotionPage.getNameInput().clear()
             editOrderPromotionPage.getNameInput().type(orderPromotionName)
-            editOrderPromotionPage.getEligibleShoppersInput().select('DO-NOT-DELETE-CYPRESS-UI-SESSION-GROUP')
+            editOrderPromotionPage.getEligibleShoppersInput().select(sessionGroup)
             editOrderPromotionPage.getUpdateButton().click()
             orderPromotionsPage.getOrderPromotionEntry(orderPromotionName).should('be.visible')
         })
