@@ -380,36 +380,49 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
   })
 })
 
-Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, cupTestdata) => {
-  const response = productSearchResponse
-  // CUP Details
-  let cupPrice = new Number(0)
-  let cupMeasure
-  let hasCupPrice
-  let cupString
-  let y
 
+Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchResponse, testdata, type) => {
+  const response = productSearchResponse
+  let y
   let mpStockCode = 0
+
   for (y in response.Products) {
     if (response.Products[y].Products[0].Price !== null &&
-            response.Products[y].Products[0].IsInStock === true &&
-            response.Products[y].Products[0].IsMarketProduct === true) {
+      response.Products[y].Products[0].IsInStock === true &&
+      response.Products[y].Products[0].IsMarketProduct === true) {
       mpStockCode = response.Products[y].Products[0].Stockcode
       cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
-      // CUP
+      break
+    }
+  }
+
+  switch (type) {
+    case 'CUP':
+    
+      let cupPrice = new Number(0)
+      let cupMeasure
+      let hasCupPrice
+      let cupString
+
+      // CUP Details
       cupPrice = response.Products[y].Products[0].CupPrice
       cupMeasure = response.Products[y].Products[0].CupMeasure
       hasCupPrice = response.Products[y].Products[0].HasCupPrice
       cupString = response.Products[y].Products[0].CupString
-      break
-    }
-  }
-  expect(mpStockCode).to.be.greaterThan(0)
 
-  // setting cup details
-  cupTestdata.cupPrice = cupPrice
-  cupTestdata.cupMeasure = cupMeasure
-  cupTestdata.hasCupPrice = hasCupPrice
-  cupTestdata.cupString = cupString
-  cy.log('product: ' + cupTestdata.searchTerm + ' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
+      testdata.cupPrice = cupPrice
+      testdata.cupMeasure = cupMeasure
+      testdata.hasCupPrice = hasCupPrice
+      testdata.cupString = cupString
+      cy.log('product: ' + testdata.searchTerm + ' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
+      break;
+    case 'TGA':
+      let productWarningsAct
+      // TGA
+      productWarningsAct = response.Products[y].Products[0].AdditionalAttributes.tgawarning
+      testdata.productWarningsAct = productWarningsAct  
+      cy.log('productWarningsAct: ' + productWarningsAct )
+      break;
+  }
+
 })
