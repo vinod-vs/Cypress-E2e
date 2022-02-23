@@ -112,11 +112,11 @@ declare namespace Cypress {
     wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
     checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
-    navigateToMyAccountViaUi(): any;
+    navigateToB2BMyAccountViaUi(): any;
     navigateToMyPaymentMethodsViaUi(): any;
     verifyMyPaymentMethodsPage(): any;
     verifyMyPaymentMethodsNotVisible(): any;
-    logoutViaUi(): any;
+    logoutViaUi(shopper: any): any;
     saveNewCreditCardViaUi(creditCard: any): any;
     deleteCreditCardViaUi(creditCard: any): any;
     subscribeToDUYearlyPersonal(userinfor: any): any;
