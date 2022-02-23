@@ -49,7 +49,7 @@ TestFilter(['FEATURE', 'AGERESTRICTION'], () => {
       })
 
       // Verify the restricted item notification is displayed on order confirmation page
-      onOrderConfirmationPage.getOrderRestrictedNotification().should('contain', 'restricted')
+      onOrderConfirmationPage.restrictedNotification().getPrimaryHeaderText().should('contain', 'restricted')
     })
   })
 })

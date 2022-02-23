@@ -1,4 +1,8 @@
+import { Notification } from "../../../shared/ui/components/Notification";
+
 export class OrderConfirmationPage {
+  private marketplaceRestrictionNotification = 'shared-order-market-restriction-notification'
+
   getBackToHomeLink () {
     return cy.contains('Back to home')
   }
@@ -25,6 +29,10 @@ export class OrderConfirmationPage {
 
   getOrderNotesElement () {
     return cy.get('.confirmation-fulfilment-details__section-notes')
+  }
+
+  restrictedNotification(): Notification {
+    return new Notification(cy.get(this.marketplaceRestrictionNotification));
   }
 
   getOrderRestrictedNotification () {
