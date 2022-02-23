@@ -12,7 +12,7 @@ export class HomePage {
     }
   
     getCartAmount () {
-      return cy.get('.headerCheckout-orderAmount')
+      return cy.get('.orderAmount')
     }
   
     getListsLink () {
