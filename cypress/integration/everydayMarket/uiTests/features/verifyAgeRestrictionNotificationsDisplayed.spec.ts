@@ -39,7 +39,7 @@ TestFilter(['FEATURE', 'AGERESTRICTION'], () => {
       onSideCartPage.getCheckoutButton().click()
 
       // Verify the restricted item notification is displayed on checkout page
-      onCheckoutPage.onCheckoutMarketplaceFulfilmentWindowPanel.getRestrictedNotification().should('contain', 'restricted')
+      onCheckoutPage.onCheckoutMarketplaceFulfilmentWindowPanel.restrictedNotification().getPrimaryHeaderText().should('contain', 'restricted')
       onCheckoutPage.onCheckoutMarketplaceFulfilmentWindowPanel.selectContinue()
 
       // Place the order

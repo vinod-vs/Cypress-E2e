@@ -1,6 +1,9 @@
 import { CheckoutAccordionPanel } from "./CheckoutAccordionPanel";
+import { Notification } from "../../../../shared/ui/components/Notification";
 
 export class CheckoutMarketplaceFulfilmentWindowPanel extends CheckoutAccordionPanel {
+  private marketplaceFulfilmentWindowPanel = '.auto_checkout-accordion-panel__market';
+
   constructor() {
     super('.auto_checkout-accordion-panel__market');
   }
@@ -17,8 +20,8 @@ export class CheckoutMarketplaceFulfilmentWindowPanel extends CheckoutAccordionP
     throw new Error("Method not implemented.");
   }
 
-  getRestrictedNotification() {
-    return cy.get('.notification-container');
+  restrictedNotification(): Notification {
+    return new Notification(cy.get(this.marketplaceFulfilmentWindowPanel));
   }
 }
 
