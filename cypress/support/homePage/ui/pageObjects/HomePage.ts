@@ -3,6 +3,10 @@ export class HomePage {
       return cy.get('.coreHeader-profile-content .coreHeader-profile-text')
     }
   
+    getB2BMyAccount () {
+      return cy.get('#header-panel a.coreHeader-signupButton')
+    }
+
     getSearchHeader () {
       return cy.get('.headerSearch-searchBox')
     }

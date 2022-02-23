@@ -28,48 +28,47 @@ Cypress.Commands.add("saveNewCreditCardViaUi", (creditCard) => {
   onMyPaymentMethodsPage.getSpinner().should("be.visible");
   onMyPaymentMethodsPage.getSpinner().should("not.exist", {timeout: 5000});
   cy.wait(1000);
-  //Add new credit card details
-  cy.get(onMyPaymentMethodsPage.getCreditCardIframeLocatorString()).then(
-    ($element) => {
-      const $body = $element.contents().find("body");
-      let stripe = cy.wrap($body);
-      stripe
-        .find(onMyPaymentMethodsPage.getCreditCardNumberLocatorString())
-        .click()
-        .type(creditCard.creditCardNumber);
-      stripe = cy.wrap($body);
-      stripe
-        .find(onMyPaymentMethodsPage.getCreditCardExpMonthLocatorString())
-        .click()
-        .type(creditCard.creditCardExpMonth);
-      stripe = cy.wrap($body);
-      stripe
-        .find(onMyPaymentMethodsPage.getCreditCardExpYearLocatorString())
-        .click()
-        .type(creditCard.creditCardExpYear);
-      stripe = cy.wrap($body);
-      stripe
-        .find(onMyPaymentMethodsPage.getCreditCardCVVLocatorString())
-        .click()
-        .type(creditCard.creditCardCVV);
-      stripe = cy.wrap($body);
-      stripe
-        .find(onMyPaymentMethodsPage.getCreditCardNumberLocatorString())
-        .click();
-    }
-  );
+  //Add new card details
+  addNewCreditCardDetails(creditCard)
   onMyPaymentMethodsPage.getButtonSave().click();
-  cy.wait(1000);
-  //if Save button still available, then have to select click again
-  cy.get("body").then(($body) => {
-    if ($body.find(onMyPaymentMethodsPage.getButtonSaveLocatorString()).length > 0) {
-      onMyPaymentMethodsPage.getButtonSave().click();
-    }
-  });
   cy.wait(1000);
   //Verify saved card
   onMyPaymentMethodsPage.getSavedCardNumbers().contains(creditCard.checkCardNumber).should("be.visible");
 });
+
+
+function addNewCreditCardDetails (creditCard: any) {
+//Add new credit card details 
+cy.get(onMyPaymentMethodsPage.getCreditCardIframeLocatorString()).then(
+  ($element) => {
+    const $body = $element.contents().find("body");
+    let stripe = cy.wrap($body);
+    stripe
+      .find(onMyPaymentMethodsPage.getCreditCardNumberLocatorString())
+      .click()
+      .type(creditCard.creditCardNumber);
+    stripe = cy.wrap($body);
+    stripe
+      .find(onMyPaymentMethodsPage.getCreditCardExpMonthLocatorString())
+      .click()
+      .type(creditCard.creditCardExpMonth);
+    stripe = cy.wrap($body);
+    stripe
+      .find(onMyPaymentMethodsPage.getCreditCardExpYearLocatorString())
+      .click()
+      .type(creditCard.creditCardExpYear);
+    stripe = cy.wrap($body);
+    stripe
+      .find(onMyPaymentMethodsPage.getCreditCardCVVLocatorString())
+      .click()
+      .type(creditCard.creditCardCVV);
+    stripe = cy.wrap($body);
+    stripe
+      .find(onMyPaymentMethodsPage.getCreditCardNumberLocatorString())
+      .click();
+  })
+}
+
 
 Cypress.Commands.add("deleteCreditCardViaUi", (creditCard) => {
   onMyPaymentMethodsPage.getButtonRemoveCreditCard().each(($el) => {

@@ -1,6 +1,6 @@
 import { onHomePage } from "../../../homePage/ui/pageObjects/HomePage";
 
-Cypress.Commands.add("navigateToMyAccountViaUi", () => {
+Cypress.Commands.add("navigateToB2BMyAccountViaUi", () => {
   onHomePage.getLogoLink().click();
-  onHomePage.getMyAccount().contains("My Account").click();
+  onHomePage.getB2BMyAccount().contains("My Account").click();
 });
