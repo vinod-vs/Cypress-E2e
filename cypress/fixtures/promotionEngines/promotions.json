@@ -51,9 +51,9 @@
      "TotalRewardsPointsEarned" :212
    },
    {
-     "stockcode": 1073745925,
+     "stockcode": 1073749067,
      "Quantity":1,
-     "TotalRewardsPointsEarned" :10
+     "TotalRewardsPointsEarned" :8
    }],
   "DeferredSpendStretchPromotions": [{
      "searchTerm": "drinks",
@@ -73,29 +73,24 @@
     "Subtotal":40,
     "Quantity":1,
     "BeingEarned":2
-  },{
-    "searchTerm": "pantry",
-    "stockcode": "211377",
-    "TotalRewardsPointsEarned" :"200",
-    "Subtotal":50,
-    "Quantity":2
   }],
   "OrderPromotions": 
   [{
-     "searchTerm": "health",
-     "stockcode": 217378,
-     "OrderDiscountWithoutTeamDiscount":10,
-     "DeliveryFeeDiscount":10,
-     "Subtotal":200 
-    },{
-      "searchTerm": "health",
-      "stockcode": 211377,
+      "searchTerm": "Household",
+      "stockcode": 692970,
+      "Quantity":1,
       "OrderDiscountWithoutTeamDiscount":5,
       "DeliveryFeeDiscount":5,
       "Subtotal":50 
     },{
+      "searchTerm": "Household",
+      "stockcode": 126765,
+      "Quantity":6,
+      "Subtotal":200 
+     },{
       "searchTerm": "health",
       "stockcode": 1073745925,
+      "Quantity":1,
       "MarketShippingFeeBeforeDiscount":10,
       "MarketShippingFeeDiscount":0.5,
       "Subtotal":20 
@@ -116,7 +111,7 @@
     "SubtotalCouponCodeDollarOFF":"2$OFFSUBTOTALAUTO",
     "DeliveryFeeCouponCodeDollarOFF":"2$OFFDELIVERYFEEAUTO"    
   },{
-    "searchTerm":"Health",
+    "searchTerm":"Health & Beauty",
     "Quantity":2,
     "PercentOFF":0.1,
     "MarketShippingFeeCouponCode":"10%OFFMARKETSHIPPINGFEE"
@@ -132,8 +127,8 @@
     "minQty":0.2,
     "TotalRewardsPointsEarned" :156
   },{
-    "stockcode" :370388,
+    "stockcode" :123902,
     "minQty" :1,
-    "TotalRewardsPointsEarned" : 214
+    "TotalRewardsPointsEarned" :132
   }]
 }

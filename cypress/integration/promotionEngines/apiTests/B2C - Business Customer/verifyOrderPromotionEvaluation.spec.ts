@@ -16,8 +16,8 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
 
     beforeEach(() => {
       // Login using shopper saved in the fixture and verify it's successful
-      cy.loginViaApi(shoppers.PESBusinessAccount).then((response: any) => {
-        //cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+      cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
+        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
 
@@ -30,22 +30,22 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
     it('Verify the Order promotion is applied on the grocery subtotal - $OFF and delivery Fee - $OFF', () => {
 
       // Set the Delivery address and add the items to Trolley
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(promotions.OrderPromotions[1].searchTerm, (promotions.OrderPromotions[1].Subtotal))
+      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.OrderPromotions[0].stockcode.toString(),<number> promotions.OrderPromotions[0].Quantity)
       cy.navigateToCheckout().then((response: any) => {
-        expect(response.Model.Order.Subtotal).to.be.greaterThan(promotions.OrderPromotions[1].Subtotal)
-        expect(response.Model.Order).to.have.property('OrderDiscountWithoutTeamDiscount', (promotions.OrderPromotions[1].OrderDiscountWithoutTeamDiscount))
-        expect(response.Model.Order).to.have.property('DeliveryFeeDiscount', (promotions.OrderPromotions[1].DeliveryFeeDiscount))
+        expect(response.Model.Order.Subtotal).to.be.greaterThan(promotions.OrderPromotions[0].Subtotal)
+        expect(response.Model.Order).to.have.property('OrderDiscountWithoutTeamDiscount', (promotions.OrderPromotions[0].OrderDiscountWithoutTeamDiscount))
+        expect(response.Model.Order).to.have.property('DeliveryFeeDiscount', (promotions.OrderPromotions[0].DeliveryFeeDiscount))
       })
     })
 
     it('Verify the Order promotion is applied on the grocery subtotal - %OFF and delivery Fee - %OFF', () => {
       // Set the Delivery address and add the items to Trolley
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(promotions.OrderPromotions[0].searchTerm, (promotions.OrderPromotions[0].Subtotal))
+      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.OrderPromotions[1].stockcode.toString(),<number> promotions.OrderPromotions[1].Quantity)
       cy.navigateToCheckout().then((response: any) => {
-        const SubTotaloff = parseFloat((((response.Model.Order.Subtotal) * 0.1) + (<number>promotions.OrderPromotions[1].OrderDiscountWithoutTeamDiscount)).toFixed(2))
-        expect(response.Model.Order.Subtotal).to.be.greaterThan(promotions.OrderPromotions[0].Subtotal)
+        const SubTotaloff = parseFloat((((response.Model.Order.Subtotal) * 0.1) + (<number>promotions.OrderPromotions[0].OrderDiscountWithoutTeamDiscount)).toFixed(2))
+        expect(response.Model.Order.Subtotal).to.be.greaterThan(promotions.OrderPromotions[1].Subtotal)
         expect(response.Model.Order.OrderDiscountWithoutTeamDiscount).to.be.eqls(SubTotaloff)
-        expect(response.Model.Order).to.have.property('DeliveryFeeDiscount', (promotions.OrderPromotions[1].DeliveryFeeDiscount))
+        expect(response.Model.Order).to.have.property('DeliveryFeeDiscount', (promotions.OrderPromotions[0].DeliveryFeeDiscount))
       })
     })
 
