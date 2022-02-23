@@ -134,5 +134,23 @@ declare namespace Cypress {
     subscribeToDUMonthlyBusiness(userinfor: any): any;
     subscribeToDUYearlyBusiness(userinfor: any): any;
     convertShortWeekDayToLong(shortWeekday: string): any;
+    verifyPersonalDetailsPageViaUi():any;
+    editFirstName(FirstName:any):any;
+    clickToEditName():any;
+    clickToEditDOB():any;
+    editLastName(LastName:any):any;
+    editDOB(DOB:any):any;
+    saveName():any;
+    saveDOB():any;
+    cancelNameChanges():any;
+    cancelDOBChanges():any;
+    validateNamesUpdation(FirstName:any,LastName:any):any;
+    validateTheSuccessMessage():any;
+    getDOB(DOB:any):any;
+    verifyBlankFirstNameErrorMessage():any;
+    verifyBlankLastNameErrorMessage():any;
+    verifyBlankDOBErrorMessage():any;
+    verifyIncorrectDOBErrorMessage(errType:any):any;
+
   }
 }

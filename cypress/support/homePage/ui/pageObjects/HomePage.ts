@@ -1,6 +1,6 @@
 export class HomePage {
     getMyAccount () {
-      return cy.get('.coreHeader-profile-content .coreHeader-profile-text')
+      return cy.get('.coreHeader-profile-content>span.coreHeader-profile-text')
     }
   
     getSearchHeader () {
