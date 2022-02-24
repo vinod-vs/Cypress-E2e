@@ -9,15 +9,15 @@ export abstract class CheckoutAccordionPanel {
   }
 
   private cancelBtn(): Button {
-    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__cancel'))
+    return new Button(cy.get('this.panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__cancel'))
   }
 
   private continueBtn(): Button {
-    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__submit'))
+    return new Button(cy.get(this.panelBaseLocatorString).find('.auto_checkout-accordion-panel-button__submit'))
   }
 
   private editBtn(): Button {
-    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__change'))
+    return new Button(cy.get('this.panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__change'))
   }
 
   public abstract isAccordionActiveAndEditable(): void;
