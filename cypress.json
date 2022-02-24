@@ -87,7 +87,8 @@
         "MAILOSAUR_API_KEY": "MQfxmYlGMOb00wv0",
         "giftCardServiceEndpoint": "https://anzuat.qwikcilver.com/QwikCilver/XnP/api/V3",
         "deletePaymentInstrument": "/apis/ui/Checkout/DigitalPay/Instruments/Delete",
-        "digitalPaymentInstrumentsAvailableEndpoint": "/api/v3/ui/checkout/digitalpay/instruments?isForPaymentAgreement=false"
+        "digitalPaymentInstrumentsAvailableEndpoint": "/api/v3/ui/checkout/digitalpay/instruments?isForPaymentAgreement=false",
+        "tz": "/usr/share/zoneinfo/America/New_York"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,

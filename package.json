@@ -4,8 +4,8 @@
     "description": "E2E Automation Framework",
     "main": "index.js",
     "scripts": {
-        "cypress:open": "cypress open",
-        "cypress:run": "cypress run",
+        "cypress:open": "TZ=America/New_York cypress open",
+        "cypress:run": "TZ=America/New_York cypress run",
         "cypress:spec": "cypress run --spec",
         "pretest": "npx standard || true",
         "test": "cypress run",
