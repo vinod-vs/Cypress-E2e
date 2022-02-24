@@ -30,7 +30,7 @@ declare namespace Cypress {
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
     setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;
-    checkIfElementExists(element: any): any;
+    checkIfElementExists(elementLocatorString: any): any;
     selectRandomElement(): any;
     getBootstrapResponse(): any;
     getRandomAvailableWindowViaApi(addressId: string, areaId: string, suburbId: string, fulfilmentType: string, windowType: string): any;
@@ -59,7 +59,7 @@ declare namespace Cypress {
     getAllRefundPaymentsByRefundIdWithRetry(refundId: number, retryOptions: any): any;
     findCCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
-    removeDateOrdinals(text: string): string;
+    removeDateOrdinals(text: string): any;
     addAvailableRestrictedWowItemsToTrolley(type: string, count: number): void;
     loginViaUI(email: string, password: string): any;
     selectTopMenu(menuToSelect: string): any;
@@ -105,18 +105,18 @@ declare namespace Cypress {
     productSearch(searchRequest: any): any;
     loginViaApiAndHandle2FA(shopper: any): any;
     getDOB(type: string): Cypress.Chainable<string>;
-    signUpPersonalUser(signupdetails: any): any;
+    signUpUser(signupdetails: any): any;
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
     performReIssueOnWowOrderOnSM(isMarketOnly: boolean): any;
     wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
     checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
-    navigateToMyAccountViaUi(): any;
+    navigateToB2BMyAccountViaUi(): any;
     navigateToMyPaymentMethodsViaUi(): any;
     verifyMyPaymentMethodsPage(): any;
     verifyMyPaymentMethodsNotVisible(): any;
-    logoutViaUi(): any;
+    logoutViaUi(shopper: any): any;
     saveNewCreditCardViaUi(creditCard: any): any;
     deleteCreditCardViaUi(creditCard: any): any;
     subscribeToDUYearlyPersonal(userinfor: any): any;
@@ -125,12 +125,14 @@ declare namespace Cypress {
     checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balance: any): any;
     placeOrderViaApiWithPaymentRequest(request: any): Cypress.Chainable<number>;
     fetchProductDataOnPDP(searchTerm: any): any;
-<<<<<<< Updated upstream
     generateGiftCards(expectedGiftCardBalance: any): any;
     payWithGiftCard(digitalPaymentRequest: any): any;
     addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
-=======
     editPersonalDetails(personalDetails: any): any;
->>>>>>> Stashed changes
+    verifyEmailNotificationForPersonalDetails():any
+    signUpBusinessUser(signupdetails: any): any;
+    subscribeToDUMonthlyBusiness(userinfor: any): any;
+    subscribeToDUYearlyBusiness(userinfor: any): any;
+    convertShortWeekDayToLong(shortWeekday: string): any;
   }
 }

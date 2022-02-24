@@ -9,15 +9,15 @@ export abstract class CheckoutAccordionPanel {
   }
 
   private cancelBtn(): Button {
-    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__cancel'))
+    return new Button(cy.get('this.panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__cancel'))
   }
 
-  private saveBtn(): Button {
-    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__submit'))
+  private continueBtn(): Button {
+    return new Button(cy.get(this.panelBaseLocatorString).find('.auto_checkout-accordion-panel-button__submit'))
   }
 
-  private changeBtn(): Button {
-    return new Button(cy.get('panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__change'))
+  private editBtn(): Button {
+    return new Button(cy.get('this.panelBaseLocatorString').find('.auto_checkout-accordion-panel-button__change'))
   }
 
   public abstract isAccordionActiveAndEditable(): void;
@@ -26,16 +26,16 @@ export abstract class CheckoutAccordionPanel {
 
   public abstract isAccordionCollapsedAndClosed(): void;
 
-  public selectSave() {
-    this.saveBtn().click();
+  public selectContinue() {
+    this.continueBtn().click();
   }
 
   public selectCancel() {
     this.cancelBtn().click();
   }
 
-  public selectChange() {
-    this.changeBtn().click();
+  public selectEdit() {
+    this.editBtn().click();
   }
 
   public getPanelHeadingText(): Cypress.Chainable<string> {

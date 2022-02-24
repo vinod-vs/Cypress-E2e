@@ -2,6 +2,7 @@
 
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/ui/commands/signUpUsers'
+import '../../../support/myAccount/ui/commands/myAccount'
 import '../../../support/duSubscription/ui/commands/subscribePersonalMothly'
 import '../../../support/duSubscription/ui/commands/subscribePersonalYearly'
 import '../../../support/utilities/ui/utility'
@@ -9,8 +10,8 @@ import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Senior', 'P0'], () => {
-  describe('[UI] User who is greater than 60 years old - Subscribe to Delivery unlimited', () => {
+TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Business', 'P0'], () => {
+  describe('[UI] Business user - Subscribe to Delivery unlimited', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
@@ -19,35 +20,37 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Senior', 'P0'], () 
   
     })
 
-    it('Subscribe to Delivery Unlimited monthly plan - Age greater than 60', () => {
+    it('Subscribe to Delivery Unlimited monthly plan - Business user', () => {
 
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
       signUpDetails.password = 'Test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-      cy.getDOB('senior').then((value)=> {
+      cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
       })
-
-      cy.signUpUser(signUpDetails)
-      cy.subscribeToDUMonthlySenior(signUpDetails)
-
+      signUpDetails.abn = "88000014675"
+      signUpDetails.companyName = "WOOLWORTHS GROUP LIMITED"
+      cy.signUpBusinessUser(signUpDetails)
+      cy.subscribeToDUMonthlyBusiness(signUpDetails)
     })
 
-    it('Subscribe to Delivery Unlimited yearly plan - Age greater than 60', () => {
+    it('Subscribe to Delivery Unlimited yearly plan - Business user', () => {
 
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
       signUpDetails.password = 'Test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-      cy.getDOB('senior').then((value)=> {
+      cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
       })
+      signUpDetails.abn = "88000014675"
+      signUpDetails.companyName = "WOOLWORTHS GROUP LIMITED"
 
-      cy.signUpUser(signUpDetails)
-      cy.subscribeToDUYearlySenior(signUpDetails)
+      cy.signUpBusinessUser(signUpDetails)
+      cy.subscribeToDUYearlyBusiness(signUpDetails)
 
     })
 

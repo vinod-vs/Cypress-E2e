@@ -17,6 +17,12 @@
         "type": "business"
     },
     {
+        "email": "b2ccheckoute2e@82f8rhkb.mailosaur.net",
+        "password": "test1234",
+        "platform": "B2C",
+        "type": "personal"
+    },
+    {
         "email": "uat_test@yopmail.com",
         "password": "Test1234",
         "platform": "B2C",

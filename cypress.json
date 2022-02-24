@@ -1,6 +1,6 @@
 {
     "supportFile": "cypress/support/index.js",
-    "baseUrl": "https://adminuatsite.woolworths.com.au/",
+    "baseUrl": "https://uatsite.woolworths.com.au/",
     "env": {
         "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
         "dev4": "https://dev4site.woolworths.com.au/",
@@ -25,7 +25,7 @@
         "deliveryInfoEndpoint": "/apis/ui/Delivery/DeliveryInfo",
         "trolleyEndpoint":"/apis/ui/Trolley",
         "clearTrolleyEndpoint": "apis/ui/Trolley/Clear",
-        "removeItemsEndpoint": "/apis/ui/Trolley/RemoveItems",
+        "removeItemsEndpoint": "/apis/ui/Trolley/UpdateOrRemoveItems",
         "addItemsToTrolleyEndpoint": "apis/ui/Trolley/Items",
         "redeemRewardsCreditsEndpoint":"apis/ui/UserPreferences/RedeemRewardsCredits",
         "promotionCodeEndpoint":"/apis/ui/Checkout/PromotionCode",
@@ -91,7 +91,8 @@
         "productDetailsEndpoint": "/apis/ui/product/detail",
         "wowDispatchUpdateCompletedOrderEndpoint": "/api/OrderManagementApi/UpdateCompletedOrder",
         "editPersonalDetails":"/apis/ui/myaccount/PersonalDetails",
-        "wowDispatchUpdateCompletedOrderApiKey": "NM04TQg7kV1P8f8jo2NYwOlh8q6sg1zI"
+        "wowDispatchUpdateCompletedOrderApiKey": "NM04TQg7kV1P8f8jo2NYwOlh8q6sg1zI",
+        "verifyEmailNotificationForPersonalDetailsEndPoint":"https://dxk8saae.uat.wx-d.net/notifications/razor?template=Shopper_PersonalDetailsUpdated&email=cypressAutomationTest%40yopmail.com"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,

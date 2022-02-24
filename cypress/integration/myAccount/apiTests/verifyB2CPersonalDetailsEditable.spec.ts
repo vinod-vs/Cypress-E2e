@@ -13,7 +13,7 @@ let DateOfBirthInput:any
 let WrongDOB:any = ["12/25/1989","32/12/2015","29/02/2015"]
 
 TestFilter(["API", "B2C", "P1"], () => {
-    describe("[API] personal details are editable from myAccounts page", () => {
+    describe("[API] personal details are editable from myAccounts page and email notification should be triggered for the change", () => {
       beforeEach(() => {
         cy.clearCookies({ domain: null });
         cy.clearLocalStorage({ domain: null });
@@ -52,18 +52,34 @@ TestFilter(["API", "B2C", "P1"], () => {
       cy.editPersonalDetails(shoppers[1]).then((response: any) => {
         expect(response.status).to.eq(405);
         expect(response.body.ResponseStatus).to.have.property("Message", "An error has occurred in updating personal details: Invalid Date Of Birth"); 
-      
 
       });
 
     });
   });
-  it("Saving future DOB should throw error", () => {
+    it("Saving future DOB should throw error", () => {
     shoppers[1].DateOfBirthInput = "08/12/2025"
     cy.editPersonalDetails(shoppers[1]).then((response: any) => {
       expect(response.status).to.eq(405);
       expect(response.body.ResponseStatus).to.have.property("Message", "An error has occurred in updating personal details: Invalid Date Of Birth"); 
   });
-});
-});
+ });
+
+   it("Verify the notication email has been sent and validate the content", () =>{
+    cy.verifyEmailNotificationForPersonalDetails().then((response: any) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.contain("Personal details updated")
+      expect(response.body).to.contain("Update to your Woolworths account")
+      expect(response.body).to.contain("Your account details have been updated.")
+      expect(response.body).to.contain("Your personal details have been successfully updated. To view these details, visit 'Account Details' in your My Account.")
+ 
+
+
+  });
+
+  })
+
 })
+})
+
+
