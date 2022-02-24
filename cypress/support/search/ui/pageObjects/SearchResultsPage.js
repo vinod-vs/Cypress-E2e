@@ -90,6 +90,71 @@ export class SearchResultsPage {
     return cy.get('.sort-by-dropdown button')
   }
 
+  getSortProductsDropdownOptionsSpan (){
+    return cy.get('span.dropdown-item__button')
+  }
+
+  // getAddToCartButtonOnProductListPage (){
+  //   return cy.get('.cartControls-addButton').contains('Add to cart')
+  // }
+
+  getOkButtonInRestrictedItemsPopup() {
+    return cy.get('.primary > .ng-star-inserted').contains('Ok, got it')
+  }
+
+  addRandomProductsToCartForTotalValue (cartValue) {
+    var cartAmountText=""
+    var cartAmount=0
+    var totalCartValue = parseFloat(cartValue)
+    this.sortProductsBy('Price High to Low')
+    //get all main menus to travel thru each main menu > first sub menu to add first available item to cart
+    onHomePage.getCategoryMenuItemLinks().not('.categoryHeader-navigationLink.is-special.ng-star-inserted').not('[href="/shop/browse/bakery"]').each(($el, $index, $list) => {
+      //get cart total
+      onHomePage.getCartAmountInHeader().then(($cartAmtEl) => {
+        cartAmountText=$cartAmtEl.text()
+        cartAmountText=cartAmountText.substring(1,cartAmountText.length)
+        cartAmount = parseFloat(cartAmountText)
+        //add Item to cart only if current cart value is less than expected cart value
+        if(cartAmount < totalCartValue){
+          //navigate to menu and click on first 'Add to cart' button if visible
+          cy.wrap($el).click()
+          onHomePage.getSubMenuItemLinks().first().click()
+          onHomePage.getSubMenuItemLinks().contains('Show All').click()
+          cy.wait(Cypress.config('fiveSecondWait'))
+          cy.checkIfElementVisible('.cartControls-addButton').then((visibleAddCart) => {
+            if(visibleAddCart===true){
+              this.getAllAddToCartButtons().first().should('be.visible').click()
+            }
+          })
+          cy.wait(Cypress.config('halfSecondWait'))
+          //click on 'OK got it' button if resticted items popup appears
+          cy.checkIfElementVisible('.primary > .ng-star-inserted').then((visiblePopupBtn) => {
+            if(visiblePopupBtn===true){
+              this.getOkButtonInRestrictedItemsPopup().should('be.visible').click()
+            }
+          })
+          //check cart if any items are under any notifications and remove them
+          onSideCartPage.removeAllItemsUnderNotificationGroupsFromCart()
+        }
+      })
+    }) 
+  }
+
+  // 'Price High to Low'
+  sortProductsBy(sortByOrder) {
+    onHomePage.getSecondCategoryMenuItem().click()
+    cy.wait(2000)
+    onHomePage.getSubMenuItemLinks().first().click()
+    onHomePage.getSubMenuItemLinks().contains('Show All').click()
+    //order by high price first
+    this.getSortByDropdownButton().should('be.visible')
+    this.getSortByDropdownButton().then(($sortDrpDwn)=>{
+      if(!($sortDrpDwn.text().includes(sortByOrder))){
+        this.getSortByDropdownButton().click()
+        this.getSortProductsDropdownOptionsSpan().contains(sortByOrder).click()
+      }
+    })
+  }
   addAvailableProductsToCartFromSearchResult(minSpendThreshold)
   {
     cy.checkIfElementExists('.no-results-primary-text').then(result => {
@@ -183,53 +248,6 @@ export class SearchResultsPage {
       }
     })
   }
-
-  getAddToCartButtonOnProductListPage (){
-    return cy.get('.cartControls-addButton').contains('Add to cart')
-  }
-
-  getOkButtonInRestrictedItemsPopup() {
-    return cy.get('.primary > .ng-star-inserted').contains('Ok, got it')
-  }
-
-  addRandomProductsToCartForTotalValue (cartValue) {
-    var cartAmountText=""
-    var cartAmount=0
-    var totalCartValue = parseFloat(cartValue)
-    onHomePage.sortProductsBy('Price High to Low')
-    //get all main menus to travel thru each main menu > first sub menu to add first available item to cart
-    onHomePage.getCategoryMenuItemLinks().not('.categoryHeader-navigationLink.is-special.ng-star-inserted').not('[href="/shop/browse/bakery"]').each(($el, $index, $list) => {
-      //get cart total
-      onHomePage.getCartAmountInHeader().then(($cartAmtEl) => {
-        cartAmountText=$cartAmtEl.text()
-        cartAmountText=cartAmountText.substring(1,cartAmountText.length)
-        cartAmount = parseFloat(cartAmountText)
-        //add Item to cart only if current cart value is less than expected cart value
-        if(cartAmount < totalCartValue){
-          //navigate to menu and click on first 'Add to cart' button if visible
-          cy.wrap($el).click()
-          onHomePage.getSubMenuItemLinks().first().click()
-          onHomePage.getSubMenuItemLinks().contains('Show All').click()
-          cy.wait(Cypress.config('fiveSecondWait'))
-          cy.checkIfElementVisible('.cartControls-addButton').then((visibleAddCart) => {
-            if(visibleAddCart===true){
-              onSearchResultsPage.getAddToCartButtonOnProductListPage().first().should('be.visible').click()
-            }
-          })
-          cy.wait(Cypress.config('halfSecondWait'))
-          //click on 'OK got it' button if resticted items popup appears
-          cy.checkIfElementVisible('.primary > .ng-star-inserted').then((visiblePopupBtn) => {
-            if(visiblePopupBtn===true){
-              onSearchResultsPage.getOkButtonInRestrictedItemsPopup().should('be.visible').click()
-            }
-          })
-          //check cart if any items are under any notifications and remove them
-          onSideCartPage.removeAllItemsUnderNotificationGroupsFromCart()
-        }
-      })
-    }) 
-  }
-
 }
 
 export const onSearchResultsPage = new SearchResultsPage()

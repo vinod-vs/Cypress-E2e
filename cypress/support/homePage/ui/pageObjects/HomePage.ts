@@ -42,31 +42,8 @@ export class HomePage {
       return cy.get('.categoriesNavigation-list > li > a')
     }
   
-    getSortProductsDropdownButton (){
-      return cy.get('.inline-dropdown__selection__button')
-    }
-  
-    getSortProductsDropdownOptionsSpan (){
-      return cy.get('span.dropdown-item__button')
-    }
-  
     getCartAmountInHeader () {
       return cy.get('.headerCheckout-orderAmount')
-    }
-    // 'Price High to Low'
-    sortProductsBy(sortByOrder: string) {
-      onHomePage.getSecondCategoryMenuItem().click()
-      cy.wait(2000)
-      onHomePage.getSubMenuItemLinks().first().click()
-      onHomePage.getSubMenuItemLinks().contains('Show All').click()
-      //order by high price first
-      onHomePage.getSortProductsDropdownButton().should('be.visible')
-      onHomePage.getSortProductsDropdownButton().then(($sortDrpDwn)=>{
-        if(!($sortDrpDwn.text().includes(sortByOrder))){
-          onHomePage.getSortProductsDropdownButton().click()
-          onHomePage.getSortProductsDropdownOptionsSpan().contains(sortByOrder).click()
-        }
-      })
     }
   }
   
