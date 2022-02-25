@@ -1,12 +1,18 @@
 import TestFilter from '../../../support/TestFilter'
-import { orderPromotionsPage } from '../../../support/orderPromotions/ui/pageObjects/OrderPromotionsPage'
+import {orderPromotionsPage} from '../../../support/orderPromotions/ui/pageObjects/OrderPromotionsPage'
 import loginDetails from '../../../fixtures/siteManagement/loginDetails.json'
 import '../../../support/siteManagement/ui/commands/login'
-import { editOrderPromotionPage } from '../../../support/orderPromotions/ui/pageObjects/EditOrderPromotionPage'
-import '../../../support/accessability/accessability'
+import {editOrderPromotionPage} from '../../../support/orderPromotions/ui/pageObjects/EditOrderPromotionPage'
 
-var orderPromotionName: string
-var timeStamp: string
+var orderPromotionName:string
+var timeStamp:string
+var startDate:string = '27/01/2022'
+var endDate:string = '30/01/2030'
+var qualifyingAmount:string = '10000.00'
+var target:string = 'Grocery Subtotal'
+var discountType:string = '% - Percent Off'
+var discountAmount:string = '5.00'
+var sessionGroup:string = 'DO-NOT-DELETE-CYPRESS-UI-SESSION-GROUP'
 
 TestFilter(['UI', 'B2C', 'Promotions', 'P3', 'OHNO'], () => {
     describe('[UI] Create, Update, Delete Order Promotions', () => {
