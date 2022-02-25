@@ -25,6 +25,7 @@
         "deliveryInfoEndpoint": "/apis/ui/Delivery/DeliveryInfo",
         "trolleyEndpoint": "/apis/ui/Trolley",
         "clearTrolleyEndpoint": "apis/ui/Trolley/Clear",
+        "removeItemEndpoint": "/apis/ui/Trolley/Remove",
         "removeItemsEndpoint": "/apis/ui/Trolley/UpdateOrRemoveItems",
         "addItemsToTrolleyEndpoint": "apis/ui/Trolley/Items",
         "redeemRewardsCreditsEndpoint": "apis/ui/UserPreferences/RedeemRewardsCredits",

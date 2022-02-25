@@ -75,6 +75,7 @@ declare namespace Cypress {
     addGiftCardToAccount(giftCardRequest: any): any;
     getGCPaymentInstrumentId(giftCardPaymentResponse: any): any;
     zero(): any;
+    removeItem(unavailableItem: any): any;
     removeItems(unavailableItemsArr: any): any;
     orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
     cancelOrder(orderId: number): any;
@@ -134,5 +135,8 @@ declare namespace Cypress {
     subscribeToDUMonthlyBusiness(userinfor: any): any;
     subscribeToDUYearlyBusiness(userinfor: any): any;
     convertShortWeekDayToLong(shortWeekday: string): any;
+    addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm: string, count: number): any;
+    removeUnavailableItemsFromTrolley(): any;
+    removeRestrictedItemsFromTrolley(): any;
   }
 }
