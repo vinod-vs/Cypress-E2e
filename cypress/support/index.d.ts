@@ -135,5 +135,8 @@ declare namespace Cypress {
     subscribeToDUYearlyBusiness(userinfor: any): any;
     convertShortWeekDayToLong(shortWeekday: string): any;
     injectAxe(): any;
+    checkA11y_wcag2aa_exclude_color_contrast(): any;
+    checkA11y_wcag2aa(): any;
+    checkA11y_wcag2a(): any;
   }
 }
