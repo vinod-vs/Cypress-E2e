@@ -22,11 +22,9 @@ TestFilter(['UI', 'B2C', 'Promotions', 'P3', 'OHNO'], () => {
             cy.clearLocalStorage({ domain: null })
             orderPromotionsPage.open()
             cy.adminLoginViaUi(loginDetails)
-            cy.injectAxe()
         })
 
         it('Create Order Promotion', () => {
-            cy.injectAxe()
             timeStamp = new Date().toISOString().substr(0, 26)
             orderPromotionName = "OP " + timeStamp
             orderPromotionsPage.getAddNewOrderPromotion().click()
