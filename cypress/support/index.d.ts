@@ -14,7 +14,7 @@ declare namespace Cypress {
     clearTrolley(): any;
     viewTrolley(): any;
     addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm: string, priceThreshold: number): any;
-    addAvailableQuantityLimitedItemsToTrolley(searchTerm: string, quantity:number):any;
+    addAvailableQuantityLimitedItemsToTrolley(searchTerm: string, quantity: number): any;
     navigateToCheckout(): any;
     navigatingToCreditCardIframe(): any;
     creditcardTokenisation(cardDetails: any, sessionHeader: any): any;
@@ -75,6 +75,7 @@ declare namespace Cypress {
     addGiftCardToAccount(giftCardRequest: any): any;
     getGCPaymentInstrumentId(giftCardPaymentResponse: any): any;
     zero(): any;
+    removeItem(unavailableItem: any): any;
     removeItems(unavailableItemsArr: any): any;
     orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
     cancelOrder(orderId: number): any;
@@ -109,14 +110,14 @@ declare namespace Cypress {
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
     performReIssueOnWowOrderOnSM(isMarketOnly: boolean): any;
-    wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
+    wowDispatchUpdateCompletedOrder(shopperId: any, orderId: any, WoolworthsSubtotal: any, testData: any): any;
     checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
-    navigateToMyAccountViaUi(): any;
+    navigateToB2BMyAccountViaUi(): any;
     navigateToMyPaymentMethodsViaUi(): any;
     verifyMyPaymentMethodsPage(): any;
     verifyMyPaymentMethodsNotVisible(): any;
-    logoutViaUi(): any;
+    logoutViaUi(shopper: any): any;
     saveNewCreditCardViaUi(creditCard: any): any;
     deleteCreditCardViaUi(creditCard: any): any;
     subscribeToDUYearlyPersonal(userinfor: any): any;
@@ -129,14 +130,19 @@ declare namespace Cypress {
     payWithGiftCard(digitalPaymentRequest: any): any;
     addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
     editPersonalDetails(personalDetails: any): any;
-    verifyEmailNotificationForPersonalDetails():any
+    verifyEmailNotificationForPersonalDetails(): any
     signUpBusinessUser(signupdetails: any): any;
     subscribeToDUMonthlyBusiness(userinfor: any): any;
     subscribeToDUYearlyBusiness(userinfor: any): any;
     convertShortWeekDayToLong(shortWeekday: string): any;
+
     injectAxe(): any;
     checkA11y_wcag2aa_exclude_color_contrast(): any;
     checkA11y_wcag2aa(): any;
     checkA11y_wcag2a(): any;
+
+    addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm: string, count: number): any;
+    removeUnavailableItemsFromTrolley(): any;
+    removeRestrictedItemsFromTrolley(): any;
   }
 }

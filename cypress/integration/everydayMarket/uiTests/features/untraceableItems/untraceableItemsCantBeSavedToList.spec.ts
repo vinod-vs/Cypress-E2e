@@ -1,16 +1,15 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import TestFilter from '../../../../support/TestFilter'
-import shoppers from '../../../../fixtures/everydayMarket/shoppers.json'
-import untraceableItem from '../../../../fixtures/everydayMarket/untraceableItemStockcodes.json'
-import { onHomePage } from '../../../../support/homePage/ui/pageObjects/HomePage'
-import { onSearchResultsPage } from '../../../../support/search/ui/pageObjects/SearchResultsPage'
-import '../../../../support/login/ui/commands/login'
-import '../../../../support/utilities/ui/utility'
+import TestFilter from '../../../../../support/TestFilter'
+import shoppers from '../../../../../fixtures/everydayMarket/shoppers.json'
+import untraceableItem from '../../../../../fixtures/everydayMarket/untraceableItemStockcodes.json'
+import { onHomePage } from '../../../../../support/homePage/ui/pageObjects/HomePage'
+import { onSearchResultsPage } from '../../../../../support/search/ui/pageObjects/SearchResultsPage'
+import '../../../../../support/login/ui/commands/login'
+import '../../../../../support/utilities/ui/utility'
 
-
-TestFilter(['MANIC'], () => {
+TestFilter(['FEATURE', 'MANIC'], () => {
   describe('[UI] RP-5466 - EM | Untraceable items should not be able to be saved to list', () => {
     before(() => {
       cy.clearCookies({ domain: null })
