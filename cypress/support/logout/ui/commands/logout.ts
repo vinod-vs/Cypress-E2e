@@ -8,7 +8,7 @@ Cypress.Commands.add('logoutViaUi', (shopper) => {
   }else 
     onHomePage.getMyAccount().contains('My Account').click()
 
-  onMyAccountPage.getLeftNavigationMenu().contains('Logout').click()
+  onMyAccountPage.getLeftNavigationMenu().contains('Logout').click({force: true})
 
   cy.url().should('eq', Cypress.config().baseUrl)
 })
