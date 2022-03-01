@@ -1,7 +1,7 @@
 class OrderPromotionsPage {
 
     open() {
-        cy.visit('manage/orderpromotions')
+        cy.visit(Cypress.env('siteAdminUat') + 'manage/orderpromotions')
     }
 
     getAddNewOrderPromotion () {
