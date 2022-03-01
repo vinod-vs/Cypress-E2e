@@ -90,7 +90,7 @@
         "deletePaymentInstrument": "/apis/ui/Checkout/DigitalPay/Instruments/Delete",
         "digitalPaymentInstrumentsAvailableEndpoint": "/api/v3/ui/checkout/digitalpay/instruments?isForPaymentAgreement=false",
         "productDetailsEndpoint": "/apis/ui/product/detail",
-        "wowDispatchUpdateCompletedOrderEndpoint": "/api/OrderManagementApi/UpdateCompletedOrder",
+        "wowDispatchUpdateCompletedOrderEndpoint": "https://adminuatsite.woolworths.com.au/api/OrderManagementApi/UpdateCompletedOrder",
         "editPersonalDetails": "/apis/ui/myaccount/PersonalDetails",
         "wowDispatchUpdateCompletedOrderApiKey": "NM04TQg7kV1P8f8jo2NYwOlh8q6sg1zI",
         "verifyEmailNotificationForPersonalDetailsEndPoint": "https://dxk8saae.uat.wx-d.net/notifications/razor?template=Shopper_PersonalDetailsUpdated&email=cypressAutomationTest%40yopmail.com",

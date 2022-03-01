@@ -1,58 +1,62 @@
 class OrderPromotionsPage {
 
     open() {
+
         cy.visit('https://adminuatsite.woolworths.com.au/manage/orderpromotions')
+
+        cy.visit(Cypress.env('siteAdminUat') + 'manage/orderpromotions')
+
     }
 
-    getAddNewOrderPromotion () {
+    getAddNewOrderPromotion() {
         return cy.get('a:contains("Add New Order Promotion")')
     }
 
-    getTableFrame () {
+    getTableFrame() {
         return cy.get('.table-frame')
     }
 
-    getIdHeader () {
+    getIdHeader() {
         return cy.get('a:contains("ID")')
     }
 
-    getNameHeader () {
+    getNameHeader() {
         return cy.get('a:contains("Name")')
     }
 
-    getStartDateHeader () {
+    getStartDateHeader() {
         return cy.get('a:contains("Start Date")')
     }
 
-    getEndDateHeader () {
+    getEndDateHeader() {
         return cy.get('a:contains("End Date")')
     }
 
-    getTargetHeader () {
+    getTargetHeader() {
         return cy.get('a:contains("Target")')
     }
 
-    getSessionGroupHeader () {
+    getSessionGroupHeader() {
         return cy.get('a:contains("Session Group")')
     }
 
-    getRankHeader () {
+    getRankHeader() {
         return cy.get('a:contains("Rank")')
     }
 
-    getOfferIdHeader () {
+    getOfferIdHeader() {
         return cy.get('a:contains("OfferID")')
     }
 
-    getDeleteHeader () {
+    getDeleteHeader() {
         return cy.get('a:contains("Delete")')
     }
 
-    getOrderPromotionEntry (orderPromotionName:string) {
-        return cy.get('a:contains("'+ orderPromotionName +'")')
+    getOrderPromotionEntry(orderPromotionName: string) {
+        return cy.get('a:contains("' + orderPromotionName + '")')
     }
 
-    getDeleteOrderPromotion (orderPromotionName:string) {
+    getDeleteOrderPromotion(orderPromotionName: string) {
         return cy.xpath('//a[text()=\'' + orderPromotionName + '\']/../..//td[@class=\'delete\']')
     }
 

@@ -1,5 +1,5 @@
 {
-    "baseUrl": "https://uatsite.woolworths.com.au/",
+    "baseUrl": "https://adminuatsite.woolworths.com.au/",
     "env": {
         "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
         "dev4": "https://dev4site.woolworths.com.au/",
