@@ -260,34 +260,33 @@ Cypress.Commands.add('payTheOrder', (testData) => {
         })
       })
       break
-      case paymentType.GIFTCARD_ONLY:
-        
-        // Checkout
-        cy.navigateToCheckout().as('checkoutResponse').then((response) => {
-          expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
-        })
-      
-        // Pay with Gift Card
-        cy.get('@checkoutResponse').then((checkoutResponse) => {
+    case paymentType.GIFTCARD_ONLY:
 
-          const totalCartValue = checkoutResponse.Model.Order.BalanceToPay
-          cy.log("Total Cart Value is "+totalCartValue)
-          // Generate multiple giftcards and get array of gift card paymentInstrumentIds
-          cy.generateGiftCards(totalCartValue)
+      // Checkout
+      cy.navigateToCheckout().as('checkoutResponse').then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      })
 
-          cy.get('@giftcardPaymentInstrumentIds').then((giftcardPaymentInstrumentIds) => {
-            const payments = []
-            giftcardPaymentInstrumentIds.forEach(paymentInstrument => {
-              payments.push({amount: paymentInstrument.amount, paymentInstrumentId: paymentInstrument.InstrumentId, stepUpToken: 'tokenise-stepup-token'})
-            });
-    
-            digitalPaymentRequest.payments = payments
-            cy.log('payments: ' + JSON.stringify(payments))
-            cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
-            cy.payWithGiftCard(digitalPaymentRequest).as('paymentResponse')
+      // Pay with Gift Card
+      cy.get('@checkoutResponse').then((checkoutResponse) => {
+        const totalCartValue = checkoutResponse.Model.Order.BalanceToPay
+        cy.log('Total Cart Value is ' + totalCartValue)
+        // Generate multiple giftcards and get array of gift card paymentInstrumentIds
+        cy.generateGiftCards(totalCartValue)
+
+        cy.get('@giftcardPaymentInstrumentIds').then((giftcardPaymentInstrumentIds) => {
+          const payments = []
+          giftcardPaymentInstrumentIds.forEach(paymentInstrument => {
+            payments.push({ amount: paymentInstrument.amount, paymentInstrumentId: paymentInstrument.InstrumentId, stepUpToken: 'tokenise-stepup-token' })
           })
+
+          digitalPaymentRequest.payments = payments
+          cy.log('payments: ' + JSON.stringify(payments))
+          cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
+          cy.payWithGiftCard(digitalPaymentRequest).as('paymentResponse')
         })
-        break
+      })
+      break
     default: // default is CREDIT_CARD_ONLY
       cy.payByCreditCard(true)
       break
@@ -380,7 +379,6 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
   })
 })
 
-
 Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchResponse, testdata, type) => {
   const response = productSearchResponse
   let y
@@ -398,7 +396,7 @@ Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchRespons
 
   switch (type) {
     case 'CUP':
-    
+
       let cupPrice = new Number(0)
       let cupMeasure
       let hasCupPrice
@@ -415,14 +413,13 @@ Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchRespons
       testdata.hasCupPrice = hasCupPrice
       testdata.cupString = cupString
       cy.log('product: ' + testdata.searchTerm + ' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
-      break;
+      break
     case 'TGA':
       let productWarningsAct
       // TGA
       productWarningsAct = response.Products[y].Products[0].AdditionalAttributes.tgawarning
-      testdata.productWarningsAct = productWarningsAct  
-      cy.log('productWarningsAct: ' + productWarningsAct )
-      break;
+      testdata.productWarningsAct = productWarningsAct
+      cy.log('productWarningsAct: ' + productWarningsAct)
+      break
   }
-
 })
