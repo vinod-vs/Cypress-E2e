@@ -261,15 +261,14 @@
     "paymentType": "GIFTCARD_ONLY"
   },
   "VerifyEDMAndWOWItemsGCLimit": {
+    "searchTerm":"treats",
     "items": [
       {
-        "searchTerm": "1073741981",
         "isEDMProduct": "true",
         "minEDMOrderThreshold":"5500",
         "bufferEDMQuantitiy":2
 
       },{
-        "searchTerm": "food",
         "isEDMProduct": "false",
         "minWowOrderThreshold": 50,
         "bufferWowQuantity": 5
