@@ -163,7 +163,7 @@ export class SideCartPage {
   }
 
   closeSideCart () {
-    this.getCloseSideCartButton().click()
+    this.getCloseSideCartButton().click({force:true})
   }
 
   gotoCheckout () {
@@ -204,14 +204,14 @@ export class SideCartPage {
   removeAllItems () {
     cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
       if(result){
-        cy.get('.auto_group-restricted-location button.linkButton').click()
+        cy.get('.auto_group-restricted-location button.linkButton').click({multiple:true})
         cy.wait(500)
       }
     })
 
     cy.checkIfElementExists('.empty-cart-title').then((exist:boolean) => {
       if(!exist){
-        this.getClearEntireCartLink().click()
+        this.getClearEntireCartLink().click({force:true})
         this.getConfirmClearCartLink().click()
         cy.wait(500)
       }

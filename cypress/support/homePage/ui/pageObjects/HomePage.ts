@@ -31,7 +31,7 @@ export class HomePage {
         return cy.get('#viewCartPanel > .button')
     }
     getSecondCategoryMenuItem () {
-      return cy.get('a.categoryHeader-navigationLink.ng-star-inserted:nth-child(2)')
+      return cy.get('.categoryHeader-navigation .categoryHeader-navigationLink:nth-child(2)')
     }
   
     getCategoryMenuItemLinks(){
@@ -43,7 +43,7 @@ export class HomePage {
     }
   
     getCartAmountInHeader () {
-      return cy.get('.headerCheckout-orderAmount')
+      return cy.get('.orderAmount')
     }
   }
   

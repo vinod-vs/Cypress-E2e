@@ -93,7 +93,7 @@ export class DeliveryDateAndWindowPage {
     if(fullfilmentMethod.toUpperCase().indexOf("DELIVERY")>=0)
     {
       //click on change delivery address link
-      onDeliveryDateAndWindowPage.getChangeDeliveryAddressLink().click()
+      onDeliveryDateAndWindowPage.getChangeDeliveryAddressLink().click({force:true})
       //if user is logging in for first time, select a different delivery button otherwise click on delivery tab in fullfilment method selection pane
       onDeliveryDateAndWindowPage.getFullfilmentPane().then(($ffPane) => {
       if($ffPane.find('input#fulfilmentSelection0').length>0){
@@ -126,7 +126,7 @@ export class DeliveryDateAndWindowPage {
       }
     })
     //click on first delivery time slop (which is not marked as delivery now)
-    onDeliveryDateAndWindowPage.getFirstDeliveryTimeSlot().click()
+    onDeliveryDateAndWindowPage.getLastDeliveryTimeSlot().click({force:true})
     //wait
     cy.wait(2000)
   }

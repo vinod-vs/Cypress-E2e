@@ -117,7 +117,7 @@ export class SearchResultsPage {
         //add Item to cart only if current cart value is less than expected cart value
         if(cartAmount < totalCartValue){
           //navigate to menu and click on first 'Add to cart' button if visible
-          cy.wrap($el).click()
+          cy.wrap($el).click({force:true})
           onHomePage.getSubMenuItemLinks().first().click()
           onHomePage.getSubMenuItemLinks().contains('Show All').click()
           cy.wait(Cypress.config('fiveSecondWait'))
@@ -142,7 +142,7 @@ export class SearchResultsPage {
 
   // 'Price High to Low'
   sortProductsBy(sortByOrder) {
-    onHomePage.getSecondCategoryMenuItem().click()
+    onHomePage.getSecondCategoryMenuItem().click({force: true})
     cy.wait(2000)
     onHomePage.getSubMenuItemLinks().first().click()
     onHomePage.getSubMenuItemLinks().contains('Show All').click()

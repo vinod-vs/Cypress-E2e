@@ -46,7 +46,7 @@ TestFilter(['B2C', 'UI', 'Refunds', 'OPS', 'P3'], () => {
         cy.wrap(totalAmount.text()).as('expectedTotalAmount')
       })
 
-      onCheckoutPage.onCheckoutPaymentPanel.PayWithExistingPayPal()
+      onCheckoutPage.onCheckoutPaymentPanel.PayWithExistingCreditCard('1111', '405')
 
       // Verify order confirmation page
       onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')
