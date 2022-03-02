@@ -34,30 +34,30 @@ TestFilter(['EDM', 'API', 'feature'], () => {
     it('[API] RP-5476  Verify Everyday Market Order more than 5000 cannot be placed using Gift cards', () => {
       const testData = tests.VerifyEDMItemsGCLimit
       const shopper = shoppers.emAccount2
-      let shopperId = shopper.shopperId
+      const shopperId = shopper.shopperId
       let orderId
       let orderReference
 
-      //Login using shopper saved in the fixture
+      // Login using shopper saved in the fixture
       cy.loginViaApiAndHandle2FA(shopper)
-      
+
       // Set delivery fulfilment to 407 Elizabeth Street, Surry Hills - Delivery Address
       cy.setFulfilmentLocationWithoutWindow(fulfilmentType.DELIVERY, addressSearch)
-       
+
       // Clear trolley in case there's any item
       cy.clearTrolley()
 
-      //Calculate quantity of Items based on Unit Price and total Value
+      // Calculate quantity of Items based on Unit Price and total Value
       cy.addEDMItemsBasedOnMinCartValueToTrolley(testData)
       cy.get('@finalQty').then((finalQty) => {
         testData.quantity = finalQty
       })
-       
-      //Pay the order
+
+      // Pay the order
       cy.payTheOrder(testData).then((response) => {
         confirmOrderRequest.placedOrderId = response.PlacedOrderId
       })
-      
+
       // Confirm the order
       cy.wait(Cypress.config('fiveSecondWait'))
       cy.confirmOrder(confirmOrderRequest).then((response) => {
@@ -65,11 +65,11 @@ TestFilter(['EDM', 'API', 'feature'], () => {
         expect(response.Order.OrderStatus).to.be.equal('Placed')
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference
-        
+
         testData.orderId = orderId
         testData.orderReference = orderReference
 
-        //Verify that the order is cancelled
+        // Verify that the order is cancelled
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, testData.orderId, {
           function: function (response) {
             if (response.body.invoices[0].wowStatus !== 'Failed') {
@@ -80,7 +80,6 @@ TestFilter(['EDM', 'API', 'feature'], () => {
           retries: 10,
           timeout: 5000
         }).as('finalProjection').then((response) => {
-
           // Order details
           expect(response.orderId).to.equal(Number(orderId))
           expect(response.shopperId).to.be.equal(Number(shopperId))
@@ -156,9 +155,9 @@ TestFilter(['EDM', 'API', 'feature'], () => {
           // Invoke OQS TMO api and validate it against the projection
           lib.verifyOQSOrderStatus(testData.orderId, 'Received', true, testData)
         })
-      })     
-    })  
-    
+      })
+    })
+
     after(() => {
       cy.log('Test Teardown - Deleting Gift Cards')
 
@@ -166,8 +165,8 @@ TestFilter(['EDM', 'API', 'feature'], () => {
         cy.log(giftcardPaymentInstrumentIds.length)
         giftcardPaymentInstrumentIds.forEach(instrumentId => {
           cy.removePaymentInstrument(instrumentId.InstrumentId)
-        });
-      }) 
-    })  
+        })
+      })
+    })
   })
 })
