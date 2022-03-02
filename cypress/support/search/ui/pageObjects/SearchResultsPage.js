@@ -1,6 +1,10 @@
 import { onSideCartPage } from "cypress/support/sideCart/ui/pageObjects/SideCartPage"
 
 export class SearchResultsPage {
+  addItemToCart (itemPositionNumber) {
+    return cy.get('#search-content .product-grid > div:nth-child(' + itemPositionNumber + ') .cartControls-addCart')
+  }
+
   getIncreaseQuantityButton () {
     return cy.get('.cartControls-incrementButton')
   }

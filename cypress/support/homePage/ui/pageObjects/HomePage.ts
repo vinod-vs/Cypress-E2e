@@ -3,6 +3,10 @@ export class HomePage {
       return cy.get('.coreHeader-profile-content .coreHeader-profile-text')
     }
   
+    getB2BMyAccount () {
+      return cy.get('#header-panel a.coreHeader-signupButton')
+    }
+
     getSearchHeader () {
       return cy.get('.headerSearch-searchBox')
     }
@@ -12,7 +16,7 @@ export class HomePage {
     }
   
     getCartAmount () {
-      return cy.get('.headerCheckout-orderAmount')
+      return cy.get('.orderAmount')
     }
   
     getListsLink () {
