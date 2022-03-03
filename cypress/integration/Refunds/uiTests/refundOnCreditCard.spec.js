@@ -5,7 +5,7 @@ import '../../../support/fulfilment/ui/commands/deliveryDateAndWindow.js'
 import '../../../support/search/ui/commands/searchAndAddProduct.js'
 import shoppers from '../../../fixtures/login/b2cShoppers.json'
 import { onSearchResultsPage } from '../../../support/search/ui/pageObjects/SearchResultsPage.js'
-import { onDeliveryDateAndWindowPage } from '../../../support/fulfilment/ui/pageObjects/DeliveryDateAndWindowPage.ts'
+import { onFMSWindowSelector } from '../../../support/fulfilment/ui/pageObjects/FMSWindowSelector.ts'
 import refundsTestData from '../../../fixtures/refunds/refundsTestData.json'
 import { onSideCartPage } from '../../../support/sideCart/ui/pageObjects/SideCartPage.ts'
 import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage.ts'
@@ -23,7 +23,7 @@ TestFilter(['B2C', 'UI', 'Refunds', 'OPS', 'P3'], () => {
       onSideCartPage.openSideCart()
       onSideCartPage.removeAllItems()
       onSideCartPage.closeSideCart()
-      onDeliveryDateAndWindowPage.selectDeliveyAddressAndRandomWindow(refundsTestData.refundsOnCC.deliveryAddress)
+      onFMSWindowSelector.selectDeliveyAddressAndRandomWindow(refundsTestData.refundsOnCC.deliveryAddress)
       onSearchResultsPage.addRandomProductsToCartForTotalValue(refundsTestData.refundsOnCC.orderMinAmount)
       onSideCartPage.getViewCartButton().click()
       onSideCartPage.gotoCheckout()
