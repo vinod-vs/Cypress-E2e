@@ -108,7 +108,7 @@ export class SearchResultsPage {
     var totalCartValue = parseFloat(cartValue)
     this.sortProductsBy('Price High to Low')
     //get all main menus to travel thru each main menu > first sub menu to add first available item to cart
-    onHomePage.getCategoryMenuItemLinks().not('.categoryHeader-navigationLink.is-special.ng-star-inserted').not('[href="/shop/browse/bakery"]').each(($el, $index, $list) => {
+    onHomePage.getCategoryMenuItemLinks().not('.categoryHeader-navigationLink.is-special').not('[href="/shop/browse/bakery"]').each(($el, $index, $list) => {
       //get cart total
       onHomePage.getCartAmountInHeader().then(($cartAmtEl) => {
         cartAmountText=$cartAmtEl.text()
