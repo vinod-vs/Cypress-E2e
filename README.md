@@ -113,3 +113,27 @@ For your email related test, you might want
     })
 More info: [How to test email and SMS with Cypress] (https://mailosaur.com/docs/frameworks-and-tools/cypress/)
 
+
+# Test accessibility with axe-core in Cypress
+
+Installation Steps :
+
+1. Install cypress-axe from npm:
+`npm install --save-dev cypress-axe`
+
+2. Install peer dependencies:
+`npm install --save-dev cypress axe-core`
+
+3. Include the commands. Update cypress/support/index.js file to include the cypress-axe commands by adding:
+`import 'cypress-axe'`
+
+4. If you’re using TypeScript, add cypress-axe types to your Cypress’ tsconfig.json file:
+
+{
+  "compilerOptions": {
+    
+   ` "types": ["cypress", "cypress-axe"]`
+  },
+  "include": ["."]
+}
+
