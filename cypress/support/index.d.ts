@@ -138,5 +138,6 @@ declare namespace Cypress {
     addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm: string, count: number): any;
     removeUnavailableItemsFromTrolley(): any;
     removeRestrictedItemsFromTrolley(): any;
+    checkPageA11y(): any;
   }
 }
