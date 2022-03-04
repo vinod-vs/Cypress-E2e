@@ -30,6 +30,7 @@ export class HomePage {
     getViewCartButton () {
         return cy.get('#viewCartPanel > .button')
     }
+    
     getSecondCategoryMenuItem () {
       return cy.get('.categoryHeader-navigation .categoryHeader-navigationLink:nth-child(2)')
     }

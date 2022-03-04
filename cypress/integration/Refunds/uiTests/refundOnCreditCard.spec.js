@@ -3,28 +3,33 @@ import '../../../support/login/ui/commands/login.js'
 import '../../../support/sideCart/ui/commands/clearTrolley.js'
 import '../../../support/fulfilment/ui/commands/deliveryDateAndWindow.js'
 import '../../../support/search/ui/commands/searchAndAddProduct.js'
-import shoppers from '../../../fixtures/login/b2cShoppers.json'
 import { onSearchResultsPage } from '../../../support/search/ui/pageObjects/SearchResultsPage.js'
+import { onFMSRibbon } from '../../../support/fulfilment/ui/pageObjects/FMSRibbon.ts'
+import { onFMSAddressSelector } from '../../../support/fulfilment/ui/pageObjects/FMSAddressSelector.ts'
 import { onFMSWindowSelector } from '../../../support/fulfilment/ui/pageObjects/FMSWindowSelector.ts'
-import refundsTestData from '../../../fixtures/refunds/refundsTestData.json'
 import { onSideCartPage } from '../../../support/sideCart/ui/pageObjects/SideCartPage.ts'
 import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage.ts'
 import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/CheckoutPage.ts'
 import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage.ts'
+import shoppers from '../../../fixtures/login/b2cShoppers.json'
+import refundsTestData from '../../../fixtures/refunds/refundsTestData.json'
+
 
 TestFilter(['B2C', 'UI', 'Refunds', 'OPS', 'P3'], () => {
-  describe('[UI] Place an order by using credit card', () => {
+  describe('[UI] Place an order, then refund the order', () => {
     before(() => {
           cy.clearCookies({ domain: null })
           cy.clearLocalStorage({ domain: null })
     })
-    it('Place order', () => {
+    it('Place and refund order', () => {
       cy.loginViaUi(shoppers[4])
-      onSideCartPage.openSideCart()
-      onSideCartPage.removeAllItems()
-      onSideCartPage.closeSideCart()
-      onFMSWindowSelector.selectDeliveyAddressAndRandomWindow(refundsTestData.refundsOnCC.deliveryAddress)
-      onSearchResultsPage.addRandomProductsToCartForTotalValue(refundsTestData.refundsOnCC.orderMinAmount)
+      onSideCartPage.cleanupTrolley()
+      onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false})
+      onFMSAddressSelector.selectDeliveyAddress(refundsTestData.refundsOnCC.deliveryAddress)
+      onFMSWindowSelector.selectAvailableDayAfterTomorrow()
+      onFMSWindowSelector.selectLastTimeslot();
+      onFMSWindowSelector.getContinueShoppingButton().click()
+      onSearchResultsPage.addRandomProductsFromEachDepartmentToCartUntilReachSpendThreshold(refundsTestData.refundsOnCC.orderMinAmount)
       onSideCartPage.getViewCartButton().click()
       onSideCartPage.gotoCheckout()
       

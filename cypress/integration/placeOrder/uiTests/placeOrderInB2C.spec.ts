@@ -26,9 +26,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
     beforeEach(() => {  
       cy.loginViaUi(b2cShoppers[3])
       
-      onSideCartPage.openSideCart()
-      onSideCartPage.removeAllItems()
-      onSideCartPage.closeSideCart()
+      onSideCartPage.cleanupTrolley()
 
       onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false});
     })
@@ -36,7 +34,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
     it('Place a delivery order with woolworths groceries', () => {
       onFMSAddressSelector.getDeliveryTab().click();
       onFMSAddressSelector.getAddNewDeliveryAddressButton().click();
-      onFMSAddressSelector.searchForNewAddress(addressTestData.search);
+      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search);
       onFMSAddressSelector.getSaveAndContinueButton().click();
     })
 
@@ -60,7 +58,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
       onHomePage.getSearchHeader().click()
       onHomePage.getSearchHeader().type('health').type('{enter}')
 
-      onSearchResultsPage.addAvailableProductsToCartFromSearchResult(50)
+      onSearchResultsPage.addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(30)
 
       onSideCartPage.getViewCartButton().click()
       onSideCartPage.gotoCheckout()

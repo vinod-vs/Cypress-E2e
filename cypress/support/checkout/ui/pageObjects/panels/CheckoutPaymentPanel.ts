@@ -179,7 +179,6 @@ export class CheckoutPaymentPanel{
         cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText', { timeout: 10000 }).should('be.visible');
         cy.checkIfElementExists(getiframeTitleSelectorString).then((existance:boolean) => {
             if(!existance){
-                console.log("existance of iframe " + existance)
                 cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText').contains(cardNumberLast4Digit).click()        
             }
         })

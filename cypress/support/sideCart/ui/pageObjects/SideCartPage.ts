@@ -217,6 +217,12 @@ export class SideCartPage {
       }
     })
   }
+
+  cleanupTrolley () {
+    this.openSideCart()
+    this.removeAllItems()
+    this.closeSideCart()
+  }
   // #endregion
 
   // #endregion - private methods

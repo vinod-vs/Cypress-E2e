@@ -94,19 +94,63 @@ export class SearchResultsPage {
     return cy.get('span.dropdown-item__button')
   }
 
-  // getAddToCartButtonOnProductListPage (){
-  //   return cy.get('.cartControls-addButton').contains('Add to cart')
-  // }
-
   getOkButtonInRestrictedItemsPopup() {
     return cy.get('.primary > .ng-star-inserted').contains('Ok, got it')
   }
 
-  addRandomProductsToCartForTotalValue (cartValue) {
+  sortSearchResultProductsBy(sortByOptionText) {
+    this.getSortByDropdownButton().should('be.visible').click({force: true})
+
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('productSearchEndpoint'),
+    }).as('productSearch')
+
+    cy.get('.sort-by-dropdown ul').contains(sortByOptionText).click()
+    
+    cy.wait('@productSearch')
+  }
+
+  sortCategoryProductsBy(sortByOptionText) {
+    this.getSortByDropdownButton().should('be.visible').click({force: true})
+
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('browseCategoryendpoint'),
+    }).as('browseCategory')
+
+    cy.get('.sort-by-dropdown ul').contains(sortByOptionText).click()
+    
+    cy.wait('@browseCategory')
+  }
+
+  addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(minSpendThreshold)
+  {
+    cy.checkIfElementExists('.no-results-primary-text').then(result => {
+      if(result == true){
+        throw new Error('Unable to find any result')
+      }
+    })
+
+    this.sortSearchResultProductsBy('Price High to Low')
+
+    let searchResultPageStartIndex = 1
+    this.getAllPageNumberElements().last().then(lastPageNumberElement => {
+      this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
+    })
+  }
+
+  addRandomProductsFromEachDepartmentToCartUntilReachSpendThreshold (spendThreshold) {
     var cartAmountText=""
     var cartAmount=0
-    var totalCartValue = parseFloat(cartValue)
-    this.sortProductsBy('Price High to Low')
+    var totalCartValue = parseFloat(spendThreshold)
+
+    onHomePage.getSecondCategoryMenuItem().click({force: true})
+    cy.wait(2000)
+    onHomePage.getSubMenuItemLinks().first().click()
+    onHomePage.getSubMenuItemLinks().contains('Show All').click()
+
+    this.sortCategoryProductsBy('Price High to Low')
     //get all main menus to travel thru each main menu > first sub menu to add first available item to cart
     onHomePage.getCategoryMenuItemLinks().not('.categoryHeader-navigationLink.is-special').not('[href="/shop/browse/bakery"]').each(($el, $index, $list) => {
       //get cart total
@@ -138,46 +182,6 @@ export class SearchResultsPage {
         }
       })
     }) 
-  }
-
-  // 'Price High to Low'
-  sortProductsBy(sortByOrder) {
-    onHomePage.getSecondCategoryMenuItem().click({force: true})
-    cy.wait(2000)
-    onHomePage.getSubMenuItemLinks().first().click()
-    onHomePage.getSubMenuItemLinks().contains('Show All').click()
-    //order by high price first
-    this.getSortByDropdownButton().should('be.visible')
-    this.getSortByDropdownButton().then(($sortDrpDwn)=>{
-      if(!($sortDrpDwn.text().includes(sortByOrder))){
-        this.getSortByDropdownButton().click()
-        this.getSortProductsDropdownOptionsSpan().contains(sortByOrder).click()
-      }
-    })
-  }
-  addAvailableProductsToCartFromSearchResult(minSpendThreshold)
-  {
-    cy.checkIfElementExists('.no-results-primary-text').then(result => {
-      if(result == true){
-        throw new Error('Unable to find any result')
-      }
-    })
-
-    this.getSortByDropdownButton().click({force: true})
-
-    cy.intercept({
-      method: 'POST',
-      url: Cypress.env('productSearchEndpoint'),
-    }).as('productSearch')
-
-    cy.get('.sort-by-dropdown ul').contains('Price High to Low').click()
-    
-    cy.wait('@productSearch')
-
-    let searchResultPageStartIndex = 1
-    this.getAllPageNumberElements().last().then(lastPageNumberElement => {
-      this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
-    })
   }
 
   #addAvailableProductsToCartFromCurrentPage(minSpendThreshold, currentPageIndex, lastPageIndex)
