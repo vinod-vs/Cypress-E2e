@@ -9,5 +9,11 @@
     "password": "test1234",
     "platform": "B2B",
     "type": "business"
+},
+{
+    "email": "amy.auto0@yopmail.com",
+    "password": "test1234",
+    "platform": "B2B",
+    "type": "business"
 }
 ]
