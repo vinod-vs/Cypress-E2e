@@ -30,10 +30,18 @@ Cypress.Commands.add("saveNewCreditCardViaUi", (creditCard) => {
   cy.wait(1000);
   //Add new card details
   addNewCreditCardDetails(creditCard)
+
+  cy.intercept({
+    method: "POST",
+    url: "creditcard",
+  }).as("saveCreditcard");
+
   onMyPaymentMethodsPage.getButtonSave().click();
-  cy.wait(1000);
-  //Verify saved card
-  onMyPaymentMethodsPage.getSavedCardNumbers().contains(creditCard.checkCardNumber).should("be.visible");
+
+  cy.wait("@saveCreditcard").then((interception) => {
+    //Verify saved card
+    onMyPaymentMethodsPage.getSavedCardNumbers().contains(creditCard.checkCardNumber).should("be.visible");
+  });
 });
 
 
