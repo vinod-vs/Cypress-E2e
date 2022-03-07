@@ -175,10 +175,13 @@ export class CheckoutPaymentPanel{
 
     PayWithExistingCreditCard (cardNumberLast4Digit: string, cvv: string) {
         var iframeTitleSelectorString = '[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
-        cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText')
-        .contains(cardNumberLast4Digit)
-        .click()
-
+        var getiframeTitleSelectorString = 'iframe[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
+        cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText', { timeout: 10000 }).should('be.visible');
+        cy.checkIfElementExists(getiframeTitleSelectorString).then((existance:boolean) => {
+            if(!existance){
+                cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText').contains(cardNumberLast4Digit).click()        
+            }
+        })
         cy.iframe(iframeTitleSelectorString).find('#cvv_csv').type(cvv)
         this.getPlaceOrderButton().click()
     }
