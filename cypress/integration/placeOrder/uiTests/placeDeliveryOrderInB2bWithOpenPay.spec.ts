@@ -7,8 +7,10 @@ import "../../../support/login/ui/commands/login";
 import "../../../support/myAccount/ui/commands/myAccount";
 import "../../../support/myAccount/ui/commands/myPaymentMethods";
 import "../../../support/logout/ui/commands/logout";
-import { has } from "cypress/types/lodash";
+import { add, has } from "cypress/types/lodash";
 import exp from "constants";
+import { text } from "stream/consumers";
+import { parseHTML } from "cypress/types/jquery";
 
 TestFilter(["B2B", "UI", "P0"], () => {
   describe("[UI] My payment methods page for eligible B2B shoppers", () => {
@@ -200,13 +202,13 @@ TestFilter(["B2B", "UI", "P0"], () => {
       cy.wait("@delivery").should((xhr) => {
         expect(xhr.response, "statusCode").is.not.null;
       });
-      cy.intercept({
-        method: "GET",
-        url: "/api/*",
-      }).as("window");
-      cy.wait("@window").should((xhr) => {
-        expect(xhr.response, "statusCode").is.not.null;
-      });
+      //   cy.intercept({
+      //     method: "GET",
+      //     url: "/api/*",
+      //   }).as("window");
+      //   cy.wait("@window").should((xhr) => {
+      //     expect(xhr.response, "statusCode").is.not.null;
+      //   });
       cy.get(
         "#checkout-timePanel > .panel > .ng-trigger > .panel-heading"
       ).then((el) => {
@@ -227,7 +229,8 @@ TestFilter(["B2B", "UI", "P0"], () => {
         if (textBtn1.includes("When suits you?")) {
           cy.get("wow-time-slot-time button").each(($el) => {
             cy.wrap($el).click().should("have.attr", "aria-checked", "true");
-            cy.get(".panel-actions-button > .shopper-action")
+
+            cy.get(".panel-actions-button > .shopper-action", { timeout: 5000 })
               .scrollIntoView()
               .contains("Continue")
               .click();
@@ -241,20 +244,60 @@ TestFilter(["B2B", "UI", "P0"], () => {
         "Coffee & Tea"
       );
       cy.get("wow-cart-item-checkout>.cart-item").should("have.length", 2);
+
+      cy.get(".auto_delivery-fee-summary").as("deliveryFees1");
+      cy.get(
+        ":nth-child(2) > .cart-item > :nth-child(1) > .wow-col-8 > .wow-col-md-3 > shared-price.ng-star-inserted > .price"
+      )
+        .invoke("text")
+        .as("line1Price");
+
+      cy.get(
+        ":nth-child(3) > .cart-item > :nth-child(1) > .wow-col-8 > .wow-col-md-3 > shared-price.ng-star-inserted > .price"
+      )
+        .invoke("text")
+        .as("line2Price");
+
       cy.get(
         "#checkout-reviewPanel > .panel > .ng-trigger > .panel-actions .shopper-action"
       )
         .contains("Continue")
         .click();
 
-      //assertions on order total container
+      //current order total amt n save it
+      cy.get(".order-total > .order-total-container .totals > .total-amount")
+        .invoke("text")
+        .as("currentOrdrTotal");
+
+      cy.get("@deliveryFees1").then((fee) => {
+        const delFee = parseFloat(fee.text().substring(1));
+        cy.log(delFee);
+
+        cy.get("@line1Price").then((line1P) => {
+          const line1PriceNum = parseFloat(`${line1P}`.substring(1));
+          cy.log(line1PriceNum);
+
+          cy.get("@line2Price").then((line2P) => {
+            const line2PriceNum = parseFloat(`${line2P}`.substring(1));
+            cy.log(line2PriceNum);
+
+            const total = (delFee + line1PriceNum + line2PriceNum).toFixed(2);
+            cy.log(total);
+
+            cy.get("@currentOrdrTotal").then((el) => {
+              expect(el).to.be.eq(total);
+            });
+          });
+        });
+      });
+      //assertions on order total container-checkout
       cy.get(".order-total > .order-total-container > .title").contains(
         "Your order:"
       );
       cy.get(".order-total > .order-total-container > .column").contains(
         "Total (incl. GST)"
       );
-      cy.get(".order-total > .order-total-container .totals").contains("62.10");
+
       cy.get(".order-total > .order-total-container .dollar-symbol").contains(
         "$"
       );
@@ -262,68 +305,127 @@ TestFilter(["B2B", "UI", "P0"], () => {
       cy.get("#checkout-items-subtotal > .payment-title")
         .should("be.visible")
         .contains("Subtotal");
+
+      const fn = (el: any) => {
+        return parseFloat(el.text().substring(1)).toFixed(2);
+      };
+
+
+    //   function fn(element) {
+    //     return new Promise((resolve) => {
+    //       setTimeout(() => {
+    //         element.disabled = true
+    //         resolve()
+    //       }, 3000)
+    //     })
+    //   }
+      
+    //   cy.get('[data-cy=my-text-input]').then((textElements) => {
+    //     cy.wrap({ disableElementAsync }).invoke(
+    //       'disableElementAsync',
+    //       textElements[0]
+    //     )
+    //   })
+
+
+
       cy.get("#checkout-items-subtotal > .payment-amount")
-        .should("be.visible").then(subTotl=>{
-          const subTotal = subTotl.text();
-          expect(subTotl).to.be.eq(subTotal);
-        })       
-      cy.get(".payment-breakdown > :nth-child(2) > .payment-title")
         .should("be.visible")
-        .contains("Delivery fee");
-      cy.get(".payment-breakdown > :nth-child(2) > .payment-amount")
-        .should("be.visible")
-        .then((el) => {
-          const deliveryFee = el.text();
-          expect(el).to.be.eq(deliveryFee);
-        }).then(()=>{
-          cy.get("#checkout-items-subtotal > .payment-amount")
-          .should("be.visible").then(subTotl=>{
-            const subTotal = subTotl.text();
-            expect(subTotl).to.be.eq(subTotal);
-          }) 
-        })
-        
+        .then((subTotl) => {
+          //   const subTotalText = parseFloat(subTotl.text().substring(1));
+          //   cy.log(subTotalText);
 
-      cy.get(".payment-breakdown > :nth-child(3) > .payment-title")
-        .should("be.visible")
-        .contains("Paper bag");
-      cy.get(".payment-breakdown > :nth-child(3) > .payment-amount")
-        .should("be.visible")
-        .contains("$0.00");
-      cy.get(".payment-breakdown > :nth-child(5) > .payment-title")
-        .should("be.visible")
-        .contains("Total (incl. GST)");
-      cy.get(".payment-breakdown > :nth-child(5) > .payment-amount")
-        .should("be.visible")
-        .contains("$62.10");
+          //   const fn = () => {
+          //     return parseFloat(subTotl.text().substring(1)).toFixed(2);
+          //   };
 
-      //Select open pay and clicking
-      cy.get("#digitalPayListItem1 > .digitalPayListItem-icon").should(
-        "be.visible"
-      );
-      cy.get(
-        "#digitalPayListItem1 > .digitalPayListItem-contentContainer .title-text"
-      )
-        .should("be.visible")
-        .contains("Paid on Work Account");
-      cy.get(
-        "#digitalPayListItem1 > .digitalPayListItem-contentContainer .sub-text"
-      )
-        .should("be.visible")
-        .contains("Powered by Openpay")
-        .click();
+          cy.wrap({ SubtlStringToNumfn: fn })
+            .invoke("SubtlStringToNumfn", subTotl)
+            .as("subTotl"); // true
+
+          cy.get("@line1Price").then((line1Price) => {
+            // const line1PriceN = parseFloat(`${line1Price}`.substring(1));
+            // cy.log(line1PriceN);
+            cy.wrap({ Line1StringToNumfn: fn })
+            .invoke("Line1StringToNumfn", line1Price)
+           // .as("subTotl"); // true
+
+
+            cy.get("@line2Price").then((line2Price) => {
+              const line2PriceN = parseFloat(`${line2Price}`.substring(1));
+              cy.log(line2PriceN);
+
+              const subTtl = (line1PriceN + line2PriceN).toFixed(2);
+
+              cy.get("@subTotl").then((el) => {
+                expect(el).to.be.eq(subTtl);
+              });
+            });
+          });
+        });
+
+
+
+
+      //     });
+      //   cy.get(".payment-breakdown > :nth-child(2) > .payment-title")
+      //     .should("be.visible")
+      //     .contains("Delivery fee");
+      //   cy.get(".payment-breakdown > :nth-child(2) > .payment-amount")
+      //     .should("be.visible")
+      //     .then((el) => {
+      //       const deliveryFee = el.text();
+      //       expect(el).to.be.eq(deliveryFee);
+      //     })
+      //     .then(() => {
+      //       cy.get("#checkout-items-subtotal > .payment-amount")
+      //         .should("be.visible")
+      //         .then((subTotl) => {
+      //           const subTotal = subTotl.text();
+      //           expect(subTotl).to.be.eq(subTotal);
+      //         });
+      //     });
+
+      //   cy.get(".payment-breakdown > :nth-child(3) > .payment-title")
+      //     .should("be.visible")
+      //     .contains("Paper bag");
+      //   cy.get(".payment-breakdown > :nth-child(3) > .payment-amount")
+      //     .should("be.visible")
+      //     .contains("$0.00");
+      //   cy.get(".payment-breakdown > :nth-child(5) > .payment-title")
+      //     .should("be.visible")
+      //     .contains("Total (incl. GST)");
+      //   cy.get(".payment-breakdown > :nth-child(5) > .payment-amount")
+      //     .should("be.visible")
+      //     .contains("$62.10");
+
+      //   //Select open pay and clicking
+      //   cy.get("#digitalPayListItem1 > .digitalPayListItem-icon").should(
+      //     "be.visible"
+      //   );
+      //   cy.get(
+      //     "#digitalPayListItem1 > .digitalPayListItem-contentContainer .title-text"
+      //   )
+      //     .should("be.visible")
+      //     .contains("Paid on Work Account");
+      //   cy.get(
+      //     "#digitalPayListItem1 > .digitalPayListItem-contentContainer .sub-text"
+      //   )
+      //     .should("be.visible")
+      //     .contains("Powered by Openpay")
+      //     .click();
 
       //Enter purchase order number
-      cy.get("#purchaseOrderInput")
-        .should("be.visible")
-        .and("has.attr", "placeholder", "Purchase order number *")
-        .clear()
-        .type("1111");
-      cy.get(".shopper-action")
-        .should("be.visible")
-        .contains("Place order")
-        .click();
-      cy.url().should("include", "/shop/confirmation?orderId=*");
+      //   cy.get("#purchaseOrderInput")
+      //     .should("be.visible")
+      //     .and("has.attr", "placeholder", "Purchase order number *")
+      //     .clear()
+      //     .type("1111");
+      //   cy.get(".shopper-action")
+      //     .should("be.visible")
+      //     .contains("Place order")
+      //     .click();
+      //   cy.url().should("include", "/shop/confirmation?orderId=*");
     });
   });
 });
