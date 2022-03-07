@@ -13,6 +13,7 @@
         "logoutEndpoint": "apis/ui/Logout",
         "signUpEndpoint": "apis/ui/signup",
         "productSearchEndpoint": "apis/ui/Search/products",
+        "browseCategoryendpoint": "apis/ui/browse/category",
         "addressEndpoint": "/apis/ui/address",
         "addressSearchEndpoint": "apis/ui/address/search",
         "storeLocatorEndpoint": "/apis/ui/StoreLocator/Suburbs",

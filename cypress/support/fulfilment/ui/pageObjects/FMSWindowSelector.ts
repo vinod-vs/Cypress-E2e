@@ -1,5 +1,9 @@
 export class FMSWindowSelector {
   // #region - Selectors
+  getSelectFullfilmentTimeHeading() {
+    return cy.get('.time-slot-title')
+  }
+
   getDayDropdown () {
     return cy.get('.day-dropdown')
   }
@@ -23,7 +27,9 @@ export class FMSWindowSelector {
   getAllTimeSlotList () {
     return cy.get('.time-slot-list > section > div')
   }
+  // #endregion
 
+  // #region - General actions
   selectSameDay () {
     this.selectDayByKeyword('Today')
   }
@@ -42,9 +48,17 @@ export class FMSWindowSelector {
         }
       })
   }
-  // #endregion
 
-  // #region - General actions
+  selectAvailableDayAfterTomorrow () {
+    cy.get('.day-dropdown > option')
+      .each(dayOption => {
+        if (!(dayOption.text().includes('Select a day') || dayOption.text().includes('Today') || dayOption.text().includes('Tomorrow') || dayOption.text().includes('Closed'))) {
+          this.getDayDropdown().select(dayOption.text())
+          return false;
+        }
+      })
+  }
+
   selectDayByKeyword (dayKeyword: string) {
     cy.get('.day-dropdown > option')
       .contains(dayKeyword)
