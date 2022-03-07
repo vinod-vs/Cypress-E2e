@@ -1,0 +1,12 @@
+{
+    "coolServiceResponseFields": [
+      "StockCode",
+      "StoreNo",
+      "BarchartNumber",
+      "Percentage",
+      "ImageName",
+      "AltText",
+      "Country",
+      "IsPackaged"
+    ]
+}
