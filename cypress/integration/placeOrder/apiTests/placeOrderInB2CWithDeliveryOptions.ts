@@ -40,7 +40,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
       cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.CanLeaveOrderUnattended, 'Can Leave Order Unattended').to.eql(true)
+        expect(confirmOrderResponse.Order.CanLeaveOrderUnattended, 'Order Confirmation can Leave Order Unattended').to.eql(true)
       })
     })
 
@@ -52,7 +52,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
       cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.DeliveryInstructions).to.eql(deliveryOptions.DeliveryInstructions)
+        expect(confirmOrderResponse.Order.DeliveryInstructions, 'Order Confirmation Delivery Instructions').to.eql(deliveryOptions.DeliveryInstructions)
       })
     })
 
@@ -67,7 +67,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
       cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.DeliveryInstructions).to.eql(deliveryOptions.PickupInstructions)
+        expect(confirmOrderResponse.Order.DeliveryInstructions, 'Order Confirmation Pick up Instructions').to.eql(deliveryOptions.PickupInstructions)
       })
     })
   })
