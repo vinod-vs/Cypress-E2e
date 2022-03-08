@@ -114,7 +114,7 @@ export class SharedAddressSelector{
     this.getSearchAddressSelectorTextbox().type(addressKeyword)
 
     this.getSearchAddressResultList().each(resultOption => {
-      const suggestedAddressText = resultOption.find('span').text()
+      const suggestedAddressText = resultOption.find('span').text().replace(/  /g, ' ').trim()
 
       if (suggestedAddressText.toLowerCase().includes(addressKeyword.toLowerCase())) {
         cy.wrap(resultOption).click()
