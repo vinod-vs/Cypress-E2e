@@ -1,3 +1,4 @@
+import '../../../../support/payment/api/commands/digitalPayment'
 /*
     This cypress command searches for the paypal accounts linked to the logged in account.
     Gets the first enabled paypal accounts paypalPaymentInstrumentId and places an order with it.
@@ -35,5 +36,12 @@ Cypress.Commands.add('payWithLinkedPaypalAccount', (digitalPaymentRequest) => {
       expect(response.status).to.eq(200)
       return response.body
     })
+  })
+})
+
+Cypress.Commands.add('getLinkedPayPalAccountInstrumentId', () => {
+  cy.getDigitalPaymentInstruments().then((instruments) => {
+    const paypalInstruments = instruments.Paypal.Instruments.filter(instrument => instrument.Status === 'VERIFIED' && instrument.Allowed)
+    return paypalInstruments[0].PaymentInstrumentId
   })
 })

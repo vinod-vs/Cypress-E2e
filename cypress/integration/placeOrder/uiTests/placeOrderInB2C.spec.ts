@@ -12,10 +12,11 @@ import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/Have
 import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
 import addressTestData from '../../../fixtures/checkout/addressSearch.json'
 import storeTestData from '../../../fixtures/checkout/storeSearch.json'
+import creditcardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import TestFilter from '../../../support/TestFilter'
 
 
-TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0'], () => {
   describe('[UI] Place an order by using credit card', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
@@ -26,17 +27,15 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
     beforeEach(() => {  
       cy.loginViaUi(b2cShoppers[3])
       
-      onSideCartPage.openSideCart()
-      onSideCartPage.removeAllItems()
-      onSideCartPage.closeSideCart()
+      onSideCartPage.cleanupTrolley()
 
       onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false});
     })
 
-    it('Place a delivery order with woolworths groceries', () => {
+    it('Place a delivery order with woolworths items', () => {
       onFMSAddressSelector.getDeliveryTab().click();
       onFMSAddressSelector.getAddNewDeliveryAddressButton().click();
-      onFMSAddressSelector.searchForNewAddress(addressTestData.search);
+      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search);
       onFMSAddressSelector.getSaveAndContinueButton().click();
     })
 
@@ -60,12 +59,17 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
       onHomePage.getSearchHeader().click()
       onHomePage.getSearchHeader().type('health').type('{enter}')
 
-      onSearchResultsPage.addAvailableProductsToCartFromSearchResult(50)
+      onSearchResultsPage.addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(30)
 
       onSideCartPage.getViewCartButton().click()
+
+      cy.intercept('api/v3/ui/fulfilment/windows?*').as('fulfilmentWindow')
+
       onSideCartPage.gotoCheckout()
 
       onHaveYouForgottenPage.continueToCheckout()
+
+      cy.wait('@fulfilmentWindow')
 
       onCheckoutPage.onCheckoutFulfilmentSelectionPanel.getSummarisedFulfilmentAddressElement().then(address => {
         cy.wrap(address.text()).as('expectedAddress')
@@ -83,25 +87,25 @@ TestFilter(['B2C', 'UI', 'Checkout', 'P0'], () => {
         cy.wrap(totalAmount.text()).as('expectedTotalAmount')
       })
 
-      onCheckoutPage.onCheckoutPaymentPanel.PayWithExistingPayPal()
+      onCheckoutPage.onCheckoutPaymentPanel.PayWithNewCreditCard(creditcardPayment.aa, creditcardPayment.dd, creditcardPayment.ee, creditcardPayment.bb)
 
       // Verify order confirmation page
       onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')
       cy.url().should('include', '/confirmation')
 
-      cy.get('@expectedAddress').then(expectedAddress => {
+      cy.get<string>('@expectedAddress').then(expectedAddress => {
         onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedAddress)
       })
 
-      cy.get('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
+      cy.get<string>('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
         onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
       })
-      
-      cy.get('@expectedFulfilmentTime').then(expectedFulfilmentTime => {
+
+      cy.get<string>('@expectedFulfilmentTime').then(expectedFulfilmentTime => {
         onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentTime)
       })
 
-      cy.get('@expectedTotalAmount').then(expectedTotalAmount => {
+      cy.get<string>('@expectedTotalAmount').then(expectedTotalAmount => {
         onOrderConfirmationPage.getOrderPaymentSummaryTotalAmountElement().should('contain.text', expectedTotalAmount)
       })
     })

@@ -15,6 +15,22 @@ Cypress.Commands.add('checkIfElementExists', (elementLocatorString) => {
   })
 })
 
+Cypress.Commands.add('checkIfElementVisible', (element) => {
+  cy.get("body").then($body => {
+    if ($body.find(element).length > 0) {   
+      cy.get(element).then($el => {
+        if ($el.is(':visible')){
+          return true
+        } else {
+          return false
+        }
+      })
+    } else {
+      return false
+    }
+  })
+})
+
 Cypress.Commands.add('getDOB', (element) => {
   let dob = new Date()
   if (element == 'senior') {

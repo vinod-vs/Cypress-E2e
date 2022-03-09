@@ -44,6 +44,8 @@ TestFilter(['EDM', 'API'], () => {
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
         testData.orderReference = orderReference
+        expect(response.Order.HasMarketOrderGiftingDetails).to.be.true
+        cy.log('HasMarketOrderGiftingDetails tag is= ' + response.Order.HasMarketOrderGiftingDetails )
         cy.log('This is the order id: ' + response.Order.OrderId + ', Order ref: ' + response.Order.OrderReference)
 
         // Verify the order totals are as expected
