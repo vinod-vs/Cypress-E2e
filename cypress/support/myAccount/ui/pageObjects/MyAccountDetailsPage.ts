@@ -1,15 +1,15 @@
 export class MyAccountDetailsPage {
 
     getMyPersonalDetailsText () {
-      return cy.get('h3.heading3V2.ng-star-inserted')
+      return cy.get('#personal-details-title')
     }
   
     getMyPersonalDetailsNameEditLink () {
-      return cy.get(':nth-child(1) > .personalDetails-col > .margin-bottom-0 > .ng-tns-c345-3')
+      return cy.get('#edit-link-full-name')
     }
 
     getMyPersonalDetailsDOBEditLink () {
-      return cy.get('.padding-bottom-0 > .personalDetails-col > .margin-bottom-0 > .ng-tns-c345-3')
+      return cy.get('#edit-link-dob')
     }
 
     getMyPersonalDetailsFirstNameInput () {
@@ -45,19 +45,64 @@ export class MyAccountDetailsPage {
      } 
 
     getCancelButtonName() {
-        return cy.get('.display-link-left')
+        return cy.get('#cancel-link-full-name')
        }     
 
     getCancelButtonDOB() {
-        return cy.get('.display-link-left.underline.ng-tns-c342-4')
+        return cy.get('#cancel-link-dob')
        }   
     getUpdatedName() {
-        return cy.get(':nth-child(1) > .personalDetails-col > div.ng-tns-c345-3')
+        return cy.get('#fullNameLabel')
+
        }   
     getSuccessTittle() {
         return cy.get('p.title')
-       }       
+       }   
+       
+    addSecondaryPhoneNumber()
+    {
+
+      return cy.get ("#addSecondaryPhoneLink")
+    } 
+
+
+    getMySecondaryPhoneNumberInput () 
+    {
+      return cy.get ('#personalDetails-firstName')
   
-  }
+    }
+
+    getCancelButtonSecondaryPhoneNumber() 
+    {
+      return cy.get('#cancelButton')
+    } 
+
+    getSaveChangesButtonforSecondaryPhoneNumber()
+    {
+      return cy.get('#saveDetailsButton')
+    } 
+
+    getMySecondaryNumberEditLink () {
+      return cy.get('#editSecondaryPhoneLink')
+    }
+
+    getUpdatedMySecondaryNumber () {
+      return cy.get('#secondaryPhoneLabel')
+    }
+
+    getEmailAddressField () {
+      return cy.get('#emailLabel')
+    }
+
+    getContactNumber () {
+      return cy.get('#phoneLabel')
+    }
+
+    getEmailAddress () {
+      return cy.get('#emailLabel')
+    }
+
+}
+
   
   export const onMyAccountDetailsPage = new MyAccountDetailsPage()

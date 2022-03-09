@@ -52,7 +52,7 @@ TestFilter(["API", "B2C", "P1"], () => {
          shoppers[1].DateOfBirthInput = DOB
       cy.editPersonalDetails(shoppers[1]).then((response: any) => {
         expect(response.status).to.eq(400);
-        expect(response.body.ResponseStatus).to.have.property("Message", "Sorry an error has occurred. If you continue to receive these errors please contact our Customer Service Team on 1800 000 610"); 
+        expect(response.body.ResponseStatus).to.have.property("ErrorCode", "500"); 
 
       });
 
@@ -62,7 +62,7 @@ TestFilter(["API", "B2C", "P1"], () => {
     shoppers[1].DateOfBirthInput = "08/12/2025"
     cy.editPersonalDetails(shoppers[1]).then((response: any) => {
       expect(response.status).to.eq(400);
-      expect(response.body.ResponseStatus).to.have.property("Message", "Sorry an error has occurred. If you continue to receive these errors please contact our Customer Service Team on 1800 000 610"); 
+      expect(response.body.ResponseStatus).to.have.property("ErrorCode", "500"); 
   });
  });
 

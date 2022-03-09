@@ -12,3 +12,16 @@ Cypress.Commands.add('logoutViaUi', (shopper) => {
 
   cy.url().should('eq', Cypress.config().baseUrl)
 })
+
+Cypress.Commands.add('logoutViaUi', (shopper) => {
+
+  if (shopper.platform === 'B2C') {
+    onHomePage.getB2BMyAccount().contains('My Account').click()
+  }else 
+    onHomePage.getMyAccount().contains('My Account').click()
+
+  onMyAccountPage.getLeftNavigationMenu().contains('Logout').click()
+
+  cy.url().should('eq', Cypress.config().baseUrl)
+})
+
