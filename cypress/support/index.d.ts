@@ -142,5 +142,7 @@ declare namespace Cypress {
     getDigitalPaymentInstruments(): any;
     getLinkedPayPalAccountInstrumentId(): any;
     getCountryOfOrigin(coolServiceData: Object): any;
+    navigateToMyAccountViaUi():any;
+    logoutViaUi():any;
   }
 }

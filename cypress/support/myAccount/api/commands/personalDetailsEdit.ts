@@ -1,4 +1,5 @@
   Cypress.Commands.add('editPersonalDetails', (personalDetails) => {
+    
     cy.api({ url: '/' }).then((response:any) => {
       expect(response.status).to.eq(200)
     })
