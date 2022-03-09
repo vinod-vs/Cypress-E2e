@@ -75,6 +75,7 @@ declare namespace Cypress {
     addGiftCardToAccount(giftCardRequest: any): any;
     getGCPaymentInstrumentId(giftCardPaymentResponse: any): any;
     zero(): any;
+    removeItem(unavailableItem: any): any;
     removeItems(unavailableItemsArr: any): any;
     orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
     cancelOrder(orderId: number): any;
@@ -112,11 +113,11 @@ declare namespace Cypress {
     wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
     checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
-    navigateToMyAccountViaUi(): any;
+    navigateToB2BMyAccountViaUi(): any;
     navigateToMyPaymentMethodsViaUi(): any;
     verifyMyPaymentMethodsPage(): any;
     verifyMyPaymentMethodsNotVisible(): any;
-    logoutViaUi(): any;
+    logoutViaUi(shopper: any): any;
     saveNewCreditCardViaUi(creditCard: any): any;
     deleteCreditCardViaUi(creditCard: any): any;
     subscribeToDUYearlyPersonal(userinfor: any): any;
@@ -134,23 +135,8 @@ declare namespace Cypress {
     subscribeToDUMonthlyBusiness(userinfor: any): any;
     subscribeToDUYearlyBusiness(userinfor: any): any;
     convertShortWeekDayToLong(shortWeekday: string): any;
-    verifyPersonalDetailsPageViaUi():any;
-    editFirstName(FirstName:any):any;
-    clickToEditName():any;
-    clickToEditDOB():any;
-    editLastName(LastName:any):any;
-    editDOB(DOB:any):any;
-    saveName():any;
-    saveDOB():any;
-    cancelNameChanges():any;
-    cancelDOBChanges():any;
-    validateNamesUpdation(FirstName:any,LastName:any):any;
-    validateTheSuccessMessage():any;
-    getDOB(DOB:any):any;
-    verifyBlankFirstNameErrorMessage():any;
-    verifyBlankLastNameErrorMessage():any;
-    verifyBlankDOBErrorMessage():any;
-    verifyIncorrectDOBErrorMessage(errType:any):any;
-
+    addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm: string, count: number): any;
+    removeUnavailableItemsFromTrolley(): any;
+    removeRestrictedItemsFromTrolley(): any;
   }
 }
