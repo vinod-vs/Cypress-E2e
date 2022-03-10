@@ -38,6 +38,13 @@ export class FMSWindowSelector {
     this.selectDayByKeyword('Tomorrow')
   }
 
+  selectLastDay () {
+    cy.get('.day-dropdown > option')
+      .last().then(dayOption => {
+        cy.wrap(dayOption).parent().select(dayOption.text())
+      })
+  }
+
   selectNextAvailableDay () {
     cy.get('.day-dropdown > option')
       .each(dayOption => {
