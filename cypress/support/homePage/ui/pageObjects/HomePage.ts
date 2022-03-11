@@ -4,7 +4,7 @@ export class HomePage {
     }
   
     getB2BMyAccount () {
-      return cy.get('#header-panel a.coreHeader-signupButton')
+      return cy.get('#header-panel a[href="/shop/myaccount/details"]')
     }
 
     getSearchHeader () {
