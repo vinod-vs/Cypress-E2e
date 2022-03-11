@@ -13,6 +13,7 @@
         "logoutEndpoint": "apis/ui/Logout",
         "signUpEndpoint": "apis/ui/signup",
         "productSearchEndpoint": "apis/ui/Search/products",
+        "browseCategoryendpoint": "apis/ui/browse/category",
         "addressEndpoint": "/apis/ui/address",
         "addressSearchEndpoint": "apis/ui/address/search",
         "storeLocatorEndpoint": "/apis/ui/StoreLocator/Suburbs",
@@ -94,7 +95,8 @@
         "editPersonalDetails": "/apis/ui/myaccount/PersonalDetails",
         "wowDispatchUpdateCompletedOrderApiKey": "NM04TQg7kV1P8f8jo2NYwOlh8q6sg1zI",
         "verifyEmailNotificationForPersonalDetailsEndPoint": "https://dxk8saae.uat.wx-d.net/notifications/razor?template=Shopper_PersonalDetailsUpdated&email=cypressAutomationTest%40yopmail.com",
-        "siteManagementUrl": "https://adminuatsite.woolworths.com.au/Manage"
+        "siteManagementUrl": "https://adminuatsite.woolworths.com.au/Manage",
+        "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,

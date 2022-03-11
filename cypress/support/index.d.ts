@@ -138,5 +138,11 @@ declare namespace Cypress {
     addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm: string, count: number): any;
     removeUnavailableItemsFromTrolley(): any;
     removeRestrictedItemsFromTrolley(): any;
+    payWithLinkedPaypalAccount(digitalPayment: any): any;
+    getDigitalPaymentInstruments(): any;
+    getLinkedPayPalAccountInstrumentId(): any;
+    getCountryOfOrigin(coolServiceData: Object): any;
+    navigateToMyAccountViaUi():any;
+    logoutViaUi():any;
   }
 }

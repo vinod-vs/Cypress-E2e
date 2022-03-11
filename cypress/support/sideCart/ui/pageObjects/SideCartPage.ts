@@ -163,7 +163,7 @@ export class SideCartPage {
   }
 
   closeSideCart () {
-    this.getCloseSideCartButton().click()
+    this.getCloseSideCartButton().click({force:true})
   }
 
   gotoCheckout () {
@@ -204,18 +204,24 @@ export class SideCartPage {
   removeAllItems () {
     cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
       if(result){
-        cy.get('.auto_group-restricted-location button.linkButton').click()
+        cy.get('.auto_group-restricted-location button.linkButton').click({multiple:true})
         cy.wait(500)
       }
     })
 
     cy.checkIfElementExists('.empty-cart-title').then((exist:boolean) => {
       if(!exist){
-        this.getClearEntireCartLink().click()
+        this.getClearEntireCartLink().click({force:true})
         this.getConfirmClearCartLink().click()
         cy.wait(500)
       }
     })
+  }
+
+  cleanupTrolley () {
+    this.openSideCart()
+    this.removeAllItems()
+    this.closeSideCart()
   }
   // #endregion
 
@@ -227,6 +233,20 @@ export class SideCartPage {
       .parents('.cart-item-details')
   }
   // #endregion
-}
+  
+  getAllRemoveItemButtonsForItemsUnderNotification () {
+    return cy.get('.notification-group').find('.cart-item-remove-button')
+  }
 
+  removeAllItemsUnderNotificationGroupsFromCart(){
+    onSideCartPage.getViewCartButton().click()
+    cy.wait(500)
+    cy.checkIfElementExists('.notification-group').then((existanceNG: boolean) => {
+      if(existanceNG===true){
+        onSideCartPage.getAllRemoveItemButtonsForItemsUnderNotification().click({ multiple: true })
+      }
+    })
+    onSideCartPage.getCloseSideCartButton().click()
+  }
+}
 export const onSideCartPage = new SideCartPage()

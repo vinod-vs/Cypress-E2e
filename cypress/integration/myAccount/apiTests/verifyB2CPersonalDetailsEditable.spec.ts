@@ -4,6 +4,7 @@ import shoppers from "../../../fixtures/myAccount/b2cShoppers.json";
 import TestFilter from "../../../support/TestFilter";
 import "../../../support/login/api/commands/login";
 import "../../../support/myAccount/api/commands/personalDetailsEdit";
+import '../../../support/utilities/ui/utility'
 
 const faker = require('faker/locale/en_AU')
 let FirstName:any = faker.name.firstName()
@@ -50,8 +51,8 @@ TestFilter(["API", "B2C", "P1"], () => {
     it("Date format apart from dd/mm/yyyy("+DOB+") or invalid date should throw error", () => {
          shoppers[1].DateOfBirthInput = DOB
       cy.editPersonalDetails(shoppers[1]).then((response: any) => {
-        expect(response.status).to.eq(405);
-        expect(response.body.ResponseStatus).to.have.property("Message", "An error has occurred in updating personal details: Invalid Date Of Birth"); 
+        expect(response.status).to.eq(400);
+        expect(response.body.ResponseStatus).to.have.property("ErrorCode", "500"); 
 
       });
 
@@ -60,8 +61,8 @@ TestFilter(["API", "B2C", "P1"], () => {
     it("Saving future DOB should throw error", () => {
     shoppers[1].DateOfBirthInput = "08/12/2025"
     cy.editPersonalDetails(shoppers[1]).then((response: any) => {
-      expect(response.status).to.eq(405);
-      expect(response.body.ResponseStatus).to.have.property("Message", "An error has occurred in updating personal details: Invalid Date Of Birth"); 
+      expect(response.status).to.eq(400);
+      expect(response.body.ResponseStatus).to.have.property("ErrorCode", "500"); 
   });
  });
 
@@ -73,8 +74,6 @@ TestFilter(["API", "B2C", "P1"], () => {
       expect(response.body).to.contain("Your account details have been updated.")
       expect(response.body).to.contain("Your personal details have been successfully updated. To view these details, visit 'Account Details' in your My Account.")
  
-
-
   });
 
   })

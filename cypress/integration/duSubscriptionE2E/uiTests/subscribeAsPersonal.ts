@@ -9,7 +9,7 @@ import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], () => {
+TestFilter(['B2C', 'UI', 'Delivery Unlimited Subscriptions - Personal', 'P0'], () => {
   describe('[UI] User who is less than 60 years old - Subscribe to Delivery unlimited', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
