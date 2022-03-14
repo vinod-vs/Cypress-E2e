@@ -6,6 +6,7 @@ Cypress.Commands.add('loginViaApi', (shopper) => {
     url: Cypress.env('loginEndpoint'),
     body: shopper
   }).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })
