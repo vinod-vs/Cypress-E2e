@@ -42,7 +42,7 @@ function serachForEDMproductWithCUPAndVerfiy (cupTestdata) {
   searchRequest.SearchTerm = cupTestdata.searchTerm
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
-    cy.searchEMProductAndStashTheResponse(response, cupTestdata,'CUP').then((response) => {
+    cy.searchEMProductAndStashTheResponse(response, cupTestdata, 'CUP').then((response) => {
       verifyCupValues(cupTestdata)
     })
   })
@@ -72,7 +72,7 @@ function returnCUPprice (cupTestdata) {
         break
       case 'length':
         adjustmentValue = adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata)
-        break       
+        break
       default:
         adjustmentValue = 1
     }
@@ -191,7 +191,7 @@ function verifyCupValues (cupTestdata) {
 
   // cup price
   expect(Number(cupTestdata.cupPrice)).to.be.equal(expCupPrice)
-  
+
   // hasCupPrice
   expect(cupTestdata.hasCupPrice).to.be.equal(true)
   // CupMeasure

@@ -95,11 +95,15 @@ TestFilter(['EDM', 'API'], () => {
           })
 
           // Get customers current reward points balance before dispatch
+          if (Cypress.env('marketRewardPointsValidationSwitch')) {
+            cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
           cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
             expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
             cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
           })
+        }
 
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.items[0].sellerName).then((response) => {
@@ -261,6 +265,9 @@ TestFilter(['EDM', 'API'], () => {
                     lib.verifyRefundDetails(testData.orderId, totalMarketRefundAmount, testData.edmDeliveryCharges)
 
                     // Verify the reward points are credited to customers card after EDM dispatch
+                    if (Cypress.env('marketRewardPointsValidationSwitch')) {
+                      cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
                     cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
                       testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
                       const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
@@ -271,6 +278,7 @@ TestFilter(['EDM', 'API'], () => {
                       cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
                       expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
                     })
+                  }
                     // Verify the events api
                     cy.orderEventsApiWithRetry(orderReference, {
                       function: function (response) {

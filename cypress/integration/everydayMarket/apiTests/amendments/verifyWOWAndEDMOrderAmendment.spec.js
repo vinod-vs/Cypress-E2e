@@ -42,7 +42,6 @@ TestFilter(['EDM', 'API'], () => {
       cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
 
-    
       cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
         req = {
           ...eventsRequest,
@@ -50,7 +49,7 @@ TestFilter(['EDM', 'API'], () => {
           orderId: confirmedOrder.Order.OrderId,
           orderReference: confirmedOrder.Order.OrderReference
         }
-        
+
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
             if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
@@ -101,7 +100,7 @@ TestFilter(['EDM', 'API'], () => {
             timeout: 10000
           }).as('eventsAfterAmendment')
         })
-        
+
         cy.all(
           cy.get('@invoiceIds'),
           cy.get('@confirmedAmendedTraderOrder')
@@ -125,12 +124,12 @@ TestFilter(['EDM', 'API'], () => {
           cy.get('@orderDataBeforeAmendment'),
           cy.get('@orderDataAfterAmendment'),
           cy.get('@eventsAfterAmendment')
-        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {  
+        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {
           // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
           expect({
             ...beforeData,
             orderId: amendedOrder.Order.OrderId
-          }).excludingEvery(['status','updatedTimeStampUtc','createdTimeStampUtc']).to.deep.equal(afterData)
+          }).excludingEvery(['status', 'updatedTimeStampUtc', 'createdTimeStampUtc']).to.deep.equal(afterData)
 
           // Validate EDM order events after amendment to have 'OrderPlaced' event
           lib.validateEvents(afterEvents, 'OrderPlaced', 2)

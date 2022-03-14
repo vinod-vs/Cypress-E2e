@@ -86,8 +86,12 @@ TestFilter(['EDM', 'API'], () => {
         })
 
         // Get reward points before we start dispatching/OOSing items via Marketplacer
-        cy.getRewardsCardDetails(rewards.partnerId, rewards.siteId, rewards.posId, rewards.loyaltySiteType, shopper.rewardsCardNumber)
-          .its('queryCardDetailsResp').its('pointBalance').as('rewardBalanceBefore')
+        if (Cypress.env('marketRewardPointsValidationSwitch')) {
+          cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
+          cy.getRewardsCardDetails(rewards.partnerId, rewards.siteId, rewards.posId, rewards.loyaltySiteType, shopper.rewardsCardNumber)
+            .its('queryCardDetailsResp').its('pointBalance').as('rewardBalanceBefore')
+        }
       })
 
       // Partial dispatch - dispatch 1 out of the 2 items via Marketplacer
@@ -189,18 +193,22 @@ TestFilter(['EDM', 'API'], () => {
             })
 
             // Validate rewards points to ensure points get accumulated for dispatched items only
-            cy.getRewardsCardDetails(rewards.partnerId, rewards.siteId, rewards.posId, rewards.loyaltySiteType, shopper.rewardsCardNumber)
-              .its('queryCardDetailsResp').its('pointBalance').as('rewardBalanceAfter')
+            if (Cypress.env('marketRewardPointsValidationSwitch')) {
+              cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
 
-            cy.all(
-              cy.get('@rewardBalanceBefore'),
-              cy.get('@rewardBalanceAfter'),
-              cy.get('@cancelledOrderProjection')
-            ).then(([before, after, cancelledOrderProjection]) => {
-              expect(after).to.be.greaterThan(before)
-              const expectedRewards = Math.floor(Number(before) + Number(cancelledOrderProjection.invoices[0].refunds[0].refundItems[0].amount))
-              expect(Number(after)).to.be.gte(Number(expectedRewards))
-            })
+              cy.getRewardsCardDetails(rewards.partnerId, rewards.siteId, rewards.posId, rewards.loyaltySiteType, shopper.rewardsCardNumber)
+                .its('queryCardDetailsResp').its('pointBalance').as('rewardBalanceAfter')
+
+              cy.all(
+                cy.get('@rewardBalanceBefore'),
+                cy.get('@rewardBalanceAfter'),
+                cy.get('@cancelledOrderProjection')
+              ).then(([before, after, cancelledOrderProjection]) => {
+                expect(after).to.be.greaterThan(before)
+                const expectedRewards = Math.floor(Number(before) + Number(cancelledOrderProjection.invoices[0].refunds[0].refundItems[0].amount))
+                expect(Number(after)).to.be.gte(Number(expectedRewards))
+              })
+            }
           })
       })
 

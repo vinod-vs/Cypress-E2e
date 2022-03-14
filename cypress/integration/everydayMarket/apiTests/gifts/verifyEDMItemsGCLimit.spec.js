@@ -77,8 +77,8 @@ TestFilter(['EDM', 'API', 'feature'], () => {
               throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Failed')
             }
           },
-          retries: 10,
-          timeout: 5000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).as('finalProjection').then((response) => {
           // Order details
           expect(response.orderId).to.equal(Number(orderId))
@@ -145,8 +145,8 @@ TestFilter(['EDM', 'API', 'feature'], () => {
                 throw new Error('Expected MarketOrderFailed event is not present')
               }
             },
-            retries: 15,
-            timeout: 5000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
             // Verify Market Order is Failed
             lib.verifyEventDetails(response, 'MarketOrderFailed', testData, shopperId, 1)
