@@ -10,7 +10,6 @@ import "../../../support/login/api/commands/login";
 import "../../../support/logout/api/commands/logout";
 import "../../../support/sideCart/api/commands/clearTrolley";
 import "../../../support/utilities/ui/utility";
-import { Console } from "console";
 
 TestFilter(["B2C", "API", "P0", "RTL"], () => {
   describe("[API] Verify the Product Tagging Service after boost and unboost RTL offers", () => {
