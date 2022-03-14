@@ -142,7 +142,11 @@ declare namespace Cypress {
     getDigitalPaymentInstruments(): any;
     getLinkedPayPalAccountInstrumentId(): any;
     getCountryOfOrigin(coolServiceData: Object): any;
+    getRtlOffers(rtlGetOffersData: Object): any;
+    patchRtlUnboost(rtlPatchData: Object): any;
     navigateToMyAccountViaUi():any;
     logoutViaUi():any;
+    productSearchByStockCode(rtlGetOffersData: Object):any
+    addToCart(rtlAddToCartData: Object):any
   }
 }

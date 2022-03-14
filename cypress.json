@@ -9,6 +9,9 @@
         "b2bDev": "https://dev-business.woolworths.com.au/",
         "b2bUat": "https://uat-atwork.woolworths.com.au/",
         "b2bProd": "https://atwork.woolworths.com.au/",
+        "productTaggingUat": "https://dxk8saae.uat.wx-d.net/producttagging-api/",
+        "productTaggingRtlOffersEndpoint": "api/v2/activeproducttag/rtl",
+        "ProductTaggingUnboostEndpoint": "api/v2/producttag",
         "loginEndpoint": "apis/ui/login/loginwithcredential",
         "logoutEndpoint": "apis/ui/Logout",
         "signUpEndpoint": "apis/ui/signup",
@@ -96,7 +99,8 @@
         "wowDispatchUpdateCompletedOrderApiKey": "NM04TQg7kV1P8f8jo2NYwOlh8q6sg1zI",
         "verifyEmailNotificationForPersonalDetailsEndPoint": "https://dxk8saae.uat.wx-d.net/notifications/razor?template=Shopper_PersonalDetailsUpdated&email=cypressAutomationTest%40yopmail.com",
         "siteManagementUrl": "https://adminuatsite.woolworths.com.au/Manage",
-        "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin"
+        "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin",
+        "productSearchByStockCodeEndpoint": "apis/ui/v2/Search/count"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,
