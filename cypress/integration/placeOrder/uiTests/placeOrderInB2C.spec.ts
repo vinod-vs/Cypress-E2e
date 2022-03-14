@@ -98,7 +98,18 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0'], () => {
       })
 
       cy.get<string>('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
-        onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
+
+        // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time, 
+        // if script selects same day window, the checkout page will show day of week of tomorrow but order confirmaiton page shows 'Tomorrow'
+        const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+        cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek : string) => {
+          if(expectedFulfilmentDay.includes(tomorrowDayOfWeek)){
+            onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', 'Tomorrow')
+          }
+          else{
+            onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
+          }
+        })
       })
 
       cy.get<string>('@expectedFulfilmentTime').then(expectedFulfilmentTime => {

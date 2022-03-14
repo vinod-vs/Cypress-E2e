@@ -155,7 +155,8 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
   cy.loginViaApiAndHandle2FA(shopperDetails)
 
   // Set fulfilment using the new /windows endpoint
-  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+  // cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, testData.address.search, windowType.FLEET_DELIVERY)
+  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, Cypress.env('commonAddressSearchTerm'), windowType.FLEET_DELIVERY)
 
   // clear the trolley before placing an order
   cy.clearTrolley().then((response) => {
@@ -386,8 +387,8 @@ Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchRespons
 
   for (y in response.Products) {
     if (response.Products[y].Products[0].Price !== null &&
-      response.Products[y].Products[0].IsInStock === true &&
-      response.Products[y].Products[0].IsMarketProduct === true) {
+            response.Products[y].Products[0].IsInStock === true &&
+            response.Products[y].Products[0].IsMarketProduct === true) {
       mpStockCode = response.Products[y].Products[0].Stockcode
       cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
       break

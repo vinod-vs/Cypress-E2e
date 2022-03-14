@@ -4,7 +4,7 @@ export class MyAccountPage {
   }
 
   getMyAccountHeaderLink () {
-    return cy.get('a#wx-link-login-desktop')
+    return cy.get('button#wx-link-login-desktop')
   }
 
   getDeliveryUnlimitedSideNavLink () {

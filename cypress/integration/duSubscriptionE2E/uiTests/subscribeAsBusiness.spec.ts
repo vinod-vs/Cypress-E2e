@@ -3,8 +3,8 @@
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/ui/commands/signUpUsers'
 import '../../../support/myAccount/ui/commands/myAccount'
-import '../../../support/duSubscription/ui/commands/subscribePersonalMothly'
-import '../../../support/duSubscription/ui/commands/subscribePersonalYearly'
+import '../../../support/duSubscription/ui/commands/subscribeMothly'
+import '../../../support/duSubscription/ui/commands/subscribeYearly'
 import '../../../support/utilities/ui/utility'
 import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 

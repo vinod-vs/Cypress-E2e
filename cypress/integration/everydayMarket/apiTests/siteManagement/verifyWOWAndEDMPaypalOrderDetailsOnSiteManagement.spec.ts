@@ -64,8 +64,8 @@ TestFilter(['EDM', 'EDM-HYBRID'], () => {
               );
             }
           },
-          retries: 10,
-          timeout: 5000,
+          retries: Cypress.env('marketApiRetryCount'),
+                        timeout: Cypress.env('marketApiTimeout')
         })
           .as("finalProjection")
           .then((response) => {
