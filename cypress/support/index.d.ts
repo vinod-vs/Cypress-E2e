@@ -142,6 +142,8 @@ declare namespace Cypress {
     getDigitalPaymentInstruments(): any;
     getLinkedPayPalAccountInstrumentId(): any;
     getCountryOfOrigin(coolServiceData: Object): any;
+    removeSavedCreditAndGiftCardsViaAPI(): void;
+    addGiftCardAndCompleteSplitPaymentOrderViaAPI(giftCard: any, giftCardAmount: number, splitPaymentRequest: any): void;
     navigateToMyAccountViaUi():any;
     logoutViaUi():any;
   }

@@ -136,8 +136,8 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
       })
     })
   }
-  cy.wrap(giftcardPaymentInstrumentIds).as('giftcardPaymentInstrumentIds')
   cy.log(giftcardPaymentInstrumentIds)
+  return cy.wrap(giftcardPaymentInstrumentIds).as('giftcardPaymentInstrumentIds') 
 })
 
 // This command is to make payment using giftcards only

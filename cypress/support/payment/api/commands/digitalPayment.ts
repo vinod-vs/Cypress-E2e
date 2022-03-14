@@ -30,14 +30,14 @@ Cypress.Commands.add('getDigitalPaymentInstruments', () => {
 })
 
 Cypress.Commands.add('removePaymentInstrument', (paymentInstrumentId: string | Cypress.Chainable) => {
-  cy.log("Deleting paymentInstrument" + paymentInstrumentId)
+  cy.log('Deleting paymentInstrument: ' + paymentInstrumentId)
   cy.request({
     method: 'POST',
     url: Cypress.env('deletePaymentInstrument'),
     body: {"paymentInstrumentId" : paymentInstrumentId},
     failOnStatusCode: false
   }).then((response) => {
-    if(response.body.Success!==true){
+    if (response.body.Success !== true) {
       cy.request({
         method: 'POST',
         url: Cypress.env('deletePaymentInstrument'),

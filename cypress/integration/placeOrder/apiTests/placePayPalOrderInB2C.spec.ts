@@ -21,6 +21,7 @@ TestFilter(['B2C', 'API', 'P1', 'Checkout', 'SPUD'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null})
       cy.loginViaApiAndHandle2FA(shopper.ppAccount1)
+      cy.removeSavedCreditAndGiftCardsViaAPI()
       cy.clearTrolley()
     })
   

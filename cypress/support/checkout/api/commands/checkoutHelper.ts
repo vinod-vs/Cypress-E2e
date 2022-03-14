@@ -77,4 +77,38 @@ Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
     
     return cy.wrap(orderId)
   })
-}) 
+})
+
+Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
+  let digitalPaymentInstruments: any = []
+
+  cy.getDigitalPaymentInstruments().then((instruments: any) => {
+    const creditCards = instruments.CreditCard.Instruments
+    cy.log('Number of Credit Cards to be removed is: ' + creditCards.length)
+
+    const giftCards = instruments.GiftCard.Instruments
+    cy.log('Number of Gift Cards to be removed is: ' + giftCards.length)
+
+    const cards = creditCards.concat(giftCards)
+    for (const card of cards) {
+      digitalPaymentInstruments.push(card.PaymentInstrumentId)
+    }
+
+    for (const instrument of digitalPaymentInstruments) {
+      cy.removePaymentInstrument(instrument)
+    }
+  })
+})
+
+Cypress.Commands.add('addGiftCardAndCompleteSplitPaymentOrderViaAPI', (giftCard, giftCardPaymentAmount, splitPaymentRequest) => {
+  // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
+  cy.addGiftCardToAccount(giftCard).then((response: any) => {
+    expect(response.status).to.eq(200)
+  }).then(() => {
+    cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(giftCardPaymentAmount).then((response: any) => {
+      expect(response, 'DigitalPay Gift Card Payment Instrument ID').to.not.be.null
+      splitPaymentRequest.payments[1].paymentInstrumentId = response
+    })
+    cy.placeOrderViaApiWithPaymentRequest(splitPaymentRequest)
+  })   
+})
