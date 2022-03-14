@@ -23,7 +23,7 @@ Cypress.Commands.add('signUpUser', (userinfo) => {
   onSignup.getLastName().type(userinfo.lastName)
   onSignup.getDateOfBirth().type(userinfo.dateOfBirth)
   onSignup.getContactNumber().type(userinfo.mobilePhone)
-
+  onSignup.getRewarsMemberNo().click()
   onSignup.getTermsAndConditions().click()
   onSignup.getSubmitButton().click()
 

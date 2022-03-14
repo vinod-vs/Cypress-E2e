@@ -20,7 +20,7 @@ declare namespace Cypress {
     creditcardTokenisation(cardDetails: any, sessionHeader: any): any;
     digitalPay(digiPayRequest: any): any;
     confirmOrder(orderDetails: any): any;
-    logOutViaApi(): void;
+    logOutViaApi(): Cypress.Chainable<string>;
     setSignUpDetails(): any;
     signUpViaApi(signUpDetails: any): any;
     signUpViaApiWith2FA(signUpDetails: any): any;
@@ -144,5 +144,10 @@ declare namespace Cypress {
     getCountryOfOrigin(coolServiceData: Object): any;
     navigateToMyAccountViaUi():any;
     logoutViaUi():any;
+    checkPlanEligibilityViaApi(value: any): any;
+    checkExistingPlanViaApi(value: any): any;
+    validateBillingAddressViaApi(): any;
+    payAndSubscribeViaApi(value: any): any;
+    writeTestDataUsed(filepath:string, signupdetails: any): any;
   }
 }

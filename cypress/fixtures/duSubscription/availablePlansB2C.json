@@ -32,5 +32,24 @@
             "SubscriberType":"senior"
 
         }
+    ],
+    "businessPlans":[
+        {
+            "PlanId": 14,
+            "ServiceType": "DeliverySaver",
+            "Name": "Any day, monthly subscription (B2B)",
+            "Price": 27,
+            "SubscriberType":"business"
+
+        },
+        {
+            "PlanId": 13,
+            "ServiceType": "DeliverySaver",
+            "Name": "Any day, annual subscription (B2B)",
+            "Price": 253,
+            "SubscriberType":"business"
+        }
+        
     ]
 }
+
