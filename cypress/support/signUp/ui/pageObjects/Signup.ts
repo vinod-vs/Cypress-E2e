@@ -96,6 +96,14 @@ export class Signup {
     return cy.get('#signupForm-promoCatalogue-no')
   }
 
+  getRewarsMemberYes () {
+    return cy.get('.button--large.signupForm-button.wow-col-6.yes')
+  }
+
+  getRewarsMemberNo () {
+    return cy.get('.button--large.no.signupForm-button.wow-col-6')
+  }
+
   getTermsAndConditions () {
     return cy.get('.signupForm-tsAndCs .checkbox-box')
   }

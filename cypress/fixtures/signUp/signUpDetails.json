@@ -12,9 +12,14 @@
   "typeOfDeliveryMethod":"DecideLater",
   "enableEmailVerificationFE":false,
   "oneTimePin": "",
+  "isBusinessPurchase":"",
   "abn": "",
   "businessType": "",
   "companyName": "",
   "jobTitle": "",
-  "numberOfEmployees": ""
+  "numberOfEmployees": "",
+  "shopperId": "",
+  "planId": "",
+  "planPrice": "",
+  "createdTime": ""
 }
