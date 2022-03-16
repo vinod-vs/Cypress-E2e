@@ -219,7 +219,7 @@
     "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"    
   },
   "GenericEMonlyProductTestData": {
-    "searchTerm": "automation",
+    "searchTerm": "treats",
     "quantity": 2
   },
   "GenericStockCodeSearch": {
@@ -231,7 +231,7 @@
     }   
   },
   "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
-    "searchTerm": "automation",
+    "searchTerm": "treats",
     "carrier": "Australia Post",
     "trackingNumber": "Automation:12345",
     "address": {

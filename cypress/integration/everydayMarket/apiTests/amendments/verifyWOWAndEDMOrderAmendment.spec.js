@@ -10,6 +10,7 @@ import '../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import '../../../../support/rewards/api/commands/rewards'
 import '../../../../support/refunds/api/commands/commands'
 import '../../../../support/orders/api/commands/amendOrder'
+import search from '../../../../fixtures/everydayMarket/search.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/validationHelpers'
 import * as commonLib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
@@ -25,7 +26,6 @@ TestFilter(['EDM', 'API'], () => {
     })
 
     it('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
-      const searchTerm = 'automation'
       const purchaseQty = 2
       let shopperId
       let req
@@ -39,7 +39,7 @@ TestFilter(['EDM', 'API'], () => {
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search
-      cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
+      cy.prepareAnySingleLineItemWowAndEdmOrder(search.searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
 
       cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
