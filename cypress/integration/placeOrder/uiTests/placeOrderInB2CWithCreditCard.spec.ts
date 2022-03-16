@@ -16,8 +16,8 @@ import creditcardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import TestFilter from '../../../support/TestFilter'
 
 
-TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0'], () => {
-  describe('[UI] Place an order by using credit card', () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
+  describe('[UI] Place orders by using credit card', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })

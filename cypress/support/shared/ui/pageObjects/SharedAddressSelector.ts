@@ -115,8 +115,9 @@ export class SharedAddressSelector{
 
     this.getSearchAddressResultList().each(resultOption => {
       const suggestedAddressText = resultOption.find('span').text().replace(/  /g, ' ').trim()
+      const trimmedAddressKeyword = addressKeyword.replace(/  /g, ' ').trim()
 
-      if (suggestedAddressText.toLowerCase().includes(addressKeyword.toLowerCase())) {
+      if (suggestedAddressText.toLowerCase().includes(trimmedAddressKeyword.toLowerCase())) {
         cy.wrap(resultOption).click()
         return false
       }
