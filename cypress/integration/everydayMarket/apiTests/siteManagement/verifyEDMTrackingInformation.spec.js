@@ -30,7 +30,7 @@ import "../../../../support/everydayMarket/ui/commands/siteManagementHelpers";
 import "../../../../support/everydayMarket/ui/commands/siteManagementValidationHelpers"
 import smLogins from '../../../../fixtures/siteManagement/loginDetails.json'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API','EDM-E2E-API'], () => {
     describe('[API] RP-5477 - EDM - Automatically capture any updates to the tracking information', () => {
       before(() => {
         cy.clearCookies({ domain: null })
