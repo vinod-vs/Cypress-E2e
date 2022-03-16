@@ -121,7 +121,7 @@ Cypress.Commands.add("validateOrderDetailsOnSM", (isMarketOnly) => {
               .should("contain", item.quantity);
             cy.get("@sellerDetailsTableAliasLocator")
               .find(
-                onOrderManagement.getCommonItemsTablePriceBeforeDiscountString()
+                onOrderManagement.getCommonItemsTableUnitPriceString()
               )
               .invoke("text")
               .should("contain", item.salePrice);
