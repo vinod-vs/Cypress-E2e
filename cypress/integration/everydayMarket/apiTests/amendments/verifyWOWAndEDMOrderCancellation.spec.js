@@ -23,7 +23,7 @@ import '../../../../support/orders/api/commands/cancelOrder'
 import tests from '../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5032 - Cancel grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -31,10 +31,10 @@ TestFilter(['EDM', 'API'], () => {
     })
 
     it('[API] RP-5032 - Cancel grocery order and verify Everyday Market order remains unchanged', () => {
-      const shopper = shoppers.emAccount3ForOrderAmendment
-      const shopperId = shoppers.emAccount3ForOrderAmendment.shopperId
+      const shopper = shoppers.emAccountWithRewards2
+      const shopperId = shoppers.emAccountWithRewards2.shopperId
       const testData = tests.GenericWOWPlusEDMPPPaymentTestData
-      const rewardsCardNumber = shoppers.emAccount3ForOrderAmendment.rewardsCardNumber
+      const rewardsCardNumber = shoppers.emAccountWithRewards2.rewardsCardNumber
       let orderId
       let orderReference
       let edmOrderId

@@ -22,10 +22,10 @@ import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import rewardsDetails from '../../../fixtures/everydayMarket/rewards.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5093 - Place Everyday Market only order using Paypal and Rewards dollars', () => {
     const testData = tests.VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD
-    const shopper = shoppers.emAccount2
+    const shopper = shoppers.emAccountWithRewards21
     const rewardsCardNumber = shopper.rewardsCardNumber
 
     before(() => {
@@ -52,7 +52,7 @@ TestFilter(['EDM', 'API'], () => {
       const shopperId = shopper.shopperId
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards21, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId

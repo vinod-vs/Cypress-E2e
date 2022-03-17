@@ -24,7 +24,7 @@ import '../../../../support/payment/api/commands/giftCard'
 import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API', 'feature'], () => {
+TestFilter(['EDM', 'API', 'feature', 'EDM-E2E-API'], () => {
   describe('[API] RP-5476  Verify Everyday Market Order more than 5000 cannot be placed using Gift cards', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -33,7 +33,7 @@ TestFilter(['EDM', 'API', 'feature'], () => {
 
     it('[API] RP-5476  Verify Everyday Market Order more than 5000 cannot be placed using Gift cards', () => {
       const testData = tests.VerifyEDMItemsGCLimit
-      const shopper = shoppers.emAccount2
+      const shopper = shoppers.emAccountWithRewards4
       const shopperId = shopper.shopperId
       let orderId
       let orderReference

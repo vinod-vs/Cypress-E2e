@@ -23,7 +23,7 @@ import tests from '../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 import { refundRequestInitiatorType } from '../../../../support/everydayMarket/common/refundRequestInitiatorType'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5218  Create Admin isntore return on full Everyday Market items invoice ', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -38,13 +38,13 @@ TestFilter(['EDM', 'API'], () => {
       let edmInvoiceId
       let encodedEdmInvoiceId
       let encodedEdmLineitemId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shoppers.emAccountWithRewards7.shopperId
+      const rewardsCardNumber = shoppers.emAccountWithRewards7.rewardsCardNumber
       let totalMarketRefundAmount
       const initiator = refundRequestInitiatorType.ADMIN
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards7, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId

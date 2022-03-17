@@ -18,7 +18,7 @@ import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 import * as refundsLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -30,7 +30,7 @@ TestFilter(['EDM', 'API'], () => {
       const dispatchQty = 1
       const cancelledQty = 1
       let req
-      const shopper = shoppers.emAccount2
+      const shopper = shoppers.emAccountWithRewards24
 
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApiAndHandle2FA(shopper)

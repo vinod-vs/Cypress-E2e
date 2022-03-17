@@ -21,7 +21,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5041 - Full cancellation of Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -36,11 +36,11 @@ TestFilter(['EDM', 'API'], () => {
       let edmInvoiceId
       let encodedEdmInvoiceId
       let encodedEdmLineitemId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shoppers.emAccountWithRewards17.shopperId
+      const rewardsCardNumber = shoppers.emAccountWithRewards17.rewardsCardNumber
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards17, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
