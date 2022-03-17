@@ -24,7 +24,7 @@ import * as lib from '../../../../support/everydayMarket/api/commands/commonHelp
 import shipment from '../../../../fixtures/everydayMarket/shipment.json'
 import { refundRequestInitiatorType } from '../../../../support/everydayMarket/common/refundRequestInitiatorType'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5215 - Instore Return On Partially Shipped Order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -38,8 +38,8 @@ TestFilter(['EDM', 'API'], () => {
       let orderReference
       let edmOrderId
       let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shoppers.emAccountWithRewards8.shopperId
+      const rewardsCardNumber = shoppers.emAccountWithRewards8.rewardsCardNumber
       let lineItemLegacyId
       const dispatchQty = 1
       let encodedInvoiceId
@@ -47,7 +47,7 @@ TestFilter(['EDM', 'API'], () => {
       const initiator = refundRequestInitiatorType.ADMIN
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards8, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId

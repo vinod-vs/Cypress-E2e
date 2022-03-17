@@ -11,7 +11,7 @@ import '../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import '../../../../support/orderPaymentService/api/commands/refunds'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5110 - EM | Refunds | Verify refunds happens to the right payment mode for market orders placed via CC + RD + GC', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -21,7 +21,7 @@ TestFilter(['EDM', 'API'], () => {
     it('RP-5110 - EM | Refunds | Verify refunds happens to the right payment mode for market orders placed via CC + RD + GC', () => {
       const purchaseQty = 5
       const cancelledQty = 5
-      const shopper = shoppers.emAccount2
+      const shopper = shoppers.emAccountWithRewards6
       const rewardsDollarsToRedeem = 10
       let req: any
 

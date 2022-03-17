@@ -20,7 +20,8 @@ Cypress.Commands.add('payWithLinkedPaypalAccount', (digitalPaymentRequest) => {
     expect(paymentInstruments.Paypal.Enabled).to.be.equal(true)
     expect(paymentInstruments.Paypal.Instruments.length).to.be.greaterThan(0)
 
-    const paypalPaymentInstruments = paymentInstruments.Paypal.Instruments.filter(instrument => instrument.Status === 'VERIFIED' && instrument.Allowed)
+    // const paypalPaymentInstruments = paymentInstruments.Paypal.Instruments.filter(instrument => instrument.Status === 'VERIFIED' && instrument.Allowed)
+    const paypalPaymentInstruments = paymentInstruments.Paypal.Instruments.filter(instrument => instrument.Allowed)
     cy.log('paypalPaymentInstruments: ' + JSON.stringify(paypalPaymentInstruments))
     expect(paypalPaymentInstruments).to.have.length(1)
     const paypalPaymentInstrumentId = paypalPaymentInstruments[0].PaymentInstrumentId

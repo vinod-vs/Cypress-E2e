@@ -32,7 +32,7 @@ TestFilter(['EDM', 'API', 'feature'], () => {
       const searchTerm = testData.searchTerm
       const quantity = testData.quantity
       const vendorNameExpected = testData.VendorName
-      const shopper = shoppers.emAccount2
+      const shopper = shoppers.emAccountWithRewards3
 
       // Login using shopper saved in the fixture
       cy.loginViaApiAndHandle2FA(shopper)

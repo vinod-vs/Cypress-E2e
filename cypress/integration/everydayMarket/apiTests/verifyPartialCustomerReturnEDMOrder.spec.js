@@ -22,7 +22,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5037 - Partial Customer Return Everyday Market order', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -37,11 +37,11 @@ TestFilter(['EDM', 'API'], () => {
       let orderReference
       let edmOrderId
       let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shoppers.emAccountWithRewards23.shopperId
+      const rewardsCardNumber = shoppers.emAccountWithRewards23.rewardsCardNumber
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards23, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
@@ -218,8 +218,8 @@ TestFilter(['EDM', 'API'], () => {
                 totalMarketRefundAmount = customerReturnResponse.refundAmount
 
                 /* After Return API Response, Invoke the Projection order api "​/api​/v1​/shoppers​/{shopperId}​/orders​/{orderId}" and Fetch the encoded ""marketRefundId"
-                                   And, Verify the EM Line Item Status as "ReturnInitiated" on Trader Website, https://marketk8saae.uat.wx-d.net/order-api/api/v1/shoppers/8409758/orders/140058427
-                                   Which will be used in the Post body of the "refundRequestReturn" to create a Refund */
+                                                   And, Verify the EM Line Item Status as "ReturnInitiated" on Trader Website, https://marketk8saae.uat.wx-d.net/order-api/api/v1/shoppers/8409758/orders/140058427
+                                                   Which will be used in the Post body of the "refundRequestReturn" to create a Refund */
 
                 cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
                   function: function (response) {

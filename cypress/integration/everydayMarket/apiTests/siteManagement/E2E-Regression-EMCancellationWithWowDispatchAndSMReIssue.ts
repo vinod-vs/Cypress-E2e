@@ -31,7 +31,7 @@ import eventsRequest from '../../../../fixtures/wowDispatch/wowDispatchDataPrep.
 import '../../../../support/wowDispatch/wowStatusUpdates'
 
 
-TestFilter(['EDM', 'EDM-HYBRID'], () => {
+TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   describe("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
     before(() => {
       cy.clearCookies({ domain: null });

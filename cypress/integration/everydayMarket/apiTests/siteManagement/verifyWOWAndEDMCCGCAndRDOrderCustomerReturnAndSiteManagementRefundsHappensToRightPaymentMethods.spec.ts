@@ -22,7 +22,7 @@ import "../../../../support/orderPaymentService/api/commands/refunds";
 import * as lib from "../../../../support/everydayMarket/api/commands/commonHelpers";
 import { onOrderManagement } from "../../../../support/siteManagement/ui/pageObjects/OrderManagement";
 
-TestFilter(["EDM", "EDM-HYBRID"], () => {
+TestFilter(["EDM", "EDM-HYBRID", 'EDM-E2E-HYBRID'], () => {
   describe("[API]  RP-5045 - EM | SM | Customer Self Service Return and CHUB Refund Mix scenarios for CC + RD + GC order", () => {
     before(() => {
       cy.clearCookies({ domain: null });
@@ -35,8 +35,8 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       let orderReference: any;
       let edmOrderId: any;
       let edmInvoiceId: any;
-      const shopperId = shoppers.emAccount2.shopperId;
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber;
+      const shopperId = shoppers.emAccountWithRewards9.shopperId;
+      const rewardsCardNumber = shoppers.emAccountWithRewards9.rewardsCardNumber;
       let refundReason = "Damaged Item";
       let refundComment = "Automation Refund Comment";
       let returnType = "Self-service returns";
@@ -55,7 +55,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
-        shoppers.emAccount2,
+        shoppers.emAemAccountWithRewards9ccount2,
         testData
       ).as("orderPlaced");
 

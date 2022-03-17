@@ -20,7 +20,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import TGA from '../../../fixtures/everydayMarket/advertWithTGAdetails.json'
 import searchRequest from '../../../fixtures/search/productSearch.json'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API]  RP-5043 | EM | Verify TGA details for a product', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -29,7 +29,7 @@ TestFilter(['EDM', 'API'], () => {
 
     it('[API]  RP-5043 | EM | Verify TGA details for a product', () => {
       cy.log('=====VERIFYING TGA DETAILS FOR PRODUCT:' + TGA.searchTerm + ' ========')
-      cy.loginViaApiAndHandle2FA(shoppers.emAccount2).then((response) => {
+      cy.loginViaApiAndHandle2FA(shoppers.emAccountWithRewards16).then((response) => {
         serachForEDMproductWithTGAAndVerfiy(TGA.searchTerm)
       })
     })

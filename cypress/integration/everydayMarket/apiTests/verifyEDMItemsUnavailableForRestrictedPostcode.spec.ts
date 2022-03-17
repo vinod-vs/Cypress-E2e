@@ -12,7 +12,7 @@ import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/sideCart/api/commands/viewTrolley'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5036 - EM | Verify Everyday Market items not available for restricted postcodes', () => {
     before(() => {
       cy.clearCookies({ domain: null })
