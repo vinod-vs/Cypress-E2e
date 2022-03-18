@@ -1,6 +1,6 @@
 {
   "ClassicProductPromotions": [{
-    "stockcode": 725090,
+    "stockcode": 134174,
     "SalePrice" :12,
     "Quantity":1
   },{
@@ -122,7 +122,7 @@
     "DollarOFF":4 
   }],
   "TigerOffers" : [{
-    "stockcode": 312270,
+    "stockcode": 77069,
     "minSpend" :5,
     "minQty":0.2,
     "TotalRewardsPointsEarned" :156
