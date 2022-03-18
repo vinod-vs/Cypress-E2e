@@ -23,7 +23,7 @@ import tests from '../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 import searchRequest from '../../../../fixtures/search/productSearch.json'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5152 - EM | Amend grocery order and verify Everyday Market products are not searchable and addable to cart', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -35,8 +35,8 @@ TestFilter(['EDM', 'API'], () => {
     })
 
     it('[API] RP-5152 - EM | Amend grocery order and verify Everyday Market products are not searchable and addable to cart', () => {
-      const shopper = shoppers.emAccount3ForOrderAmendment
-      const shopperId = shoppers.emAccount3ForOrderAmendment.shopperId
+      const shopper = shoppers.emAccountWithRewards1
+      const shopperId = shoppers.emAccountWithRewards1.shopperId
       const testData = tests.GenericWOWPlusEDMPPPaymentTestData
       let orderId
       let orderReference
@@ -81,7 +81,7 @@ TestFilter(['EDM', 'API'], () => {
         cy.orderEventsApiWithRetry(orderReference, {
           function: function (response) {
             if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-              !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
               cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
               throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
             }

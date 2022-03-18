@@ -21,7 +21,7 @@ import "../../../../support/rewards/api/commands/rewards";
 import "../../../../support/orderPaymentService/api/commands/refunds";
 import * as lib from "../../../../support/everydayMarket/api/commands/commonHelpers";
 
-TestFilter(["EDM", "EDM-HYBRID"], () => {
+TestFilter(["EDM", "EDM-HYBRID", 'EDM-E2E-HYBRID'], () => {
   describe("[API]  RP-5038 - EM | SM | Create CHUB refunds for Everyday Market items via Site Management + goodwill", () => {
     before(() => {
       cy.clearCookies({ domain: null });
@@ -34,15 +34,15 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       let orderReference: any;
       let edmOrderId: any;
       let edmInvoiceId: any;
-      const shopperId = shoppers.emAccount2.shopperId;
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber;
+      const shopperId = shoppers.emAccountWithRewards12.shopperId;
+      const rewardsCardNumber = shoppers.emAccountWithRewards12.rewardsCardNumber;
       let refundReason = "Damaged Item";
       let refundComment = "Automation Refund Comment";
       const goodwillAmount = 15;
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
-        shoppers.emAccount2,
+        shoppers.emAccountWithRewards12,
         testData
       ).as("orderPlaced");
 
@@ -542,7 +542,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
             ).to.not.be.null;
             expect(
               refundedProjection.invoices[0].refunds[0].refundItems[0].reason
-            ).equal("Market Payment");
+            ).equal("Damaged Item");
             expect(
               refundedProjection.invoices[0].refunds[0].refundItems[0].quantity
             ).equal(1);

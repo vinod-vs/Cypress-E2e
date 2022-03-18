@@ -6,13 +6,13 @@ import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import giftCard from '../../../fixtures/payment/giftCard.json'
 import splitPayment from '../../../fixtures/payment/splitCreditGiftCardPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
-import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import TestFilter from '../../../support/TestFilter'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/signUp/api/commands/signUp'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/fulfilment/api/commands/fulfilment'
+import '../../../support/sideCart/api/commands/clearTrolley'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/payment/api/commands/giftCard'
 import '../../../support/checkout/api/commands/navigateToCheckout'
@@ -21,26 +21,31 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/logout/api/commands/logout'
 import '../../../support/checkout/api/commands/checkoutHelper'
+import '../../../support/payment/api/commands/paypal'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
-  describe('[API]Place an order on B2C Platform via split payment (Credit Card & Gift Card)', () => {
+  describe('[API] Place an order on B2C Platform via split card payment', () => {
+    const searchTerm = 'Fish'
+    const trolleyThreshold = 50.0
+
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
-      cy.logOutViaApi()
     })
 
     it('Should place a split payment order via Credit Card & Gift Card', () => {
+      const giftCardPaymentAmount = 0.01
+
       cy.loginWithNewShopperViaApi()
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.CROWD_DELIVERY)
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
       cy.navigateToCheckout().then((response) => {
         cy.log('Balance To Pay is: ' + response.Model.Order.BalanceToPay)
 
-        splitPayment.payments[0].amount = response.Model.Order.BalanceToPay - 0.01
-        splitPayment.payments[1].amount = 0.01
+        splitPayment.payments[0].amount = response.Model.Order.BalanceToPay - giftCardPaymentAmount
+        splitPayment.payments[1].amount = giftCardPaymentAmount
       })
 
       cy.navigatingToCreditCardIframe().then((response) => {
@@ -48,39 +53,12 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response) => {
-        expect(response.status.responseText).to.be.eqls('ACCEPTED')
+        expect(response.status.responseText, 'Credit Card Tokenisation').to.be.eqls('ACCEPTED')
 
         splitPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
-      cy.addGiftCardToAccount(giftCard).then((response) => {
-        expect(response.status).to.eq(200)
-
-        splitPayment.payments[1].paymentInstrumentId = response.body.GiftCard.PaymentInstrumentId
-      })
-
-      cy.digitalPay(splitPayment).then((response) => {
-        if (response.PaymentResponses !== null) {
-          cy.get(response.PaymentResponses).each((instrument) => {
-            expect(instrument.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrument.PaymentInstrumentType).to.be.null
-          }).then(() => {
-            checkForOrderPlacementErrorsAndThrow(response).then(() => {
-              expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
-              expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
-                
-              confirmOrderParameter.placedOrderId = response.PlacedOrderId 
-            })
-          })
-        } else {
-          cy.checkForOrderPlacementErrorsAndThrow(response)
-        }       
-      })
-    
-      cy.confirmOrder(confirmOrderParameter).then((response) => {
-        expect(response.Order.OrderId, 'Order Placement Id').to.eqls(confirmOrderParameter.placedOrderId)
-
-        cy.log('This is the order id: ' + response.Order.OrderId) 
-      })
+      cy.addGiftCardAndCompleteSplitPaymentOrderViaAPI(giftCard, giftCardPaymentAmount, splitPayment)
     })
-  })
+  }) 
 })

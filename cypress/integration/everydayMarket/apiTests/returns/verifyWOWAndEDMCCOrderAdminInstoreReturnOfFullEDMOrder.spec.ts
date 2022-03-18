@@ -23,7 +23,7 @@ import tests from '../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 import { refundRequestInitiatorType } from '../../../../support/everydayMarket/common/refundRequestInitiatorType'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5218  Create Admin isntore return on full Everyday Market items invoice ', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -38,13 +38,13 @@ TestFilter(['EDM', 'API'], () => {
       let edmInvoiceId
       let encodedEdmInvoiceId
       let encodedEdmLineitemId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shoppers.emAccountWithRewards7.shopperId
+      const rewardsCardNumber = shoppers.emAccountWithRewards7.rewardsCardNumber
       let totalMarketRefundAmount
       const initiator = refundRequestInitiatorType.ADMIN
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards7, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
@@ -95,11 +95,15 @@ TestFilter(['EDM', 'API'], () => {
           })
 
           // Get customers current reward points balance before dispatch
+          if (Cypress.env('marketRewardPointsValidationSwitch')) {
+            cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
           cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
             expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
             testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
             cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
           })
+        }
 
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.items[0].sellerName).then((response) => {
@@ -261,6 +265,9 @@ TestFilter(['EDM', 'API'], () => {
                     lib.verifyRefundDetails(testData.orderId, totalMarketRefundAmount, testData.edmDeliveryCharges)
 
                     // Verify the reward points are credited to customers card after EDM dispatch
+                    if (Cypress.env('marketRewardPointsValidationSwitch')) {
+                      cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
                     cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
                       testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
                       const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
@@ -271,6 +278,7 @@ TestFilter(['EDM', 'API'], () => {
                       cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
                       expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
                     })
+                  }
                     // Verify the events api
                     cy.orderEventsApiWithRetry(orderReference, {
                       function: function (response) {

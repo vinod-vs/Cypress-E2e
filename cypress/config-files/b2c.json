@@ -1,9 +1,9 @@
 {
-    "baseUrl": "https://adminuatsite.woolworths.com.au/",
+    "baseUrl": "https://uatsite.woolworths.com.au/",
     "env": {
         "dev3": "https://wowguiaae.wowdevaae-ase.p.azurewebsites.net/",
         "dev4": "https://dev4site.woolworths.com.au/",
-        "b2cUat": "https://adminuatsite.woolworths.com.au/",
+        "b2cUat": "https://uatsite.woolworths.com.au/",
         "prod": "https://woolworths.com.au/",
         "uat": "https://uatsite.woolworths.com.au/",
         "b2cDiscoverPageEndPoint": "apis/ui/inspiration/navigation",
@@ -51,6 +51,7 @@
         "rocketMongoURI": "mongodb+srv://ordersdb-tests-user:nhayjFujzRYAt1Nt@uat-orders-0.7lxuc.mongodb.net/ordersdb?retryWrites=true&w=majority",
         "rocketMongoDB": "ordersdb",
         "rocketMongoDBCollection": "orders",
-        "b2cPlatform": "B2C"
+        "b2cPlatform": "B2C",
+        "siteAdminUat": "https://adminuatsite.woolworths.com.au/"
     }
 }

@@ -20,7 +20,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import cup from '../../../fixtures/everydayMarket/searchEDMitemWithCUP.json'
 import searchRequest from '../../../fixtures/search/productSearch.json'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API]  RP-5042 | EM | Verify CUP details for a product for measure type-Weight', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -30,7 +30,7 @@ TestFilter(['EDM', 'API'], () => {
     it('RP-5042 | EM | Verify CUP details for different measure type', () => {
       cup.forEach(cupdetails => {
         cy.log('=====VERIFYING CUP DETAILS FOR PRODUCT:' + cupdetails.searchTerm + ' ========')
-        cy.loginViaApiAndHandle2FA(shoppers.emAccount2).then((response) => {
+        cy.loginViaApiAndHandle2FA(shoppers.emAccountWithRewards14).then((response) => {
           serachForEDMproductWithCUPAndVerfiy(cupdetails)
         })
       })
@@ -42,7 +42,7 @@ function serachForEDMproductWithCUPAndVerfiy (cupTestdata) {
   searchRequest.SearchTerm = cupTestdata.searchTerm
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
-    cy.getEDMProductFromProductSearchResponse(response, cupTestdata).then((response) => {
+    cy.searchEMProductAndStashTheResponse(response, cupTestdata, 'CUP').then((response) => {
       verifyCupValues(cupTestdata)
     })
   })
@@ -72,7 +72,7 @@ function returnCUPprice (cupTestdata) {
         break
       case 'length':
         adjustmentValue = adjustItemsizeToComparativeSizeForDiffLengthComb(cupTestdata)
-        break       
+        break
       default:
         adjustmentValue = 1
     }
@@ -191,7 +191,7 @@ function verifyCupValues (cupTestdata) {
 
   // cup price
   expect(Number(cupTestdata.cupPrice)).to.be.equal(expCupPrice)
-  
+
   // hasCupPrice
   expect(cupTestdata.hasCupPrice).to.be.equal(true)
   // CupMeasure

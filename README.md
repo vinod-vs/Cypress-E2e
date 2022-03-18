@@ -113,3 +113,10 @@ For your email related test, you might want
     })
 More info: [How to test email and SMS with Cypress] (https://mailosaur.com/docs/frameworks-and-tools/cypress/)
 
+# Preserve cookies
+ 1. for personal details api, we need to pass the below cookies   which expires after a certain period of time.   
+       "INGRESSCOOKIE"
+        "w-8484730-uldtvc"
+        "w-loggedin"
+  2. Preserve the cookies in the test case   
+

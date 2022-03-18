@@ -2,15 +2,16 @@
 
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/signUp/ui/commands/signUpUsers'
-import '../../../support/duSubscription/ui/commands/subscribePersonalMothly'
-import '../../../support/duSubscription/ui/commands/subscribePersonalYearly'
+import '../../../support/myAccount/ui/commands/myAccount'
+import '../../../support/duSubscription/ui/commands/subscribeMothly'
+import '../../../support/duSubscription/ui/commands/subscribeYearly'
 import '../../../support/utilities/ui/utility'
 import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], () => {
-  describe('[UI] User who is less than 60 years old - Subscribe to Delivery unlimited', () => {
+TestFilter(['B2C', 'UI', 'Delivery Unlimited Subscriptions - Business', 'P0'], () => {
+  describe('[UI] Business user - Subscribe to Delivery unlimited', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
@@ -19,7 +20,7 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
   
     })
 
-    it('Subscribe to Delivery Unlimited monthly plan - Age less than 60', () => {
+    it('Subscribe to Delivery Unlimited monthly plan - Business user', () => {
 
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
@@ -29,13 +30,13 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
       cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
       })
-
-      cy.signUpPersonalUser(signUpDetails)
-      cy.subscribeToDUMonthlyPersonal(signUpDetails)
-
+      signUpDetails.abn = "88000014675"
+      signUpDetails.companyName = "WOOLWORTHS GROUP LIMITED"
+      cy.signUpBusinessUser(signUpDetails)
+      cy.subscribeToDUMonthlyBusiness(signUpDetails)
     })
 
-    it('Subscribe to Delivery Unlimited yearly plan - Age less than 60', () => {
+    it('Subscribe to Delivery Unlimited yearly plan - Business user', () => {
 
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
@@ -45,9 +46,11 @@ TestFilter(['UI', 'B2C', 'Delivery Unlimited Subscriptions - Personal', 'P0'], (
       cy.getDOB('personal').then((value)=> {
           signUpDetails.dateOfBirth = value
       })
+      signUpDetails.abn = "88000014675"
+      signUpDetails.companyName = "WOOLWORTHS GROUP LIMITED"
 
-      cy.signUpPersonalUser(signUpDetails)
-      cy.subscribeToDUYearlyPersonal(signUpDetails)
+      cy.signUpBusinessUser(signUpDetails)
+      cy.subscribeToDUYearlyBusiness(signUpDetails)
 
     })
 

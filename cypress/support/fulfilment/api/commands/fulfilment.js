@@ -194,10 +194,20 @@ function selectRandomWindow (windowArr) {
   return cy.wrap(selectedWindow)
 }
 
+function formatFulfilmentLocationRequest(locationRequest) {
+  let location
+  if (typeof locationRequest === 'string') {
+    location = ({ search: locationRequest })
+  } else {
+    location = locationRequest // should already be formatted correctly as object
+  }
+  return location
+}
+
 Cypress.Commands.add('setFulfilmentLocationWithoutWindow', (fulType, fulfilmentLocation) => {
   switch (fulType) {
     case fulfilmentType.DELIVERY:
-      cy.searchDeliveryAddress({ search: fulfilmentLocation }).then(() => {
+      cy.searchDeliveryAddress(formatFulfilmentLocationRequest(fulfilmentLocation)).then(() => {
         cy.addDeliveryAddress()
       })
       break
@@ -212,7 +222,7 @@ Cypress.Commands.add('setFulfilmentLocationWithoutWindow', (fulType, fulfilmentL
 Cypress.Commands.add('setFulfilmentLocationWithWindow', (fulType, fulfilmentLocation, windowType) => {
   switch (fulType) { // set Fulfilment
     case fulfilmentType.DELIVERY:
-      cy.searchDeliveryAddress({ search: fulfilmentLocation }).then(() => {
+      cy.searchDeliveryAddress(formatFulfilmentLocationRequest(fulfilmentLocation)).then(() => {
         cy.addDeliveryAddress()
       })
       break

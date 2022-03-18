@@ -155,7 +155,8 @@ Cypress.Commands.add('loginAndPlaceRequiredOrderFromTestdata', (shopperDetails, 
   cy.loginViaApiAndHandle2FA(shopperDetails)
 
   // Set fulfilment using the new /windows endpoint
-  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+  // cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, testData.address.search, windowType.FLEET_DELIVERY)
+  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, Cypress.env('commonAddressSearchTerm'), windowType.FLEET_DELIVERY)
 
   // clear the trolley before placing an order
   cy.clearTrolley().then((response) => {
@@ -260,6 +261,33 @@ Cypress.Commands.add('payTheOrder', (testData) => {
         })
       })
       break
+    case paymentType.GIFTCARD_ONLY:
+
+      // Checkout
+      cy.navigateToCheckout().as('checkoutResponse').then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      })
+
+      // Pay with Gift Card
+      cy.get('@checkoutResponse').then((checkoutResponse) => {
+        const totalCartValue = checkoutResponse.Model.Order.BalanceToPay
+        cy.log('Total Cart Value is ' + totalCartValue)
+        // Generate multiple giftcards and get array of gift card paymentInstrumentIds
+        cy.generateGiftCards(totalCartValue)
+
+        cy.get('@giftcardPaymentInstrumentIds').then((giftcardPaymentInstrumentIds) => {
+          const payments = []
+          giftcardPaymentInstrumentIds.forEach(paymentInstrument => {
+            payments.push({ amount: paymentInstrument.amount, paymentInstrumentId: paymentInstrument.InstrumentId, stepUpToken: 'tokenise-stepup-token' })
+          })
+
+          digitalPaymentRequest.payments = payments
+          cy.log('payments: ' + JSON.stringify(payments))
+          cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
+          cy.payWithGiftCard(digitalPaymentRequest).as('paymentResponse')
+        })
+      })
+      break
     default: // default is CREDIT_CARD_ONLY
       cy.payByCreditCard(true)
       break
@@ -352,36 +380,47 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
   })
 })
 
-Cypress.Commands.add('getEDMProductFromProductSearchResponse', (productSearchResponse, cupTestdata) => {
+Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchResponse, testdata, type) => {
   const response = productSearchResponse
-  // CUP Details
-  let cupPrice = new Number(0)
-  let cupMeasure
-  let hasCupPrice
-  let cupString
   let y
-
   let mpStockCode = 0
+
   for (y in response.Products) {
     if (response.Products[y].Products[0].Price !== null &&
             response.Products[y].Products[0].IsInStock === true &&
             response.Products[y].Products[0].IsMarketProduct === true) {
       mpStockCode = response.Products[y].Products[0].Stockcode
       cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
-      // CUP
+      break
+    }
+  }
+
+  switch (type) {
+    case 'CUP':
+
+      let cupPrice = new Number(0)
+      let cupMeasure
+      let hasCupPrice
+      let cupString
+
+      // CUP Details
       cupPrice = response.Products[y].Products[0].CupPrice
       cupMeasure = response.Products[y].Products[0].CupMeasure
       hasCupPrice = response.Products[y].Products[0].HasCupPrice
       cupString = response.Products[y].Products[0].CupString
-      break
-    }
-  }
-  expect(mpStockCode).to.be.greaterThan(0)
 
-  // setting cup details
-  cupTestdata.cupPrice = cupPrice
-  cupTestdata.cupMeasure = cupMeasure
-  cupTestdata.hasCupPrice = hasCupPrice
-  cupTestdata.cupString = cupString
-  cy.log('product: ' + cupTestdata.searchTerm + ' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
+      testdata.cupPrice = cupPrice
+      testdata.cupMeasure = cupMeasure
+      testdata.hasCupPrice = hasCupPrice
+      testdata.cupString = cupString
+      cy.log('product: ' + testdata.searchTerm + ' ,CupPrice: ' + cupPrice + ' , CupMeasure: ' + cupMeasure + ' , HasCupPrice: ' + hasCupPrice + ' ,CupString ' + cupString)
+      break
+    case 'TGA':
+      let productWarningsAct
+      // TGA
+      productWarningsAct = response.Products[y].Products[0].AdditionalAttributes.tgawarning
+      testdata.productWarningsAct = productWarningsAct
+      cy.log('productWarningsAct: ' + productWarningsAct)
+      break
+  }
 })

@@ -21,8 +21,8 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
-TestFilter(['EDM', 'API'], () => {
+const rewardsCardNumber = shoppers.emAccountWithRewards22.rewardsCardNumber
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5040 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -35,14 +35,14 @@ TestFilter(['EDM', 'API'], () => {
       let orderReference
       let edmOrderId
       let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
+      const shopperId = shoppers.emAccountWithRewards22.shopperId
       let lineItemLegacyId
       let trackingId1
       let trackingId2
       let partialDispatchNumber
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards22, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
@@ -60,8 +60,8 @@ TestFilter(['EDM', 'API'], () => {
               throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Placed')
             }
           },
-          retries: 10,
-          timeout: 5000
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
         }).then((response) => {
           edmOrderId = response.invoices[0].legacyIdFormatted
           edmInvoiceId = response.invoices[0].legacyId
@@ -76,24 +76,27 @@ TestFilter(['EDM', 'API'], () => {
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
                 cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
             },
-            retries: 15,
-            timeout: 5000
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
             lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
             lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
           })
 
           // Get customers current reward points balance before dispatch
-          cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
-          })
+          if (Cypress.env('marketRewardPointsValidationSwitch')) {
+            cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
 
+            cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+              expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+              testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+            })
+          }
           // Verify the MP and shipping invoices are available for the customer
           // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
@@ -166,8 +169,8 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
         }
       }
     },
-    retries: 10,
-    timeout: 5000
+    retries: Cypress.env('marketApiRetryCount'),
+    timeout: Cypress.env('marketApiTimeout')
   }).as('finalProjection').then((response) => {
     // Order details
     lib.verifyCommonOrderDetails(response, testData, shopperId)
@@ -243,22 +246,22 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
       function: function (response) {
         if (partialDispatchNumber === 1) {
           if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-            !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-            !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                        !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                        !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
             cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
             throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
           }
         } else {
           if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-            !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-            !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                        !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                        !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
             cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
             throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
           }
         }
       },
-      retries: 15,
-      timeout: 5000
+      retries: Cypress.env('marketApiRetryCount'),
+      timeout: Cypress.env('marketApiTimeout')
     }).then((response) => {
       if (partialDispatchNumber === 1) {
         // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
@@ -278,22 +281,26 @@ function verifyOrderProjectionDetails (shopperId, orderId, testData, trackingId,
     })
 
     // Verify the reward points are credited to customers card after EDM dispatch
-    cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-      testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-      const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
-      cy.log('Testdata JSON: ' + JSON.stringify(testData))
-      cy.log('EDM Total: ' + testData.edmTotal)
-      cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-      cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
-      expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-      // Rewards has a logic of rouding to an even number if odd
-      // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
-      if (partialDispatchNumber === 1) {
-        const expectedRewardsPtsPartialDispatch = Math.floor(expectedRewardsPoints - testData.items[0].pricePerItem)
-        expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPtsPartialDispatch)
-      } else {
-        expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
-      }
-    })
+    if (Cypress.env('marketRewardPointsValidationSwitch')) {
+      cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
+      cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+        testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
+        const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
+        cy.log('Testdata JSON: ' + JSON.stringify(testData))
+        cy.log('EDM Total: ' + testData.edmTotal)
+        cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+        cy.log('Expected New Rewards Balance: ' + Math.floor(expectedRewardsPoints) + ' , OR: ' + Number(Number(Math.round(expectedRewardsPoints + 1))))
+        expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+        // Rewards has a logic of rouding to an even number if odd
+        // expect(response.queryCardDetailsResp.pointBalance).to.be.equal(expectedRewardsPoints)
+        if (partialDispatchNumber === 1) {
+          const expectedRewardsPtsPartialDispatch = Math.floor(expectedRewardsPoints - testData.items[0].pricePerItem)
+          expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPtsPartialDispatch)
+        } else {
+          expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
+        }
+      })
+    }
   })
 }

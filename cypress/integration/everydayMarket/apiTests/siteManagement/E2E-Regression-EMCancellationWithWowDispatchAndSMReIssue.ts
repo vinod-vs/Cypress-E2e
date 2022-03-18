@@ -25,13 +25,13 @@ import '../../../../support/orders/api/commands/amendOrder'
 import * as lib from '../../../../support/everydayMarket/api/commands/validationHelpers'
 import * as commonLib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
-import wowDispatchData from '../../../../fixtures/everydayMarket/wowDispatch.json'
-import eventsRequest from '../../../../fixtures/everydayMarket/wowDispatchDataPrep.json'
+import wowDispatchData from '../../../../fixtures/wowDispatch/wowDispatch.json'
+import eventsRequest from '../../../../fixtures/wowDispatch/wowDispatchDataPrep.json'
 
-import '../../../../support/everydayMarket/api/commands/wowStatusUpdates'
+import '../../../../support/wowDispatch/wowStatusUpdates'
 
 
-TestFilter(['EDM', 'EDM-HYBRID'], () => {
+TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   describe("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
     before(() => {
       cy.clearCookies({ domain: null });
@@ -108,8 +108,7 @@ TestFilter(['EDM', 'EDM-HYBRID'], () => {
       // Now Calling WowDispatch'UpdateCompletedOrder'
       cy.wowDispatchUpdateCompletedOrder(req.shopperId , req.orderId, req.WoolworthsSubtotal, testData )
 
-      })   // cy.get('@confirmedTraderOrder').then((confirmedOrder)  - ENDS  //Replace OrderID  ShopperID  Total present in wowDispatch.json File with the https://uatsite.woolworths.com.au/apis/ui/Checkout/ConfirmOrder?OrderId=140103981
-          // req.orderId  signUpResp.ShopperId   WoolworthsSubtotal  API Response
+      })   
       
       // Now UI section to Perform the ReIssue from Site Management So, First Login to SM and verify the order details
       cy.get("@finalProjection").then((response) => {

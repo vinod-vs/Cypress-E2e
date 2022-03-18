@@ -2,7 +2,7 @@
   "lastName":"",
   "firstName":"",
   "emailAddress":"",
-  "password":"test1234",
+  "password":"Test1234",
   "agreeToTsAndCs":true,
   "idLikeToReceiveSmsTextsAboutProductsServicesAndPromotions":false,
   "idLikeToReceiveEmailsAboutProductsAndServices":false,
@@ -11,5 +11,15 @@
   "mobilePhone":"",
   "typeOfDeliveryMethod":"DecideLater",
   "enableEmailVerificationFE":false,
-  "oneTimePin": ""
+  "oneTimePin": "",
+  "isBusinessPurchase":"",
+  "abn": "",
+  "businessType": "",
+  "companyName": "",
+  "jobTitle": "",
+  "numberOfEmployees": "",
+  "shopperId": "",
+  "planId": "",
+  "planPrice": "",
+  "createdTime": ""
 }

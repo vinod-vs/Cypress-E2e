@@ -23,7 +23,7 @@ import '../../../../support/orders/api/commands/cancelOrder'
 import tests from '../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5032 - Cancel grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -31,10 +31,10 @@ TestFilter(['EDM', 'API'], () => {
     })
 
     it('[API] RP-5032 - Cancel grocery order and verify Everyday Market order remains unchanged', () => {
-      const shopper = shoppers.emAccount3ForOrderAmendment
-      const shopperId = shoppers.emAccount3ForOrderAmendment.shopperId
+      const shopper = shoppers.emAccountWithRewards2
+      const shopperId = shoppers.emAccountWithRewards2.shopperId
       const testData = tests.GenericWOWPlusEDMPPPaymentTestData
-      const rewardsCardNumber = shoppers.emAccount3ForOrderAmendment.rewardsCardNumber
+      const rewardsCardNumber = shoppers.emAccountWithRewards2.rewardsCardNumber
       let orderId
       let orderReference
       let edmOrderId
@@ -93,11 +93,15 @@ TestFilter(['EDM', 'API'], () => {
         })
 
         // Get customers current reward points balance before dispatch
-        cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-          expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-          testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
-          cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
-        })
+        if (Cypress.env('marketRewardPointsValidationSwitch')) {
+          cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
+          cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+            cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
+          })
+        }
 
         // Cancel the above created WOW order
         cy.cancelOrder(oldOrderId).as('cancelOrder')
@@ -194,17 +198,21 @@ TestFilter(['EDM', 'API'], () => {
           // Verify reward points are credited for dispatched items
           cy.get('@fullDispatchAnInvoice').then((fullDispatchAnInvoiceResponse) => {
             // Verify the reward points are credited to customers card after EDM dispatch
-            cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-              testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-              const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
-              cy.log('Testdata JSON: ' + JSON.stringify(testData))
-              cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-              cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints)
-              cy.log('Current Rewards Balance: ' + response.queryCardDetailsResp.pointBalance)
-              expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-              // Rewards has a logic of rouding to an even number if odd
-              expect(response.queryCardDetailsResp.pointBalance).to.be.gte(Number(expectedRewardsPoints))
-            })
+            if (Cypress.env('marketRewardPointsValidationSwitch')) {
+              cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
+              cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+                testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
+                const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
+                cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+                cy.log('Expected New Rewards Balance: ' + expectedRewardsPoints)
+                cy.log('Current Rewards Balance: ' + response.queryCardDetailsResp.pointBalance)
+                expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+                // Rewards has a logic of rouding to an even number if odd
+                expect(response.queryCardDetailsResp.pointBalance).to.be.gte(Number(expectedRewardsPoints))
+              })
+            }
           })
 
           // Verify invoices

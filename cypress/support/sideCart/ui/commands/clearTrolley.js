@@ -2,7 +2,7 @@ import { onHomePage } from '../../../homePage/ui/pageObjects//HomePage'
 import { onCheckoutPage } from '../../../checkout/ui/pageObjects/CheckoutPage'
 import { onSideCartPage } from '../../../sideCart/ui/pageObjects/SideCartPage'
 
-Cypress.Commands.add('clearTrolley', (shopper) => {
+Cypress.Commands.add('clearTrolleyViaUi', () => {
   // clear cart if required
   // open cart if it has >0 amount and clear it
   onHomePage.getCartAmount().then(function (cartElement) {
@@ -13,7 +13,7 @@ Cypress.Commands.add('clearTrolley', (shopper) => {
     } else {
       cy.log('Cart has some items.  Cart Value: ' + cartAmount + '. Removing them.')
       onSideCartPage.getViewCartButton().click()
-      onSideCartPage.getClearEntireCartLink().click()
+      onSideCartPage.getClearEntireCartLink().click({force: true})
       cy.wait(Cypress.config('oneSecondWait'))
       onSideCartPage.getConfirmClearCartLink().click()
       cy.wait(Cypress.config('oneSecondWait'))

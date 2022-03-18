@@ -1,7 +1,7 @@
 
 export class FMSRibbon {
   getHeaderFulfilmentSection () {
-    return cy.get('.header-fulfilment__section')
+    return cy.get('.header-fulfilment__section-content')
   }
 
   getHeaderFulfilmentSectionArrow () {
@@ -9,11 +9,11 @@ export class FMSRibbon {
   }
 
   getFMSRibbonAddressLink () {
-    return this.getHeaderFulfilmentSection().find('a').eq(0)
+    return this.getHeaderFulfilmentSection().find('.header-fulfilment__active-message').eq(0)
   }
 
   getFMSRibbonWindowLink () {
-    return this.getHeaderFulfilmentSection().find('a').eq(1)
+    return this.getHeaderFulfilmentSection().find('.header-fulfilment__active-message').eq(1)
   }
 
   getFMSRibbonChangeAddressButton () {

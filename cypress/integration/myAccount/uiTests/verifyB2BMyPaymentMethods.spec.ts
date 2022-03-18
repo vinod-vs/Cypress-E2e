@@ -20,7 +20,7 @@ TestFilter(["B2B", "UI", "P0"], () => {
       // Login
       cy.loginViaUi(shoppers[0]);
       //Navigate to My account
-      cy.navigateToMyAccountViaUi();
+      cy.navigateToB2BMyAccountViaUi();
       //Navigate to 'My Payments Methods' page
       cy.navigateToMyPaymentMethodsViaUi();
       //Verify details on 'My Payments Methods' page
@@ -29,17 +29,17 @@ TestFilter(["B2B", "UI", "P0"], () => {
       cy.saveNewCreditCardViaUi(creditCard);
       //Delete credit card
       cy.deleteCreditCardViaUi(creditCard);
-      cy.logoutViaUi();
+      cy.logoutViaUi(shoppers[0]);
     });
 
     it("My Payment methods not display for B2B shopper who is only eligible for Open pay payments", () => {
       // Login as shopper who's not eligible for credit card payments
       cy.loginViaUi(shoppers[1]);
       //Navigate to My account
-      cy.navigateToMyAccountViaUi();
+      cy.navigateToB2BMyAccountViaUi();
       //Verify 'My Payments Methods' not visible
       cy.verifyMyPaymentMethodsNotVisible();
-      cy.logoutViaUi();
+      cy.logoutViaUi(shoppers[0]);
     });
   });
 });

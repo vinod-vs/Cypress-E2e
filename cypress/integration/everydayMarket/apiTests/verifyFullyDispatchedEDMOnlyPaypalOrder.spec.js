@@ -22,7 +22,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5030 - Full dispatch Everyday Market Only order using paypal', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -35,11 +35,11 @@ TestFilter(['EDM', 'API'], () => {
       let orderReference
       let edmOrderId
       let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shoppers.emAccountWithRewards20.shopperId
+      const rewardsCardNumber = shoppers.emAccountWithRewards20.rewardsCardNumber
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards20, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
@@ -72,7 +72,7 @@ TestFilter(['EDM', 'API'], () => {
           cy.orderEventsApiWithRetry(orderReference, {
             function: function (response) {
               if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+                                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
                 cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
                 throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
               }
@@ -89,11 +89,15 @@ TestFilter(['EDM', 'API'], () => {
           cy.verifyOrderInvoice(testData)
 
           // Get customers current reward points balance before dispatch
-          cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
-            cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
-          })
+          if (Cypress.env('marketRewardPointsValidationSwitch')) {
+            cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
+            cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+              expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+              testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+              cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
+            })
+          }
 
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.items[0].sellerName).then((response) => {
@@ -160,8 +164,8 @@ TestFilter(['EDM', 'API'], () => {
               cy.orderEventsApiWithRetry(orderReference, {
                 function: function (response) {
                   if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                                        !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                                        !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
                     cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                     throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
                   }
@@ -178,16 +182,20 @@ TestFilter(['EDM', 'API'], () => {
               })
 
               // Verify the reward points are credited to customers card after EDM dispatch
-              cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-                testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-                const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
-                cy.log('Testdata JSON: ' + JSON.stringify(testData))
-                cy.log('EDM Total: ' + testData.edmTotal)
-                cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
-                cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
-                expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
-              })
+              if (Cypress.env('marketRewardPointsValidationSwitch')) {
+                cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
+
+                cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+                  testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
+                  const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
+                  cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                  cy.log('EDM Total: ' + testData.edmTotal)
+                  cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+                  cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
+                  cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
+                  expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
+                })
+              }
 
               // Verify No refund details
               lib.verifyRefundDetails(testData.orderId, 0, 0)

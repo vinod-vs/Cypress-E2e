@@ -33,7 +33,7 @@ export class Signup {
   }
 
   getShoppingOnbehalfBusinessSelection () {
-    return cy.get('.signupForm-shoppingOfBusinessCheckBox .iconNoti-Confirmation_Tick_Thick')
+    return cy.get('.signupForm-shoppingOfBusinessCheckBox .checkbox-box')
   }
 
   getBusinessABN () {
@@ -50,6 +50,10 @@ export class Signup {
 
   getBusinessType () {
     return cy.get('select#shared-dropdown-input-0')
+  }
+
+  getBusinessTypeRetailService () {
+    return cy.get('select#shared-dropdown-input-0').select("Retail Service")
   }
 
   getJobTitle () {
@@ -92,12 +96,20 @@ export class Signup {
     return cy.get('#signupForm-promoCatalogue-no')
   }
 
+  getRewarsMemberYes () {
+    return cy.get('.button--large.signupForm-button.wow-col-6.yes')
+  }
+
+  getRewarsMemberNo () {
+    return cy.get('.button--large.no.signupForm-button.wow-col-6')
+  }
+
   getTermsAndConditions () {
     return cy.get('.signupForm-tsAndCs .checkbox-box')
   }
 
   getSubmitButton () {
-    return cy.get('shared-button > .full-width.l.m.mobile-full-width.success')
+    return cy.get('form#signupForm shared-button')
   }
 
   getCancelButton () {

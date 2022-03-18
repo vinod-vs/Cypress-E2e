@@ -13,6 +13,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
   private fulfilmentWindowSummary = 'wow-checkout-fulfilment-windows-summary';
   private fulfilmentDateSummaryText = '.delivery-date-summary-text';
   private fulfilmentDateTimeValue = '.auto_fulfilment-date-time';
+  private fulfilmentDateTimeSummaryTextDN = '.auto_express-date-time'
   private deliveryFeeSummaryNoDiscount = '.auto_delivery-fee-summary';
   private normalDeliveryFee = '.normal-fee';
   private saleFee = '.sale-fee';
@@ -144,8 +145,26 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @returns day of reserved window 
    */
   public getSummarisedFulfilmentDay(): Cypress.Chainable<string> {
-    return this.fulfilmentDaySummaryEl().invoke('text').then(($text) => {
-      return cy.removeDateOrdinals($text);
+    return cy.checkIfElementExists(this.fulfilmentDateTimeSummaryTextDN).then((result:boolean)=>{
+      if(result){
+        return ""
+      }
+      else{
+        this.fulfilmentDaySummaryEl().invoke('text').then(($text) => {
+          if(!$text.includes('Today') && !$text.includes('Tomorrow') && !$text.includes('In approx')){
+            cy.removeDateOrdinals($text).then((noOrdinals: any) => {
+              let shortWeekdayString = noOrdinals.substring(0, noOrdinals.indexOf(' '))
+              cy.convertShortWeekDayToLong(shortWeekdayString).then((longWeekdayString: any) => {
+                let str = longWeekdayString + ',' + noOrdinals.substring(noOrdinals.indexOf(' '))
+                return str.replace(' of', '')
+              })
+            })
+          }
+          else{
+            return $text
+          }   
+        })
+      }
     })
   }
 
@@ -156,10 +175,19 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @returns time of reserved window
    */
   public getSummarisedFulfilmentTime(): Cypress.Chainable<string> { 
-    return this.fulfilmentTimeSummaryEl().invoke('text').then(($text) => {
-      cy.removeNewLineCarriageReturn($text).then((noCr: any) => {
-        return noCr.split('between')[1].replace('and-', 'to').trim();
-      })
+    return cy.checkIfElementExists(this.fulfilmentDateTimeSummaryTextDN).then((result:boolean)=>{
+      if(result){
+        this.convertDNEstimateTimeTextToMinutes().then(estimatesMunites => {
+          return this.getEstimateDeliveryTimeForDN(estimatesMunites)
+        })
+      }
+      else{
+        return this.fulfilmentTimeSummaryEl().invoke('text').then(($text) => {
+          cy.removeNewLineCarriageReturn($text).then((noCr: any) => {
+            return noCr.split('between')[1].replace('and-', '-').trim();
+          })
+        })
+      }
     })
   }
 
@@ -389,6 +417,59 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
         return false;
       }
     })
+  }
+
+  public convertDNEstimateTimeTextToMinutes(): Cypress.Chainable<number>{
+    return cy.get(this.fulfilmentDateTimeSummaryTextDN).then(textElement => {
+      var hours = 0
+      var minutes = 0
+
+      if(textElement.text().includes('hr')){
+        hours = Number(textElement.text().charAt((textElement.text().indexOf('hr') - 1)))
+      }
+      if(textElement.text().includes('mins')){
+        minutes = Number(textElement.text().substring((textElement.text().indexOf('mins') - 2), textElement.text().indexOf('mins')))
+      }
+
+      return hours * 60 + minutes
+    })
+  }
+
+  private getEstimateDeliveryTimeForDN(estimateMinutes : number) : string {
+    var currentDate = new Date() //get current system date time.
+    var futureDateTime = new Date(currentDate.getTime() + estimateMinutes * 60000)
+
+    var estimateDeliveryTime = this.RoundUpDeliveryTime(futureDateTime)
+
+    //eg, 1:15:30 AM
+    const deliveryTimeStringArray = estimateDeliveryTime.toLocaleTimeString('en-US').split(':')
+    //eg, 1:15AM
+    const deliveryTimeString = deliveryTimeStringArray[0] + ":" + deliveryTimeStringArray[1] + deliveryTimeStringArray[2].substring(deliveryTimeStringArray[2].length - 2)
+
+    return deliveryTimeString
+  }
+
+  private RoundUpDeliveryTime(furtureDateTime: Date) : Date {
+    var minuteLastDigit = furtureDateTime.getMinutes().toString().charAt(1)
+    switch(minuteLastDigit){
+      case '0':
+      case '5':
+        return new Date(furtureDateTime.getTime() + 5 * 60000)
+      case '1':
+      case '6':
+        return new Date(furtureDateTime.getTime() + 4 * 60000)
+      case '2':
+      case '7':
+        return new Date(furtureDateTime.getTime() + 3 * 60000)
+      case '3':
+      case '8':
+        return new Date(furtureDateTime.getTime() + 2 * 60000)
+      case '4':
+      case '9':
+        return new Date(furtureDateTime.getTime() + 1 * 60000)
+      default:
+        return furtureDateTime
+    }
   }
 }
 

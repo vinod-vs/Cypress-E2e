@@ -1,10 +1,14 @@
 export class HomePage {
     getMyAccount () {
-      return cy.get('#header-panel a.coreHeader-signupButton')
+      return cy.get('#wx-link-login-desktop span.coreHeader-profile-text')
     }
   
+    getB2BMyAccount () {
+      return cy.get('#header-panel a[href="/shop/myaccount/details"]')
+    }
+
     getSearchHeader () {
-      return cy.get('#headerSearch')
+      return cy.get('.headerSearch-searchBox')
     }
   
     getClearSearchHeader () {
@@ -12,7 +16,7 @@ export class HomePage {
     }
   
     getCartAmount () {
-      return cy.get('.headerCheckout-orderAmount')
+      return cy.get('.orderAmount')
     }
   
     getListsLink () {
@@ -26,7 +30,22 @@ export class HomePage {
     getViewCartButton () {
         return cy.get('#viewCartPanel > .button')
     }
+    
+    getSecondCategoryMenuItem () {
+      return cy.get('.categoryHeader-navigation .categoryHeader-navigationLink:nth-child(2)')
+    }
   
+    getCategoryMenuItemLinks(){
+      return cy.get('.categoryHeader-navigation>a')
+    }
+    
+    getSubMenuItemLinks () {
+      return cy.get('.categoriesNavigation-list > li > a')
+    }
+  
+    getCartAmountInHeader () {
+      return cy.get('.orderAmount')
+    }
   }
   
   export const onHomePage = new HomePage()

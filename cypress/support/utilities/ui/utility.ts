@@ -5,13 +5,27 @@ Cypress.Commands.add('getTextFromElement', (element) => {
   })
 })
 
-Cypress.Commands.add('checkIfElementExists', (element) => {
+Cypress.Commands.add('checkIfElementExists', (elementLocatorString) => {
   cy.get('body').then($body => {
-    if ($body.find(element).length > 0) {
-      // cy.log('checkIfElementExists: Element: ' + element + ' , Exist: True')
+    if ($body.find(elementLocatorString).length > 0) {
       return true
     } else {
-      // cy.log('checkIfElementExists: Element: ' + element + ' , Exist: False')
+      return false
+    }
+  })
+})
+
+Cypress.Commands.add('checkIfElementVisible', (element) => {
+  cy.get("body").then($body => {
+    if ($body.find(element).length > 0) {   
+      cy.get(element).then($el => {
+        if ($el.is(':visible')){
+          return true
+        } else {
+          return false
+        }
+      })
+    } else {
       return false
     }
   })
@@ -57,6 +71,27 @@ Cypress.Commands.add('getDayOfWeek', (dateObject) => {
     ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek])
 })
 
+Cypress.Commands.add('convertShortWeekDayToLong', (shortWeekday) => {
+  switch(shortWeekday){
+    case 'Mon':
+      return 'Monday'
+    case 'Tue':
+      return 'Tuesday'
+    case 'Wed':
+      return 'Wednesday'
+    case 'Thu':
+      return 'Thursday'
+    case 'Fri':
+      return 'Friday'
+    case 'Sat':
+      return 'Saturday'
+    case 'Sun':
+      return 'Sunday'
+    default:
+      return shortWeekday
+  }
+})
+
 Cypress.Commands.add('generateRandomString', () => {
   let text = ''
   const alpha = 'abcdefghijklmnopqrstuvwxyz'
@@ -85,7 +120,7 @@ Cypress.Commands.add('removeNewLineCarriageReturn', (text) => {
 })
 
 Cypress.Commands.add('removeDateOrdinals', (text) => {
-  return text.replace('st|nd|rd|th', '')
+  return text.replace(/st|nd|rd|th/g, '')
 })
 
 

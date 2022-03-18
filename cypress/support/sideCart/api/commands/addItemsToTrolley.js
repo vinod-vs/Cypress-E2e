@@ -5,6 +5,7 @@ import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWo
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
   cy.request('POST', Cypress.env('addItemsToTrolleyEndpoint'), addItemsBody).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })
@@ -198,5 +199,28 @@ Cypress.Commands.add('addAvailableQuantityLimitedItemsToTrolley', (searchTerm, q
       // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
       // in the trolley request body fixture
       cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: productStockcode, Quantity: quantity })
+    })
+})
+
+Cypress.Commands.add('addEDMItemsBasedOnMinCartValueToTrolley', (testData) => {
+  // Search product by overriding the SearchTerm attribute in the search body request fixture
+  cy.productSearch({ ...searchRequestBody, SearchTerm: testData.searchTerm })
+    .then((searchResponse) => {
+      const product = searchResponse.Products
+      // Filter search results by IsAvailable = true
+        .filter(searchProduct => searchProduct.Products[0].IsAvailable)
+      // Pick the first result
+        .shift()
+      testData.stockcode = product.Products[0].Stockcode
+
+      // Add the product to the trolley and pass the quantity based on the total Price
+      const unitPrice = product.Products[0].Price
+      const minProductQuantity = Math.ceil(testData.minCartValue/unitPrice)
+      const finalQty = minProductQuantity + 10
+      const totalPrice = finalQty * unitPrice
+     
+      testData.sellerName = product.Products[0].AdditionalAttributes['Market.Seller_BusinessName']
+      cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: testData.stockcode, Quantity: finalQty })
+      cy.wrap(finalQty).as('finalQty')
     })
 })

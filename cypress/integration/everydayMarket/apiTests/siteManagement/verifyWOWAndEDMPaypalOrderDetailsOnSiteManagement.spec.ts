@@ -17,7 +17,7 @@ import "../../../../support/everydayMarket/ui/commands/siteManagementValidationH
 import tests from "../../../../fixtures/everydayMarket/apiTests.json";
 import smLogins from '../../../../fixtures/siteManagement/loginDetails.json'
 
-TestFilter(['EDM', 'EDM-HYBRID'], () => {
+TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   describe("[API]  RP-5339 - Create and WOW + EDM order and verify both the order details on SM", () => {
     before(() => {
       cy.clearCookies({ domain: null });
@@ -30,11 +30,11 @@ TestFilter(['EDM', 'EDM-HYBRID'], () => {
       let orderReference: any;
       let edmOrderId: any;
       let edmInvoiceId: any;
-      const shopperId = shoppers.emAccount2.shopperId;
+      const shopperId = shoppers.emAccountWithRewards11.shopperId;
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
-        shoppers.emAccount2,
+        shoppers.emAccountWithRewards11,
         testData
       ).then((response) => {
         orderId = response.Order.OrderId.toString();
@@ -64,8 +64,8 @@ TestFilter(['EDM', 'EDM-HYBRID'], () => {
               );
             }
           },
-          retries: 10,
-          timeout: 5000,
+          retries: Cypress.env('marketApiRetryCount'),
+                        timeout: Cypress.env('marketApiTimeout')
         })
           .as("finalProjection")
           .then((response) => {

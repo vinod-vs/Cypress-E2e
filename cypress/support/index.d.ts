@@ -20,7 +20,7 @@ declare namespace Cypress {
     creditcardTokenisation(cardDetails: any, sessionHeader: any): any;
     digitalPay(digiPayRequest: any): any;
     confirmOrder(orderDetails: any): any;
-    logOutViaApi(): void;
+    logOutViaApi(): Cypress.Chainable<string>;
     setSignUpDetails(): any;
     signUpViaApi(signUpDetails: any): any;
     signUpViaApiWith2FA(signUpDetails: any): any;
@@ -30,7 +30,7 @@ declare namespace Cypress {
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
     setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;
-    checkIfElementExists(element: any): any;
+    checkIfElementExists(elementLocatorString: any): any;
     selectRandomElement(): any;
     getBootstrapResponse(): any;
     getRandomAvailableWindowViaApi(addressId: string, areaId: string, suburbId: string, fulfilmentType: string, windowType: string): any;
@@ -59,7 +59,7 @@ declare namespace Cypress {
     getAllRefundPaymentsByRefundIdWithRetry(refundId: number, retryOptions: any): any;
     findCCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
-    removeDateOrdinals(text: string): string;
+    removeDateOrdinals(text: string): any;
     addAvailableRestrictedWowItemsToTrolley(type: string, count: number): void;
     loginViaUI(email: string, password: string): any;
     selectTopMenu(menuToSelect: string): any;
@@ -75,6 +75,7 @@ declare namespace Cypress {
     addGiftCardToAccount(giftCardRequest: any): any;
     getGCPaymentInstrumentId(giftCardPaymentResponse: any): any;
     zero(): any;
+    removeItem(unavailableItem: any): any;
     removeItems(unavailableItemsArr: any): any;
     orderEventsApiWithRetry(orderReference: string, retryOptions: RetryOptions): any;
     cancelOrder(orderId: number): any;
@@ -105,23 +106,56 @@ declare namespace Cypress {
     productSearch(searchRequest: any): any;
     loginViaApiAndHandle2FA(shopper: any): any;
     getDOB(type: string): Cypress.Chainable<string>;
-    signUpPersonalUser(signupdetails: any): any;
+    signUpUser(signupdetails: any): any;
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
     performReIssueOnWowOrderOnSM(isMarketOnly: boolean): any;
     wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
     checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
-    navigateToMyAccountViaUi(): any;
+    navigateToB2BMyAccountViaUi(): any;
     navigateToMyPaymentMethodsViaUi(): any;
     verifyMyPaymentMethodsPage(): any;
     verifyMyPaymentMethodsNotVisible(): any;
-    logoutViaUi(): any;
+    logoutViaUi(shopper: any): any;
     saveNewCreditCardViaUi(creditCard: any): any;
     deleteCreditCardViaUi(creditCard: any): any;
     subscribeToDUYearlyPersonal(userinfor: any): any;
     subscribeToDUMonthlySenior(userinfor: any): any;
     subscribeToDUYearlySenior(userinfor: any): any;
+    checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balance: any): any;
+    placeOrderViaApiWithPaymentRequest(request: any): Cypress.Chainable<number>;
     fetchProductDataOnPDP(searchTerm: any): any;
+    generateGiftCards(expectedGiftCardBalance: any): any;
+    payWithGiftCard(digitalPaymentRequest: any): any;
+    addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
+    editPersonalDetails(personalDetails: any): any;
+    verifyEmailNotificationForPersonalDetails():any
+    signUpBusinessUser(signupdetails: any): any;
+    subscribeToDUMonthlyBusiness(userinfor: any): any;
+    subscribeToDUYearlyBusiness(userinfor: any): any;
+    convertShortWeekDayToLong(shortWeekday: string): any;
+    addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm: string, count: number): any;
+    removeUnavailableItemsFromTrolley(): any;
+    removeRestrictedItemsFromTrolley(): any;
+    payWithLinkedPaypalAccount(digitalPayment: any): any;
+    getDigitalPaymentInstruments(): any;
+    getLinkedPayPalAccountInstrumentId(): any;
+    getCountryOfOrigin(coolServiceData: Object): any;
+    getRtlOffers(rtlGetOffersData: Object): any;
+    patchRtlUnboost(rtlPatchData: Object): any;
+    navigateToMyAccountViaUi():any;
+    logoutViaUi():any;
+    productSearchByStockCode(rtlGetOffersData: Object):any
+    addToCart(rtlAddToCartData: Object):any
+    removeSavedCreditAndGiftCardsViaAPI(): void;
+    addGiftCardAndCompleteSplitPaymentOrderViaAPI(giftCard: any, giftCardAmount: number, splitPaymentRequest: any): void;
+    navigateToMyAccountViaUi():any;
+    logoutViaUi():any;
+    checkPlanEligibilityViaApi(value: any): any;
+    checkExistingPlanViaApi(value: any): any;
+    validateBillingAddressViaApi(): any;
+    payAndSubscribeViaApi(value: any): any;
+    writeTestDataUsed(filepath:string, signupdetails: any): any;
   }
 }

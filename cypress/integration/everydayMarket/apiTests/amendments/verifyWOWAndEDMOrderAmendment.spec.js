@@ -10,10 +10,11 @@ import '../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import '../../../../support/rewards/api/commands/rewards'
 import '../../../../support/refunds/api/commands/commands'
 import '../../../../support/orders/api/commands/amendOrder'
+import search from '../../../../fixtures/everydayMarket/search.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/validationHelpers'
 import * as commonLib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -25,7 +26,6 @@ TestFilter(['EDM', 'API'], () => {
     })
 
     it('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
-      const searchTerm = 'automation'
       const purchaseQty = 2
       let shopperId
       let req
@@ -39,10 +39,9 @@ TestFilter(['EDM', 'API'], () => {
 
       // Place single line item EDM order with quantity = 2, using 'treats' as search term
       // and grab the first any available EDM item returned by search
-      cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
+      cy.prepareAnySingleLineItemWowAndEdmOrder(search.searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
 
-    
       cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
         req = {
           ...eventsRequest,
@@ -50,7 +49,7 @@ TestFilter(['EDM', 'API'], () => {
           orderId: confirmedOrder.Order.OrderId,
           orderReference: confirmedOrder.Order.OrderReference
         }
-        
+
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
             if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
@@ -101,7 +100,7 @@ TestFilter(['EDM', 'API'], () => {
             timeout: 10000
           }).as('eventsAfterAmendment')
         })
-        
+
         cy.all(
           cy.get('@invoiceIds'),
           cy.get('@confirmedAmendedTraderOrder')
@@ -125,12 +124,12 @@ TestFilter(['EDM', 'API'], () => {
           cy.get('@orderDataBeforeAmendment'),
           cy.get('@orderDataAfterAmendment'),
           cy.get('@eventsAfterAmendment')
-        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {  
+        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {
           // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
           expect({
             ...beforeData,
             orderId: amendedOrder.Order.OrderId
-          }).excludingEvery(['status','updatedTimeStampUtc','createdTimeStampUtc']).to.deep.equal(afterData)
+          }).excludingEvery(['status', 'updatedTimeStampUtc', 'createdTimeStampUtc']).to.deep.equal(afterData)
 
           // Validate EDM order events after amendment to have 'OrderPlaced' event
           lib.validateEvents(afterEvents, 'OrderPlaced', 2)

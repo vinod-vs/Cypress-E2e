@@ -17,7 +17,7 @@ import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5035 - EM | Verify Everyday Market items are available for delivery only', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -28,7 +28,7 @@ TestFilter(['EDM', 'API'], () => {
       const testData = tests.GenericEMonlyProductTestData
       const searchTerm = testData.searchTerm
       const quantity = testData.quantity
-      const shopper = shoppers.emAccount2
+      const shopper = shoppers.emAccountWithRewards15
 
       // Login using shopper saved in the fixture
       cy.loginViaApiAndHandle2FA(shopper)
