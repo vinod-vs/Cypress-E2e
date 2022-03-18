@@ -13,7 +13,8 @@
         "browserstackGenerateReport": "browserstack-cypress generate-report",
         "allure:open": "allure open",
         "allure:generate": "allure generate cypress/allure-results --clean",
-        "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open"
+        "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open",
+        "cy:parallel": "cypress-parallel -s cypress:run -m false"
     },
     "author": "Test Automation Atom|Autobots Chapter",
     "license": "ISC",
