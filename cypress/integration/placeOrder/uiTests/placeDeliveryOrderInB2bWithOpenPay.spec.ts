@@ -197,15 +197,6 @@ TestFilter(["B2B", "UI", "P0"], () => {
         "wow-checkout-fulfilment-summary.ng-star-inserted > p.ng-star-inserted"
       ).contains("Delivery to:");
 
-    
-
-      // cy.intercept({
-      //   method: "POST",
-      //   url: "https://woolworthsfoodgroup.tt.omtrdc.net/rest/v1/*",
-      // }).as("delivery");
-      // cy.wait("@delivery").should((xhr2) => {
-      //   expect(xhr2.response, "statusCode").is.not.null;
-      // });
 
       cy.intercept({
         method: "GET",
@@ -214,19 +205,6 @@ TestFilter(["B2B", "UI", "P0"], () => {
       cy.wait("@getPurchaseOrderCode").should((xhr) => {
         expect(xhr.response, "statusCode").is.not.null;
       });
-
-   
-
-      // cy.wait(10000);
-      // cy.intercept({
-      //   method: "GET",
-      //   url: "/apis/ui/*",
-      // }).as("checkout");
-      // cy.wait("@checkout").should((xhr) => {
-      //   expect(xhr.response, "statusCode").is.not.null;
-      // });
-
- 
 
       cy.get(
         "#checkout-timePanel > .panel > .ng-trigger > .panel-heading"
