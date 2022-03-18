@@ -11,6 +11,7 @@ import { add, has } from "cypress/types/lodash";
 import exp from "constants";
 import { text } from "stream/consumers";
 import { parseHTML } from "cypress/types/jquery";
+import { any } from "cypress/types/bluebird";
 
 TestFilter(["B2B", "UI", "P0"], () => {
   describe("[UI] My payment methods page for eligible B2B shoppers", () => {
@@ -181,8 +182,8 @@ TestFilter(["B2B", "UI", "P0"], () => {
       //click on checkout button
       cy.get(".cart-checkout-button > .button").click();
       cy.get(
-        "#checkout-fulfilmentPanel > .panel > .ng-trigger > .panel-heading > .panel-heading-text"
-      ).contains("Your groceries will be delivered to Armidale");
+        "wow-checkout-fulfilment-summary.ng-star-inserted > span.ng-star-inserted"
+      ).contains("Auto Reg All trading 101 - 101 Red street, ARMIDALE 2350");
 
       //When unavailable delivery window tile
       // cy.get('.unavailable-title').contains('We\'re sorry, Delivery windows are currently closed')
@@ -195,27 +196,45 @@ TestFilter(["B2B", "UI", "P0"], () => {
       cy.get(
         "wow-checkout-fulfilment-summary.ng-star-inserted > p.ng-star-inserted"
       ).contains("Delivery to:");
+
+    
+
+      // cy.intercept({
+      //   method: "POST",
+      //   url: "https://woolworthsfoodgroup.tt.omtrdc.net/rest/v1/*",
+      // }).as("delivery");
+      // cy.wait("@delivery").should((xhr2) => {
+      //   expect(xhr2.response, "statusCode").is.not.null;
+      // });
+
       cy.intercept({
-        method: "POST",
-        url: "https://woolworthsfoodgroup.tt.omtrdc.net/rest/v1/*",
-      }).as("delivery");
-      cy.wait("@delivery").should((xhr) => {
+        method: "GET",
+        url: Cypress.env('purchaseOrderCode'),
+      }).as("getPurchaseOrderCode");
+      cy.wait("@getPurchaseOrderCode").should((xhr) => {
         expect(xhr.response, "statusCode").is.not.null;
       });
-      //   cy.intercept({
-      //     method: "GET",
-      //     url: "/api/*",
-      //   }).as("window");
-      //   cy.wait("@window").should((xhr) => {
-      //     expect(xhr.response, "statusCode").is.not.null;
-      //   });
+
+   
+
+      // cy.wait(10000);
+      // cy.intercept({
+      //   method: "GET",
+      //   url: "/apis/ui/*",
+      // }).as("checkout");
+      // cy.wait("@checkout").should((xhr) => {
+      //   expect(xhr.response, "statusCode").is.not.null;
+      // });
+
+ 
+
       cy.get(
         "#checkout-timePanel > .panel > .ng-trigger > .panel-heading"
       ).then((el) => {
         const textBtn = el.contents().text();
         cy.log(textBtn);
-        if (textBtn.includes("You will receive it")) {
-          cy.contains("You will receive it").should("be.visible");
+        if (textBtn.includes("Delivery time")) {
+          cy.contains("Delivery time").should("be.visible");
           cy.get(
             ".wow-row > :nth-child(2) > :nth-child(1) > p.ng-star-inserted"
           ).contains(" Estimated time of delivery: ");
@@ -226,7 +245,7 @@ TestFilter(["B2B", "UI", "P0"], () => {
         "#checkout-timePanel > .panel > .ng-trigger > .panel-heading"
       ).then((body) => {
         const textBtn1 = body.contents().text();
-        if (textBtn1.includes("When suits you?")) {
+        if (textBtn1.includes("Select a time")) {
           cy.get("wow-time-slot-time button").each(($el) => {
             cy.wrap($el).click().should("have.attr", "aria-checked", "true");
 
@@ -309,63 +328,41 @@ TestFilter(["B2B", "UI", "P0"], () => {
       const fn = (el: any) => {
         return parseFloat(el.text().substring(1)).toFixed(2);
       };
+      const func = (el: any) => {
+        return parseFloat(`${el}`.substring(1));
+      };
 
-
-    //   function fn(element) {
-    //     return new Promise((resolve) => {
-    //       setTimeout(() => {
-    //         element.disabled = true
-    //         resolve()
-    //       }, 3000)
-    //     })
-    //   }
-      
-    //   cy.get('[data-cy=my-text-input]').then((textElements) => {
-    //     cy.wrap({ disableElementAsync }).invoke(
-    //       'disableElementAsync',
-    //       textElements[0]
-    //     )
-    //   })
-
-
+      const sumfn = (a: any, b: any) => {
+        return (a + b).toFixed(2);
+      };
 
       cy.get("#checkout-items-subtotal > .payment-amount")
         .should("be.visible")
         .then((subTotl) => {
-          //   const subTotalText = parseFloat(subTotl.text().substring(1));
-          //   cy.log(subTotalText);
-
-          //   const fn = () => {
-          //     return parseFloat(subTotl.text().substring(1)).toFixed(2);
-          //   };
-
           cy.wrap({ SubtlStringToNumfn: fn })
             .invoke("SubtlStringToNumfn", subTotl)
             .as("subTotl"); // true
 
           cy.get("@line1Price").then((line1Price) => {
-            // const line1PriceN = parseFloat(`${line1Price}`.substring(1));
-            // cy.log(line1PriceN);
-            cy.wrap({ Line1StringToNumfn: fn })
-            .invoke("Line1StringToNumfn", line1Price)
-           // .as("subTotl"); // true
-
+            cy.wrap({ Line1StringToNumfn: func }).invoke(
+              "Line1StringToNumfn",
+              line1Price
+            );
 
             cy.get("@line2Price").then((line2Price) => {
-              const line2PriceN = parseFloat(`${line2Price}`.substring(1));
-              cy.log(line2PriceN);
-
-              const subTtl = (line1PriceN + line2PriceN).toFixed(2);
+              cy.wrap({ Line2StringToNumfn: func }).invoke(
+                "Line2StringToNumfn",
+                line2Price
+              );
 
               cy.get("@subTotl").then((el) => {
-                expect(el).to.be.eq(subTtl);
+                cy.wrap({ SumOfAll: sumfn })
+                  .invoke("SumOfAll", func(line1Price), func(line2Price))
+                  .should("eq", el);
               });
             });
           });
         });
-
-
-
 
       //     });
       //   cy.get(".payment-breakdown > :nth-child(2) > .payment-title")
