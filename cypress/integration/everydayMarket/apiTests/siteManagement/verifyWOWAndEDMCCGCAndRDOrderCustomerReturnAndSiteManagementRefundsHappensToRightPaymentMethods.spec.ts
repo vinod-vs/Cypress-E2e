@@ -55,7 +55,7 @@ TestFilter(["EDM", "EDM-HYBRID", 'EDM-E2E-HYBRID'], () => {
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
-        shoppers.emAemAccountWithRewards9ccount2,
+        shoppers.emAccountWithRewards9,
         testData
       ).as("orderPlaced");
 
