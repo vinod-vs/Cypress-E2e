@@ -82,11 +82,11 @@ Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
 Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
   let digitalPaymentInstruments: any = []
 
-  cy.getDigitalPaymentInstruments().then((instruments: any) => {
-    const creditCards = instruments.CreditCard.Instruments
+  cy.getDigitalPaymentInstruments().then((response: any) => {
+    const creditCards = response.CreditCard.Instruments
     cy.log('Number of Credit Cards to be removed is: ' + creditCards.length)
 
-    const giftCards = instruments.GiftCard.Instruments
+    const giftCards = response.GiftCard.Instruments
     cy.log('Number of Gift Cards to be removed is: ' + giftCards.length)
 
     const cards = creditCards.concat(giftCards)
@@ -95,7 +95,9 @@ Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
     }
 
     for (const instrument of digitalPaymentInstruments) {
-      cy.removePaymentInstrument(instrument)
+      cy.removePaymentInstrument(instrument).then((response: any) => {
+        expect(response.Success, 'Removing Card Instrument').to.be.true
+      })
     }
   })
 })

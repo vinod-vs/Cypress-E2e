@@ -7,7 +7,8 @@ Cypress.Commands.add('addGiftCardToAccount', (cardRequest) => {
     url: Cypress.env('addGiftCardEndpoint'),
     body: cardRequest
   }).then((response) => {
-    return response
+    expect(response.status, 'Gift Card Addition status').to.eq(200)
+    return response.body
   })
 })
 

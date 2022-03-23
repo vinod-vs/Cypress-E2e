@@ -142,6 +142,7 @@ declare namespace Cypress {
     getDigitalPaymentInstruments(): any;
     getLinkedPayPalAccountInstrumentId(): any;
     getCountryOfOrigin(coolServiceData: Object): any;
+    removeSavedCreditAndGiftCardsViaAPI(): any;
     getRtlOffers(rtlGetOffersData: Object): any;
     patchRtlUnboost(rtlPatchData: Object): any;
     navigateToMyAccountViaUi():any;

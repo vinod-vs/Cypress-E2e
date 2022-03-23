@@ -11,6 +11,7 @@ Cypress.Commands.add('addCreditCardViaApi', (creditCardDetails) => {
       creditcardSessionId: urlSplit[urlSplit.length - 1]
     }
     cy.creditcardTokenisation(creditCardDetails, creditCardSessionHeader).then((response) => {
+      expect(response.status.responseCode, 'Credit Card initialisation response code').to.eql('00')
       return response.body
     })
   })
