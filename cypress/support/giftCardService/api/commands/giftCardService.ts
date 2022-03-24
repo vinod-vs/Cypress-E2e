@@ -9,7 +9,7 @@ Cypress.Commands.add("authorizeGiftingService", () => {
   cy.api({
     method: "POST",
     headers: {
-      "Content-Type": "application/json;charset=UTF-8 ",
+      "Content-Type": "application/json;charset=UTF-8",
       "DateAtClient": dateAtClient,
     },
     body: gifCardAuthorizeRequest,
@@ -31,7 +31,7 @@ Cypress.Commands.add("generateANewGiftCard", (giftCardAmount) => {
     cy.api({
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=UTF-8 ",
+        "Content-Type": "application/json;charset=UTF-8",
         "DateAtClient": dateAtClient,
         TransactionId: Number(Math.floor(Math.random() * 100000)),
       },

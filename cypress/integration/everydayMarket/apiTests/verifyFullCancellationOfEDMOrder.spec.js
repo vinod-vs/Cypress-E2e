@@ -108,9 +108,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
             // After Seller cancellation, Invoke the order api and verify the projection content is updated acordingly for refunds
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
               function: function (response) {
-                if (response.body.invoices[0].wowStatus !== 'SellerCancelled') {
-                  cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of SellerCancelled')
-                  throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of SellerCancelled')
+                if (response.body.invoices[0].wowStatus !== 'SellerCancelled' && response.body.invoices[0].invoiceStatus !== 'REFUNDED') {
+                  cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of SellerCancelled, invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
+                  throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of SellerCancelled, invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),

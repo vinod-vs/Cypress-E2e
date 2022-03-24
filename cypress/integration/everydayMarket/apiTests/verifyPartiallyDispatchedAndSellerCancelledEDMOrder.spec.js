@@ -161,16 +161,16 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
 
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
-                if (response.body.invoices[0].wowStatus !== 'Shipped') {
-                  cy.log('WOW status is not "Shipped" yet')
-                  throw new Error('Still not fully shipped yet')
+                if (response.body.invoices[0].wowStatus !== 'PartiallyShipped' && response.body.invoices[0].invoiceStatus !== 'REFUNDED') {
+                  cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of PartiallyShipped, invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
+                  throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of PartiallyShipped, invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
             }).as('cancelledOrderProjection').then((response) => {
               expect(response.invoices[0].invoiceStatus).is.equal('REFUNDED')
-              expect(response.invoices[0].wowStatus).is.equal('Shipped')
+              expect(response.invoices[0].wowStatus).is.equal('PartiallyShipped')
               // Validate line items
               expect(response.invoices[0].lineItems[0].refundableQuantity).is.equal(dispatchQty)
               // Validate refunds
