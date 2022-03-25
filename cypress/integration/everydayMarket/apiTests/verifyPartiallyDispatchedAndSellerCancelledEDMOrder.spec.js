@@ -161,9 +161,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
 
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
               function: function (response) {
-                if (response.body.invoices[0].wowStatus !== 'PartiallyShipped' && response.body.invoices[0].invoiceStatus !== 'REFUNDED') {
-                  cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of PartiallyShipped, invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
-                  throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of PartiallyShipped, invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
+                if (response.body.invoices[0].wowStatus !== 'Shipped') {
+                  cy.log('WOW status is not "Shipped" yet')
+                  throw new Error('Still not fully shipped yet')
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
