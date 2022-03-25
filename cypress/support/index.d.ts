@@ -109,7 +109,7 @@ declare namespace Cypress {
     signUpUser(signupdetails: any): any;
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
-    performReIssueOnWowOrderOnSM(isMarketOnly: boolean): any;
+    performReIssueOnWowOrderOnSM(): any;
     wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
     checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
