@@ -19,13 +19,13 @@ import * as lib from '../../../support/everydayMarket/api/commands/validationHel
 import * as refundsLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
-  describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+  describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order. {Failing because of BUG: MPPF-1450}', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+    it('RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order. {Failing because of BUG: MPPF-1450}', () => {
       const purchaseQty = 2
       const dispatchQty = 1
       const cancelledQty = 1
