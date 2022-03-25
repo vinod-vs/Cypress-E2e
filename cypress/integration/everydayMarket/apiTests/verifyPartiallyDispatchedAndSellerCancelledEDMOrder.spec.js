@@ -170,7 +170,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
               timeout: Cypress.env('marketApiTimeout')
             }).as('cancelledOrderProjection').then((response) => {
               expect(response.invoices[0].invoiceStatus).is.equal('REFUNDED')
-              expect(response.invoices[0].wowStatus).is.equal('PartiallyShipped')
+              expect(response.invoices[0].wowStatus).is.equal('Shipped')
               // Validate line items
               expect(response.invoices[0].lineItems[0].refundableQuantity).is.equal(dispatchQty)
               // Validate refunds
