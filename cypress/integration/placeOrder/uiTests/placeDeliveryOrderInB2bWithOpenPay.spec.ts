@@ -197,10 +197,9 @@ TestFilter(["B2B", "UI", "P0"], () => {
         "wow-checkout-fulfilment-summary.ng-star-inserted > p.ng-star-inserted"
       ).contains("Delivery to:");
 
-
       cy.intercept({
         method: "GET",
-        url: Cypress.env('purchaseOrderCode'),
+        url: Cypress.env("purchaseOrderCode"),
       }).as("getPurchaseOrderCode");
       cy.wait("@getPurchaseOrderCode").should((xhr) => {
         expect(xhr.response, "statusCode").is.not.null;
@@ -342,31 +341,29 @@ TestFilter(["B2B", "UI", "P0"], () => {
           });
         });
 
-      //     });
-      //   cy.get(".payment-breakdown > :nth-child(2) > .payment-title")
-      //     .should("be.visible")
-      //     .contains("Delivery fee");
-      //   cy.get(".payment-breakdown > :nth-child(2) > .payment-amount")
-      //     .should("be.visible")
-      //     .then((el) => {
-      //       const deliveryFee = el.text();
-      //       expect(el).to.be.eq(deliveryFee);
-      //     })
-      //     .then(() => {
-      //       cy.get("#checkout-items-subtotal > .payment-amount")
-      //         .should("be.visible")
-      //         .then((subTotl) => {
-      //           const subTotal = subTotl.text();
-      //           expect(subTotl).to.be.eq(subTotal);
-      //         });
-      //     });
+      cy.get(".payment-breakdown > :nth-child(2) > .payment-title")
+        .should("be.visible")
+        .contains("Delivery fee");
 
-      //   cy.get(".payment-breakdown > :nth-child(3) > .payment-title")
-      //     .should("be.visible")
-      //     .contains("Paper bag");
-      //   cy.get(".payment-breakdown > :nth-child(3) > .payment-amount")
-      //     .should("be.visible")
-      //     .contains("$0.00");
+      cy.get(".payment-breakdown > :nth-child(2) > .payment-amount")
+        .should("be.visible")
+        .then((delFee) => {
+          cy.get(".auto_delivery-fee-summary").then((el) => {
+            expect(delFee.text().trim()).to.be.eq(el.text().trim());
+          });
+        });
+
+
+        cy.get(".payment-breakdown > :nth-child(3) > .payment-title")
+          .should("be.visible")
+          .contains("Paper bag");
+        cy.get(".payment-breakdown > :nth-child(3) > .payment-amount")
+          .should("be.visible").then(packFree=>{
+            cy.get('.auto_packing-summary-cost').then(el=>{
+              expect(packFree.text().trim()).to.contain(el.text().trim())
+            })
+          })
+         
       //   cy.get(".payment-breakdown > :nth-child(5) > .payment-title")
       //     .should("be.visible")
       //     .contains("Total (incl. GST)");
