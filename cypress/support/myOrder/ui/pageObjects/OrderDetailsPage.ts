@@ -23,5 +23,22 @@ export class OrderDetailsPage {
          return cy.get('.fulfilment-details-panel').find('.cancelled-status')
      }
 
+     getChangeOrderButton(){
+        // return cy.get('.your-groceries-panel > .panel-heading').find('button.secondary')
+        return cy.get('.your-groceries-panel').find('button.secondary')
+     }
+     
+    getChangeMyOrderModal() {
+        return cy.get('.order-modal')
+    } 
+
+    getChangeMyOrderModalCheckbox() {
+        return this.getChangeMyOrderModal().find('[type="checkbox"]')
+    }
+
+    getChangeMyOrderModalButton(){
+        return cy.get('.checkbox-container.selected').parents('div').find('button.primary').eq(1)
+        }
+
 }
 export const onOrderDetailsPage = new OrderDetailsPage()
