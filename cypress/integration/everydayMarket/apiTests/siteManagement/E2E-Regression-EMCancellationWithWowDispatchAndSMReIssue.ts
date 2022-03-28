@@ -39,7 +39,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     });
 
     it("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
-      const searchTerm = 'everyday market'
+      const searchTerm = 'treats'   // 'everyday market'
       const purchaseQty = 2
       let shopperId: any;
       let req: any;

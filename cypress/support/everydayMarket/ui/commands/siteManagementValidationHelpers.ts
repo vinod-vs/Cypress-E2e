@@ -240,7 +240,7 @@ Cypress.Commands.add("performReIssueOnWowOrderOnSM", (isMarketOnly) => {
   //Verify Wow 'OrderStatus' is 'Dispatched' Under the "Woolworths Order" Tab
   onOrderManagement.getWOWTabOrderStatus().parent().invoke("text").should("contain", 'Dispatched');
 // Verify the Wow SubTotal-
-onOrderManagement.getWOWTabSubtotal().parent().invoke("text").should("contain", "56.37")
+onOrderManagement.getWOWTabSubtotal().parent().invoke("text").should("contain", "65.05")
 if(onOrderManagement.getWowLineItemsTable().find("td:nth-child(5)").contains('465135'))
     {
       cy.log("Compare the ReIssue 'ISS' CheckBox for the StockCode 465135")
