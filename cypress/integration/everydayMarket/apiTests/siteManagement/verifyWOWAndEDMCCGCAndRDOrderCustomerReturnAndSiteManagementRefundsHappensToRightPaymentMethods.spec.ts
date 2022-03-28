@@ -812,7 +812,7 @@ TestFilter(["EDM", "EDM-HYBRID", 'EDM-E2E-HYBRID'], () => {
             ).to.not.be.null;
             expect(
               refundedProjection.invoices[0].refunds[1].refundItems[0].reason
-            ).equal("Market Payment");
+            ).equal(refundReason);
             expect(
               refundedProjection.invoices[0].refunds[1].refundItems[0].quantity
             ).equal(1);
