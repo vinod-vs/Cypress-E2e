@@ -40,6 +40,7 @@
         "creditCardIframeEndpoint": "apis/ui/Checkout/DigitalPay/InitializeCreditCardIframe",
         "creditCardTokenisationEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
         "addGiftCardEndpoint": "apis/ui/Checkout/DigitalPay/GiftCard/Tokenize",
+        "unsavedGiftCardBalanceEndpoint":"apis/ui/Checkout/DigitalPay/UnsavedGiftCard/Balance",
         "digitalPaymentEndpoint": "apis/ui/Checkout/DigitalPay/Payment",
         "digitalPaymentInstrumentsEndpoint": "api/v3/ui/checkout/digitalpay/instruments",
         "payOrderZeroEndpoint": "/apis/ui/Checkout/PayOrder/Zero",

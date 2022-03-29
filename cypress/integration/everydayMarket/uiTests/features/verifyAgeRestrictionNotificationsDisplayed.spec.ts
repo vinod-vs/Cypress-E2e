@@ -45,7 +45,7 @@ TestFilter(['FEATURE', 'AGERESTRICTION'], () => {
       // Place the order
       cy.getExpectedCCCardDetails()
       cy.get('@creditCardToUse').then((cc) => {
-        onCheckoutPage.onCheckoutPaymentPanel.PayWithNewCreditCard(cc.aa, cc.dd, cc.ee, cc.bb)
+        onCheckoutPage.onCheckoutPaymentPanel.payWithNewCreditCard(cc.aa, cc.dd, cc.ee, cc.bb)
       })
 
       // Verify the restricted item notification is displayed on order confirmation page
