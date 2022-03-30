@@ -78,6 +78,17 @@ export class FMSWindowSelector {
     this.selectTimeSlotStartFromIndex(0, startTimeString, endTimeString)
   }
 
+  selectDeliveryNowTimeslot () {
+    cy.get('wow-time-slot-badges span').each(eachBadgeSpan => {
+      if(eachBadgeSpan.text() == 'Delivery Now'){
+        cy.intercept(Cypress.env('bootstrapEndpoint')).as('bootstrap');
+        cy.wrap(eachBadgeSpan).parents('.time-slot-badge-container').click()
+        cy.wait('@bootstrap');
+        return false;
+      }
+    })
+  }
+
   selectFirstTimeslot () {
     this.getAllTimeSlotList().first().find('input').check({ force: true })
     cy.wait(500)

@@ -22,7 +22,7 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5097  Create Everyday Market items self service return - completely returned by the customer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -35,12 +35,12 @@ TestFilter(['EDM', 'API'], () => {
       let orderReference
       let edmOrderId
       let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
+      const shopperId = shoppers.emAccountWithRewards18.shopperId
+      const rewardsCardNumber = shoppers.emAccountWithRewards18.rewardsCardNumber
       let totalMarketRefundAmount
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards18, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId

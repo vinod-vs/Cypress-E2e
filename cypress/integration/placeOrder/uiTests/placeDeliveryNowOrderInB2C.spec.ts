@@ -10,12 +10,12 @@ import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/Checkou
 import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage'
 import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage'
 import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
-import addressTestData from '../../../fixtures/checkout/addressSearch.json'
+import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import TestFilter from '../../../support/TestFilter'
 
 
-TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
-  describe('[UI] Place a delivery order by using Paypal', () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'DN'], () => {
+  describe('[UI] Place delivery now order by using Paypal', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null });
@@ -27,16 +27,16 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       onSideCartPage.cleanupTrolley();
     })
 
-    it('Place a delivery order with woolworths items', () => {
+    it('Place a delivery now order with woolworths items', () => {
       onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false});
 
       onFMSAddressSelector.getDeliveryTab().click();
       onFMSAddressSelector.getAddNewDeliveryAddressButton().click();
-      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search);
+      onFMSAddressSelector.searchForNewDeliveryAddress(addressSearchBody.searchDN);
       onFMSAddressSelector.getSaveAndContinueButton().click();
 
-      onFMSWindowSelector.selectNextAvailableDay();
-      onFMSWindowSelector.selectLastTimeslot();
+      onFMSWindowSelector.selectSameDay();
+      onFMSWindowSelector.selectDeliveryNowTimeslot();
       onFMSWindowSelector.getContinueShoppingButton().click();
 
       onHomePage.getSearchHeader().click();

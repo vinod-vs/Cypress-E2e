@@ -31,7 +31,7 @@ import eventsRequest from '../../../../fixtures/wowDispatch/wowDispatchDataPrep.
 import '../../../../support/wowDispatch/wowStatusUpdates'
 
 
-TestFilter(['EDM', 'EDM-HYBRID'], () => {
+TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   describe("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
     before(() => {
       cy.clearCookies({ domain: null });
@@ -39,7 +39,7 @@ TestFilter(['EDM', 'EDM-HYBRID'], () => {
     });
 
     it("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
-      const searchTerm = 'automation'
+      const searchTerm = 'treats'   // 'everyday market'
       const purchaseQty = 2
       let shopperId: any;
       let req: any;
@@ -114,12 +114,9 @@ TestFilter(['EDM', 'EDM-HYBRID'], () => {
       cy.get("@finalProjection").then((response) => {
        cy.loginToSMAndSearchOrder(smLogins, testData.OrderID)
        //Verify that Wow Order Status is displayed as 'Dispatched' under 'Woolworths orders' Tab
-       cy.performReIssueOnWowOrderOnSM(false);
-      });
-
-      // TO do - Code to Perform ReIssue from the SM UI using "Woolworths Orders" Tab
-
+       cy.performReIssueOnWowOrderOnSM() //Perform ReIssue from the SM UI using "Woolworths Orders" Tab
+      })
     
   })
-  });
-});
+  })
+})

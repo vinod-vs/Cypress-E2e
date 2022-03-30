@@ -150,17 +150,26 @@ export class CheckoutPaymentPanel{
     getGiftCardInstrumentToggleButton () {
         return cy.get('wow-gift-card-instruments .toggle-button')
     }
+
+    getNewGiftCardNumberTextbox () {
+        return cy.get('wow-gift-card-add-payment #newGiftCardNumber')
+    }
+
+    getNewGiftCardPinTextbox () {
+        return cy.get('wow-gift-card-add-payment #newGiftCardPin')
+    }
+
+    getNewGiftCardAmountTextBox() {
+        return cy.get('wow-gift-card-add-payment #newGiftCardAmount')
+    }
+
+    getNewGiftCardBalanceElement() {
+        return cy.get('wow-gift-card-add-payment #newGiftCardBalance')
+    }
     //#endregion
 
     //#region - general actions
-    AddNewCreditCardDetails (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
-        cy.iframe('.creditCardAdd-iframe').find('#card_number').type(cardNumber)
-        cy.iframe('.creditCardAdd-iframe').find('#expiry_month').type(expiryMonth)
-        cy.iframe('.creditCardAdd-iframe').find('#exp_year').type(expiryYear)
-        cy.iframe('.creditCardAdd-iframe').find('#cvv_csv').type(cvv)
-    }
-
-    PayWithNewCreditCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
+    inputNewCreditCardDetails (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
         cy.checkIfElementExists('.creditCards-add-button').then((exist:boolean) => {
             if(!exist){
                 this.getCreditCardInstrumentToggleButton().click()
@@ -169,11 +178,19 @@ export class CheckoutPaymentPanel{
                 this.getAddNewCreditCardButton().click()
             }
         })
-        this.AddNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
+
+        cy.iframe('.creditCardAdd-iframe').find('#card_number').type(cardNumber)
+        cy.iframe('.creditCardAdd-iframe').find('#expiry_month').type(expiryMonth)
+        cy.iframe('.creditCardAdd-iframe').find('#exp_year').type(expiryYear)
+        cy.iframe('.creditCardAdd-iframe').find('#cvv_csv').type(cvv)
+    }
+
+    payWithNewCreditCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
+        this.inputNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
         this.getPlaceOrderButton().click()
     }
 
-    PayWithExistingCreditCard (cardNumberLast4Digit: string, cvv: string) {
+    inputExistingCreditCardDetails(cardNumberLast4Digit: string, cvv: string){
         var iframeTitleSelectorString = '[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
         var getiframeTitleSelectorString = 'iframe[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
         cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText', { timeout: 10000 }).should('be.visible');
@@ -183,10 +200,14 @@ export class CheckoutPaymentPanel{
             }
         })
         cy.iframe(iframeTitleSelectorString).find('#cvv_csv').type(cvv)
+    }
+
+    payWithExistingCreditCard (cardNumberLast4Digit: string, cvv: string) {
+        this.inputExistingCreditCardDetails(cardNumberLast4Digit, cvv)
         this.getPlaceOrderButton().click()
     }
 
-    PayWithExistingPayPal () {
+    selectExistingPaypal () {
         this.getExistingPaypalInstrumentItem()
         .invoke('attr', 'class')
         .then(classValue => {
@@ -194,10 +215,57 @@ export class CheckoutPaymentPanel{
                 this.getExistingPaypalInstrumentItem().click()
             }   
         })
+    }
+
+    payWithExistingPayPal () {
+        this.selectExistingPaypal()
         this.getPlaceOrderButton().click()
     }
 
-    RedeemRewardsDollars (dollarAmount: number) {
+    inputNewGiftCardDetails(giftCardNumber: string, pin: string, amount: number) {
+        this.getGiftCardInstrumentToggleButton()
+        .invoke('attr', 'aria-pressed')
+        .then(attributeValue => {
+            if(attributeValue?.includes('false')){
+                this.getGiftCardInstrumentToggleButton().click()
+            }
+        })
+
+        cy.intercept(Cypress.env('unsavedGiftCardBalanceEndpoint')).as('checkNewGiftCardBalance')
+        this.getNewGiftCardNumberTextbox().type(giftCardNumber)
+        this.getNewGiftCardPinTextbox().type(pin)
+        cy.wait('@checkNewGiftCardBalance')
+
+        this.getNewGiftCardBalanceElement()
+        .should('not.be.disabled')
+        .then(element=> {
+            cy.wrap(element).find('div').then(availableBalanceEle => {
+                var balanceText = availableBalanceEle.text().substring(1)
+                expect(amount).not.greaterThan(Number(balanceText))
+            })
+        })
+
+        this.getNewGiftCardAmountTextBox().clear().type(String(amount))
+    }
+
+    payWithNewGiftCard (giftCardNumber: string, pin: string, amount: number) {
+        this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
+        this.getPlaceOrderButton().click()
+    }
+
+    splitPayWithNewCreditCardAndNewGiftCard(cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string, giftCardNumber: string, pin: string, amount: number){
+        this.inputNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
+        this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
+        this.getPlaceOrderButton().click()
+    }
+
+    splitPayWithExistingPaypalAndNewGiftCard(giftCardNumber: string, pin: string, amount: number){
+        this.selectExistingPaypal()
+        this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
+        this.getPlaceOrderButton().click()
+    }
+
+    redeemRewardsDollars (dollarAmount: number) {
         this.getRewardsDollarsToggleButton()
         .invoke('attr', 'aria-pressed')
         .then(attributeValue => {
@@ -215,7 +283,7 @@ export class CheckoutPaymentPanel{
         this.getRewardsDollarUseButton().click()
     }
 
-    AddPromoCode (promoCode: string) {
+    addPromoCode (promoCode: string) {
         this.getPromoCodeToggleButton()
         .invoke('attr', 'aria-pressed')
         .then(attributeValue => {

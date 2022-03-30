@@ -44,9 +44,11 @@ Cypress.Commands.add('removePaymentInstrument', (paymentInstrumentId: string | C
         body: {"paymentInstrumentId" : paymentInstrumentId},
         failOnStatusCode: false
       }).then((secondResponse) => {
-        expect(secondResponse.body.Success).to.be.equal(true)
-      })
+        expect(secondResponse.body.Success, 'Deleting Payment Instrument: ' + paymentInstrumentId).to.be.equal(true)
+        return secondResponse.body
+      })   
     }
+    return response.body
   })
 })
 

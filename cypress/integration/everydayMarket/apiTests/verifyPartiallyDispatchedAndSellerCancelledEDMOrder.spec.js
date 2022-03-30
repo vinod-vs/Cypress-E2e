@@ -18,19 +18,19 @@ import '../../../support/refunds/api/commands/commands'
 import * as lib from '../../../support/everydayMarket/api/commands/validationHelpers'
 import * as refundsLib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
-  describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
+  describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order. {Failing because of BUG: MPPF-1450}', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    it('RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order', () => {
+    it('RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order. {Failing because of BUG: MPPF-1450}', () => {
       const purchaseQty = 2
       const dispatchQty = 1
       const cancelledQty = 1
       let req
-      const shopper = shoppers.emAccount2
+      const shopper = shoppers.emAccountWithRewards24
 
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApiAndHandle2FA(shopper)

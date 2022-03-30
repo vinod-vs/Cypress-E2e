@@ -14,7 +14,7 @@ import search from '../../../../fixtures/everydayMarket/search.json'
 import * as lib from '../../../../support/everydayMarket/api/commands/validationHelpers'
 import * as commonLib from '../../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -98,45 +98,38 @@ TestFilter(['EDM', 'API'], () => {
             },
             retries: Cypress.env('marketApiRetryCount'),
             timeout: 10000
-          }).as('eventsAfterAmendment')
+          })
         })
 
-        cy.all(
-          cy.get('@invoiceIds'),
-          cy.get('@confirmedAmendedTraderOrder')
-        ).then(([invoiceIds, amendedOrder]) => {
-          cy.ordersApiByEdmInvoiceIdWithRetry(invoiceIds, {
-            function: function (response) {
-              if (response.body[0].orderId !== amendedOrder.Order.OrderId) {
-                cy.log('Order ID has not been updated with the latest order amendment ID')
-                throw new Error('Order ID has not been updated with the latest order amendment ID')
-              }
-            },
-            retries: Cypress.env('marketApiRetryCount'),
-            timeout: Cypress.env('marketApiTimeout')
-          }).as('orderDataAfterAmendment')
-        })
+        cy.get('@invoiceIds').then((invoiceIds) => {
+          cy.get('@confirmedAmendedTraderOrder').then((amendedOrder) => {
+            cy.ordersApiByEdmInvoiceIdWithRetry(invoiceIds, {
+              function: function (response) {
+                if (response.body[0].orderId !== amendedOrder.Order.OrderId) {
+                  cy.log('Order ID has not been updated with the latest order amendment ID')
+                  throw new Error('Order ID has not been updated with the latest order amendment ID')
+                }
+              },
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
+            }).as('orderDataAfterAmendment')
 
-        cy.get('@orderDataAfterAmendment').as('finalProjection')
+            cy.get('@orderDataAfterAmendment').as('finalProjection')
 
-        cy.all(
-          cy.get('@confirmedAmendedTraderOrder'),
-          cy.get('@orderDataBeforeAmendment'),
-          cy.get('@orderDataAfterAmendment'),
-          cy.get('@eventsAfterAmendment')
-        ).then(([amendedOrder, beforeData, afterData, afterEvents]) => {
-          // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
-          expect({
-            ...beforeData,
-            orderId: amendedOrder.Order.OrderId
-          }).excludingEvery(['status', 'updatedTimeStampUtc', 'createdTimeStampUtc']).to.deep.equal(afterData)
+            cy.get('@orderDataBeforeAmendment').then((beforeData) => {
+              cy.get('@orderDataAfterAmendment').then((afterData) => {
+                // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
+                expect({
+                  ...beforeData,
+                  orderId: amendedOrder.Order.OrderId
+                }).excludingEvery(['status', 'updatedTimeStampUtc', 'createdTimeStampUtc']).to.deep.equal(afterData)
 
-          // Validate EDM order events after amendment to have 'OrderPlaced' event
-          lib.validateEvents(afterEvents, 'OrderPlaced', 2)
-
-          // Invoke OQS TMO api and validate it against the projection
-          // New trader order will be in Received state, Will be an WOW + MP Order and will have all the WOW items in it. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
-          commonLib.verifyOQSOrderStatus(afterData.orderId, 'Received', false, null, false)
+                // Invoke OQS TMO api and validate it against the projection
+                // New trader order will be in Received state, Will be an WOW + MP Order and will have all the WOW items in it. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
+                commonLib.verifyOQSOrderStatus(afterData.orderId, 'Received', false, null, false)
+              })
+            })
+          })
         })
       })
     })

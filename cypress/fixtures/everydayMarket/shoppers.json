@@ -1,4 +1,7 @@
 {
+    "Old Deprecated Accounts": {
+        "comments": "These are the Old Deprecated Accounts. Please do not use them for any scenario."
+    },
     "emAccount1": {
         "email": "rjagadish+uat1@woolworths.com.au",
         "password": "testing123",
@@ -23,10 +26,224 @@
         "shopperId": "8457683",
         "platform": "B2C"
     },
+
+
+
+
+
+    "Features specific Accounts": {
+        "comments": "These are the Accounts used for specific scenarios."
+    },
     "emAccount4ForManic": {
         "email": "oray+manic1@woolworths.com.au",
         "password": "testing123",
         "shopperId": "8475479",
+        "platform": "B2C"
+    },
+
+
+
+
+
+    "New curently being used Accounts": {
+        "comments": "Newly created curently being used accounts for each e2e scenario. Going forward all scenarios must have their own accounts or use newAccount for every run."
+    },
+    "emAccountWithRewards1": {
+        "email": "rjagadishauto8@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401944,
+        "shopperId": "8517500",
+        "platform": "B2C"
+    },
+
+    "emAccountWithRewards2": {
+        "email": "rjagadishauto9@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401982,
+        "shopperId": "8517501",
+        "platform": "B2C"
+    },
+
+    "emAccountWithRewards3": {
+        "email": "rjagadishauto10@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125255226,
+        "shopperId": "8517502",
+        "platform": "B2C"
+    },
+
+    "emAccountWithRewards4": {
+        "email": "rjagadishauto11@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125255240,
+        "shopperId": "8517503",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards5": {
+        "email": "rjagadishauto12@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125255264,
+        "shopperId": "8517504",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards6": {
+        "email": "rjagadishauto13@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125255271,
+        "shopperId": "8517505",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards7": {
+        "email": "rjagadishauto14@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400794,
+        "shopperId": "8517506",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards8": {
+        "email": "rjagadishauto15@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400800,
+        "shopperId": "8517507",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards9": {
+        "email": "rjagadishauto16@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400831,
+        "shopperId": "8517508",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards10": {
+        "email": "rjagadishauto17@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400848,
+        "shopperId": "8517509",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards11": {
+        "email": "rjagadishauto18@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400862,
+        "shopperId": "8517510",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards12": {
+        "email": "rjagadishauto19@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400879,
+        "shopperId": "8517511",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards13": {
+        "email": "rjagadishauto20@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400886,
+        "shopperId": "8517537",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards14": {
+        "email": "rjagadishauto21@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400961,
+        "shopperId": "8517998",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards15": {
+        "email": "rjagadishauto22@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400978,
+        "shopperId": "8518000",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards16": {
+        "email": "rjagadishauto23@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400985,
+        "shopperId": "8518002",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards17": {
+        "email": "rjagadishauto24@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125400992,
+        "shopperId": "8518011",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards18": {
+        "email": "rjagadishauto25@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401005,
+        "shopperId": "8518017",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards19": {
+        "email": "rjagadishauto26@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401012,
+        "shopperId": "8518024",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards20": {
+        "email": "rjagadishauto27@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401043,
+        "shopperId": "8518171",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards21": {
+        "email": "rjagadishauto28@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401050,
+        "shopperId": "8518183",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards22": {
+        "email": "rjagadishauto29@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401067,
+        "shopperId": "8518196",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards23": {
+        "email": "rjagadishauto30@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401081,
+        "shopperId": "8518216",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards24": {
+        "email": "rjagadishauto31@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401098,
+        "shopperId": "8518228",
+        "platform": "B2C"
+    },
+
+
+
+    "New un-used Accounts": {
+        "comments": "Newly created curently being un-used accounts for each e2e scenario. Going forward all scenarios must have their own accounts or use newAccount for every run."
+    },
+    "emAccountWithRewards25": {
+        "email": "rjagadishauto32@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401104,
+        "shopperId": "8518267",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards26": {
+        "email": "rjagadishauto33@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401111,
+        "shopperId": "8518279",
+        "platform": "B2C"
+    },
+    "emAccountWithRewards27": {
+        "email": "rjagadishauto34@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401128,
+        "shopperId": "8518293",
         "platform": "B2C"
     }
 }

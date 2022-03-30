@@ -21,8 +21,8 @@ import '../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../support/everydayMarket/api/commands/commonHelpers'
 
-const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber
-TestFilter(['EDM', 'API'], () => {
+const rewardsCardNumber = shoppers.emAccountWithRewards22.rewardsCardNumber
+TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5040 - Multiple Partial Dispatch Everyday Market order via Marketplacer', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -35,14 +35,14 @@ TestFilter(['EDM', 'API'], () => {
       let orderReference
       let edmOrderId
       let edmInvoiceId
-      const shopperId = shoppers.emAccount2.shopperId
+      const shopperId = shoppers.emAccountWithRewards22.shopperId
       let lineItemLegacyId
       let trackingId1
       let trackingId2
       let partialDispatchNumber
 
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccount2, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards22, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId

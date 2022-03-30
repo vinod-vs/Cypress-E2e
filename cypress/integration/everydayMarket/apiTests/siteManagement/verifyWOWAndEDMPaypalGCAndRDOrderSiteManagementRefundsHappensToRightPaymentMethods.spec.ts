@@ -22,7 +22,7 @@ import "../../../../support/orderPaymentService/api/commands/refunds";
 import * as lib from "../../../../support/everydayMarket/api/commands/commonHelpers";
 import { onOrderManagement } from "../../../../support/siteManagement/ui/pageObjects/OrderManagement";
 
-TestFilter(["EDM", "EDM-HYBRID"], () => {
+TestFilter(["EDM", "EDM-HYBRID", 'EDM-E2E-HYBRID'], () => {
   describe("[API]  RP-5112 - EM | SM | Refunds | Verify refunds and goodwill from site management happens to the right payment mode for market orders placed with PP + GC + RD ", () => {
     before(() => {
       cy.clearCookies({ domain: null });
@@ -35,8 +35,8 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
       let orderReference: any;
       let edmOrderId: any;
       let edmInvoiceId: any;
-      const shopperId = shoppers.emAccount2.shopperId;
-      const rewardsCardNumber = shoppers.emAccount2.rewardsCardNumber;
+      const shopperId = shoppers.emAccountWithRewards10.shopperId;
+      const rewardsCardNumber = shoppers.emAccountWithRewards10.rewardsCardNumber;
       let refundReason = "Damaged Item";
       let refundComment = "Automation Refund Comment";
       const goodwillAmount = 15;
@@ -44,7 +44,7 @@ TestFilter(["EDM", "EDM-HYBRID"], () => {
 
       // Login and place the order from testdata
       cy.loginAndPlaceRequiredOrderFromTestdata(
-        shoppers.emAccount2,
+        shoppers.emAccountWithRewards10,
         testData
       ).as("orderPlaced");
 

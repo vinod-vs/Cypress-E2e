@@ -168,6 +168,58 @@ export class OrderManagement {
     return cy.get(".goodwill-total")
   }
   
+  //------------- WOW Tab Specific Locators ---------------------
+  getWowLineItemsTable() {
+    //return cy.get("#refund-lines-form > div.refund-lines-table > div > table > tbody > tr")
+    return cy.get("#refund-lines-form > div.refund-lines-table > div > table > tbody") 
+  }
+
+  getWowLineItemsReIssueReasonSelectString() {
+    return ' > tr.refund-order-line-reissue.line-1.sc-465135.edit.parent-stockcode- > td:nth-child(2) > select' 
+  }
+
+  getWowLineItemsShoppersNoteTextBoxString() {
+    return ' > tr.refund-order-line-reissue.line-1.sc-465135.edit.parent-stockcode- > td:nth-child(9) > input' 
+  }
+
+  getWowLineItemsCommentTextBoxString() {
+    return ' > tr.refund-order-line-reissue.line-1.sc-465135.edit.parent-stockcode- > td:nth-child(2) > input.refund-edit-comment' 
+  }
+  getWowSaveButton() {
+    return cy.get("input[type=submit]") 
+  }
+
+  getCourierRadioButton() {
+    return cy.get("label[for=\"Courier\"]") 
+  }
+
+  getCourierDeliveryAddressDropDown() {
+    return cy.get("select[class=\"AddressID\"]") // select[id="courierAddressID"]
+  }
+
+  getChangeDeliveryWindowDropDown() {
+    return cy.get("select#courierDeliveryWindow") 
+  }
+
+  getDeliveryInstructionsTextBox() {
+    return cy.get("textarea#DeliveryInstructions") 
+  }
+
+  getWowApproveButton() {
+    return cy.get("input[name=\"ApproveButton\"]") 
+  }
+
+  getWowApproveFormSubmit() {
+    return cy.get("form[class=\"refund-approve-form\"]") 
+  }
+
+  getSubmitAndPlaceOrderButton() {
+     return cy.get("input[type=\"submit\"]") 
+  }
+
+  getApprovedRefundDetailsLabel() {
+    return cy.get("input[value=\"Submit and place order\"]") 
+  }
 
 }
 
