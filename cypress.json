@@ -100,7 +100,9 @@
         "verifyEmailNotificationForPersonalDetailsEndPoint": "https://dxk8saae.uat.wx-d.net/notifications/razor?template=Shopper_PersonalDetailsUpdated&email=cypressAutomationTest%40yopmail.com",
         "siteManagementUrl": "https://adminuatsite.woolworths.com.au/Manage",
         "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin",
-        "productSearchByStockCodeEndpoint": "apis/ui/v2/Search/count"
+        "productSearchByStockCodeEndpoint": "apis/ui/v2/Search/count",
+        "substitutionEndpoint": "/apis/ui/Checkout/substitution",
+        "productNoteEndpoint": "/apis/ui/Checkout/ProductNote"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,

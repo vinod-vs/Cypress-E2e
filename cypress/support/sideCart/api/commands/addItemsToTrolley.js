@@ -20,7 +20,7 @@ Cypress.Commands.add('curateProductsForTrolley', (productArray) => {
 
     trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
 
-    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
     addItemsRequestBody.items = expectedTrolleyItems
 
     if (totalPrice > 60.0) {
@@ -125,16 +125,12 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
 })
 
 function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
-  const trolleyArr = []
   const expectedTrolleyItems = []
   let totalPrice = 0.0
 
   for (const item of productArray) {
     totalPrice = totalPrice + item.Price
-
-    trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
-
-    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
 
     if (totalPrice >= totalThreshold) {
       break
@@ -152,12 +148,10 @@ function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
     throw ('No products found for Count Limited Trolley Addition')
   }
 
-  const trolleyArr = []
   let addedToCart = 0
 
   for (const item of productArray) {
-    trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
-    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
 
     addedToCart++
     if (addedToCart === itemCount) {
@@ -166,7 +160,7 @@ function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
   }
   addItemsRequestBody.items = expectedTrolleyItems
 
-  return trolleyArr
+  return expectedTrolleyItems
 }
 
 Cypress.Commands.add('addAvailableEDMItemsToTrolley', (searchTerm, quantity) => {

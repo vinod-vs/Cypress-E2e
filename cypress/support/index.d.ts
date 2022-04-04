@@ -158,5 +158,7 @@ declare namespace Cypress {
     validateBillingAddressViaApi(): any;
     payAndSubscribeViaApi(value: any): any;
     writeTestDataUsed(filepath:string, signupdetails: any): any;
+    addProductNoteViaApi(productNote: any): any;
+    setItemSubstitutionviaAPI(subsRequest: any): any;
   }
 }

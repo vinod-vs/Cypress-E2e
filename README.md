@@ -31,6 +31,11 @@ Another report is in allure, hosted in Azure Blob storage: https://wowe2eautomat
 4. After the test runs, check the `cypress/allure-reports` folder. The json reports should be there.
 5. To generate the HTML report, simply run `npm run allure:trend`.
 
+# Running in parallel via cypress-parallel Locally and on Azure Pipelines
+* Just use the below command to execute tests in parallel
+npx cypress-parallel -s cypress:run -t <No of parallel threads> -d '<path to desired spec files>' -a '"<cypress dynamic config>" --browser <desired browser type> "--config <any desired cypress config>"'
+* Example command to execute everyday market api tests on 4 thread -> npx cypress-parallel -s cypress:run -t 4 -d 'cypress/integration/everydayMarket/apiTests/**' -a '"--env fileConfig=edm,tags=EDM-E2E-API/EDM-E2E-HYBRID,card=diners" --browser chrome "--config retries=1,baseUrl=https://adminuatsite.woolworths.com.au/"' -m false
+
 # Contributing / PR Guidelines
 If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation and create a pull request for review. 
 
@@ -98,6 +103,7 @@ Test scripts will do 2FA validation based on setting 'otpValidationSwitch' value
 * while writing API tests for any existing b2c user login, simply call cy.loginViaApiWith2FA() by passing in shopperdetails, otpValidationSwitch value and static code value.
 * for any new b2c user sign up and login via API, simply call cy.loginWithNewShopperViaApi()
 * for UI tests remains the same still using cy.loginViaUi() by passing in the shopper details
+* to login and dynamically handle the 2FA if or if not shown irespective of the flag, use the cypress command cy.loginViaApiAndHandle2FA(shopper) under support/login/api/commands/login.js
 
 # Mailosaur email service integration
 Now we have integrated with Mailosaur email service. If your tests need get email information (like subject, content, etc), highly suggest to create your test account with given Mailosaur server domain address.
