@@ -18,7 +18,7 @@ import addressSearch from '../../../../../fixtures/checkout/addressSearch.json'
 import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 import searchRequestBody from '../../../../../fixtures/search/productSearch.json'
 import '../../../../../support/sideCart/api/commands/viewTrolley'
-import '../../../../support/pdp/pdp.ts'
+import '../../../../../support/pdp/pdp.ts'
 
 TestFilter(['EDM', 'API', 'feature'], () => {
   describe('[API]  RP-5483 | EM | Seller name be returned from backend endpoint in search result page, PDP, view cart items and checkout page', () => {
@@ -28,7 +28,7 @@ TestFilter(['EDM', 'API', 'feature'], () => {
     })
 
     it('RP-5483 | EM | Seller name be returned from backend endpoint in search result page, PDP, view cart items and checkout page', () => {
-      const testData = tests.GenericStockCodeSearch
+      const testData = tests.GenericVendorInfoStockCodeSearch
       const searchTerm = testData.searchTerm
       const quantity = testData.quantity
       const vendorNameExpected = testData.VendorName

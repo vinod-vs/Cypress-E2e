@@ -259,5 +259,13 @@
       }
     ],
     "paymentType": "GIFTCARD_ONLY"
-  }   
+  },
+  "GenericVendorInfoStockCodeSearch": {
+    "searchTerm": "1073741957",
+    "quantity": 1,
+    "VendorName": "Pet Culture",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    }   
+  } 
 }
