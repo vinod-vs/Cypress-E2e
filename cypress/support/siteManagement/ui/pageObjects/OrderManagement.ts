@@ -170,8 +170,15 @@ export class OrderManagement {
   
   //------------- WOW Tab Specific Locators ---------------------
   getWowLineItemsTable() {
-    //return cy.get("#refund-lines-form > div.refund-lines-table > div > table > tbody > tr")
     return cy.get("#refund-lines-form > div.refund-lines-table > div > table > tbody") 
+  }
+
+  getWowLineItemsStockCodeString() {
+    return 'td:nth-child(5)' 
+  }
+
+  getWowLineItemsStockReIssueCheckBoxString() {
+    return ' > tr > td:nth-child(5)' 
   }
 
   getWowLineItemsReIssueReasonSelectString() {
@@ -194,7 +201,7 @@ export class OrderManagement {
   }
 
   getCourierDeliveryAddressDropDown() {
-    return cy.get("select[class=\"AddressID\"]") // select[id="courierAddressID"]
+    return cy.get("select[class=\"AddressID\"]")
   }
 
   getChangeDeliveryWindowDropDown() {
@@ -217,8 +224,12 @@ export class OrderManagement {
      return cy.get("input[type=\"submit\"]") 
   }
 
-  getApprovedRefundDetailsLabel() {
-    return cy.get("input[value=\"Submit and place order\"]") 
+  getOrderidOnApprovedRefundDetailsScreeen() {
+    return cy.get('label[for="OrderNumber"]') 
+  }
+
+  getReissueOrderTotalOnApprovedRefundDetailsScreeen() {
+    return cy.get("#content-panel > div > div.tab-layout > div:nth-child(18) > label") 
   }
 
 }
