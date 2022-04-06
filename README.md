@@ -117,6 +117,8 @@ For your email related test, you might want
     cy.getMailosaurEmailByEmailAddress(emailAddress).then(email => {
         expect(email.subject).to.equal('Reset your password')
     })
+  3. In order to parse html body of the email to verify or get any specific text from the email, install JSDOM, using command - "npm install jsdom --save-dev"
+     More details on this can be found at - https://mailosaur.com/docs/test-cases/html-content/
 More info: [How to test email and SMS with Cypress] (https://mailosaur.com/docs/frameworks-and-tools/cypress/)
 
 # Preserve cookies
