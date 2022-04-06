@@ -74,7 +74,7 @@ jobs:
         displayName: "Run B2C Tests"
       - script: |
           npm install
-          npm test -- --env tags=B2C-P0,fileConfig=b2c,otpValidationSwitch=true --browser ${{ parameters.browser }}
+          npm test -- --env tags=B2C-P0,fileConfig=b2c,otpValidationSwitch=true,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
           npm run allure:generate
         displayName: "Npm install and run B2C tests"
 
@@ -190,7 +190,7 @@ jobs:
         displayName: "Run B2B Tests"
       - script: |
           npm install
-          npm test -- --env tags=B2B-P0,fileConfig=b2b --browser ${{ parameters.browser }}
+          npm test -- --env tags=B2B-P0,fileConfig=b2b,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
           npm run allure:generate
         displayName: "Npm install and run B2B tests"
 
