@@ -6,7 +6,7 @@ Cypress.Commands.add("adminLoginViaUi", (loginDetails) => {
   loginPage.getLoginButton().click();
 });
 
-Cypress.Commands.add("loginViaUI", (email, password) => {
+Cypress.Commands.add("siteManagementLoginViaUi", (email, password) => {
   cy.visit(Cypress.env('siteManagementUrl'));
   cy.url().should("include", "/Login");
   loginPage.getEmailAddress().type(email);

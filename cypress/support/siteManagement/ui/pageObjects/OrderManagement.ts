@@ -114,32 +114,32 @@ export class OrderManagement {
     return 'td[class="total-column"]';
   }
 
-  getRefundCheckboxForStockcode(stockcode) {
+  getRefundCheckboxForStockcode(stockcode: any) {
     let checkbocLoc = "input[class*='refund-checkbox'][name*='"+stockcode+"']"
     return cy.get(checkbocLoc);
   }
 
-  getRefundDetailsForStockcode(stockcode) {
+  getRefundDetailsForStockcode(stockcode: any) {
     let refundDetailsLoc = "tr[class*='" + stockcode + " return'] td[class*='refund-order-stockcode']"    
     return cy.get(refundDetailsLoc);
   }
 
-  getRefundDetailsTDForStockcode(stockcode) {
+  getRefundDetailsTDForStockcode(stockcode: any) {
     let refundDetailsLoc = "tr[class*='" + stockcode + " return']"    
     return cy.get(refundDetailsLoc);
   }
   
-  getRefundReasonFieldForStockcode(stockcode) {
+  getRefundReasonFieldForStockcode(stockcode: any) {
     let refundReasonLoc = "select[class='refund-edit-reason'][name*='"+stockcode+"']"
     return cy.get(refundReasonLoc);
   }
 
-  getRefundCommentFieldForStockcode(stockcode) {
+  getRefundCommentFieldForStockcode(stockcode: any) {
     let refundCommentLoc = "input[class='refund-edit-comment'][name*='"+stockcode+"']"
     return cy.get(refundCommentLoc);
   }
 
-  getRefundQuantityFieldForStockcode(stockcode) {
+  getRefundQuantityFieldForStockcode(stockcode: any) {
     let refundQuantityLoc = "input[class='refund-edit-amount'][name*='"+stockcode+"-Payment].Quantity']"
     return cy.get(refundQuantityLoc);
   }
@@ -164,11 +164,15 @@ export class OrderManagement {
     return cy.get("input[class='refund-edit-comment'][name*='RefundLines[-2-0-Payment].Comment']")
   }
 
-  getGoodWillField() {
+  getGoodwillTotalField() {
     return cy.get(".goodwill-total")
   }
   
-  //------------- WOW Tab Specific Locators ---------------------
+  getRefundTotalField() {
+    return cy.get(".refund-total")
+  }
+
+//------------- WOW Tab Specific Locators ---------------------
   getWowLineItemsTable() {
     return cy.get("#refund-lines-form > div.refund-lines-table > div > table > tbody") 
   }
@@ -232,6 +236,69 @@ export class OrderManagement {
     return cy.get("#content-panel > div > div.tab-layout > div:nth-child(18) > label") 
   }
 
-}
+  getGoodwillCheckboxForStockCode(stockcode: any) {
+    return cy.get("input[class*='goodwill-checkbox'][name*='"+stockcode+"']")
+  }
 
-export const onOrderManagement = new OrderManagement();
+  getGoodwillReasonForStockCode(stockcode: any) {
+    return cy.get("select[class='refund-edit-reason'][name*='"+stockcode+"-Goodwill']")
+  }
+
+  getGoodwillCommentForStockCode(stockcode: any) {
+    return cy.get("input[class='refund-edit-comment'][name*='"+stockcode+"-Goodwill']")
+  }
+
+  getGoodwillQuantityFieldForStockcode(stockcode: any) {
+    return cy.get("input[class='refund-edit-amount'][name*='"+stockcode+"-Goodwill']:nth-child(2)")
+  }
+
+  getGoodwillAmountFieldForStockcode(stockcode: any) {
+    return cy.get("input[class='refund-edit-amount'][name*='"+stockcode+"-Goodwill']:nth-child(1)")
+  }
+
+  getRefundIdTitleHearder() {
+    return cy.get('.manage-title>h1')
+  }
+
+  //get first stock code in the order
+  public getFirstStockCodeInOrder() {
+    cy.get('.refund-lines-table > div > table > tbody > tr._filter-table-row td:nth-child(5)').each(($el, index, $list) => {
+      const orderedColVal = $el.text()
+      const sizeColVal = $el.prev().text()
+      if(parseInt(orderedColVal)>0 && sizeColVal!=null && sizeColVal!='')
+      {
+        cy.get('.refund-lines-table > div > table > tbody > tr._filter-table-row td:nth-child(5)').eq(index).prev().prev().prev().children('span').invoke('text').then(($stockCode) => {
+          cy.wrap($stockCode).as('firstStockCode')
+        })
+        return false
+      }
+    })
+  }    
+
+  public generateRefundInSiteManagement(stockcode: any, refundReason: string, refundComment: string, refundQuantity: string, goodwillQuantity: string) {
+    //Fill refund details
+    this.getRefundCheckboxForStockcode(stockcode).click();
+    this.getRefundReasonFieldForStockcode(stockcode).select(refundReason);
+    this.getRefundCommentFieldForStockcode(stockcode).type(refundComment);
+    this.getRefundQuantityFieldForStockcode(stockcode).clear().type(refundQuantity)
+    if (parseInt(goodwillQuantity) > 0) {
+      this.getGoodwillCheckboxForStockCode(stockcode).click()
+      this.getGoodwillReasonForStockCode(stockcode).select(refundReason)
+      this.getGoodwillCommentForStockCode(stockcode).type(refundComment)
+      this.getGoodwillQuantityFieldForStockcode(stockcode).clear().type(goodwillQuantity)
+    }
+    this.getRefundTotalField().click()
+    this.getRefundTotalField().invoke('val').then(($refundTotalVal) => {
+      cy.wrap($refundTotalVal).as('refundTotalCapture')
+    })
+    this.getGoodwillTotalField().invoke('val').then(($goodwillTotalVal) => {
+      cy.wrap($goodwillTotalVal).as('goodwillTotalCapture')
+    })
+     //Click save and approve
+    this.getRefundSaveButton().click();
+    this.getRefundApproveButton().click();
+    cy.url().should("include", "/OrderManagement/OrderRefundDetail");
+  }
+
+}
+export const onOrderManagement = new OrderManagement()
