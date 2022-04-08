@@ -119,7 +119,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
             // Verify the projections
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, testData.orderId, {
               function: function (response) {
-                if (response.body.invoices[0].wowStatus !== 'PartiallyShipped') {
+                if (response.body.invoices[0].invoiceStatus !== 'PARTIALLY_SENT') {
+                  cy.log('Expecting invoice status to be PARTIALLY_SENT')
                   throw new Error('Still not shipped yet')
                 }
               },
