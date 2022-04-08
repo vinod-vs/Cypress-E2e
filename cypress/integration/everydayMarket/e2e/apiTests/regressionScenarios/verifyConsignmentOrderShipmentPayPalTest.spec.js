@@ -96,7 +96,15 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
 
             const AfterShipStatus = ['InTransit', 'OutForDelivery', 'Delivered','AvailableForPickup'] 
             let ids = AfterShipStatus  
-            ids.forEach(id => {                       
+            ids.forEach(id => {                      
+              
+                    //Consignment aftership webhook  for InTransit Status
+                    cy.invokeconsignmentwebhook(testData.trackingNumber, id, {
+                      function: function (response) {
+                        expect(response.status).to.eq(200)
+                        cy.log('The Consignment aftership api'+ JSON.stringify(response.body))
+                        }
+                    }) 
                   
                     // After dispatch, Invoke the order api and verify the projection content is updated acordingly
                     cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -105,14 +113,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                           cy.log('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
                           throw new Error('wowStatus was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
                         }
-
-                          //Consignment aftership webhook  for InTransit Status
-                          cy.invokeconsignmentwebhook(testData.trackingNumber, id, {
-                            function: function (response) {
-                              expect(response.status).to.eq(200)
-                              cy.log('The Consignment aftership api'+ JSON.stringify(response.body))
-                              }
-                          }) 
+                        
                       },
                       retries: Cypress.env('marketApiRetryCount'),
                       timeout: Cypress.env('marketApiTimeout')
