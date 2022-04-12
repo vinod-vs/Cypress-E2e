@@ -161,5 +161,6 @@ declare namespace Cypress {
     addProductNoteViaApi(productNote: any): any;
     setItemSubstitutionviaAPI(subsRequest: any): any;
     addYearsToCurrentDate(noOfYearsToAdd: any): any;
+    evaluateSessionGroup(requestBody:any): any;
   }
 }
