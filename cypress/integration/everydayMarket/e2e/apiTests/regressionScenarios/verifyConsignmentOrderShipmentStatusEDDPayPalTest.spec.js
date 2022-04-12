@@ -32,17 +32,17 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
     })
 
     it('[API] RP-5544 - Verify Estimate Delivery Date , Shipment Status post invoking the consignment API', () => {
-      const testData = tests.VerifyFullyDispatchedEDMOnlyOrderPaypal
+      const testData = tests.VerifyFullyDispatchedEDMOrder
       let orderId
       let orderReference
       let edmOrderId
       let edmInvoiceId
       var randomnum = Math.floor(Math.random() * (9 * (Math.pow(10, 5)))) + (Math.pow(10, 5))
       let trackNo = testData.trackingNumber + randomnum
-      const shopperId = shoppers.emAccountWithRewards20.shopperId
+      const shopperId = shoppers.emAccountWithRewards25.shopperId
                   
       // Login and place the order from testdata
-      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards20, testData).then((response) => {
+      cy.loginAndPlaceRequiredOrderFromTestdata(shoppers.emAccountWithRewards25, testData).then((response) => {
         orderId = response.Order.OrderId.toString()
         orderReference = response.Order.OrderReference.toString()
         testData.orderId = orderId
