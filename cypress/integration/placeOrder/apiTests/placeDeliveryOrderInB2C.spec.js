@@ -21,6 +21,8 @@ import '../../../support/checkout/api/commands/checkoutHelper'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
+    const creditCard = Cypress.env('creditCard')
+    
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -71,7 +73,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
       })
 
-      cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response) => {
+      cy.creditcardTokenisation(creditCard, creditcardSessionHeader).then((response) => {
         expect(response.status.responseText, 'Credit Card tokenisation status').to.be.eqls('ACCEPTED')
         expect(response.status.error, 'Credit Card Tokenisation error').to.be.null
 

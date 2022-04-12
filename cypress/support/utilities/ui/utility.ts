@@ -123,6 +123,15 @@ Cypress.Commands.add('removeDateOrdinals', (text) => {
   return text.replace(/st|nd|rd|th/g, '')
 })
 
+Cypress.Commands.add('addYearsToCurrentDate', (noOfYearsToAdd:any) => {
+  let today = new Date()
+  let todayPlusYears = new  Date(today.getFullYear()+parseInt(noOfYearsToAdd), today.getMonth(), today.getDate())
+  let monthNames =["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec"]
+  let date = todayPlusYears.getDate()
+  let monthName = monthNames[todayPlusYears.getMonth()]
+  let year = todayPlusYears.getFullYear()
+  return cy.wrap(date.toString()+' '+monthName+' '+year.toString())
+})
 
 /*
  * TODO: Look into why this isn't working as a Custom Command. For now, implement as a standard function 

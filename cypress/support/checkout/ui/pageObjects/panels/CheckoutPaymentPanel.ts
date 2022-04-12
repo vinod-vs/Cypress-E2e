@@ -1,9 +1,24 @@
 import 'cypress-iframe'
+import { searchForNewAddress } from '../../../../shared/ui/components/AddressSelectorTextField'
 
 export class CheckoutPaymentPanel{
+    private billingAddressSelectorTexFieldLocator = '#billingAddressSelector'
+    private billingAddressResultListLocator = '#billingAddressSelector-listbox > li > div'
+
     getPlaceOrderButton () {
         return cy.get('.payment-placeOrderButtonContainer button')
     }
+
+    //#region - Billing Address 
+    getBillingAddressTextField(){
+        return cy.get(this.billingAddressSelectorTexFieldLocator)
+    }
+
+    getSearchAddressResultList () {
+        return cy.get(this.billingAddressResultListLocator)
+      }
+    //#endregion
+
     //#region - Everyday Rewards
     getRewardsContainer () {
         return cy.get('wow-checkout-rewards-container')
@@ -293,6 +308,10 @@ export class CheckoutPaymentPanel{
         })
         this.getPromoCodeEnterTextbox().type(promoCode)
         this.getPromoCodeApplyButton().click()
+    }
+
+    searchForNewBillingAddress (addressKeyword: string) {
+        searchForNewAddress(this.billingAddressSelectorTexFieldLocator, this.billingAddressResultListLocator, addressKeyword)
     }
     //#endregion
 

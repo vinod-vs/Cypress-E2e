@@ -27,18 +27,18 @@ import * as commonLib from '../../../../../support/everydayMarket/api/commands/c
 
 import wowDispatchData from '../../../../../fixtures/wowDispatch/wowDispatch.json'
 import eventsRequest from '../../../../../fixtures/wowDispatch/wowDispatchDataPrep.json'
-
 import '../../../../../support/wowDispatch/wowStatusUpdates'
 
+import { onOrderManagement } from "../../../../../support/siteManagement/ui/pageObjects/OrderManagement"
 
 TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
-  describe("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
+  describe("[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue", () => {
     before(() => {
       cy.clearCookies({ domain: null });
       cy.clearLocalStorage({ domain: null });
     });
 
-    it("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
+    it("[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue", () => {
       const searchTerm = 'treats'   // 'everyday market'
       const purchaseQty = 2
       let shopperId: any;
@@ -59,8 +59,6 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         cy.log('Shopper id is === ' + shopperId )
       })
 
-      // Place single line item EDM order with quantity = 2, using 'automation' as search term
-      // and grab the first any available EDM item returned by search
       cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
  
@@ -85,9 +83,8 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
           },
           retries: Cypress.env('marketApiRetryCount'),
           timeout: 10000
-        })  // orderEventsApiWithRetry- ENDS   
+        })
 
-        // Invoke Market Order API and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
           function: function (response) {
             if (response.body.invoices[0].wowStatus !== "Placed") {
@@ -117,6 +114,58 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
        cy.performReIssueOnWowOrderOnSM() //Perform ReIssue from the SM UI using "Woolworths Orders" Tab
       })
     
+      Cypress.Commands.add('performReIssueOnWowOrderOnSM', () => { 
+  // Perform the ReIssue of Wow items from Site Management
+  cy.get("@finalProjection").then((finalProjection) => {
+  //Verify Common OrderReference Number is present on the Order Management SM UI
+  cy.log( "In finalProjection the OrderReference Number is= " + finalProjection.orderReference);      
+  onOrderManagement.getOrderReference().parent().invoke("text").should("contain", finalProjection.orderReference);
+  // Click on "Woolworths Order" Tab
+  onOrderManagement.getWOWTab().click();
+//  cy.wait(Cypress.config("fiveSecondWait"));
+  onOrderManagement.getWOWTabOrderId().parent().invoke("text").should("contain", finalProjection.orderId);
+  //Verify Wow 'OrderStatus' is 'Dispatched' Under the "Woolworths Order" Tab
+  onOrderManagement.getWOWTabOrderStatus().parent().invoke("text").should("contain", 'Dispatched');
+
+  if(onOrderManagement.getWowLineItemsTable().find(onOrderManagement.getWowLineItemsStockCodeString()).contains('465135'))
+      {
+        cy.log("Compare the ReIssue 'ISS' CheckBox for the StockCode 465135")
+        onOrderManagement.getWowLineItemsTable().find(onOrderManagement.getWowLineItemsStockReIssueCheckBoxString()).parent()
+        .within(function(){
+          cy.log("----Now Clicking on the ReIssue 'ISS' CheckBox for the StockCode 465135----")
+          cy.get("td").eq(2).click()
+        })
+        cy.log("----Now Selecting the ReIssue Reason from DropDown box as - Damaged Item----")
+        onOrderManagement.getWowLineItemsTable().find(onOrderManagement.getWowLineItemsReIssueReasonSelectString()).select('Damaged Item')
+        cy.log("----Now Enter Text inside the Shoppers Note TextBox----")
+        onOrderManagement.getWowLineItemsTable().find(onOrderManagement.getWowLineItemsShoppersNoteTextBoxString()).type('Shoppers Note for the ReIssue of the Damaged Item')
+        cy.log("----Now Enter Text inside the Comment TextBox----")
+        onOrderManagement.getWowLineItemsTable().find(onOrderManagement.getWowLineItemsCommentTextBoxString()).type('Comments for the ReIssue of the Damaged Item')
+        cy.log("----Now Click on Save Button to Create the ReIssue----")
+        onOrderManagement.getWowSaveButton().click()
+        cy.log("---- Verify Reissue Payment Total - Courier Option gets Displayed----")
+        onOrderManagement.getCourierRadioButton().invoke("text").should("contain", "Courier")    
+        cy.log("---- Select ReIssue Delivery Address from the Drop Down Box----")
+        onOrderManagement.getCourierDeliveryAddressDropDown().select(1) 
+        onOrderManagement.getChangeDeliveryWindowDropDown().select(6)
+        cy.log("----Now, Entering Text in Delivery Instructions TextBox----")
+        onOrderManagement.getDeliveryInstructionsTextBox().type("Delivery Instructions for the ReIssue of the Damaged Item")
+        cy.log("----Now, Click on Approve Button----") 
+        onOrderManagement.getWowApproveButton().click()
+      cy.wait(Cypress.config("tenSecondWait"))
+      cy.log("----Now, Click on 'Submit and Place Order Button' on 'Confirm your Reissued Order' Screen ----")
+      onOrderManagement.getSubmitAndPlaceOrderButton().click()
+      cy.wait(Cypress.config("fiveSecondWait"))
+      cy.log("----Now, Verify 'Order ID' and 'Reissue Order Total' are displayed ----")
+      onOrderManagement.getOrderidOnApprovedRefundDetailsScreeen().parent().invoke("text").should("contain", finalProjection.orderId)
+      onOrderManagement.getReissueOrderTotalOnApprovedRefundDetailsScreeen().parent().contains("0.00")
+  
+    }
+  
+  })
+  }) 
+
   })
   })
-})
+  })
+
