@@ -23,6 +23,23 @@ export function verifyEventDetails (response, expectedEventName, testData, shopp
   expect(events).to.have.length(expectedEventCount)
 }
 
+export function verifyShipmentStatusEDD (response, expectedEventName, testData, shopperId, Status) {  
+  const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
+  cy.log('Expected events: ' + JSON.stringify(events))
+  var ctr=0
+  events.forEach(event => {
+    // Verify the event contents
+    // If traderOrderId is null, skip its validation
+    if (testData.orderId !== null) { expect(event.orderId).to.equal(Number(testData.orderId)) }
+    expect(event.orderReference).to.be.equal(testData.orderReference)
+    expect(event.shopperId).to.be.equal(Number(shopperId))
+    expect(event.domainEvent).to.be.equal(expectedEventName)   
+    expect(event.payload).includes(Status[0].toLowerCase())
+  })  
+}
+
+
+
 export function verifyCommonOrderDetails (response, testData, shopperId) {
   // Order details
   expect(response.orderId).to.equal(Number(testData.orderId))
