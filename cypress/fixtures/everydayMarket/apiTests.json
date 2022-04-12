@@ -2,7 +2,7 @@
   "VerifyFullyDispatchedEDMOrder": {
     "searchTerm": "treats",
     "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
+    "trackingNumber": "Automation12345",
     "address": {
       "search": "407-419 Elizabeth St, SURRY HILLS"
     },
