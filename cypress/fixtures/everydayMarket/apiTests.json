@@ -23,7 +23,7 @@
   "VerifyFullyDispatchedEDMOnlyOrderPaypal": {
     "searchTerm": "treats",
     "carrier": "Australia Post",
-    "trackingNumber": "MysaviourTest",
+    "trackingNumber": "Automation12345",
     "address": {
       "search": "407-419 Elizabeth St, SURRY HILLS"
     },
