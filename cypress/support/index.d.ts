@@ -162,5 +162,6 @@ declare namespace Cypress {
     setItemSubstitutionviaAPI(subsRequest: any): any;
     addYearsToCurrentDate(noOfYearsToAdd: any): any;
     evaluateSessionGroup(requestBody:any): any;
+    generateRandomString(numChars?: number): Cypress.Chainable<string>;
   }
 }
