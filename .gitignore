@@ -10,3 +10,4 @@ cypress/allure-results
 log
 results
 local.log
+cypress.env.json

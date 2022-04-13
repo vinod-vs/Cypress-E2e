@@ -17,8 +17,10 @@ Cypress.Commands.add("selectOrderManagementSubMenu", (menuToSelect) => {
 
 Cypress.Commands.add("searchOrder", (orderId) => {
   onOrderManagement.getOrderIDTextField().click({ force: true });
-  onOrderManagement.getOrderIDTextField().type(orderId);
-  onOrderManagement.getSearchButton().click();
+  cy.wait(2000)
+  onOrderManagement.getOrderIDTextField().should('be.visible').type(orderId);
+  onOrderManagement.getSearchButton().should('be.visible').click()
+  cy.contains('#manage-title-panel > #manage-title-area > .manage-title > h1', orderId, {timeout: 60000})
 });
 
 Cypress.Commands.add(
@@ -38,8 +40,8 @@ Cypress.Commands.add(
       .type(refundQuantity);
 
     if (goodwillAmount > 0) {
-      onOrderManagement.getGoodWillField().clear();
-      onOrderManagement.getGoodWillField().type(goodwillAmount);
+      onOrderManagement.getGoodwillTotalField().clear();
+      onOrderManagement.getGoodwillTotalField().type(goodwillAmount);
     }
 
     //Click save and approve
@@ -57,8 +59,8 @@ Cypress.Commands.add(
     onOrderManagement.getRefundShippingFeeCommentField().type(refundComment);
 
     if (goodwillAmount > 0) {
-      onOrderManagement.getGoodWillField().clear();
-      onOrderManagement.getGoodWillField().type(goodwillAmount);
+      onOrderManagement.getGoodwillTotalField().clear();
+      onOrderManagement.getGoodwillTotalField().type(goodwillAmount);
     }
 
     //Click save and approve

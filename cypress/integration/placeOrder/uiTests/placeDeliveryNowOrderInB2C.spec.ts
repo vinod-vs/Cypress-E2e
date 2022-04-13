@@ -70,7 +70,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'DN'], () => {
         cy.wrap(totalAmount.text()).as('expectedTotalAmount');
       })
 
-      onCheckoutPage.onCheckoutPaymentPanel.PayWithExistingPayPal();
+      onCheckoutPage.onCheckoutPaymentPanel.payWithExistingPayPal();
 
       // Verify order confirmation page
       onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received');

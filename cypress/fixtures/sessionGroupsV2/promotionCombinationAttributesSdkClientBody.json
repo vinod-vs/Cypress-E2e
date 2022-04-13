@@ -1,0 +1,34 @@
+[
+    {
+        "groupId": "6243a187b814cc46dacd41d3",
+        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":\"R10 1364378\"}}"
+    },
+    {
+        "groupId": "6243a2c1b814cc46dacd41d4",
+        "dynamicJson": "{\"ShopperData\":{\"OrderCount\":\"0\"},\"Order\":{\"DeliveryMethod\":\"Pickup\"}}"
+    },
+    {
+        "groupId": "6243a21b1351fbc68b9d85a2",
+        "dynamicJson": "{\"Order\":{\"CouponID\":\"LURPAK10\"}}"
+    },
+    {
+        "groupId": "6243a0a7b814cc46dacd41d2",
+        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":\"SEP2021\"},\"ShopperData\":{\"TeamMember\":\"false\"}}"
+    },
+    {
+        "groupId": "6243bfb01351fbc68b9d85a4",
+        "dynamicJson": "{\"Order\":{\"DeliveryMethod\":\"Courier\"},\"UsertargetingSubscription\":{\"Status\":\"Active\"}}"
+    },
+    {
+        "groupId": "6243c11e1351fbc68b9d85a5",
+        "dynamicJson": "{\"Shopper\":{\"ShopperID\":\"8521476\"},\"IdentityMetadata\":{\"OriginateFrom\":\"woolworths-b2b\"}}"
+    },
+    {
+        "groupId": "6243c1b01351fbc68b9d85a6",
+        "dynamicJson": "{\"MarketOrderData\":{\"MarketOrderCount\":0}}"
+    },
+    {
+        "groupId": "6243c1f2b814cc46dacd41da",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"Status\":\"Active\"}}"
+    }
+]

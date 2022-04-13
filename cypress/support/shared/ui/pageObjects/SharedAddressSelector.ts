@@ -1,4 +1,9 @@
+import { searchForNewAddress } from "../components/AddressSelectorTextField"
+
 export class SharedAddressSelector{
+  private addressSelectorTexFieldLocator = '#deliveryAddressSelector'
+  private addressResultListLocator = '#deliveryAddressSelector-listbox > li > div'
+
   // #region - Tabs
   getFullfilmentPane (){
     return cy.get('.drawer')
@@ -39,11 +44,11 @@ export class SharedAddressSelector{
   }
 
   getSearchAddressSelectorTextbox () {
-    return cy.get('#deliveryAddressSelector')
+    return cy.get(this.addressSelectorTexFieldLocator)
   }
 
   getSearchAddressResultList () {
-    return cy.get('#deliveryAddressSelector-listbox > li > div')
+    return cy.get(this.addressResultListLocator)
   }
 
   getDeliveryFullfilmentSelectorForFirstTimeShopper() {
@@ -84,19 +89,19 @@ export class SharedAddressSelector{
   // #region - General actions
   chooseFulfilmentOptionForFirstTimeCustomer(fulfilmentOption: string){
     if (fulfilmentOption.toUpperCase().includes('DELIVERY')){
-      this.getDeliveryFullfilmentSelectorForFirstTimeShopper().click()
+      this.getDeliveryFullfilmentSelectorForFirstTimeShopper().click({ force: true })
     }
     else if (fulfilmentOption.toUpperCase().includes('PICKUP')){
-      this.getPickupFullfilmentSelectorForFirstTimeShopper().click()
+      this.getPickupFullfilmentSelectorForFirstTimeShopper().click({ force: true })
     }
     else if (fulfilmentOption.toUpperCase().includes('DTB') || fulfilmentOption.toUpperCase().includes('DIRECT')){
-      this.getDTBFullfilmentSelectorForFirstTimeShopper().click()
+      this.getDTBFullfilmentSelectorForFirstTimeShopper().click({ force: true })
     }
     else{
       throw new Error('not recongnised fulfilment option: ' + fulfilmentOption)
     }
 
-    this.getSaveAndContinueButton().click()
+    this.getSaveAndContinueButton().click({ force: true })
   }
 
   selectSavedDeliveryAddressByKeyword (addressKeyword: string) {
@@ -111,17 +116,7 @@ export class SharedAddressSelector{
   }
 
   searchForNewDeliveryAddress (addressKeyword: string) {
-    this.getSearchAddressSelectorTextbox().type(addressKeyword)
-
-    this.getSearchAddressResultList().each(resultOption => {
-      const suggestedAddressText = resultOption.find('span').text().replace(/  /g, ' ').trim()
-      const trimmedAddressKeyword = addressKeyword.replace(/  /g, ' ').trim()
-
-      if (suggestedAddressText.toLowerCase().includes(trimmedAddressKeyword.toLowerCase())) {
-        cy.wrap(resultOption).click()
-        return false
-      }
-    })
+    searchForNewAddress(this.addressSelectorTexFieldLocator, this.addressResultListLocator, addressKeyword)
   }
 
   searchForStoreBySuburbName (suburbName: string) {

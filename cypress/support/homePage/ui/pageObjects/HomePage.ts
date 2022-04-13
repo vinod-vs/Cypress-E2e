@@ -1,4 +1,8 @@
 export class HomePage {
+    loadHomePage () {
+      cy.visit('.')
+    }
+
     getMyAccount () {
       return cy.get('#wx-link-login-desktop span.coreHeader-profile-text')
     }

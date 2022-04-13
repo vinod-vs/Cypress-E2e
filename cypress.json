@@ -40,6 +40,7 @@
         "creditCardIframeEndpoint": "apis/ui/Checkout/DigitalPay/InitializeCreditCardIframe",
         "creditCardTokenisationEndpoint": "https://iframe.nonprod.payments.woolworths.com.au/tokenisation/creditcard",
         "addGiftCardEndpoint": "apis/ui/Checkout/DigitalPay/GiftCard/Tokenize",
+        "unsavedGiftCardBalanceEndpoint":"apis/ui/Checkout/DigitalPay/UnsavedGiftCard/Balance",
         "digitalPaymentEndpoint": "apis/ui/Checkout/DigitalPay/Payment",
         "digitalPaymentInstrumentsEndpoint": "api/v3/ui/checkout/digitalpay/instruments",
         "payOrderZeroEndpoint": "/apis/ui/Checkout/PayOrder/Zero",
@@ -99,7 +100,10 @@
         "verifyEmailNotificationForPersonalDetailsEndPoint": "https://dxk8saae.uat.wx-d.net/notifications/razor?template=Shopper_PersonalDetailsUpdated&email=cypressAutomationTest%40yopmail.com",
         "siteManagementUrl": "https://adminuatsite.woolworths.com.au/Manage",
         "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin",
-        "productSearchByStockCodeEndpoint": "apis/ui/v2/Search/count"
+        "productSearchByStockCodeEndpoint": "apis/ui/v2/Search/count",
+        "substitutionEndpoint": "/apis/ui/Checkout/substitution",
+        "productNoteEndpoint": "/apis/ui/Checkout/ProductNote",
+        "segmentationSdkClientEndpoint": "https://dxk8saae.uat.wx-d.net/utsdktestclient/api/v1/Sdk/isingroupbyid/dictionary"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,

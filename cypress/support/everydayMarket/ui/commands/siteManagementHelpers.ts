@@ -5,19 +5,19 @@ import { OrderManagementMenu } from "cypress/support/siteManagement/ui/commands/
 import { HomepageTopMenu } from "cypress/support/siteManagement/ui/commands/HomepageTopMenu";
 
 Cypress.Commands.add("loginToSMAndSearchOrder", (loginDetails, orderId) => {
-  cy.loginViaUI(loginDetails.email, loginDetails.password);
+  cy.siteManagementLoginViaUi(loginDetails.email, loginDetails.password);
   cy.selectTopMenu(HomepageTopMenu.ORDER_MANAGEMENT);
   cy.selectOrderManagementSubMenu(OrderManagementMenu.CUSTOMER_SEARCH);
-  cy.wait(Cypress.config("fiveSecondWait"));
+  cy.wait(5000);
   cy.searchOrder(orderId);
-  cy.wait(Cypress.config("tenSecondWait"));
+  cy.wait(10000);
 });
 
 
 Cypress.Commands.add("searchAnOrderOnSM", (orderId) => {
   cy.selectTopMenu(HomepageTopMenu.ORDER_MANAGEMENT);
   cy.selectOrderManagementSubMenu(OrderManagementMenu.CUSTOMER_SEARCH);
-  cy.wait(Cypress.config("fiveSecondWait"));
+  cy.wait(5000);
   cy.searchOrder(orderId);
-  cy.wait(Cypress.config("tenSecondWait"));
+  cy.wait(10000);
 });

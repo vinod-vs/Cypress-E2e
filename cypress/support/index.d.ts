@@ -26,7 +26,7 @@ declare namespace Cypress {
     signUpViaApiWith2FA(signUpDetails: any): any;
     setDeliveryOptionsViaApi(deliveryOptions: any): any;
     setFulfilmentLocationWithWindow(fulfilmentType: string, addressSearchBody: any, windowType: string): any;
-    placeOrderViaApiWithAddedCreditCard(creditCardDetails: any, platform: string): any;
+    placeOrderViaApiWithAddedCreditCard(platform: string, creditCardDetails?: any): any;
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
     setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;
@@ -61,7 +61,7 @@ declare namespace Cypress {
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     removeDateOrdinals(text: string): any;
     addAvailableRestrictedWowItemsToTrolley(type: string, count: number): void;
-    loginViaUI(email: string, password: string): any;
+    siteManagementLoginViaUi(email: string, password: string): any;
     selectTopMenu(menuToSelect: string): any;
     selectOrderManagementSubMenu(menuToSelect: string): any;
     searchOrder(orderId: string): any;
@@ -158,5 +158,9 @@ declare namespace Cypress {
     validateBillingAddressViaApi(): any;
     payAndSubscribeViaApi(value: any): any;
     writeTestDataUsed(filepath:string, signupdetails: any): any;
+    addProductNoteViaApi(productNote: any): any;
+    setItemSubstitutionviaAPI(subsRequest: any): any;
+    addYearsToCurrentDate(noOfYearsToAdd: any): any;
+    evaluateSessionGroup(requestBody:any): any;
   }
 }
