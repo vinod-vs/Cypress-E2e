@@ -92,14 +92,20 @@ Cypress.Commands.add('convertShortWeekDayToLong', (shortWeekday) => {
   }
 })
 
-Cypress.Commands.add('generateRandomString', () => {
+Cypress.Commands.add('generateRandomString', (numChars?: number) => {
+  let strLength
   let text = ''
   const alpha = 'abcdefghijklmnopqrstuvwxyz'
 
-  for (let i = 0; i < alpha.length; i++) {
-    text += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  if (typeof numChars !== undefined) {
+    strLength = numChars!
+  } else {
+    strLength = alpha.length
   }
 
+  for (let i = 0; i < strLength; i++) {
+    text += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  }
   return cy.wrap(text)
 })
 
@@ -109,7 +115,7 @@ Cypress.Commands.add('formatToAmPm', (date) => {
   let ampm = hours >= 12 ? 'pm' : 'am'
   hours = hours % 12
   hours = hours ? hours : 12 // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes
+  minutes = minutes < 10 ? '0'+ minutes : minutes
   let strTime = hours + ':' + minutes + ' ' + ampm
 
   return cy.wrap(strTime)
