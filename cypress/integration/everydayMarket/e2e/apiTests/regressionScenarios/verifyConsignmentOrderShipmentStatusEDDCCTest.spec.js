@@ -22,7 +22,7 @@ import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/everydayMarket/api/commands/afterShip'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
-import { shipmentStatus } from '../../../../../support/everydayMarket/api/commands/shipmentStatus'
+import { shipmentStatus } from '../../../../../support/shipmentStatus'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5544 - Verify Estimate Delivery Date, Shipment Status post invoking the consignment API', () => {

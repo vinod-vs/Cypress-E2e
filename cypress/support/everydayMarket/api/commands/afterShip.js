@@ -2,10 +2,10 @@
 /// <reference types="cypress" />
 
 import '../../../utilities/api/apiUtilities'
-import getconsignmentwebhook from '../../../../fixtures/everydayMarket/afterShip.json'
+import getConsignmentWebhook from '../../../../fixtures/everydayMarket/afterShip.json'
 
 Cypress.Commands.add('invokeconsignmentwebhook', (postageTrackingnumber, status) => {  
-  const requestBody = getconsignmentwebhook
+  const requestBody = getConsignmentWebhook
   const secret = String(Cypress.env('consignmentaftershipAPIKey'))  
   requestBody.msg.tracking_number = postageTrackingnumber   
   requestBody.msg.tag = status  
