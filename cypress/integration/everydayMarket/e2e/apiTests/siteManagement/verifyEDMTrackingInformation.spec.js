@@ -1,41 +1,38 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import shoppers from '../../../../fixtures/everydayMarket/shoppers.json'
-import rewardsDetails from '../../../../fixtures/everydayMarket/rewards.json'
-import TestFilter from '../../../../support/TestFilter'
-import '../../../../support/login/api/commands/login'
-import '../../../../support/search/api/commands/search'
-import eventsRequest from '../../../../fixtures/everydayMarket/events.json'
-import shipment from '../../../../fixtures/everydayMarket/shipment.json'
-import '../../../../support/fulfilment/api/commands/fulfilment'
-import '../../../../support/sideCart/api/commands/clearTrolley'
-import '../../../../support/invoices/api/commands/commands'
-import '../../../../support/refunds/api/commands/commands'
-import '../../../../support/sideCart/api/commands/addItemsToTrolley'
-import '../../../../support/checkout/api/commands/navigateToCheckout'
-import '../../../../support/checkout/api/commands/confirmOrder'
-import '../../../../support/payment/api/commands/creditcard'
-import '../../../../support/payment/api/commands/digitalPayment'
-import '../../../../support/rewards/api/commands/rewards'
-import '../../../../support/everydayMarket/api/commands/orderApi'
-import '../../../../support/everydayMarket/api/commands/marketplacer'
-import '../../../../support/everydayMarket/api/commands/utility'
-import '../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
-import search from '../../../../fixtures/everydayMarket/search.json'
-import tests from '../../../../fixtures/everydayMarket/apiTests.json'
-import * as refundsLib from '../../../../support/everydayMarket/api/commands/commonHelpers'
-import * as lib from '../../../../support/everydayMarket/api/commands/validationHelpers'
-import "../../../../support/everydayMarket/ui/commands/siteManagementHelpers";
-import "../../../../support/everydayMarket/ui/commands/siteManagementValidationHelpers"
-import smLogins from '../../../../fixtures/siteManagement/loginDetails.json'
+import shoppers from '../../../../../fixtures/everydayMarket/shoppers.json'
+import TestFilter from '../../../../../support/TestFilter'
+import '../../../../../support/login/api/commands/login'
+import '../../../../../support/search/api/commands/search'
+import eventsRequest from '../../../../../fixtures/everydayMarket/events.json'
+import shipment from '../../../../../fixtures/everydayMarket/shipment.json'
+import '../../../../../support/fulfilment/api/commands/fulfilment'
+import '../../../../../support/sideCart/api/commands/clearTrolley'
+import '../../../../../support/invoices/api/commands/commands'
+import '../../../../../support/refunds/api/commands/commands'
+import '../../../../../support/sideCart/api/commands/addItemsToTrolley'
+import '../../../../../support/checkout/api/commands/navigateToCheckout'
+import '../../../../../support/checkout/api/commands/confirmOrder'
+import '../../../../../support/payment/api/commands/creditcard'
+import '../../../../../support/payment/api/commands/digitalPayment'
+import '../../../../../support/rewards/api/commands/rewards'
+import '../../../../../support/everydayMarket/api/commands/orderApi'
+import '../../../../../support/everydayMarket/api/commands/marketplacer'
+import '../../../../../support/everydayMarket/api/commands/utility'
+import '../../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
+import search from '../../../../../fixtures/everydayMarket/search.json'
+import * as lib from '../../../../../support/everydayMarket/api/commands/validationHelpers'
+import "../../../../../support/everydayMarket/ui/commands/siteManagementHelpers";
+import "../../../../../support/everydayMarket/ui/commands/siteManagementValidationHelpers"
+import smLogins from '../../../../../fixtures/siteManagement/loginDetails.json'
 
-TestFilter(['EDM', 'API','EDM-E2E-API'], () => {
+TestFilter(['EDM', 'API','EDM-E2E-HYBRID'], () => {
     describe('[API] RP-5477 - EDM - Automatically capture any updates to the tracking information', () => {
-      before(() => {
-        cy.clearCookies({ domain: null })
-        cy.clearLocalStorage({ domain: null })
-      })
+        before(() => {
+            cy.clearCookies({ domain: null })
+            cy.clearLocalStorage({ domain: null })
+        })
   
       it('[API] RP-5477 - EDM - Automatically capture any updates to the tracking information', () => {
         const purchaseQty = 5
@@ -43,17 +40,17 @@ TestFilter(['EDM', 'API','EDM-E2E-API'], () => {
         const searchTerm = 'treats'
         let req
         let shipmentId
-        const shopper = shoppers.emAccount2
+        const shopper = shoppers.emAccountWithRewards25
         const updatedTrackingNumber = 'Update12345'
-  
+
         // Login using shopper saved in the fixture and verify it's successful
         cy.loginViaApiAndHandle2FA(shopper)
-  
+
         // Place single line item EDM order with quantity = 2, using 'treats' as search term
         // and grab the first any available EDM item returned by search
         cy.prepareAnySingleLineItemEdmOrder(search.searchTerm, purchaseQty)
         cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
-  
+
         cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
             req = {
                 ...eventsRequest,
@@ -61,7 +58,7 @@ TestFilter(['EDM', 'API','EDM-E2E-API'], () => {
                 orderId: confirmedOrder.Order.OrderId,
                 orderReference: confirmedOrder.Order.OrderReference
             }
-  
+
             // Call Market Order API and validate the data
             cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
                 function: function (response) {
@@ -82,7 +79,7 @@ TestFilter(['EDM', 'API','EDM-E2E-API'], () => {
                 // Validate shipments
                 expect(response.invoices[0].shipments).is.empty
             })
-  
+
             // Call the Market Events API and validate the data
             cy.orderEventsApiWithRetry(req.orderReference, {
                 function: function (response) {
@@ -146,23 +143,17 @@ TestFilter(['EDM', 'API','EDM-E2E-API'], () => {
                     lib.validateEvents(response, 'MarketOrderDispatched', 1)
                     })
 
-                    //Login to SM and verify the order details
-                    cy.loginToSMAndSearchOrder(smLogins, req.orderId)
-                    cy.validateOrderDetailsOnSM(true);
-
                     //Update shipping tracking number
                     cy.updateShippingInformation(shipmentId, data.invoices[0].legacyId, updatedTrackingNumber, data.invoices[0].seller.sellerName).then((response) => {
                         expect(response.data.attributes.shipment_tracking_number).is.equal(updatedTrackingNumber)
-                        cy.log()
                     })
                 })
 
                 //Get Projection And Verify Updated Tracking Number
-                cy.wait(Cypress.config('tenSecondWait'))
                 cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
                     function: function (response) {
-                    if (response.body.invoices[0].wowStatus !== 'PartiallyShipped') {
-                        throw new Error('Still not shipped yet')
+                    if (response.body.invoices[0].shipments[0].trackingNumber !== updatedTrackingNumber) {
+                        throw new Error('Tracking number not updated yet')
                     }
                     },
                     retries: Cypress.env('marketApiRetryCount'),
@@ -175,11 +166,25 @@ TestFilter(['EDM', 'API','EDM-E2E-API'], () => {
 
                 //Search Order in SM and verify the Updated Tracking number
                 cy.get("@finalProjection").then((response) => {
-                    cy.searchAnOrderOnSM(req.orderId)
+                    cy.loginToSMAndSearchOrder(smLogins, req.orderId)
                     cy.validateOrderDetailsOnSM(true)
+                })
+
+                // Invoke OQS TMO api and validate it against the projection
+                cy.get("@finalProjection").then((response) => {
+                    cy.getOrderStatus(req.orderId).then((oqsResponse) => {
+                        cy.log(JSON.stringify(oqsResponse))
+
+                        //Verify Shipping Information
+                        oqsResponse.MarketOrders.forEach(function (item, i) {
+                            expect(oqsResponse.MarketOrders[i].Shipment.Carrier).to.be.equal(response.invoices[i].shipments[0].carrier)
+                            expect(oqsResponse.MarketOrders[i].Shipment.TrackingLink).to.be.equal(response.invoices[i].shipments[0].trackingLink)
+                            expect(oqsResponse.MarketOrders[i].Shipment.TrackingNumber).to.be.equal(response.invoices[i].shipments[0].trackingNumber)
+                        })
+                    })
                 })
             })  
         })        
       })
     })
-  })
+})
