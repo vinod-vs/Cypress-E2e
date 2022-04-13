@@ -24,7 +24,6 @@ export class OrderDetailsPage {
      }
 
      getChangeOrderButton(){
-        // return cy.get('.your-groceries-panel > .panel-heading').find('button.secondary')
         return cy.get('.your-groceries-panel').find('button.secondary')
      }
      
@@ -37,8 +36,8 @@ export class OrderDetailsPage {
     }
 
     getChangeMyOrderModalButton(){
-        return cy.get('.checkbox-container.selected').parents('div').find('button.primary').eq(1)
-        }
+        return cy.get('.checkbox-container.selected').parents('div').find('button.primary').eq(0)
+    }
 
 }
 export const onOrderDetailsPage = new OrderDetailsPage()

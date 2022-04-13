@@ -39,7 +39,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
         cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
      
-        cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+        cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then((confirmOrderResponse: any) => {
       // Save the Order Id of the order placed    
         const orderId = confirmOrderResponse.Order.OrderId
 
@@ -57,9 +57,9 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         onOrderDetailsPage.getChangeMyOrderModalCheckbox().then(checkbox => {
         cy.wrap(checkbox).should('not.be.visible').check({force:true}).should('be.checked')
         })
-        onOrderDetailsPage.getChangeMyOrderModalButton().click({force:true})
+        onOrderDetailsPage.getChangeMyOrderModalButton().should('contain', 'Change my order').click()
         cy.wait(500)
-        onSideCartPage.getViewCartButton().should('be.visible')
+        //onSideCartPage.getViewCartButton().should('be.visible')
 
         })
     })
