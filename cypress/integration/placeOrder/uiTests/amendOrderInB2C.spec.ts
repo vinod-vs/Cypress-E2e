@@ -7,6 +7,7 @@ import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import { MyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
 import { onOrderDetailsPage } from '../../../support/myOrder/ui/pageObjects/OrderDetailsPage'
+import {onSideCartPage} from '../../../support/sideCart/ui/pageObjects/SideCartPage'
 import '../../../support/login/api/commands/login'
 import '../../../support/delivery/api/commands/options'
 import '../../../support/fulfilment/api/commands/fulfilment'
@@ -58,6 +59,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         })
         onOrderDetailsPage.getChangeMyOrderModalButton().click({force:true})
         cy.wait(500)
+        onSideCartPage.getViewCartButton().should('be.visible')
 
         })
     })
