@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
 /// <reference types="cypress" />
 
-import '../../../utilities/api/apiUtilities'
-import getConsignmentWebhook from '../../../../fixtures/everydayMarket/afterShip.json'
+import './utilities/api/apiUtilities'
+import getConsignmentWebhook from '../fixtures/afterShip.json'
 
 Cypress.Commands.add('invokeconsignmentwebhook', (postageTrackingnumber, status) => {  
   const requestBody = getConsignmentWebhook

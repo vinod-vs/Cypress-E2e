@@ -104,7 +104,6 @@
         "productSearchByStockCodeEndpoint": "apis/ui/v2/Search/count",
         "substitutionEndpoint": "/apis/ui/Checkout/substitution",
         "productNoteEndpoint": "/apis/ui/Checkout/ProductNote",
-        "commonAddressSearchTerm": "11 Church Ave, MASCOT NSW 2020",
         "consignmentEndpoint": "https://uat.mobile-api.woolworths.com.au/consignment/aftership/v1/trackings"
     },
     "viewportHeight": 1080,
