@@ -33,8 +33,6 @@ const getApiKeyForSeller = (sellerName) => {
   switch (sellerName) {
     case 'Pet Culture':
       return Cypress.env('marketplacerPetCultureAPIKey')
-    case 'BigWTest':
-      return Cypress.env('marketplacerBigWTestAPIKey')
     case 'Big W Test':
       return Cypress.env('marketplacerBigWTestAPIKey')
     case 'Healthy Life':
@@ -329,6 +327,28 @@ Cypress.Commands.add('getInvoiceDetails', (encodedInvoiceId) => {
         id: encodedInvoiceId
       }
     }
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+    return response.body
+  })
+})
+
+Cypress.Commands.add('updateShippingInformation', (shippingId, decodedInvoiceId, postageTrackingnumber, sellerName) => {
+  const apiKey = getApiKeyForSeller(sellerName)
+  const requestBody = partialDispatchOfLineItemsInInvoice
+  requestBody.data.attributes.shipment_tracking_number = postageTrackingnumber
+  const endPoint = String(Cypress.env('marketplacerPartialDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)+'/'
+  cy.log(endPoint)
+  cy.api({
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/vnd.api+json'
+    },
+    auth: {
+      bearer: apiKey
+    },
+    url: Cypress.env('marketplacerApiEndpoint') + endPoint + shippingId,
+    body: requestBody
   }).then((response) => {
     expect(response.status).to.eq(200)
     return response.body
