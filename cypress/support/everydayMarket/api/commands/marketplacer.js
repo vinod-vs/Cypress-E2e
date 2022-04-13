@@ -35,8 +35,6 @@ const getApiKeyForSeller = (sellerName) => {
       return Cypress.env('marketplacerPetCultureAPIKey')
     case 'Big W Test':
       return Cypress.env('marketplacerBigWTestAPIKey')
-    case 'Big W Test':
-      return Cypress.env('marketplacerBigWTestAPIKey')
     case 'Healthy Life':
       return Cypress.env('marketplacerHealthyLifeAPIKey')
     default:
