@@ -26,7 +26,7 @@ declare namespace Cypress {
     signUpViaApiWith2FA(signUpDetails: any): any;
     setDeliveryOptionsViaApi(deliveryOptions: any): any;
     setFulfilmentLocationWithWindow(fulfilmentType: string, addressSearchBody: any, windowType: string): any;
-    placeOrderViaApiWithAddedCreditCard(creditCardDetails: any, platform: string): any;
+    placeOrderViaApiWithAddedCreditCard(platform: string, creditCardDetails?: any): any;
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
     setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;

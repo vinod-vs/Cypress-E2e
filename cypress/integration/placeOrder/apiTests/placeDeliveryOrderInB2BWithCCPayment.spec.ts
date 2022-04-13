@@ -76,7 +76,7 @@ TestFilter(['B2B' ,'API', 'P0'], () => {
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then(() => {
+      cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then(() => {
       })
     })
   })

@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-expressions */
 
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
