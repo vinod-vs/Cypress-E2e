@@ -160,6 +160,8 @@ declare namespace Cypress {
     writeTestDataUsed(filepath:string, signupdetails: any): any;
     addProductNoteViaApi(productNote: any): any;
     setItemSubstitutionviaAPI(subsRequest: any): any;
+    prepareAnyMultiSellerLineItemEdmOrder(searchTerm: string, purchaseQty: number): void;
+    addMultiSellerAvailableEDMItemsToTrolley(searchTerm: string, quantity: number): void;
     addYearsToCurrentDate(noOfYearsToAdd: any): any;
     evaluateSessionGroup(requestBody:any): any;
     generateRandomString(numChars?: number): Cypress.Chainable<string>;
