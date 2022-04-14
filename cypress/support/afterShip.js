@@ -6,10 +6,10 @@ import getConsignmentWebhook from '../fixtures/afterShip.json'
 
 Cypress.Commands.add('invokeconsignmentwebhook', (postageTrackingnumber, status) => {
   const requestBody = getConsignmentWebhook
-  const secret = String(Cypress.env('consignmentaftershipAPIKey'))
+  const secret = String(Cypress.env('consignmentAfterShipAPIKey'))
   const idVal = Math.floor(Math.random() * (9 * (Math.pow(10, 5)))) + (Math.pow(10, 5))
   const eventIdVal = Math.floor(Math.random() * (9 * (Math.pow(10, 5)))) + (Math.pow(10, 5))
-  const tsVal = Math.floor(Math.random() * (9 * (Math.pow(10, 5)))) + (Math.pow(10, 5))
+  const tsVal = Math.floor(Math.random() * (9 * (Math.pow(10, 10)))) + (Math.pow(10, 10))
   requestBody.event_id = "17e03e7d-a969-455b-99eb-"+eventIdVal
   requestBody.msg.id = idVal
   requestBody.msg.tracking_number = postageTrackingnumber
