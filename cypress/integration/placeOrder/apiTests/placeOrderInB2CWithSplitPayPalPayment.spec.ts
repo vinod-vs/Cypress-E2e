@@ -43,7 +43,7 @@ TestFilter(['B2C', 'API', 'P1'], () => {
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
       cy.navigateToCheckout().then((response: any) => {
-        splitPayPalPayment.payments[0].amount = response.Model.Order.BalanceToPay - giftCardPaymentAmount
+        splitPayPalPayment.payments[0].amount = (response.Model.Order.BalanceToPay * 100 - giftCardPaymentAmount * 100) / 100
         splitPayPalPayment.payments[1].amount = giftCardPaymentAmount
       })
 

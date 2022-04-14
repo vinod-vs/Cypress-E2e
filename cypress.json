@@ -102,7 +102,8 @@
         "coolServiceEndpoint": "http://wowcool-api-uat.trafficmanager.net/api/CountryOfOrigin",
         "productSearchByStockCodeEndpoint": "apis/ui/v2/Search/count",
         "substitutionEndpoint": "/apis/ui/Checkout/substitution",
-        "productNoteEndpoint": "/apis/ui/Checkout/ProductNote"
+        "productNoteEndpoint": "/apis/ui/Checkout/ProductNote",
+        "segmentationSdkClientEndpoint": "https://dxk8saae.uat.wx-d.net/utsdktestclient/api/v1/Sdk/isingroupbyid/dictionary"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,

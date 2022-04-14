@@ -32,13 +32,13 @@ import '../../../../../support/wowDispatch/wowStatusUpdates'
 import { onOrderManagement } from "../../../../../support/siteManagement/ui/pageObjects/OrderManagement"
 
 TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
-  describe("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
+  describe("[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue", () => {
     before(() => {
       cy.clearCookies({ domain: null });
       cy.clearLocalStorage({ domain: null });
     });
 
-    it("[API]  RP-5469-E2E-Automation-Regression-Scenario-4-EM|SM|EMCancellationWithWowDispatchAndSMReIssue", () => {
+    it("[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue", () => {
       const searchTerm = 'treats'   // 'everyday market'
       const purchaseQty = 2
       let shopperId: any;
@@ -152,7 +152,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         onOrderManagement.getDeliveryInstructionsTextBox().type("Delivery Instructions for the ReIssue of the Damaged Item")
         cy.log("----Now, Click on Approve Button----") 
         onOrderManagement.getWowApproveButton().click()
-      cy.wait(Cypress.config("fiveSecondWait"))
+      cy.wait(Cypress.config("tenSecondWait"))
       cy.log("----Now, Click on 'Submit and Place Order Button' on 'Confirm your Reissued Order' Screen ----")
       onOrderManagement.getSubmitAndPlaceOrderButton().click()
       cy.wait(Cypress.config("fiveSecondWait"))
@@ -164,13 +164,6 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   
   })
   }) 
-
-
-
-
-
-
-
 
   })
   })

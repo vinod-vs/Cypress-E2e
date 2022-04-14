@@ -2,7 +2,6 @@
 
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import deliveryOptions from '../../../fixtures/checkout/deliveryOptions.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import TestFilter from '../../../support/TestFilter'
@@ -39,7 +38,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
       deliveryOptions.CanLeaveUnattended = true
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
         expect(confirmOrderResponse.Order.CanLeaveOrderUnattended, 'Order Confirmation can Leave Order Unattended').to.eql(true)
       })
     })
@@ -51,7 +50,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
       deliveryOptions.DeliveryInstructions = 'Delivery Instructions added by API'
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
         expect(confirmOrderResponse.Order.DeliveryInstructions, 'Order Confirmation Delivery Instructions').to.eql(deliveryOptions.DeliveryInstructions)
       })
     })
@@ -66,7 +65,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
       deliveryOptions.PickupInstructions = 'Store Pick up Instructions added by API'
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
         expect(confirmOrderResponse.Order.DeliveryInstructions, 'Order Confirmation Pick up Instructions').to.eql(deliveryOptions.PickupInstructions)
       })
     })
