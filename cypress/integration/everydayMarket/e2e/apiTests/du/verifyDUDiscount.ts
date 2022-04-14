@@ -60,10 +60,10 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       cy.log('LoggedIn Rewards Card Number is = ' + shoppers.emAccountWithRewards27.rewardsCardNumber)
 
       // Add Wow + EM Multi Seller Items in the Cart
-      //cy.prepareAnyMultiSellerLineItemWowAndEdmOrder(searchTerm, purchaseQty)
+      cy.prepareAnyMultiSellerLineItemWowAndEdmOrder(searchTerm, purchaseQty)
 
       // Add EM ONLY Multi Seller Items in the Cart
-      cy.prepareAnyMultiSellerLineItemEdmOrder(searchTerm, purchaseQty)
+      //cy.prepareAnyMultiSellerLineItemEdmOrder(searchTerm, purchaseQty)
       
       //Place Order
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
@@ -76,52 +76,10 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
           orderReference: confirmedOrder.Order.OrderReference,
           WoolworthsSubtotal: confirmedOrder.Order.WoolworthsSubtotal
         }
-        cy.wrap(req.orderId).as('orderId')       
-        cy.wrap(WoolworthsSubtotal).as('WoolworthsSubtotal')
-      
-      // Invoke the events api and verify the content
-       cy.orderEventsApiWithRetry(req.orderReference, {
-          function: function (response) {
-            if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
-              cy.log('Expected OrderPlaced & MarketOrderPlaced to be present')
-              throw new Error('Expected OrderPlaced & MarketOrderPlaced to be present')
-            }
-          },
-          retries: Cypress.env('marketApiRetryCount'),
-          timeout: 10000
-        })
 
-        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
-          function: function (response) {
-            if (response.body.invoices[0].wowStatus !== "Placed") {
-              cy.log("wowStatus was " + response.body.invoices[0].wowStatus + " instead of Placed" );
-              throw new Error( "wowStatus was " + response.body.invoices[0].wowStatus + " instead of Placed" )
-            }
-          },
-          retries: Cypress.env('marketApiRetryCount'),
-          timeout: Cypress.env('marketApiTimeout')
-        })
-          .as("finalProjection")
-          .then((response) => {
-            edmOrderId = response.invoices[0].legacyIdFormatted;
-            edmInvoiceId = response.invoices[0].legacyId;
-            cy.log( "In finalProjection the MPOrder Id= " + edmOrderId + ", and MPInvoice Id= " + edmInvoiceId );     
-          });
-
-          lib.verifyEventDetails( response, "MarketOrderPlaced", testData, shopperId, 1 );
-
-
-
-      })  // ENDS - cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
+      })
     
     
-    
-    
-    
-    
-    
-    
-    }) // ENDS - it("[API]  RP-5538-EM|MP|SM-VerifyDeliveryUnlimitedDiscountForEMitemsAndDisplayedInSM", () => {
-  }) // ENDS - describe
-})  // ENDS - TestFilter
+    })
+  })
+})  
