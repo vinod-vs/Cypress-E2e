@@ -218,3 +218,20 @@ Cypress.Commands.add('addEDMItemsBasedOnMinCartValueToTrolley', (testData) => {
       cy.wrap(finalQty).as('finalQty')
     })
 })
+
+Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, quantity) => {
+  // Search product by overriding the SearchTerm attribute in the search body request fixture
+  cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
+    .then((searchResponse) => {
+      cy.wrap
+      ( searchResponse.Products
+      //Filter search results by IsMarketProduct = true and IsAvailable = true
+        .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
+      //Select the Products Available - EM Multi Seller
+        .forEach(edmMultiSellerItems => {
+          cy.log("EM Seller's=  \" " + edmMultiSellerItems.Products[0].Vendor + " \" , Added Product Display Name is =  \" " + edmMultiSellerItems.Products[0].DisplayName + " \" " + " and StockCode is= \" " + edmMultiSellerItems.Products[0].Stockcode + " \" ")
+          cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmMultiSellerItems.Products[0].Stockcode, Quantity: quantity }) 
+        }) // forEach - Ends
+      ) //  cy.wrap - Ends
+  }) // cy.productSearch - ENDS 
+}) // addMultiSellerAvailableEDMItemsToTrolley -  ENDS

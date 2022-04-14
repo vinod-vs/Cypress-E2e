@@ -219,6 +219,13 @@
         "shopperId": "8518228",
         "platform": "B2C"
     },
+    "emAccountWithRewards27": {
+        "email": "rjagadishauto34@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401128,
+        "shopperId": "8518293",
+        "platform": "B2C"
+    },
 
 
 
@@ -238,12 +245,6 @@
         "rewardsCardNumber": 9355125401111,
         "shopperId": "8518279",
         "platform": "B2C"
-    },
-    "emAccountWithRewards27": {
-        "email": "rjagadishauto34@woolworths.com.au",
-        "password": "testing123",
-        "rewardsCardNumber": 9355125401128,
-        "shopperId": "8518293",
-        "platform": "B2C"
     }
+
 }
