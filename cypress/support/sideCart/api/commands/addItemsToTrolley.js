@@ -231,7 +231,7 @@ Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, qu
         .forEach(edmMultiSellerItems => {
           cy.log("EM Seller's=  \" " + edmMultiSellerItems.Products[0].Vendor + " \" , Added Product Display Name is =  \" " + edmMultiSellerItems.Products[0].DisplayName + " \" " + " and StockCode is= \" " + edmMultiSellerItems.Products[0].Stockcode + " \" ")
           cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmMultiSellerItems.Products[0].Stockcode, Quantity: quantity }) 
-        }) // forEach - Ends
-      ) //  cy.wrap - Ends
-  }) // cy.productSearch - ENDS 
-}) // addMultiSellerAvailableEDMItemsToTrolley -  ENDS
+        }) 
+      ) 
+  })  
+}) 
