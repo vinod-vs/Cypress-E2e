@@ -1,4 +1,4 @@
-export const shipmentStatus = {
+export const afterShipShipmentStatus = {
   IN_TRANSIT: 'InTransit',
   OUT_FOR_DELIVERY: 'OutForDelivery',
   DELIVERED: 'Delivered',

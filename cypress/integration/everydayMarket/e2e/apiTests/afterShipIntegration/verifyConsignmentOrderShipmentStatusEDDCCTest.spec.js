@@ -19,10 +19,10 @@ import '../../../../../support/rewards/api/commands/rewards'
 import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
-import '../../../../../support/afterShip'
+import '../../../../../support/afterShip/api/commands/afterShip'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
-import { shipmentStatus } from '../../../../../support/shipmentStatus'
+import { afterShipShipmentStatus } from '../../../../../support/afterShip/api/commands/shipmentStatus'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5544 - Verify Estimate Delivery Date, Shipment Status post invoking the consignment API', () => {
@@ -94,7 +94,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, trackNo, testData.carrier, testData.items[0].sellerName).then((response) => {
             // Iterate the four shipment status
-            const AfterShipStatus = [shipmentStatus.IN_TRANSIT, shipmentStatus.OUT_FOR_DELIVERY, shipmentStatus.DELIVERED, shipmentStatus.AVAILABLE_FOR_PICKUP]
+            const AfterShipStatus = [afterShipShipmentStatus.IN_TRANSIT, afterShipShipmentStatus.OUT_FOR_DELIVERY, afterShipShipmentStatus.DELIVERED, afterShipShipmentStatus.AVAILABLE_FOR_PICKUP]
             const ids = AfterShipStatus
             ids.forEach(id => {
               // After dispatch, Invoke the order api and verify the projection content is updated acordingly
@@ -133,7 +133,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                 lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
               })
               // Consignment aftership webhook  for each of the Shipment Status
-              cy.invokeconsignmentwebhook(trackNo, id, {
+              cy.invokeConsignmentWebhook(trackNo, id, {
                 function: function (response) {
                   expect(response.status).to.eq(200)
                   cy.log('The Consignment aftership api' + JSON.stringify(response.body))
@@ -175,7 +175,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
                 // Verify the event has got"MarketShipmentStatusUpdated" for the respective Shipment Status {'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED', 'AVAILABLE_FOR_PICKUP'}
-                lib.verifyShipmentStatusEDD(response, 'MarketShipmentStatusUpdated', testData, shopperId, id)
+                lib.verifyShipmentStatusDetails(response, 'MarketShipmentStatusUpdated', testData, shopperId, id)
               })
             })
           })

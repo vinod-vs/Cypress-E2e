@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /// <reference types="cypress" />
 
-import './utilities/api/apiUtilities'
-import getConsignmentWebhook from '../fixtures/afterShip.json'
+import '../../../utilities/api/apiUtilities'
+import getConsignmentWebhook from '../../../../fixtures/afterShip.json'
 
-Cypress.Commands.add('invokeconsignmentwebhook', (postageTrackingnumber, status) => {
+Cypress.Commands.add('invokeConsignmentWebhook', (postageTrackingnumber, status) => {
   const requestBody = getConsignmentWebhook
   const secret = String(Cypress.env('consignmentAfterShipAPIKey'))
   const idVal = Math.floor(Math.random() * (9 * (Math.pow(10, 5)))) + (Math.pow(10, 5))

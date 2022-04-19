@@ -23,7 +23,7 @@ export function verifyEventDetails (response, expectedEventName, testData, shopp
   expect(events).to.have.length(expectedEventCount)
 }
 
-export function verifyShipmentStatusEDD (response, expectedEventName, testData, shopperId, Status) {  
+export function verifyShipmentStatusDetails(response, expectedEventName, testData, shopperId, Status) {  
   const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
   cy.log('Expected events: ' + JSON.stringify(events))
   var ctr=0
