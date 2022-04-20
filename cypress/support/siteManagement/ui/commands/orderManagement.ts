@@ -23,6 +23,14 @@ Cypress.Commands.add("searchOrder", (orderId) => {
   cy.contains('#manage-title-panel > #manage-title-area > .manage-title > h1', orderId, {timeout: 60000})
 });
 
+Cypress.Commands.add("searchCustomerByEmailInSM", (email) => {
+  onOrderManagement.getEmailAddressTextField().click({ force: true });
+  cy.wait(2000)
+  onOrderManagement.getEmailAddressTextField().should('be.visible').type(email);
+  onOrderManagement.getCustomerSearchButton().should('be.visible').click()
+  cy.contains('#manage-title-panel > #manage-title-area > .manage-title > h1', 'Customer Maintenance', {timeout: 60000})
+})
+
 Cypress.Commands.add(
   "createARefund",
   (stockcode, refundReason, refundComment, refundQuantity, goodwillAmount) => {
