@@ -15,6 +15,9 @@ let SecondaryNumber:any = faker.phone.phoneNumber('04########')
 let tempNumber:any = []
 let DateOfBirthInput:any
 let WrongDOB:any = ["12/25/1989","32/12/2015","29/02/2015"]
+let ABN:any = "13450475265"
+let CompanyName:any = faker.company.companyName()
+let jobTitle:any = faker.name.jobTitle();
 
 TestFilter(["B2C", "UI", "P0"], () => {
     describe("[UI] Personal details are editable in myAccounts page", () => {
@@ -117,7 +120,45 @@ TestFilter(["B2C", "UI", "P0"], () => {
 
       it("verify email address field is present in myAccounts page", () => {
         onMyAccountDetailsPage. getEmailAddress ().click()
-      });  
+        cy.logoutViaUi(shoppers);
+      }); 
+      
+      it("verify user is able to add Business details in myAccounts page",() => {
+        cy.clearCookies({ domain: null });
+        cy.clearLocalStorage({ domain: null });
+        Cypress.Cookies.preserveOnce("w-rctx");
+        cy.loginViaUi(shoppers[0]);      
+        //Navigate to My account
+        cy.navigateToMyAccountViaUi();
+        let countOfElements = 0;
+        cy.get(".secondary.l.m.mobile-full-width").then($elements => {
+          countOfElements = $elements.length;
+          if (countOfElements > 0)
+          { 
+            onMyAccountDetailsPage.addBusinessDetailsButton().click()
+            onMyAccountDetailsPage.addABNnumber().clear().type(ABN)
+            onMyAccountDetailsPage.addCompanyName().clear().type(CompanyName)
+            onMyAccountDetailsPage.addBusinessType().select("Legal")
+            onMyAccountDetailsPage.addJobTitle().clear().type(jobTitle)
+            onMyAccountDetailsPage.addNumberOfEmployees().clear().type("120")
+            onMyAccountDetailsPage.saveBusinessDetails().click()
+          }
+          else{
+
+            onMyAccountDetailsPage.editLinkABNnumber().click()
+            onMyAccountDetailsPage.addABNnumber().clear().type(ABN)
+            onMyAccountDetailsPage.saveBusinessDetails().click()
+            onMyAccountDetailsPage.editLinkCompanyName().click()
+            onMyAccountDetailsPage.addCompanyName().clear().type(CompanyName)
+            onMyAccountDetailsPage.saveBusinessDetails().click()  
+            onMyAccountDetailsPage.editLinkJobTitle().click()
+            onMyAccountDetailsPage.addJobTitle().clear().type(jobTitle)
+          }
+
+        });
+
+
+      });
 
     })
 })

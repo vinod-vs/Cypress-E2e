@@ -129,7 +129,7 @@ declare namespace Cypress {
     generateGiftCards(expectedGiftCardBalance: any): any;
     payWithGiftCard(digitalPaymentRequest: any): any;
     addEDMItemsBasedOnMinCartValueToTrolley(testData: any): any;
-    editPersonalDetails(personalDetails: any): any;
+    editPersonalDetails(personalDetails: any): any;  
     verifyEmailNotificationForPersonalDetails():any
     signUpBusinessUser(signupdetails: any): any;
     subscribeToDUMonthlyBusiness(userinfor: any): any;
@@ -167,5 +167,6 @@ declare namespace Cypress {
     generateRandomString(numChars?: number): Cypress.Chainable<string>;
     changeDateFormatToAddSlash(date: any): any;
     searchCustomerByEmailInSM(email: any): void;
+
   }
 }

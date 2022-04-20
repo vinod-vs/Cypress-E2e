@@ -102,7 +102,66 @@ export class MyAccountDetailsPage {
       return cy.get('#emailLabel')
     }
 
-}
+    addBusinessDetailsButton () {
+      return cy.get('.secondary.l.m.mobile-full-width')
+    }
 
-  
+    addABNnumber () {
+      return cy.get('#shared-text-input-8')
+    }
+
+    addCompanyName () {
+      return cy.get('#businessDetails-CompanyName')
+    }
+
+
+    addBusinessType () {
+      return cy.get('#shared-dropdown-input-0')
+    }
+
+    addJobTitle () {
+      return cy.get('#businessDetails-JobTitle')
+    }
+
+    addNumberOfEmployees () {
+      return cy.get('#businessDetails-NumberOfEmployees')
+    }
+
+    saveBusinessDetails () {
+      return cy.get('.success.l.m.full-width.mobile-full-width')
+    }
+
+    cancelBusinessDetails () {
+      return cy.get('#cancelBusinessDetails')
+    }
+
+    editLinkABNnumber() {
+      return cy.get('#edit-link-abn')
+
+    }
+
+    editLinkCompanyName() {
+      return cy.get('#edit-link-company-name')
+
+    }
+
+    editLinkTypeOfBusiness() {
+      return cy.get('#edit-link-type-of-business')
+
+    }
+
+    editLinkJobTitle() {
+      return cy.get('#edit-link-job-title')
+
+    }
+
+    editLinkNumberOfEmployees() {
+      return cy.get('#edit-link-number-of-employees')
+
+    }
+
+    
+
+
+} 
   export const onMyAccountDetailsPage = new MyAccountDetailsPage()
