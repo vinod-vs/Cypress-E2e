@@ -11,7 +11,8 @@ export function verifyEventDetails (response, expectedEventName, testData, shopp
 
   events.forEach(event => {
     // Verify the event contents
-    expect(event.orderId).to.equal(Number(testData.orderId))
+    // If traderOrderId is null, skip its validation
+    if (testData.orderId !== null) { expect(event.orderId).to.equal(Number(testData.orderId)) }
     expect(event.orderReference).to.be.equal(testData.orderReference)
     expect(event.shopperId).to.be.equal(Number(shopperId))
     expect(event.domainEvent).to.be.equal(expectedEventName)
@@ -21,6 +22,23 @@ export function verifyEventDetails (response, expectedEventName, testData, shopp
   // Verify there are only expectedEventCount events
   expect(events).to.have.length(expectedEventCount)
 }
+
+export function verifyShipmentStatusDetails(response, expectedEventName, testData, shopperId, Status) {  
+  const events = response.data.filter(event => event.domainEvent === String(expectedEventName))
+  cy.log('Expected events: ' + JSON.stringify(events))
+  var ctr=0
+  events.forEach(event => {
+    // Verify the event contents
+    // If traderOrderId is null, skip its validation
+    if (testData.orderId !== null) { expect(event.orderId).to.equal(Number(testData.orderId)) }
+    expect(event.orderReference).to.be.equal(testData.orderReference)
+    expect(event.shopperId).to.be.equal(Number(shopperId))
+    expect(event.domainEvent).to.be.equal(expectedEventName)   
+    expect(event.payload).includes(Status[0].toLowerCase())
+  })  
+}
+
+
 
 export function verifyCommonOrderDetails (response, testData, shopperId) {
   // Order details
@@ -43,7 +61,7 @@ export function verifyOrderTotals (testData, confirmOrderResponse) {
   testData.teamDiscount = confirmOrderResponse.Order.TeamDiscount
   testData.orderDiscountWithoutTeamDiscount = confirmOrderResponse.Order.OrderDiscountWithoutTeamDiscount
   testData.orderTotal = Number(Number.parseFloat(Number(Number(testData.edmTotal) + Number(testData.edmDeliveryCharges) + Number(testData.wowTotal) + Number(testData.packagingFee) + Number(testData.wowDeliveryCharges) -
-    Number(testData.teamDiscount) - Number(testData.orderDiscountWithoutTeamDiscount))).toFixed(2))
+        Number(testData.teamDiscount) - Number(testData.orderDiscountWithoutTeamDiscount))).toFixed(2))
   cy.log('Testdata JSON: ' + JSON.stringify(testData))
   cy.log('ExpectedTotalIncludingGst: ' + testData.orderTotal)
   cy.log('TeamDiscount: ' + testData.teamDiscount)
@@ -194,7 +212,7 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
       expect(oqsResponse.MarketDeliveryPostCode).to.not.be.null
       expect(oqsResponse.IsMarketOnly).to.be.equal(isMarketOnly)
       expect(oqsResponse.MarketOrders.length).to.be.greaterThan(0)
-      //expect(oqsResponse.MarketShippingPdfLink).to.be.equal(projection.shippingPdfLink)
+      // expect(oqsResponse.MarketShippingPdfLink).to.be.equal(projection.shippingPdfLink)
       expect(oqsResponse.CurrentStatus).to.be.equal(expectedWOWOrderStatus)
 
       // If marketOnly order, verify there are no WOW products
@@ -246,7 +264,7 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
           }
           expect(oqsResponse.MarketOrders[i].Total).to.be.equal(projection.invoices[i].invoiceTotal)
           expect(oqsResponse.MarketOrders[i].MarketShippingFee).to.be.equal(projection.shippingAmount)
-          //expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
+          // expect(oqsResponse.MarketOrders[i].PdfLink).to.be.equal(projection.invoices[i].pdfLink)
           expect(oqsResponse.MarketOrders[i].CreatedDate).to.not.be.null
           expect(oqsResponse.MarketOrders[i].UpdatedDate).to.not.be.null
           expect(oqsResponse.MarketOrders[i].DeliveryInfo).to.not.be.null

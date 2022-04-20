@@ -2,7 +2,7 @@
   "VerifyFullyDispatchedEDMOrder": {
     "searchTerm": "treats",
     "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
+    "trackingNumber": "Automation12345",
     "address": {
       "search": "407-419 Elizabeth St, SURRY HILLS"
     },
@@ -23,7 +23,7 @@
   "VerifyFullyDispatchedEDMOnlyOrderPaypal": {
     "searchTerm": "treats",
     "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
+    "trackingNumber": "Automation12345",
     "address": {
       "search": "407-419 Elizabeth St, SURRY HILLS"
     },
@@ -139,7 +139,7 @@
   "GenericWOWPlusEDMPPPaymentTestData": {
     "searchTerm": "treats",
     "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
+    "trackingNumber": "Automation12345",
     "address": {
       "search": "407-419 Elizabeth St, SURRY HILLS"
     },
@@ -168,7 +168,8 @@
       {
         "quantity": 2,
         "isEDMProduct": "true",
-        "searchTerm": "1073745302"
+        "searchTerm": "1073741957"
+        
       },
       {
         "isEDMProduct": "false",
@@ -259,5 +260,13 @@
       }
     ],
     "paymentType": "GIFTCARD_ONLY"
-  }   
+  },
+  "GenericVendorInfoStockCodeSearch": {
+    "searchTerm": "1073741957",
+    "quantity": 1,
+    "VendorName": "Pet Culture",
+    "address": {
+      "search": "407-419 Elizabeth St, SURRY HILLS"
+    }   
+  } 
 }

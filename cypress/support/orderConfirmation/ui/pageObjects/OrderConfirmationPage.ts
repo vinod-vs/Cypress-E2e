@@ -59,20 +59,36 @@ export class OrderConfirmationPage {
     return this.getOrderPaymentSummaryDetailInfoValue('Total')
   }
 
-  GoBackToHomePage () {
+  getOrderSplitPaymentPaidWithGiftCardAmount () {
+    return this.getOrderSplitPaymentInstrumentPaidAmount('Paid with Gift Card')
+  }
+
+  getOrderSplitPaymentPaidWithCreditCardAmount () {
+    return this.getOrderSplitPaymentInstrumentPaidAmount('Paid with Credit Card')
+  }
+
+  getOrderSplitPaymentPaidWithPayPalAmount () {
+    return this.getOrderSplitPaymentInstrumentPaidAmount('Paid with PayPal')
+  }
+
+  goBackToHomePage () {
     this.getBackToHomeLink().click()
   }
 
-  GoToMyOrderDetailsPage () {
+  goToMyOrderDetailsPage () {
     this.getMakeChangesToMyOrderButton().click()
   }
 
-  GoToTrackMyOrderPage () {
+  goToTrackMyOrderPage () {
     this.getTrackMyOrderButton().click()
   }
 
   private getOrderPaymentSummaryDetailInfoValue (typeName: string) {
     return cy.contains(typeName).parents('.confirmation-order-information__row').find('.confirmation-order-information__highlight')
+  } 
+
+  private getOrderSplitPaymentInstrumentPaidAmount (typeName: string) {
+    return cy.contains(typeName).parents('.confirmation-order-information__label__row').find('.confirmation-order-information__highlight').eq(1)
   } 
 }
 

@@ -3,7 +3,6 @@
 import TestFilter from '../../../support/TestFilter'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import removeItemsRequestBody from '../../../fixtures/sideCart/removeItems.json'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
@@ -29,7 +28,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
       
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
         cy.wrap(confirmOrderResponse.Order.OrderId).as('initialOrderId')
         cy.wrap(confirmOrderResponse.Order.TotalIncludingGst).as('initialOrderTotal')
       })
@@ -38,7 +37,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     it('Place an order for B2C customer, then amend the order and place amended order with additional items', () => {
       cy.get('@initialOrderId').then(($orderId: any) => {
         cy.amendOrder($orderId).then((response: any) => {
-          expect(response.status).to.eq(200)
+          expect(response.status, 'Amend status').to.eq(200)
         })
       })
 
@@ -54,7 +53,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.get('@initialOrderTotal').then((initialTotal: any) => {
           if ($response.TrolleyRequest.Totals.Total > initialTotal) {
             cy.log('Amended Total > Initial Order Total')
-            cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform)
+            cy.placeOrderViaApiWithAddedCreditCard(platform)
           }
           else {
             cy.log('Amended Total <= Initial Order Total')

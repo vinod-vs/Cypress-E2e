@@ -5,7 +5,6 @@ import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
@@ -24,6 +23,8 @@ import '../../../support/checkout/api/commands/checkoutHelper'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Place a Direct to boot order in B2C platform using Credit Card', () => {
+    const creditCard = Cypress.env('creditCard')
+
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -63,7 +64,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         })
       })
 
-      cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response: any) => {
+      cy.creditcardTokenisation(creditCard, creditcardSessionHeader).then((response: any) => {
         expect(response.status.responseText, 'Credit Card Tokenisation').to.be.eqls('ACCEPTED')
 
         digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId

@@ -92,14 +92,20 @@ Cypress.Commands.add('convertShortWeekDayToLong', (shortWeekday) => {
   }
 })
 
-Cypress.Commands.add('generateRandomString', () => {
+Cypress.Commands.add('generateRandomString', (numChars?: number) => {
+  let strLength
   let text = ''
   const alpha = 'abcdefghijklmnopqrstuvwxyz'
 
-  for (let i = 0; i < alpha.length; i++) {
-    text += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  if (typeof numChars !== undefined) {
+    strLength = numChars!
+  } else {
+    strLength = alpha.length
   }
 
+  for (let i = 0; i < strLength; i++) {
+    text += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  }
   return cy.wrap(text)
 })
 
@@ -109,7 +115,7 @@ Cypress.Commands.add('formatToAmPm', (date) => {
   let ampm = hours >= 12 ? 'pm' : 'am'
   hours = hours % 12
   hours = hours ? hours : 12 // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes
+  minutes = minutes < 10 ? '0'+ minutes : minutes
   let strTime = hours + ':' + minutes + ' ' + ampm
 
   return cy.wrap(strTime)
@@ -123,6 +129,28 @@ Cypress.Commands.add('removeDateOrdinals', (text) => {
   return text.replace(/st|nd|rd|th/g, '')
 })
 
+Cypress.Commands.add('addYearsToCurrentDate', (noOfYearsToAdd:any) => {
+  let today = new Date()
+  let todayPlusYears = new  Date(today.getFullYear()+parseInt(noOfYearsToAdd), today.getMonth(), today.getDate())
+  let monthNames =["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep", "Oct","Nov","Dec"]
+  let date = todayPlusYears.getDate()
+  let monthName = monthNames[todayPlusYears.getMonth()]
+  let year = todayPlusYears.getFullYear()
+  return cy.wrap(date.toString()+' '+monthName+' '+year.toString())
+})
+
+//input date in format dd mmm yyyy, it returns the same date in formate dd/mm/yyyy
+Cypress.Commands.add('changeDateFormatToAddSlash', (date:any) => {
+  let givenDate = new Date(date)
+  let day = givenDate.getDate()
+  let month = givenDate.getMonth()
+  month++
+  let year = givenDate.getFullYear()
+  if(month>=10)
+    return cy.wrap(day+"/"+month+"/"+year)
+  if(month<10)
+    return cy.wrap(day+"/0"+month+"/"+year)
+})
 
 /*
  * TODO: Look into why this isn't working as a Custom Command. For now, implement as a standard function 

@@ -6,7 +6,7 @@ import '../../../../support/payment/api/commands/creditcard'
 import '../../../../support/payment/api/commands/digitalPayment'
 import '../../../../support/checkout/api/commands/confirmOrder'
 
-Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: any, platform: string) => {
+Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (platform: string, creditCardDetails?: any) => {
   cy.navigateToCheckout().then((response: any) => {
     const balanceToPay = response.Model.Order.BalanceToPay
     expect(balanceToPay, 'Balance To Pay').to.be.greaterThan(0)
@@ -18,7 +18,15 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (creditCardDetails: 
     })
   })
 
-  cy.creditcardTokenisation(creditCardDetails, creditcardSessionHeader).then((response: any) => {
+  let creditCardRequest
+
+  if (typeof creditCardDetails !== 'undefined') {
+    creditCardRequest = creditCardDetails
+  } else {
+    creditCardRequest = Cypress.env('creditCard') 
+  }
+
+  cy.creditcardTokenisation(creditCardRequest, creditcardSessionHeader).then((response: any) => {
     if (platform.toUpperCase() === 'B2C') {
       digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
     } else if (platform.toUpperCase() === 'B2B') {
@@ -82,11 +90,11 @@ Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
 Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
   let digitalPaymentInstruments: any = []
 
-  cy.getDigitalPaymentInstruments().then((instruments: any) => {
-    const creditCards = instruments.CreditCard.Instruments
+  cy.getDigitalPaymentInstruments().then((response: any) => {
+    const creditCards = response.CreditCard.Instruments
     cy.log('Number of Credit Cards to be removed is: ' + creditCards.length)
 
-    const giftCards = instruments.GiftCard.Instruments
+    const giftCards = response.GiftCard.Instruments
     cy.log('Number of Gift Cards to be removed is: ' + giftCards.length)
 
     const cards = creditCards.concat(giftCards)
@@ -95,16 +103,16 @@ Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
     }
 
     for (const instrument of digitalPaymentInstruments) {
-      cy.removePaymentInstrument(instrument)
+      cy.removePaymentInstrument(instrument).then((response: any) => {
+        expect(response.Success, 'Removing Card Instrument').to.be.true
+      })
     }
   })
 })
 
 Cypress.Commands.add('addGiftCardAndCompleteSplitPaymentOrderViaAPI', (giftCard, giftCardPaymentAmount, splitPaymentRequest) => {
   // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
-  cy.addGiftCardToAccount(giftCard).then((response: any) => {
-    expect(response.status).to.eq(200)
-  }).then(() => {
+  cy.addGiftCardToAccount(giftCard).then(() => {
     cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(giftCardPaymentAmount).then((response: any) => {
       expect(response, 'DigitalPay Gift Card Payment Instrument ID').to.not.be.null
       splitPaymentRequest.payments[1].paymentInstrumentId = response

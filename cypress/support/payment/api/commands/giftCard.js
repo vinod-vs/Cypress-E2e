@@ -7,13 +7,14 @@ Cypress.Commands.add('addGiftCardToAccount', (cardRequest) => {
     url: Cypress.env('addGiftCardEndpoint'),
     body: cardRequest
   }).then((response) => {
-    return response
+    expect(response.status, 'Gift Card Addition status').to.eq(200)
+    return response.body
   })
 })
 
 Cypress.Commands.add('getGCPaymentInstrumentId', (giftCardPaymentResponse) => {
   let paymentInstrumentId = 0
-  paymentInstrumentId = giftCardPaymentResponse.body.GiftCard.PaymentInstrumentId
+  paymentInstrumentId = giftCardPaymentResponse.GiftCard.PaymentInstrumentId
   cy.log('Gift card payment instrument ID ' + paymentInstrumentId)
 
   return cy.wrap(paymentInstrumentId)

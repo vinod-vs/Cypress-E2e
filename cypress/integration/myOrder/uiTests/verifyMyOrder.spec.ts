@@ -38,7 +38,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
         cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
         cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
      
-        cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+        cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then((confirmOrderResponse: any) => {
       // Save the Order details of the order placed    
         const orderId = confirmOrderResponse.Order.OrderId
         const orderTotal = confirmOrderResponse.Order.TotalIncludingGst

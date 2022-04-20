@@ -26,7 +26,7 @@ declare namespace Cypress {
     signUpViaApiWith2FA(signUpDetails: any): any;
     setDeliveryOptionsViaApi(deliveryOptions: any): any;
     setFulfilmentLocationWithWindow(fulfilmentType: string, addressSearchBody: any, windowType: string): any;
-    placeOrderViaApiWithAddedCreditCard(creditCardDetails: any, platform: string): any;
+    placeOrderViaApiWithAddedCreditCard(platform: string, creditCardDetails?: any): any;
     api(request: any): any;
     navigateExpressionOfInterestPage(expressionOfInterestPageEndPoint: string): any;
     setFulfilmentLocationWithoutWindow(fulfilmentType: string, location: any): any;
@@ -61,7 +61,7 @@ declare namespace Cypress {
     findSCRefundPayment(refundPaymentsDetails: any, refundAmount: number): any;
     removeDateOrdinals(text: string): any;
     addAvailableRestrictedWowItemsToTrolley(type: string, count: number): void;
-    loginViaUI(email: string, password: string): any;
+    siteManagementLoginViaUi(email: string, password: string): any;
     selectTopMenu(menuToSelect: string): any;
     selectOrderManagementSubMenu(menuToSelect: string): any;
     searchOrder(orderId: string): any;
@@ -109,7 +109,7 @@ declare namespace Cypress {
     signUpUser(signupdetails: any): any;
     subscribeToDUMonthlyPersonal(userinfor: any): any;
     get2FACode(shopper: any): Cypress.Chainable<string>;
-    performReIssueOnWowOrderOnSM(isMarketOnly: boolean): any;
+    performReIssueOnWowOrderOnSM(): any;
     wowDispatchUpdateCompletedOrder(shopperId:any , orderId:any, WoolworthsSubtotal:any, testData:any): any;
     checkForOrderPlacementErrorsAndThrow(paymentResponse: any): any;
     availableDigitalPaymentInstruments(): any;
@@ -142,6 +142,7 @@ declare namespace Cypress {
     getDigitalPaymentInstruments(): any;
     getLinkedPayPalAccountInstrumentId(): any;
     getCountryOfOrigin(coolServiceData: Object): any;
+    removeSavedCreditAndGiftCardsViaAPI(): any;
     getRtlOffers(rtlGetOffersData: Object): any;
     patchRtlUnboost(rtlPatchData: Object): any;
     navigateToMyAccountViaUi():any;
@@ -157,5 +158,14 @@ declare namespace Cypress {
     validateBillingAddressViaApi(): any;
     payAndSubscribeViaApi(value: any): any;
     writeTestDataUsed(filepath:string, signupdetails: any): any;
+    addProductNoteViaApi(productNote: any): any;
+    setItemSubstitutionviaAPI(subsRequest: any): any;
+    prepareAnyMultiSellerLineItemEdmOrder(searchTerm: string, purchaseQty: number): void;
+    addMultiSellerAvailableEDMItemsToTrolley(searchTerm: string, quantity: number): void;
+    addYearsToCurrentDate(noOfYearsToAdd: any): any;
+    evaluateSessionGroup(requestBody:any): any;
+    generateRandomString(numChars?: number): Cypress.Chainable<string>;
+    changeDateFormatToAddSlash(date: any): any;
+    searchCustomerByEmailInSM(email: any): void;
   }
 }

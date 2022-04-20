@@ -87,7 +87,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         cy.wrap(totalAmount.text()).as('expectedTotalAmount')
       })
 
-      onCheckoutPage.onCheckoutPaymentPanel.PayWithNewCreditCard(creditcardPayment.aa, creditcardPayment.dd, creditcardPayment.ee, creditcardPayment.bb)
+      onCheckoutPage.onCheckoutPaymentPanel.payWithNewCreditCard(creditcardPayment.aa, creditcardPayment.dd, creditcardPayment.ee, creditcardPayment.bb)
 
       // Verify order confirmation page
       onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')

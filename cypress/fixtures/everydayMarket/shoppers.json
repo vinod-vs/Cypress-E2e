@@ -219,24 +219,11 @@
         "shopperId": "8518228",
         "platform": "B2C"
     },
-
-
-
-    "New un-used Accounts": {
-        "comments": "Newly created curently being un-used accounts for each e2e scenario. Going forward all scenarios must have their own accounts or use newAccount for every run."
-    },
     "emAccountWithRewards25": {
         "email": "rjagadishauto32@woolworths.com.au",
         "password": "testing123",
         "rewardsCardNumber": 9355125401104,
         "shopperId": "8518267",
-        "platform": "B2C"
-    },
-    "emAccountWithRewards26": {
-        "email": "rjagadishauto33@woolworths.com.au",
-        "password": "testing123",
-        "rewardsCardNumber": 9355125401111,
-        "shopperId": "8518279",
         "platform": "B2C"
     },
     "emAccountWithRewards27": {
@@ -245,5 +232,17 @@
         "rewardsCardNumber": 9355125401128,
         "shopperId": "8518293",
         "platform": "B2C"
+    },
+
+    "New un-used Accounts": {
+        "comments": "Newly created curently being un-used accounts for each e2e scenario. Going forward all scenarios must have their own accounts or use newAccount for every run."
+    },
+    "emAccountWithRewards26": {
+        "email": "rjagadishauto33@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125401111,
+        "shopperId": "8518279",
+        "platform": "B2C"
     }
+
 }
