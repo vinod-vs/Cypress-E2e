@@ -165,5 +165,7 @@ declare namespace Cypress {
     addYearsToCurrentDate(noOfYearsToAdd: any): any;
     evaluateSessionGroup(requestBody:any): any;
     generateRandomString(numChars?: number): Cypress.Chainable<string>;
+    changeDateFormatToAddSlash(date: any): any;
+    searchCustomerByEmailInSM(email: any): void;
   }
 }
