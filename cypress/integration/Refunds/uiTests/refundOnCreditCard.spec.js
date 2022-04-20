@@ -15,6 +15,7 @@ import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/Have
 import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/CheckoutPage.ts'
 import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage.ts'
 import { onOrderManagement } from '../../../support/siteManagement/ui/pageObjects/OrderManagement.ts'
+import { onCustomerMaintenance } from '../../../support/siteManagement/ui/pageObjects/customerMaintenance.ts'
 import { HomepageTopMenu } from "../../../support/siteManagement/ui/commands/HomepageTopMenu";
 import { OrderManagementMenu } from "../../../support/siteManagement/ui/commands/OrderManagementMenu";
 import shoppers from '../../../fixtures/login/b2cShoppers.json'
@@ -24,8 +25,9 @@ import smLogins from "../../../fixtures/siteManagement/loginDetails.json";
 
 TestFilter(['B2C', 'UI', 'Refunds', 'OPS', 'P3'], () => {
   describe('[UI] Place an order, then refund the order', () => {
+    let shopperEmail;
     let orderId="", firstStockCode="", refundTotal="", goodwillTotal="", refundId="";
-    let refundTime, refundTotalFloat, goodwillTotalFloat;
+    let refundTime, refundTotalFloat, goodwillTotalFloat, storeCredit;
     const { JSDOM } = require('jsdom')
     before(() => {
           cy.clearCookies({ domain: null })
@@ -33,6 +35,7 @@ TestFilter(['B2C', 'UI', 'Refunds', 'OPS', 'P3'], () => {
     })
     it('Place an order', () => {
       cy.loginViaUi(shoppers[4])
+      shopperEmail = shoppers[4].email
       onSideCartPage.cleanupTrolley()
       onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false})
       onFMSAddressSelector.selectDeliveyAddress(refundsTestData.refundsOnCC.deliveryAddress)
@@ -152,24 +155,43 @@ TestFilter(['B2C', 'UI', 'Refunds', 'OPS', 'P3'], () => {
         const dom = new JSDOM(email.html.body);
         const el = dom.window.document.querySelector('table.table tbody');
         const emailText = el.textContent;
-        // const emailText = 'Hi UAT, Please see below for refund details regarding order number 140149201.  Your credit/debit card used for payment will be refunded with the amount of $22.60. You\’ll receive your refund in the next 3-5 days, depending on your financial institution\’s processing times.   A store credit of $22.60 has been added to your account. Please enter the coupon code SCXDn-Tg-izG at checkout to redeem the next time you shop with Woolworths Online and Everyday Market from Woolworths. Minimum spend of $50 applies. Coupon valid until 6 Apr 2024.Coupon Code:Expiry Date:Amount: SCXDn-Tg-izG 6 Apr 2024$22.60We look forward to seeing you online again soon,Your Woolworths Online TeamLet Olive, your Woolworths Digital Team Member, know how she can help.This email was sent by Woolworths Group Limited, ABN 88 000 014 675,1 Woolworths Way, Bella Vista, NSW 2153.Make sure you addnoreply@onlineemails.woolworths.com.au to your address book and safe list. You have received this email as this is a service announcement and not apromotional email. Emails to this address will not be responded to. If youneed any further information feel free to call us on 1800 000 610.If you have an enquiry about why you received this email, please see our fullTerms and Conditions.Need help? Check out ourhandy FAQ\'sor Chat live with us oncontact us page.';
         expect(emailText).to.include('Please see below for refund details regarding order number '+ orderId)
         expect(emailText).to.include("Your credit/debit card used for payment will be refunded with the amount of $"+refundTotalFloat.toString()+". You\’ll receive your refund in the next 3-5 days, depending on your financial institution\’s processing times.")
         expect(emailText).to.include('A store credit of $'+goodwillTotalFloat.toString()+' has been added to your account.')
         const regEx = new RegExp('[A-Za-z0-9]{5}\-[A-Za-z0-9]{2}\-[A-Za-z0-9]{3}')
         const storeCreditCoupon = regEx.exec(emailText)
-        console.log("storecredit: " + storeCreditCoupon[0])
+        storeCredit = storeCreditCoupon[0]
+        console.log("storecredit: " + storeCredit)
         expect(emailText).to.include('Please enter the coupon code '+storeCreditCoupon[0]+' at checkout to redeem the next time you shop with Woolworths Online and Everyday Market from Woolworths. Minimum spend of $50 applies.')
         const emailTextWithTable = emailText.substring(emailText.indexOf('Coupon Code:'), emailText.indexOf('We look forward to seeing you online again soon'))
         expect(emailTextWithTable).to.include('Coupon Code:')
         expect(emailTextWithTable).to.include('Expiry Date:')
         expect(emailTextWithTable).to.include('Amount:')
         expect(emailTextWithTable).to.include(storeCreditCoupon[0])
-        cy.addYearsToCurrentDate('2').then((scExpiryDate) => {
+        cy.addYearsToCurrentDate('3').then((scExpiryDate) => {
           expect(emailText).to.include('Minimum spend of $50 applies. Coupon valid until '+scExpiryDate+'.')
           expect(emailTextWithTable).to.include(scExpiryDate)
         })
         expect(emailText).to.include('Olive, your Woolworths Digital Team Member, know how she can help.')
+      })
+    })
+
+    it.skip('verify store credit expiry date in SM', () => {
+      cy.siteManagementLoginViaUi(smLogins.email, smLogins.password);
+      cy.selectTopMenu(HomepageTopMenu.ORDER_MANAGEMENT);
+      cy.selectOrderManagementSubMenu(OrderManagementMenu.CUSTOMER_SEARCH);
+      cy.searchCustomerByEmailInSM(shopperEmail)
+      onCustomerMaintenance.getViewRefundsAndCreditsButton().click()
+      cy.contains('td', orderId).parent().invoke('index').then((i) => {
+        i++
+        console.log("index is: " + i)
+        cy.get('tbody > tr:nth-child('+i+') > td:nth-child(11)').should('contain', goodwillTotalFloat)
+        cy.get('tbody > tr:nth-child('+i+') > td:nth-child(12)').should('contain', storeCredit)
+        cy.addYearsToCurrentDate('3').then((scExpiryDate) => {
+          cy.changeDateFormatToAddSlash(scExpiryDate).then((scExpDate) => {
+            cy.get('tbody > tr:nth-child('+i+') > td:nth-child(13)').should('contain', scExpDate)
+          })
+        })
       })
     })
   })

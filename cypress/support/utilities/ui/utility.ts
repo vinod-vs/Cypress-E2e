@@ -139,6 +139,19 @@ Cypress.Commands.add('addYearsToCurrentDate', (noOfYearsToAdd:any) => {
   return cy.wrap(date.toString()+' '+monthName+' '+year.toString())
 })
 
+//input date in format dd mmm yyyy, it returns the same date in formate dd/mm/yyyy
+Cypress.Commands.add('changeDateFormatToAddSlash', (date:any) => {
+  let givenDate = new Date(date)
+  let day = givenDate.getDate()
+  let month = givenDate.getMonth()
+  month++
+  let year = givenDate.getFullYear()
+  if(month>=10)
+    return cy.wrap(day+"/"+month+"/"+year)
+  if(month<10)
+    return cy.wrap(day+"/0"+month+"/"+year)
+})
+
 /*
  * TODO: Look into why this isn't working as a Custom Command. For now, implement as a standard function 
 */
