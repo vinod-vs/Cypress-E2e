@@ -167,5 +167,6 @@ declare namespace Cypress {
     generateRandomString(numChars?: number): Cypress.Chainable<string>;
     changeDateFormatToAddSlash(date: any): any;
     searchCustomerByEmailInSM(email: any): void;
+    getEmailDetails(emailId: string, expectedEmailSubject: string): any;
   }
 }

@@ -1,272 +1,276 @@
 {
-  "VerifyFullyDispatchedEDMOrder": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "VerifyFullyDispatchedEDMOrder": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "stockCode": "",
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "stockCode": "",
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "CREDIT_CARD_ONLY"
-  },
-  "VerifyFullyDispatchedEDMOnlyOrderPaypal": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "VerifyFullyDispatchedEDMOnlyOrderPaypal": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+            "quantity": 2,
+            "isEDMProduct": "true"
+        }],
+        "paymentType": "PAYPAL_ONLY",
+        "payment": {
+            "paypal": true
+        }
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      }
-    ],
-    "paymentType": "PAYPAL_ONLY",
-    "payment": {
-      "paypal": true
-    }
-  },
-  "VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+            "quantity": 2,
+            "isEDMProduct": "true"
+        }],
+        "paymentType": "PAYPAL_PLUS_REWARDS",
+        "payment": {
+            "paypal": true
+        }
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      }
-    ],
-    "paymentType": "PAYPAL_PLUS_REWARDS",
-    "payment": {
-      "paypal": true
-    }
-  },
-  "VerifyMultiplePartialDispatchedEDMOrder": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:123456",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "VerifyMultiplePartialDispatchedEDMOrder": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:123456",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "CREDIT_CARD_ONLY"
-  },
-  "VerifyFullCancellationOfEDMOrder": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "VerifyFullCancellationOfEDMOrder": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "CREDIT_CARD_ONLY"
-  },
-  "customerSelfServiceReturn":{
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "customerSelfServiceReturn": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "CREDIT_CARD_ONLY"
-  },
-  "GenericWOWPlusEDMCCPaymentTestData": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "GenericWOWPlusEDMCCPaymentTestData": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "CREDIT_CARD_ONLY"
-  },
-  "GenericWOWPlusEDMPPPaymentTestData": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "GenericWOWPlusEDMPPPaymentTestData": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "PAYPAL_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "PAYPAL_ONLY"    
-  },
-  "GiftWOWPlusEDMPPPaymentTestData": {
-    "searchTerm": "treats",
-    "isAGiftOrder": true,
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "GiftWOWPlusEDMPPPaymentTestData": {
+        "searchTerm": "treats",
+        "isAGiftOrder": true,
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true",
+                "searchTerm": "1073741957"
+
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "PAYPAL_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true",
-        "searchTerm": "1073741957"
-        
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "PAYPAL_ONLY"    
-  },
-  "GenericWOWPlusEDMPaypalRDAndGCPaymentTestData": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "GenericWOWPlusEDMPaypalRDAndGCPaymentTestData": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 1,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "PAYPAL_PLUS_REWARDS_PLUS_GIFTCARD"
     },
-    "items": [
-      {
+    "GenericWOWPlusEDMCCRDAndGCPaymentTestData": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
+    },
+    "GenericEMonlyProductTestData": {
+        "searchTerm": "treats",
+        "quantity": 2
+    },
+    "GenericStockCodeSearch": {
+        "searchTerm": "1073745302",
         "quantity": 1,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "PAYPAL_PLUS_REWARDS_PLUS_GIFTCARD"    
-  },
-  "GenericWOWPlusEDMCCRDAndGCPaymentTestData": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+        "VendorName": "Healthy Life",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        }
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"    
-  },
-  "GenericEMonlyProductTestData": {
-    "searchTerm": "treats",
-    "quantity": 2
-  },
-  "GenericStockCodeSearch": {
-    "searchTerm": "1073745302",
-    "quantity": 1,
-    "VendorName": "Healthy Life",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
-    }   
-  },
-  "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
-    "searchTerm": "treats",
-    "carrier": "Australia Post",
-    "trackingNumber": "Automation:12345",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
+    "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 2,
+                "isEDMProduct": "true"
+            },
+            {
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_ONLY"
     },
-    "items": [
-      {
-        "quantity": 2,
-        "isEDMProduct": "true"
-      },
-      {
-        "isEDMProduct": "false",
-        "minWowOrderThreshold": 50,
-        "bufferWowQuantity": 5
-      }
-    ],
-    "paymentType": "CREDIT_CARD_ONLY"
-  },
-  "VerifyEDMItemsGCLimit": {
-    "searchTerm": "1073741981",
-    "minCartValue": "5500",
-    "items": [
-      {
-        "isEDMProduct": "true"
-      }
-    ],
-    "paymentType": "GIFTCARD_ONLY"
-  },
-  "GenericVendorInfoStockCodeSearch": {
-    "searchTerm": "1073741957",
-    "quantity": 1,
-    "VendorName": "Pet Culture",
-    "address": {
-      "search": "407-419 Elizabeth St, SURRY HILLS"
-    }   
-  } 
+    "VerifyEDMItemsGCLimit": {
+        "searchTerm": "1073741981",
+        "minCartValue": "5500",
+        "items": [{
+            "isEDMProduct": "true"
+        }],
+        "paymentType": "GIFTCARD_ONLY"
+    },
+    "GenericVendorInfoStockCodeSearch": {
+        "searchTerm": "1073741957",
+        "quantity": 1,
+        "VendorName": "Pet Culture",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        }
+    },
+    "VerifyEmailNotifications": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+                "quantity": 5,
+                "isEDMProduct": "true"
+            },
+            {
+                "stockCode": "",
+                "isEDMProduct": "false",
+                "minWowOrderThreshold": 50,
+                "bufferWowQuantity": 5
+            }
+        ],
+        "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
+    }
 }
