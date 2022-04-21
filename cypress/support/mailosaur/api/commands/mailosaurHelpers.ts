@@ -1,11 +1,11 @@
 const { JSDOM } = require('jsdom')
 
-Cypress.Commands.add('getEmailDetails', (emailId: string, expectedEmailSubject: string) => {
+Cypress.Commands.add('getEmailDetails', (emailId: string, expectedEmailSubject: string, sentFrom: string) => {
     cy.log(emailId)
     cy.mailosaurGetMessage(Cypress.env('mailosaur_serverId'), {
         sentTo: emailId,
         subject: expectedEmailSubject,
-        sentFrom: 'shoponline@woolworths.com.au'
+        sentFrom: sentFrom
     }, {
         timeout: 60000
     }).then(email => {

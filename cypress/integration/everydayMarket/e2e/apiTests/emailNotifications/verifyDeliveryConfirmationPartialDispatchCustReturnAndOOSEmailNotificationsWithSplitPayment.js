@@ -34,7 +34,7 @@ const emailId = shopper.email
 let lineItemLegacyId;
 let encodedEdmInvoiceId;
 let encodedEdmLineitemId;
-
+let sentFrom = 'shoponline@woolworths.com.au';
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
     describe('[API] RP-5568 - Email Notifications | Verify delivery confirmation, partial dispatch, customer return-refund and partial OOS email notifications with split payments', () => {
@@ -226,7 +226,7 @@ Cypress.Commands.add('verifyDeliveryConfirmationEmailDetails', (testData) => {
         cy.get('@orderPlacedEvents').then((orderPlacedEvents) => {
             cy.getOrderStatus(testData.orderId).as('orderPlacedOqsResponse').then((orderPlacedOqsResponse) => {
                 let expectedSubject = 'Delivery order #' + orderId + ' - Confirmation'
-                cy.getEmailDetails(emailId, expectedSubject)
+                cy.getEmailDetails(emailId, expectedSubject, sentFrom)
                 cy.get('@emailDetails').then((emailDetails) => {
                     let body = emailDetails.body.toLowerCase()
                     expect(emailDetails.subject).to.be.equal(expectedSubject)
@@ -308,7 +308,7 @@ Cypress.Commands.add('verifyOrderOnItsWayEmailDetails', (testData) => {
         cy.get('@partialDispatchEvents').then((partialDispatchEvents) => {
             cy.getOrderStatus(testData.orderId).as('partialDispatchOqsResponse').then((partialDispatchOqsResponse) => {
                 let expectedSubject = 'Your Everyday Market order ' + edmOrderId + ' is on its way'
-                cy.getEmailDetails(emailId, expectedSubject)
+                cy.getEmailDetails(emailId, expectedSubject, sentFrom)
                 cy.get('@emailDetails').then((emailDetails) => {
                     let body = emailDetails.body.toLowerCase()
                     expect(emailDetails.subject).to.be.equal(expectedSubject)
@@ -350,7 +350,7 @@ Cypress.Commands.add('verifyCustomerReturnAndRefundEmailDetails', (testData) => 
             cy.getOrderStatus(testData.orderId).as('customerReturnOqsResponse').then((customerReturnOqsResponse) => {
 
                 let expectedSubject = 'Everyday Market order ' + edmOrderId + ' return created'
-                cy.getEmailDetails(emailId, expectedSubject)
+                cy.getEmailDetails(emailId, expectedSubject, sentFrom)
                 cy.get('@emailDetails').then((emailDetails) => {
                     let body = emailDetails.body.toLowerCase()
                     expect(emailDetails.subject).to.be.equal(expectedSubject)
@@ -377,7 +377,7 @@ Cypress.Commands.add('verifyCustomerReturnAndRefundEmailDetails', (testData) => 
                     })
                 })
                 let expectedSubject2 = 'Everyday Market Refund Notification - ' + edmOrderId
-                cy.getEmailDetails(emailId, expectedSubject2)
+                cy.getEmailDetails(emailId, expectedSubject2, sentFrom)
                 cy.get('@emailDetails').then((emailDetails) => {
                     let body = emailDetails.body.toLowerCase()
                     expect(emailDetails.subject).to.be.equal(expectedSubject2)
@@ -418,7 +418,7 @@ Cypress.Commands.add('verifyOOSEmailDetails', (testData) => {
 
                 //let expectedSubject = 'Everyday Market Out of Stock Notification ' + edmOrderId
                 let expectedSubject = 'Everyday Market items removed from order ' + edmOrderId
-                cy.getEmailDetails(emailId, expectedSubject)
+                cy.getEmailDetails(emailId, expectedSubject, sentFrom)
                 cy.get('@emailDetails').then((emailDetails) => {
                     let body = emailDetails.body.toLowerCase()
                     expect(emailDetails.subject).to.be.equal(expectedSubject)
