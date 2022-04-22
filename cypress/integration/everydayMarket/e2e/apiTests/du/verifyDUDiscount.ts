@@ -84,14 +84,22 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         cy.log("checkOutResponse Woolworths Subtotal is = " + checkOutResponse.Model.Order.WoolworthsSubtotal) 
         cy.log("checkOutResponse Total Deferred Discount Amount is = " + checkOutResponse.Model.Order.TotalDeferredDiscountAmount)  
         marketSubtotal = checkOutResponse.Model.Order.MarketSubtotal 
+
+        cy.log("checkOutResponse DU DiscountSource is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource)
+        cy.log("checkOutResponse DU Discount Amount is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount)
+        cy.log("checkOutResponse DU DiscountTarget is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target)
+        cy.log("checkOutResponse marketEMShipping Fee is = " + checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee)
+        cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
+
+
         if(marketSubtotal >= marketSubTotalLowerLimit && marketSubtotal <= marketSubTotalUpperLimit)
         {
           cy.log(" ---------- DU Discount is Applicable and Discount Details Below ----------")
-          cy.log("checkOutResponse DU DiscountSource is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource)
-          cy.log("checkOutResponse DU Discount Amount is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount)
-          cy.log("checkOutResponse DU DiscountTarget is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target)
-          cy.log("checkOutResponse marketEMShipping Fee is = " + checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee)
-          cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
+        //  cy.log("checkOutResponse DU DiscountSource is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource)
+        //  cy.log("checkOutResponse DU Discount Amount is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount)
+        //  cy.log("checkOutResponse DU DiscountTarget is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target)
+        //  cy.log("checkOutResponse marketEMShipping Fee is = " + checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee)
+        //  cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
           doubleRewardPoints = Math.round((checkOutResponse.Model.Order.MarketSubtotal + checkOutResponse.Model.Order.WoolworthsSubtotal - checkOutResponse.Model.Order.TotalDeferredDiscountAmount) * 2 )
           cy.log(" double RewardsPoints Calculated is = " + doubleRewardPoints )
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource).to.be.equal(duDiscountSource)
@@ -99,17 +107,69 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount).to.be.equal(duDiscountAmount)
           expect(checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee).to.be.equal(marketEMShippingFee)
           expect(checkOutResponse.Model.Order.TotalRewardsPointsEarned).to.be.equal(doubleRewardPoints)
-        }  // ENDS- IF
         
       //Place Order
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
-      cy.get('@confirmedTraderOrder').then((confirmedOrder) => {
-        req = { ...eventsRequest, shopperId: shopperId, orderId: confirmedOrder.Order.OrderId, 
-          orderReference: confirmedOrder.Order.OrderReference, WoolworthsSubtotal: confirmedOrder.Order.WoolworthsSubtotal
-        }      })
+      cy.get('@confirmedTraderOrder').then((confirmedOrder) => 
+      {
+        req = { ...eventsRequest,  shopperId: shopperId,  orderId: confirmedOrder.Order.OrderId,
+                orderReference: confirmedOrder.Order.OrderReference, WoolworthsSubtotal: confirmedOrder.Order.WoolworthsSubtotal
+              }
+        cy.wrap(req.orderId).as('orderId')       
+        cy.wrap(WoolworthsSubtotal).as('WoolworthsSubtotal')
+      
+        cy.orderEventsApiWithRetry(req.orderReference, 
+        { function: function (response) 
+          { if ( !response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
+                 !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced') ) 
+                { cy.log('Expected OrderPlaced & MarketOrderPlaced to be present')
+                  throw new Error('Expected OrderPlaced & MarketOrderPlaced to be present')
+                } // Ends - If
+          }, // Ends - function: function (response) {
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: 10000
+        }) // ENDS - cy.orderEventsApiWithRetry(req.orderReference, {
+          .as("finalProjection")
+          .then((response) => 
+          { edmOrderId = response.invoices[0].legacyIdFormatted;
+            edmInvoiceId = response.invoices[0].legacyId;
+            cy.log( "In finalProjection the MPOrder Id: " + edmOrderId + ", and MPInvoice Id: " + edmInvoiceId );     
+          }) // ENDS - .then((response) => {
 
+
+
+      /*  cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
+          function: function (response) 
+          { if (response.body.invoices[0].wowStatus !== "Placed") 
+            { cy.log("wowStatus was " + response.body.invoices[0].wowStatus + " instead of Placed" );
+              throw new Error( "wowStatus was " + response.body.invoices[0].wowStatus + " instead of Placed" )
+            } // Ends - If
+          }, // Ends - function: function (response) {
+          retries: Cypress.env('marketApiRetryCount'),
+          timeout: Cypress.env('marketApiTimeout')
+        })      // ENDS - cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
+          .as("finalProjection")
+          .then((response) => 
+          { edmOrderId = response.invoices[0].legacyIdFormatted;
+            edmInvoiceId = response.invoices[0].legacyId;
+            cy.log( "In finalProjection the MPOrder Id: " + edmOrderId + ", and MPInvoice Id: " + edmInvoiceId );     
+          }) // ENDS - .then((response) => {
+      */
+           
+      })  // ENDS - cy.get('@confirmedTraderOrder').then((confirmedOrder) => {         
+     
+        
+        
+        
+        
+        
 
         
+
+
+
+
+      }  // ENDS- IF        
         else {
           cy.log("DU Discount is Not Applicable")
         }  // ENDS - Else 
