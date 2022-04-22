@@ -229,7 +229,7 @@ Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, qu
         .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
       //Select the Products Available - EM Multi Seller
         .forEach(edmMultiSellerItems => {
-          cy.log("EM Seller's=  \" " + edmMultiSellerItems.Products[0].Vendor + " \" , Added Product Display Name is =  \" " + edmMultiSellerItems.Products[0].DisplayName + " \" " + " and StockCode is= \" " + edmMultiSellerItems.Products[0].Stockcode + " \" ")
+          cy.log("EM Seller's=  \" " + edmMultiSellerItems.Products[0].Vendor + " \" , Added Product Display Name is =  \" " + edmMultiSellerItems.Products[0].DisplayName + " \" " + " and StockCode is= \" " + edmMultiSellerItems.Products[0].Stockcode + " \" " + " and Price is= \" " + edmMultiSellerItems.Products[0].Price + " \" ")
           cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmMultiSellerItems.Products[0].Stockcode, Quantity: quantity }) 
         }) 
       ) 
