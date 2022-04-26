@@ -31,7 +31,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
 
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
-        expect(response.Id, 'AddressId').to.not.be.null
+        expect(response.Id, 'AddressId').to.not.be.empty
       })
 
       cy.addDeliveryAddress().then((response) => {

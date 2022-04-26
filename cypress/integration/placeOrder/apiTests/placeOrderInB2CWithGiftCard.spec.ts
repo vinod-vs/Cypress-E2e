@@ -27,7 +27,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
     it('Should place a delivery order with full payment via gift card', () => {
       cy.loginWithNewShopperViaApi()
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0)
       cy.navigateToCheckout().then((response: any) => {
         const balToPay: number = response.Model.Order.BalanceToPay
@@ -44,7 +44,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
     it('Should place a delivery order with payment split across 2 gift cards', () => {
       cy.loginWithNewShopperViaApi()
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 50.0)
 
       cy.navigateToCheckout().then((response: any) => {

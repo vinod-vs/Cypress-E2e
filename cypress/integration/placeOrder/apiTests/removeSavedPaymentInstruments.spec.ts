@@ -1,11 +1,11 @@
 import TestFilter from '../../../support/TestFilter'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import giftCard from '../../../fixtures/payment/giftCard.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/payment/api/commands/giftCard'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
 TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
+  const creditCard = Cypress.env('creditCard')
   let instrumentId: any
 
   describe('[API] Remove saved credit and gift cards via API from B2C Customer Account', () => {
@@ -16,9 +16,9 @@ TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
     })
 
     it('Should remove via API saved credit cards added to a B2C Customer Account', () => {
-      creditCardPayment.save = true
+      creditCard.save = true
       
-      cy.addCreditCardViaApi(creditCardPayment).then((response: any) => {
+      cy.addCreditCardViaApi(creditCard).then((response: any) => {
         instrumentId = response.paymentInstrument.itemId
         cy.getDigitalPaymentInstruments().then((response: any) => {
           const hasInstrumentId = response.CreditCard.Instruments.filter((instrument: { [x: string]: any }) => instrument['PaymentInstrumentId'] === instrumentId)
