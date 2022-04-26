@@ -160,7 +160,13 @@ declare namespace Cypress {
     writeTestDataUsed(filepath:string, signupdetails: any): any;
     addProductNoteViaApi(productNote: any): any;
     setItemSubstitutionviaAPI(subsRequest: any): any;
+    prepareAnyMultiSellerLineItemEdmOrder(searchTerm: string, purchaseQty: number): void;
+    addMultiSellerAvailableEDMItemsToTrolley(searchTerm: string, quantity: number): void;
     addYearsToCurrentDate(noOfYearsToAdd: any): any;
     evaluateSessionGroup(requestBody:any): any;
+    generateRandomString(numChars?: number): Cypress.Chainable<string>;
+    changeDateFormatToAddSlash(date: any): any;
+    searchCustomerByEmailInSM(email: any): void;
+    getEmailDetails(emailId: string, expectedEmailSubject: string, sentFrom: string): any;
   }
 }

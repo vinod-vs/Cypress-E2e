@@ -7,6 +7,10 @@ export class OrderManagement {
     return cy.get('#OrderID');
   }
 
+  getEmailAddressTextField() {
+    return cy.get('#Email');
+  }
+
   getCustomerSearchButton() {
     return cy.get('input[value="Customer Search"]');
   }
