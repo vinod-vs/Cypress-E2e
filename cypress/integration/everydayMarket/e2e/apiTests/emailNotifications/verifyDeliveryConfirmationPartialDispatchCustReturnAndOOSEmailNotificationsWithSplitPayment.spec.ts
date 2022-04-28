@@ -243,13 +243,13 @@ Cypress.Commands.add('verifyDeliveryConfirmationEmailDetails', (testData) => {
                         //expect(body).to.include(orderPlacedOqsResponse.Total) not appearing in email
                     expect(body).to.include(orderPlacedOqsResponse.Shopper.FirstName.toLowerCase())
 
-                    //Verify totals
-                    expect(body).to.include(Number(testData.wowTotal))
-                    expect(body).to.include(Number(testData.edmTotal))
-                    expect(body).to.include(Number(testData.orderTotal))
-                    expect(body).to.include(Number(testData.edmDeliveryCharges))
-                    expect(body).to.include(Number(testData.wowDeliveryCharges))
-                    expect(body).to.include(Number(testData.packagingFee))
+                    //Verify totals                    
+                    expect(body).to.include(Number(Number.parseFloat(Number(testData.wowTotal)).toFixed(2)))        
+                    expect(body).to.include(Number(Number.parseFloat(Number(testData.edmTotal)).toFixed(2)))                    
+                    expect(body).to.include(Number(Number.parseFloat(Number(testData.orderTotal)).toFixed(2)))                    
+                    expect(body).to.include(Number(Number.parseFloat(Number(testData.edmDeliveryCharges)).toFixed(2)))        
+                    expect(body).to.include(Number(Number.parseFloat(Number(testData.wowDeliveryCharges)).toFixed(2)))                    
+                    expect(body).to.include(Number(Number.parseFloat(Number(testData.packagingFee)).toFixed(2)))
 
                     //Verify links
                     expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/myaccount/myorders']") !== null).to.be.true
@@ -262,8 +262,8 @@ Cypress.Commands.add('verifyDeliveryConfirmationEmailDetails', (testData) => {
                     //Verify payment method
                     expect(body).to.include('Paid with Everyday Rewards dollars'.toLowerCase())
                     expect(body).to.include('Paid by Gift Card'.toLowerCase())
-                    expect(body).to.include('Paid by Credit Card'.toLowerCase())
-                    expect(body).to.include(Number(testData.orderTotal) - Number(20))
+                    expect(body).to.include('Paid by Credit Card'.toLowerCase())                    
+                    expect(body).to.include(Number(Number.parseFloat(Number(testData.orderTotal) - Number(20)).toFixed(2)))
 
 
                     //Verify wow items

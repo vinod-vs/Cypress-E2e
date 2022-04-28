@@ -32,7 +32,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
     })
 
     it('Should place an order with leave unattended selected', () => {
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
       deliveryOptions.CanLeaveUnattended = true
@@ -44,7 +44,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
     })
 
     it('Should place an order with delivery driver notes', () => {
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
       deliveryOptions.DeliveryInstructions = 'Delivery Instructions added by API'

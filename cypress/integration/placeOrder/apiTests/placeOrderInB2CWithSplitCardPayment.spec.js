@@ -38,7 +38,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
 
       cy.loginWithNewShopperViaApi()
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.CROWD_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.CROWD_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
       cy.navigateToCheckout().then((response) => {
