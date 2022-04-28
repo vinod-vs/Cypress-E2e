@@ -144,8 +144,8 @@ function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
 function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
   const expectedTrolleyItems = []
 
-  if (productArray.length == 0) {
-    throw ('No products found for Count Limited Trolley Addition')
+  if (productArray.length === 0) {
+    throw new Error('No products found for Count Limited Trolley Addition')
   }
 
   let addedToCart = 0
@@ -211,7 +211,6 @@ Cypress.Commands.add('addEDMItemsBasedOnMinCartValueToTrolley', (testData) => {
       const unitPrice = product.Products[0].Price
       const minProductQuantity = Math.ceil(testData.minCartValue / unitPrice)
       const finalQty = minProductQuantity + 10
-      const totalPrice = finalQty * unitPrice
 
       testData.sellerName = product.Products[0].AdditionalAttributes['Market.Seller_BusinessName']
       cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: testData.stockcode, Quantity: finalQty })
@@ -223,8 +222,7 @@ Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, qu
   // Search product by overriding the SearchTerm attribute in the search body request fixture
   cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
     .then((searchResponse) => {
-      cy.wrap
-      (searchResponse.Products
+      cy.wrap(searchResponse.Products
       // Filter search results by IsMarketProduct = true and IsAvailable = true
         .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
       // Select the Products Available - EM Multi Seller

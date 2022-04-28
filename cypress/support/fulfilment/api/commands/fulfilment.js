@@ -124,7 +124,6 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
     throw new Error('No windows found for window type: ' + selectedWindowType)
   }
 
-  days:
   for (x = windowResponse.body.Days.length - 1; x >= 0; x--) {
     const day = daysResp[x]
     if (day.Available === true) {
@@ -180,7 +179,7 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
       if (timesArr.length > 0) {
         windowDate = day.Date // for fulfilment request
 
-        break days
+        break
       }
     }
   }
@@ -271,7 +270,7 @@ Cypress.Commands.add('getFulfilmentWindowViaApi', (selectedWindowType) => {
     }).then((response) => {
       getAvailableWindowsByWindowType(response, selectedWindowType).then((availWindows) => {
         if (availWindows.length === 0) {
-          throw ('No windows found for window type: ' + selectedWindowType)
+          throw new Error('No windows found for window type: ' + selectedWindowType)
         } else {
           return selectRandomWindow(availWindows)
         }
