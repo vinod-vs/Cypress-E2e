@@ -53,7 +53,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         onMyOrderPage.getMyOrderNumber().should('contain', orderId)
         onMyOrderPage.getViewOrderDetailsLink().click()
         onOrderDetailsPage.getCancelMyOrderButton().click()
-        onOrderDetailsPage.getCancelMyOrderModalCheckbox().then(chekbox => {
+        onOrderDetailsPage.getMyOrderModalCheckbox().then(chekbox => {
         cy.wrap(chekbox).should('not.be.visible').check({force:true}).should('be.checked')
         })
         onOrderDetailsPage.getCancelMyOrderModalButton().click()

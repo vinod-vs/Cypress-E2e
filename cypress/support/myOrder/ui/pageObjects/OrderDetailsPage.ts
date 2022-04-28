@@ -1,5 +1,8 @@
 export class OrderDetailsPage {
     
+    private getMyOrderModalButton(){
+        return cy.get('.checkbox-container.selected').parents('div').find('button.primary')
+    }
     getOrderDetails(){
         return cy.get('.order-details')
     }
@@ -7,16 +10,16 @@ export class OrderDetailsPage {
        return this.getOrderDetails().find('.cancel-link')
       }
 
-    getCancelMyOrderModal() {
+    getMyOrderModal() {
         return cy.get('.order-modal')
     }  
 
-     getCancelMyOrderModalCheckbox() {
-      return this.getCancelMyOrderModal().find('[type="checkbox"]')
+     getMyOrderModalCheckbox() {
+      return this.getMyOrderModal().find('[type="checkbox"]')
      }
 
      getCancelMyOrderModalButton(){
-     return cy.get('.checkbox-container.selected').parents('div').find('button.primary').eq(1)
+     return this.getMyOrderModalButton().eq(1)
      }
 
      getCancelledStatus(){
@@ -27,16 +30,16 @@ export class OrderDetailsPage {
         return cy.get('.your-groceries-panel').find('button.secondary')
      }
      
-    getChangeMyOrderModal() {
-        return cy.get('.order-modal')
-    } 
+    // getChangeMyOrderModal() {
+    //     return cy.get('.order-modal')
+    // } 
 
-    getChangeMyOrderModalCheckbox() {
-        return this.getChangeMyOrderModal().find('[type="checkbox"]')
-    }
+    // getChangeMyOrderModalCheckbox() {
+    //     return this.getChangeMyOrderModal().find('[type="checkbox"]')
+    // }
 
     getChangeMyOrderModalButton(){
-        return cy.get('.checkbox-container.selected').parents('div').find('button.primary').eq(0)
+        return this.getMyOrderModalButton().eq(0)
     }
 
 }
