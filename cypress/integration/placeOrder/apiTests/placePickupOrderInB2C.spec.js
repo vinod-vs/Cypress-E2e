@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-/* eslint-disable no-unused-expressions */
 
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
