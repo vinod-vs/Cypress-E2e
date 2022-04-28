@@ -30,18 +30,18 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
     })
 
     it('Should create a new list, add items in the list and delete the list', () => {
-      //Login to the application
-     if (Cypress.env('fileConfig') === 'b2c') {
+      // Login to the application
+      if (Cypress.env('fileConfig') === 'b2c') {
         cy.loginViaApi(b2cShopper).then((response) => {
           cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-       })
+        })
       } else if (Cypress.env('fileConfig') === 'b2b') {
         cy.loginViaApi(b2bShopper).then((response) => {
           expect(response).to.have.property('LoginResult', 'Success')
         })
-    }
+      }
 
-      //create a new list
+      // create a new list
       listName.Name = faker.commerce.productName()
       cy.addList(listName).then((response) => {
         expect(response).to.have.property('Message', 'The new list has been created sucessfully')
@@ -49,7 +49,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         createdListId.listId = response.ListId
       })
 
-      // searching  an item 
+      // searching  an item
       searchBody.SearchTerm = 'Milk'
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -57,7 +57,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         cy.wrap(response.Products[0].Products[0].Stockcode).as('stockCode')
       })
 
-      //Adding the item to the list
+      // Adding the item to the list
       cy.get('@stockCode').then(stockCode => {
         listItemBody.StockCode = stockCode
         cy.get('@listId').then(listId => {
@@ -67,14 +67,14 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         })
       })
 
-      //Verify if item is added to list
+      // Verify if item is added to list
       cy.get('@listId').then(listId => {
         cy.getProductsFromList(listId).then((response) => {
           expect(response.body.Items[0].Stockcode).to.be.eqls(listItemBody.StockCode)
         })
       })
 
-      //renaming the list name and verify if list has been renamed   
+      // renaming the list name and verify if list has been renamed
       renameListBody.name = 'ListRenamed'
       cy.get('@listId').then(listId => {
         renameListBody.id = listId
@@ -87,11 +87,11 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
     })
 
     after(() => {
-      cy.get('@listId').then(listId =>{
-      cy.deleteList(listId).then((response) => {
-        expect(response.status).to.eq(200)
+      cy.get('@listId').then(listId => {
+        cy.deleteList(listId).then((response) => {
+          expect(response.status).to.eq(200)
+        })
       })
     })
-  })
   })
 })
