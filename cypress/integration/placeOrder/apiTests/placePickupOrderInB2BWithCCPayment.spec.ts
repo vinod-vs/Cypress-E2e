@@ -24,7 +24,7 @@ const searchTerm = 'Fish'
 const trolleyThreshold = 50.00
 const platform = Cypress.env('b2bPlatform')
 
-TestFilter(['B2B' ,'API', 'P0'], () => {
+TestFilter(['B2B', 'API', 'P0'], () => {
   describe('[API] Place a pickup order on Woolworths at Work website using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -33,7 +33,7 @@ TestFilter(['B2B' ,'API', 'P0'], () => {
 
     it('Should place an order on Woolworths at Work website using Credit Card as payment option', () => {
       cy.loginViaApi(shopper).then((response: any) => {
-        expect(response).to.have.property("LoginResult", "Success");
+        expect(response).to.have.property('LoginResult', 'Success')
       })
 
       cy.searchDeliveryAddress(addressSearchBody).then((response: any) => {
@@ -53,7 +53,7 @@ TestFilter(['B2B' ,'API', 'P0'], () => {
       cy.completeWindowFulfilmentViaApi().then((response: any) => {
         if (!response.IsSuccessful) {
           cy.completeWindowFulfilmentViaApi().then((newResponse: any) => {
-            expect(newResponse).to.have.property("IsSuccessful", true)
+            expect(newResponse).to.have.property('IsSuccessful', true)
           })
         }
       })

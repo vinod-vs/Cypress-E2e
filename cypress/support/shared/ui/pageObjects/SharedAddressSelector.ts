@@ -1,11 +1,11 @@
-import { searchForNewAddress } from "../components/AddressSelectorTextField"
+import { searchForNewAddress } from '../components/AddressSelectorTextField'
 
-export class SharedAddressSelector{
-  private addressSelectorTexFieldLocator = '#deliveryAddressSelector'
-  private addressResultListLocator = '#deliveryAddressSelector-listbox > li > div'
+export class SharedAddressSelector {
+  private readonly addressSelectorTexFieldLocator = '#deliveryAddressSelector'
+  private readonly addressResultListLocator = '#deliveryAddressSelector-listbox > li > div'
 
   // #region - Tabs
-  getFullfilmentPane (){
+  getFullfilmentPane () {
     return cy.get('.drawer')
   }
 
@@ -51,15 +51,15 @@ export class SharedAddressSelector{
     return cy.get(this.addressResultListLocator)
   }
 
-  getDeliveryFullfilmentSelectorForFirstTimeShopper() {
+  getDeliveryFullfilmentSelectorForFirstTimeShopper () {
     return cy.get('#fulfilmentSelection0')
   }
 
-  getPickupFullfilmentSelectorForFirstTimeShopper() {
+  getPickupFullfilmentSelectorForFirstTimeShopper () {
     return cy.get('#fulfilmentSelection1')
   }
 
-  getDTBFullfilmentSelectorForFirstTimeShopper() {
+  getDTBFullfilmentSelectorForFirstTimeShopper () {
     return cy.get('#fulfilmentSelection2')
   }
   // #endregion
@@ -87,17 +87,14 @@ export class SharedAddressSelector{
   }
 
   // #region - General actions
-  chooseFulfilmentOptionForFirstTimeCustomer(fulfilmentOption: string){
-    if (fulfilmentOption.toUpperCase().includes('DELIVERY')){
+  chooseFulfilmentOptionForFirstTimeCustomer (fulfilmentOption: string) {
+    if (fulfilmentOption.toUpperCase().includes('DELIVERY')) {
       this.getDeliveryFullfilmentSelectorForFirstTimeShopper().click({ force: true })
-    }
-    else if (fulfilmentOption.toUpperCase().includes('PICKUP')){
+    } else if (fulfilmentOption.toUpperCase().includes('PICKUP')) {
       this.getPickupFullfilmentSelectorForFirstTimeShopper().click({ force: true })
-    }
-    else if (fulfilmentOption.toUpperCase().includes('DTB') || fulfilmentOption.toUpperCase().includes('DIRECT')){
+    } else if (fulfilmentOption.toUpperCase().includes('DTB') || fulfilmentOption.toUpperCase().includes('DIRECT')) {
       this.getDTBFullfilmentSelectorForFirstTimeShopper().click({ force: true })
-    }
-    else{
+    } else {
       throw new Error('not recongnised fulfilment option: ' + fulfilmentOption)
     }
 
@@ -147,25 +144,23 @@ export class SharedAddressSelector{
   // More conditions we handles on UI behaviours means more chance to skip the protential risk.
   // This is only for bringing ease to the test script which would like having a general function as a tool to select delivery address but check point is somewhere else.
   selectDeliveyAddress (deliveryAddress: string) {
-    //Select the delivery address if its existing or enter if it doesnot already exist or enter the address if user is first time shopper
-    var deliveryAddressForSearch = deliveryAddress.toString().substring(0, deliveryAddress.lastIndexOf(" "))
-    deliveryAddressForSearch = deliveryAddressForSearch.substring(0, deliveryAddress.lastIndexOf(" "))
-    var deliveryAddressToSelect = deliveryAddress.toString().substring(deliveryAddress.indexOf(','), deliveryAddress.length)
-    
+    // Select the delivery address if its existing or enter if it doesnot already exist or enter the address if user is first time shopper
+    let deliveryAddressForSearch = deliveryAddress.toString().substring(0, deliveryAddress.lastIndexOf(' '))
+    deliveryAddressForSearch = deliveryAddressForSearch.substring(0, deliveryAddress.lastIndexOf(' '))
+    const deliveryAddressToSelect = deliveryAddress.toString().substring(deliveryAddress.indexOf(','), deliveryAddress.length)
+
     this.getFullfilmentPane().then(($ffPane) => {
-      if($ffPane.find('label:contains('+deliveryAddressForSearch+')').length > 0){
+      if ($ffPane.find('label:contains(' + deliveryAddressForSearch + ')').length > 0) {
         this.selectSavedDeliveryAddressByKeyword(deliveryAddressForSearch)
-      }
-      else if ($ffPane.find('button.add-address-button').length > 0) {
+      } else if ($ffPane.find('button.add-address-button').length > 0) {
         this.getAddNewDeliveryAddressButton().click()
         this.searchForNewDeliveryAddress(deliveryAddressForSearch)
-      }
-      else if ($ffPane.find('input#deliveryAddressSelector').length > 0) {
+      } else if ($ffPane.find('input#deliveryAddressSelector').length > 0) {
         this.searchForNewDeliveryAddress(deliveryAddressForSearch)
       }
-    }) 
+    })
     // click on savecontinue button
-    this.getSaveAndContinueButton().click() 
+    this.getSaveAndContinueButton().click()
   }
   // #endregion
 }

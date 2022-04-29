@@ -7,7 +7,6 @@ import '../../../support/checkout/api/commands/redeemRewardsDollars'
 import TestFilter from '../../../support/TestFilter'
 
 TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
-
   describe('[API] Verify Product Promotions', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -54,7 +53,6 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.AvailableItems[0].SalePrice).to.be.eqls(promotions.ProductPromotions[2].SalePrice2)
         expect(response.WowRewardsSummary.RewardsCredits.BeingRedeemed).to.be.eqls(promotions.ProductPromotions[2].CreditsUsed2)
       })
-
     })
   })
 })

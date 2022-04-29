@@ -40,28 +40,27 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
       cy.clearTrolley()
 
       // Add Pet Culture EM items to trolley
-      cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)      
-      
-    // Search and select the PickUp address
-    cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response: any) => {
-      expect(response.AddressId).to.not.be.null
-    })
-    //Select the Fulfilment Window
-    cy.getFulfilmentWindowViaApi(windowType.PICK_UP).then((response: any) => {
-      expect(response.Id).to.be.greaterThan(0)
-    })
+      cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
 
-    cy.completeWindowFulfilmentViaApi().then((response: any) => {
-      expect(response).to.have.property('IsSuccessful', true)
-    })
+      // Search and select the PickUp address
+      cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response: any) => {
+        expect(response.AddressId).to.not.be.null
+      })
+      // Select the Fulfilment Window
+      cy.getFulfilmentWindowViaApi(windowType.PICK_UP).then((response: any) => {
+        expect(response.Id).to.be.greaterThan(0)
+      })
 
-    // Verify the RestrictedByDeliveryMethodMessage When Fulfilment Type = PickUp
-    cy.viewTrolley().as('trolleyResponse')
-    cy.get('@trolleyResponse').then((trolleyResponse: any) => {
-      cy.log(trolleyResponse.RestrictedByDeliveryMethodMessage)
-      expect(trolleyResponse.RestrictedByDeliveryMethodMessage).to.equal('These items are not available for Pick up. Remove them or change to Delivery.')
-    })
+      cy.completeWindowFulfilmentViaApi().then((response: any) => {
+        expect(response).to.have.property('IsSuccessful', true)
+      })
 
+      // Verify the RestrictedByDeliveryMethodMessage When Fulfilment Type = PickUp
+      cy.viewTrolley().as('trolleyResponse')
+      cy.get('@trolleyResponse').then((trolleyResponse: any) => {
+        cy.log(trolleyResponse.RestrictedByDeliveryMethodMessage)
+        expect(trolleyResponse.RestrictedByDeliveryMethodMessage).to.equal('These items are not available for Pick up. Remove them or change to Delivery.')
+      })
     })
   })
 })

@@ -39,7 +39,7 @@ TestFilter(['B2B', 'API', 'P0'], () => {
 
       cy.searchDeliveryAddress(addressSearchBody).then((response: any) => {
         expect(response.Id).to.not.be.empty
-        
+
         expect(response.Id).to.not.be.null
       })
 

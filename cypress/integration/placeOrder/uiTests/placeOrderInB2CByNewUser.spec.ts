@@ -15,31 +15,30 @@ import storeTestData from '../../../fixtures/checkout/storeSearch.json'
 import creditcardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import TestFilter from '../../../support/TestFilter'
 
-
 TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
   describe('[UI] Place orders by new user', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
-      cy.clearCookies({ domain: null });
-      cy.clearLocalStorage({ domain: null });
+      cy.clearCookies({ domain: null })
+      cy.clearLocalStorage({ domain: null })
     })
 
-    beforeEach(() => {  
-      cy.loginWithNewShopperViaApi();
+    beforeEach(() => {
+      cy.loginWithNewShopperViaApi()
 
-      onHomePage.loadHomePage();
+      onHomePage.loadHomePage()
 
-      onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false});
+      onFMSRibbon.getFMSRibbonAddressLink().click({ waitForAnimations: false })
     })
 
     it('Place a delivery order with woolworths items', () => {
-      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer("Delivery");
-      onFMSAddressSelector.getDeliveryTab().click();
-      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer('Delivery')
+      onFMSAddressSelector.getDeliveryTab().click()
+      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
 
-      onFMSWindowSelector.selectNextAvailableDay();
-      onFMSWindowSelector.selectLastTimeslot();
+      onFMSWindowSelector.selectNextAvailableDay()
+      onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
       onHomePage.getSearchHeader().click()
@@ -59,13 +58,13 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
     })
 
     it('Place a pickup order with woolworths groceries', () => {
-      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer("Pickup");
-      onFMSAddressSelector.getPickupTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer('Pickup')
+      onFMSAddressSelector.getPickupTab().click()
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
 
-      onFMSWindowSelector.selectNextAvailableDay();
-      onFMSWindowSelector.selectLastTimeslot();
+      onFMSWindowSelector.selectNextAvailableDay()
+      onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
       onHomePage.getSearchHeader().click()
@@ -87,13 +86,13 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
     })
 
     it('Place a direct to boot order with woolworths groceries', () => {
-      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer("DTB");
-      onFMSAddressSelector.getDirectToBootTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer('DTB')
+      onFMSAddressSelector.getDirectToBootTab().click()
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
 
-      onFMSWindowSelector.selectNextAvailableDay();
-      onFMSWindowSelector.selectLastTimeslot();
+      onFMSWindowSelector.selectNextAvailableDay()
+      onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
       onHomePage.getSearchHeader().click()
@@ -114,7 +113,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onCheckoutPage.onCheckoutPaymentPanel.searchForNewBillingAddress(storeTestData.billingAddress)
     })
 
-    afterEach(()=>{
+    afterEach(() => {
       onCheckoutPage.onCheckoutFulfilmentSelectionPanel.getSummarisedFulfilmentAddressElement().then(address => {
         cy.wrap(address.text()).as('expectedAddress')
       })
@@ -142,15 +141,13 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       })
 
       cy.get<string>('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
-
-        // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time, 
+        // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time,
         // if script selects same day window, the checkout page will show day of week of tomorrow but order confirmaiton page shows 'Tomorrow'
         const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
-        cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek : string) => {
-          if(expectedFulfilmentDay.includes(tomorrowDayOfWeek)){
+        cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek: string) => {
+          if (expectedFulfilmentDay.includes(tomorrowDayOfWeek)) {
             onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', 'Tomorrow')
-          }
-          else{
+          } else {
             onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
           }
         })

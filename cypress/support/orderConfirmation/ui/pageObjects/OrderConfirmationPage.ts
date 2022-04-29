@@ -1,12 +1,12 @@
-import { Notification } from "../../../shared/ui/components/Notification";
+import { Notification } from '../../../shared/ui/components/Notification'
 
 export class OrderConfirmationPage {
-  private marketplaceRestrictionNotification = 'shared-order-market-restriction-notification'
+  private readonly marketplaceRestrictionNotification = 'shared-order-market-restriction-notification'
 
   getBackToHomeLink () {
     return cy.contains('Back to home')
   }
-  
+
   getOrderConfirmationHeader () {
     return cy.get('.confirmation-container__header')
   }
@@ -31,8 +31,8 @@ export class OrderConfirmationPage {
     return cy.get('.confirmation-fulfilment-details__section-notes')
   }
 
-  restrictedNotification(): Notification {
-    return new Notification(cy.get(this.marketplaceRestrictionNotification));
+  restrictedNotification (): Notification {
+    return new Notification(cy.get(this.marketplaceRestrictionNotification))
   }
 
   getOrderRestrictedNotification () {
@@ -85,11 +85,11 @@ export class OrderConfirmationPage {
 
   private getOrderPaymentSummaryDetailInfoValue (typeName: string) {
     return cy.contains(typeName).parents('.confirmation-order-information__row').find('.confirmation-order-information__highlight')
-  } 
+  }
 
   private getOrderSplitPaymentInstrumentPaidAmount (typeName: string) {
     return cy.contains(typeName).parents('.confirmation-order-information__label__row').find('.confirmation-order-information__highlight').eq(1)
-  } 
+  }
 }
 
 export const onOrderConfirmationPage = new OrderConfirmationPage()

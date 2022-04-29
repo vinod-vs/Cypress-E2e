@@ -1,6 +1,6 @@
 export class FMSWindowSelector {
   // #region - Selectors
-  getSelectFullfilmentTimeHeading() {
+  getSelectFullfilmentTimeHeading () {
     return cy.get('.time-slot-title')
   }
 
@@ -48,10 +48,9 @@ export class FMSWindowSelector {
   selectNextAvailableDay () {
     cy.get('.day-dropdown > option')
       .each(dayOption => {
-        if(!dayOption.prop('disabled'))
-        {
+        if (!dayOption.prop('disabled')) {
           cy.wrap(dayOption).parent().select(dayOption.text())
-          return false;
+          return false
         }
       })
   }
@@ -61,7 +60,7 @@ export class FMSWindowSelector {
       .each(dayOption => {
         if (!(dayOption.text().includes('Select a day') || dayOption.text().includes('Today') || dayOption.text().includes('Tomorrow') || dayOption.text().includes('Closed'))) {
           this.getDayDropdown().select(dayOption.text())
-          return false;
+          return false
         }
       })
   }
@@ -71,7 +70,7 @@ export class FMSWindowSelector {
       .contains(dayKeyword)
       .then(dayOption => {
         cy.wrap(dayOption).parent().select(dayOption.text())
-    })
+      })
   }
 
   selectTimeSlotByTime (startTimeString: string, endTimeString = 'undefined') {
@@ -80,11 +79,11 @@ export class FMSWindowSelector {
 
   selectDeliveryNowTimeslot () {
     cy.get('wow-time-slot-badges span').each(eachBadgeSpan => {
-      if(eachBadgeSpan.text() == 'Delivery Now'){
-        cy.intercept(Cypress.env('bootstrapEndpoint')).as('bootstrap');
+      if (eachBadgeSpan.text() == 'Delivery Now') {
+        cy.intercept(Cypress.env('bootstrapEndpoint')).as('bootstrap')
         cy.wrap(eachBadgeSpan).parents('.time-slot-badge-container').click()
-        cy.wait('@bootstrap');
-        return false;
+        cy.wait('@bootstrap')
+        return false
       }
     })
   }

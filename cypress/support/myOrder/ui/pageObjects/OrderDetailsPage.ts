@@ -1,27 +1,26 @@
 export class OrderDetailsPage {
-    
-    getOrderDetails(){
-        return cy.get('.order-details')
-    }
-    getCancelMyOrderButton() {
-       return this.getOrderDetails().find('.cancel-link')
-      }
+  getOrderDetails () {
+    return cy.get('.order-details')
+  }
 
-    getCancelMyOrderModal() {
-        return cy.get('.order-modal')
-    }  
+  getCancelMyOrderButton () {
+    return this.getOrderDetails().find('.cancel-link')
+  }
 
-     getCancelMyOrderModalCheckbox() {
-      return this.getCancelMyOrderModal().find('[type="checkbox"]')
-     }
+  getCancelMyOrderModal () {
+    return cy.get('.order-modal')
+  }
 
-     getCancelMyOrderModalButton(){
-     return cy.get('.checkbox-container.selected').parents('div').find('button.primary').eq(1)
-     }
+  getCancelMyOrderModalCheckbox () {
+    return this.getCancelMyOrderModal().find('[type="checkbox"]')
+  }
 
-     getCancelledStatus(){
-         return cy.get('.fulfilment-details-panel').find('.cancelled-status')
-     }
+  getCancelMyOrderModalButton () {
+    return cy.get('.checkbox-container.selected').parents('div').find('button.primary').eq(1)
+  }
 
+  getCancelledStatus () {
+    return cy.get('.fulfilment-details-panel').find('.cancelled-status')
+  }
 }
 export const onOrderDetailsPage = new OrderDetailsPage()

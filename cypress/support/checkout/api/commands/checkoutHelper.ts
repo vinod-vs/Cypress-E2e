@@ -23,7 +23,7 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (platform: string, c
   if (typeof creditCardDetails !== 'undefined') {
     creditCardRequest = creditCardDetails
   } else {
-    creditCardRequest = Cypress.env('creditCard') 
+    creditCardRequest = Cypress.env('creditCard')
   }
 
   cy.creditcardTokenisation(creditCardRequest, creditcardSessionHeader).then((response: any) => {
@@ -55,7 +55,7 @@ Cypress.Commands.add('checkForOrderPlacementErrorsAndThrow', (paymentResponse) =
   if (orderPlacementErrors !== null) {
     const type = orderPlacementErrors[0].Type
     const message = orderPlacementErrors[0].Message
-    throw new Error ('Error on Payment.' + '\n' + 'Type is: ' + type  + '.' + '\n' + 'Message is: ' + message)
+    throw new Error('Error on Payment.' + '\n' + 'Type is: ' + type + '.' + '\n' + 'Message is: ' + message)
   }
 })
 
@@ -68,13 +68,13 @@ Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
         cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
           expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
           expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
-            
-          confirmOrderParameter.placedOrderId = response.PlacedOrderId 
+
+          confirmOrderParameter.placedOrderId = response.PlacedOrderId
         })
       })
     } else {
       cy.checkForOrderPlacementErrorsAndThrow(response)
-    }       
+    }
   })
 
   cy.confirmOrder(confirmOrderParameter).then((response: any) => {
@@ -82,13 +82,13 @@ Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
     expect(orderId, 'Order Placement Id').to.eqls(confirmOrderParameter.placedOrderId)
 
     cy.log('This is the order id: ' + response.Order.OrderId)
-    
+
     return cy.wrap(orderId)
   })
 })
 
 Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
-  let digitalPaymentInstruments: any = []
+  const digitalPaymentInstruments: any = []
 
   cy.getDigitalPaymentInstruments().then((response: any) => {
     const creditCards = response.CreditCard.Instruments
@@ -118,5 +118,5 @@ Cypress.Commands.add('addGiftCardAndCompleteSplitPaymentOrderViaAPI', (giftCard,
       splitPaymentRequest.payments[1].paymentInstrumentId = response
     })
     cy.placeOrderViaApiWithPaymentRequest(splitPaymentRequest)
-  })   
+  })
 })

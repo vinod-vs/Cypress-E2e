@@ -7,7 +7,6 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import TestFilter from '../../../support/TestFilter'
 
 TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
-
   describe('[API] Verify Order Promotions', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -28,7 +27,6 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
     })
 
     it('Verify the Order promotion is applied on the grocery subtotal - $OFF and delivery Fee - $OFF', () => {
-
       // Set the Delivery address and add the items to Trolley
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(promotions.OrderPromotions[1].searchTerm, (promotions.OrderPromotions[1].Subtotal))
       cy.navigateToCheckout().then((response: any) => {
