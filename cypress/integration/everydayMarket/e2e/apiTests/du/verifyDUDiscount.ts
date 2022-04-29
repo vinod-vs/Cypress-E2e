@@ -131,9 +131,9 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         }) // ENDS - cy.orderEventsApiWithRetry(req.orderReference, {
           .as("finalProjection")
           .then((response) => 
-          { edmOrderId = response.invoices[0].legacyIdFormatted;
-            edmInvoiceId = response.invoices[0].legacyId;
-            cy.log( "In finalProjection the MPOrder Id: " + edmOrderId + ", and MPInvoice Id: " + edmInvoiceId );     
+          { edmOrderId = response.body.data.element.domainEvent
+            //edmInvoiceId = response.invoices[0].legacyId;
+            //cy.log( "In finalProjection the MPOrder Id: " + edmOrderId + ", and MPInvoice Id: " + edmInvoiceId )    
           }) // ENDS - .then((response) => {
 
 
