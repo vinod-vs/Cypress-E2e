@@ -243,6 +243,19 @@
         "rewardsCardNumber": 9355125401111,
         "shopperId": "8518279",
         "platform": "B2C"
+    },
+    "emailTest1": {
+        "email": "emailtest1@82f8rhkb.mailosaur.net",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125828529,
+        "shopperId": "8525221",
+        "platform": "B2C"
+    },
+    "emailTest3": {
+        "email": "emailtest3@82f8rhkb.mailosaur.net",
+        "password": "testing123",
+        "rewardsCardNumber": 9355125852562,
+        "shopperId": "8532130",
+        "platform": "B2C"
     }
-
 }

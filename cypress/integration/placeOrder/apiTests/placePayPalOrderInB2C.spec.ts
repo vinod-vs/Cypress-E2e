@@ -1,6 +1,6 @@
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/login/api/commands/login'
-import shopper from '../../../fixtures/checkout/payPalShoppers.json'
+import shopper from '../../../fixtures/checkout/paypalShoppers.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import '../../../support/fulfilment/api/commands/fulfilment'
@@ -26,7 +26,7 @@ TestFilter(['B2C', 'API', 'P1', 'Checkout', 'SPUD'], () => {
     })
   
     it('Should place an order with full payment via a previously linked PayPal account', () => {
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
       cy.navigateToCheckout().then((response: any) => {
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
