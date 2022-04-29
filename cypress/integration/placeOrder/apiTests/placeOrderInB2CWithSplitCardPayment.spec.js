@@ -60,5 +60,5 @@ TestFilter(['B2C', 'API', 'P0'], () => {
 
       cy.addGiftCardAndCompleteSplitPaymentOrderViaAPI(giftCard, giftCardPaymentAmount, splitPayment)
     })
-  }) 
+  })
 })
