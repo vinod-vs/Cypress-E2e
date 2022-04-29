@@ -1,5 +1,7 @@
 {
+  "parser": "@typescript-eslint/parser",
   "plugins": [
+    ["@typescript-eslint"],
     "cypress",
     "chai-friendly"
   ],
