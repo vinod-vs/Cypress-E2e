@@ -7,3 +7,12 @@ Cypress.Commands.add('renameList', (listId, renameListBody) => {
     return response
   })
 })
+
+Cypress.Commands.add('setListAsDefault', (listId) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('myListsEndPointV3') + listId + '/update/default'
+  }).then((response) => {
+    return response
+  })
+})
