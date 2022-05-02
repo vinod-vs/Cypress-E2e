@@ -1,5 +1,3 @@
-let productArr
-
 Cypress.Commands.add('productSearch', (searchBody) => {
   cy.api({
     method: 'POST',

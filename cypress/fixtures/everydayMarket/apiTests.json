@@ -272,5 +272,18 @@
             }
         ],
         "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
+    },
+    "VerifyEmailNotificationsEDMOnly": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [{
+            "quantity": 2,
+            "isEDMProduct": "true"
+        }],
+        "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
     }
 }

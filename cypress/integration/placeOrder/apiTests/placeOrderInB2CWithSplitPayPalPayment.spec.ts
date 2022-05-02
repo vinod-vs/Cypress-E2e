@@ -39,7 +39,7 @@ TestFilter(['B2C', 'API', 'P1'], () => {
     it('Should place a split payment order via PayPal & Gift Card', () => {
       const giftCardPaymentAmount = 0.01
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.CROWD_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.CROWD_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
       cy.navigateToCheckout().then((response: any) => {

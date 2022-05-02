@@ -25,7 +25,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
       cy.loginWithNewShopperViaApi()
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
       
       cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
