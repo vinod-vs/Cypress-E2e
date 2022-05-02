@@ -15,7 +15,6 @@ import storeTestData from '../../../fixtures/checkout/storeSearch.json'
 import creditcardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import TestFilter from '../../../support/TestFilter'
 
-
 TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
   describe('[UI] Place orders by using credit card', () => {
     // pre-requisite to clear all cookies before login
@@ -24,36 +23,36 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
-    beforeEach(() => {  
+    beforeEach(() => {
       cy.loginViaUi(b2cShoppers[3])
-      
+
       onSideCartPage.cleanupTrolley()
 
-      onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false});
+      onFMSRibbon.getFMSRibbonAddressLink().click({ waitForAnimations: false })
     })
 
     it('Place a delivery order with woolworths items', () => {
-      onFMSAddressSelector.getDeliveryTab().click();
-      onFMSAddressSelector.getAddNewDeliveryAddressButton().click();
-      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.getDeliveryTab().click()
+      onFMSAddressSelector.getAddNewDeliveryAddressButton().click()
+      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
     })
 
     it('Place a pickup order with woolworths groceries', () => {
-      onFMSAddressSelector.getPickupTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.getPickupTab().click()
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
     })
 
     it('Place a direct to boot order with woolworths groceries', () => {
-      onFMSAddressSelector.getDirectToBootTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.getDirectToBootTab().click()
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
     })
 
-    afterEach(()=>{
-      onFMSWindowSelector.selectNextAvailableDay();
-      onFMSWindowSelector.selectLastTimeslot();
+    afterEach(() => {
+      onFMSWindowSelector.selectNextAvailableDay()
+      onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
       onHomePage.getSearchHeader().click()
@@ -98,15 +97,13 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       })
 
       cy.get<string>('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
-
-        // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time, 
+        // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time,
         // if script selects same day window, the checkout page will show day of week of tomorrow but order confirmaiton page shows 'Tomorrow'
         const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
-        cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek : string) => {
-          if(expectedFulfilmentDay.includes(tomorrowDayOfWeek)){
+        cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek: string) => {
+          if (expectedFulfilmentDay.includes(tomorrowDayOfWeek)) {
             onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', 'Tomorrow')
-          }
-          else{
+          } else {
             onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
           }
         })

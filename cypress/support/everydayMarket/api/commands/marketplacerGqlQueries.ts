@@ -95,4 +95,4 @@ export const getInvoiceDetailsQuery = `query ($id: ID!)
       }
     }
   }
-}`;
+}`

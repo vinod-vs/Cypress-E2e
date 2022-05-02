@@ -101,11 +101,11 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           if (Cypress.env('marketRewardPointsValidationSwitch')) {
             cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
 
-          cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
-          })
-        }
+            cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+              expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+              testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+            })
+          }
           // Dispatch partial order with a unique tracking id
           cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, [{ line_item_id: lineItemLegacyId, quantity: dispatchQty }], shipment.postageTrackingnumber, testData.carrier, testData.items[0].sellerName).then((response) => {
             expect(response.data.attributes.shipment_tracking_number).to.be.equal(shipment.postageTrackingnumber)
@@ -192,19 +192,19 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                     if (Cypress.env('marketRewardPointsValidationSwitch')) {
                       cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
 
-                    cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-                      testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-                      const totalDispatchAmount = Math.floor(Number(testData.edmTotal)) - Math.floor(Number(testData.items[0].pricePerItem * dispatchQty))
-                      cy.log('totalDispatchAmount: ' + totalDispatchAmount)
-                      const expectedRewardsPoints = totalDispatchAmount + Number(testData.rewardPointBefore)
-                      cy.log('Testdata JSON: ' + JSON.stringify(testData))
-                      cy.log('EDM Total: ' + testData.edmTotal)
-                      cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                      cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
-                      cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
-                      expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
-                    })
-                  }
+                      cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+                        testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
+                        const totalDispatchAmount = Math.floor(Number(testData.edmTotal)) - Math.floor(Number(testData.items[0].pricePerItem * dispatchQty))
+                        cy.log('totalDispatchAmount: ' + totalDispatchAmount)
+                        const expectedRewardsPoints = totalDispatchAmount + Number(testData.rewardPointBefore)
+                        cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                        cy.log('EDM Total: ' + testData.edmTotal)
+                        cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+                        cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
+                        cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
+                        expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
+                      })
+                    }
                     // Verify the events api
                     cy.orderEventsApiWithRetry(orderReference, {
                       function: function (response) {

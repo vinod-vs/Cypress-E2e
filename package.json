@@ -7,7 +7,7 @@
         "cypress:open": "TZ=Australia/Sydney cypress open",
         "cypress:run": "TZ=Australia/Sydney cypress run",
         "cypress:spec": "TZ=Australia/Sydney cypress run --spec",
-        "pretest": "npx standard || true",
+        "pretest": "npx ts-standard || true",
         "test": "TZ=Australia/Sydney cypress run",
         "browserstackTest": "browserstack-cypress run --sync",
         "browserstackGenerateReport": "browserstack-cypress generate-report",
@@ -43,6 +43,7 @@
         "mongodb": "^4.1.2",
         "standard": "^16.0.4",
         "ts-loader": "^9.2.6",
+        "ts-standard": "^11.0.0",
         "typescript": "^4.4.4",
         "webpack": "^5.64.0"
     },
@@ -56,6 +57,23 @@
             "expect",
             "assert"
         ]
+    },
+    "ts-standard": {
+      "ignore": [
+        ".config-files",
+        ".downloads",
+        "fixtures"
+      ],
+      "noDefaultIgnore": false,
+      "globals": [
+        "cy",
+        "Cypress",
+        "expect",
+        "assert"
+    ],
+      "envs": [
+        "mocha"
+      ] 
     },
     "dependencies": {
         "fs": "0.0.1-security",

@@ -3,7 +3,6 @@
 //
 
 export class Signup {
-  
   getPageTitle () {
     return cy.get('//form[@id="signupForm"]//h3[@class="signupForm-headerTitle"]')
   }
@@ -53,7 +52,7 @@ export class Signup {
   }
 
   getBusinessTypeRetailService () {
-    return cy.get('select#shared-dropdown-input-0').select("Retail Service")
+    return cy.get('select#shared-dropdown-input-0').select('Retail Service')
   }
 
   getJobTitle () {

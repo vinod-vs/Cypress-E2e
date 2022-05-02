@@ -1,80 +1,79 @@
 class SessionGroupsV2Page {
-    open() {
-        cy.visit(Cypress.env('siteAdminUat') + 'manage/sessiongroupsv2')
-    }
+  open () {
+    cy.visit(Cypress.env('siteAdminUat') + 'manage/sessiongroupsv2')
+  }
 
-    getTableFrame () {
-        return cy.get('.table-frame')
-    }
+  getTableFrame () {
+    return cy.get('.table-frame')
+  }
 
-    getLogOffButton () {
-        return cy.get('a:contains("Log Off")')
-    }
+  getLogOffButton () {
+    return cy.get('a:contains("Log Off")')
+  }
 
-    getIdHeader () {
-        return cy.get('a:contains("Id")')
-    }
+  getIdHeader () {
+    return cy.get('a:contains("Id")')
+  }
 
-    getNameHeader () {
-        return cy.get('a:contains("Name")')
-    }
+  getNameHeader () {
+    return cy.get('a:contains("Name")')
+  }
 
-    getDescriptionHeader () {
-        return cy.get('a:contains("Description")')
-    }
+  getDescriptionHeader () {
+    return cy.get('a:contains("Description")')
+  }
 
-    getDomainHeader () {
-        return cy.get('a:contains("Domain")')
-    }
+  getDomainHeader () {
+    return cy.get('a:contains("Domain")')
+  }
 
-    getDeleteHeader () {
-        return cy.get('a:contains("Delete")')
-    }
-    
-    getCreateNewSessionGroup () {
-        return cy.get('a:contains("Create New Session Group")')
-    }
-    
-    getSessionGroupEntry (sessionGroupName:string) {
-        return cy.get('a:contains("'+ sessionGroupName +'")')
-    }
+  getDeleteHeader () {
+    return cy.get('a:contains("Delete")')
+  }
 
-    getDeleteSessionGroup (sessionGroupName:string) {
-        return cy.xpath('//a[text()=\'' + sessionGroupName + '\']/../..//td[@class=\'delete\']')
-    }
+  getCreateNewSessionGroup () {
+    return cy.get('a:contains("Create New Session Group")')
+  }
 
-    getShowSelect() {
-        return cy.get('.selectwrap > select')
-    }
+  getSessionGroupEntry (sessionGroupName: string) {
+    return cy.get('a:contains("' + sessionGroupName + '")')
+  }
 
-    getSelectOption(option:string) {
-        return cy.xpath('//select/option[@value=\' + option + \']')
-    }
+  getDeleteSessionGroup (sessionGroupName: string) {
+    return cy.xpath('//a[text()=\'' + sessionGroupName + '\']/../..//td[@class=\'delete\']')
+  }
 
-    getTableRow(row:number) {
-        row = row + 1    
-        return cy.xpath('//tbody/tr[' + row + ']')
-    }
+  getShowSelect () {
+    return cy.get('.selectwrap > select')
+  }
 
-    getTableRowName(row:number) {
-        row = row + 1    
-        return cy.xpath('//tbody/tr[' + row + ']/td[2]/a')
-    }
+  getSelectOption (option: string) {
+    return cy.xpath('//select/option[@value=\' + option + \']')
+  }
 
-    getTableRowDescription(row:number) {
-        row = row + 1    
-        return cy.xpath('//tbody/tr[' + row + ']/td[3]')
-    }
+  getTableRow (row: number) {
+    row = row + 1
+    return cy.xpath('//tbody/tr[' + row + ']')
+  }
 
-    getTableRowDomain(row:number) {
-        row = row + 1    
-        return cy.xpath('//tbody/tr[' + row + ']/td[4]')
-    }
+  getTableRowName (row: number) {
+    row = row + 1
+    return cy.xpath('//tbody/tr[' + row + ']/td[2]/a')
+  }
 
-    getLastRowName() {
-        return cy.get('tr').last().get('td').eq(1).get('a')
-    }
+  getTableRowDescription (row: number) {
+    row = row + 1
+    return cy.xpath('//tbody/tr[' + row + ']/td[3]')
+  }
 
+  getTableRowDomain (row: number) {
+    row = row + 1
+    return cy.xpath('//tbody/tr[' + row + ']/td[4]')
+  }
+
+  getLastRowName () {
+    return cy.get('tr').last().get('td').eq(1).get('a')
+  }
 }
 
-export const sessionGroupsV2Page = new SessionGroupsV2Page();
+export const sessionGroupsV2Page = new SessionGroupsV2Page()

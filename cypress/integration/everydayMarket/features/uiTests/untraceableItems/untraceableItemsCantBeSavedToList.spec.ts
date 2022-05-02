@@ -23,10 +23,10 @@ TestFilter(['FEATURE', 'MANIC'], () => {
       // Search for untraceable item stockcode
       onHomePage.getSearchHeader().click()
       onHomePage.getSearchHeader().type(untraceableItem.stockcode).type('{enter}')
-      
+
       onSearchResultsPage.getProductTitle().then(() => {
-          // Verify the 'Save to List' button does not exist
-          onSearchResultsPage.getSaveToListButton().should('not.exist');
+        // Verify the 'Save to List' button does not exist
+        onSearchResultsPage.getSaveToListButton().should('not.exist')
       })
     })
   })

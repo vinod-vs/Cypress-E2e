@@ -7,7 +7,6 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import TestFilter from '../../../support/TestFilter'
 
 TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
-
   describe('[API] Verify Order Promotions', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -28,7 +27,6 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
     })
 
     it('Verify the Deferred order promotion is applied and added the reward points- $OFF', () => {
-
       // add the items to Trolley and do checkout
       cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredOrderPromotions[0].stockcode, (promotions.DeferredOrderPromotions[0].Quantity)).then((response: any) => {
         const TotalRewardPoints = ((response.Totals.SubTotal) + (promotions.DeferredOrderPromotions[0].TotalRewardsPointsEarned))
@@ -41,17 +39,14 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
     })
 
     it('Verify the Deferred order promotion is applied on earning Container Credits', () => {
-
       // add the items to Trolley and do checkout
 
       cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredOrderPromotions[0].stockcode.toString(), promotions.DeferredOrderPromotions[0].Quantity).then((response: any) => {
         expect(response.WowRewardsSummary.RewardsCredits.BeingEarned).to.be.eqls(promotions.DeferredOrderPromotions[0].BeingEarned)
-
       })
       cy.navigateToCheckout().then((response: any) => {
         expect(response.Model.Order.RewardsCredits.BeingEarned).to.be.eqls(promotions.DeferredOrderPromotions[0].BeingEarned)
       })
     })
-
   })
 })

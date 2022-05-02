@@ -1,184 +1,179 @@
-export class CheckoutReviewItemsPanel{
+export class CheckoutReviewItemsPanel {
+  // #region - General selectors
+  getSaveDetailsButton () {
+    return cy.get('button.shopper-action').contains('Save details')
+  }
 
-    //#region - General selectors
-    getSaveDetailsButton () {
-        return cy.get('button.shopper-action').contains('Save details')
-    }
+  getOrderReviewErrorParagraph () {
+    return cy.get('wow-checkout-order-review-errors p')
+  }
 
-    getOrderReviewErrorParagraph () {
-        return cy.get('wow-checkout-order-review-errors p')
-    }
+  getOrderReviewChangeSelectionLink () {
+    return cy.get('wow-checkout-order-review-card .linkButton')
+  }
 
-    getOrderReviewChangeSelectionLink () {
-        return cy.get('wow-checkout-order-review-card .linkButton')
-    }
+  getPackageOptionReusableBagsButton () {
+    return cy.get('wow-checkout-packaging-selector button').contains('Reusable bags')
+  }
 
-    getPackageOptionReusableBagsButton () {
-        return cy.get('wow-checkout-packaging-selector button').contains('Reusable bags')
-    }
+  getPackageOptionPaperBagsButton () {
+    return cy.get('wow-checkout-packaging-selector button').contains('Paper bags')
+  }
 
-    getPackageOptionPaperBagsButton () {
-        return cy.get('wow-checkout-packaging-selector button').contains('Paper bags')
-    }
+  // #endregion
 
-    //#endregion
+  // #region - Selectors of all products
+  getAllProductsDetailsList () {
+    return cy.get('.cart-item')
+  }
 
-    //#region - Selectors of all products
-    getAllProductsDetailsList () {
-        return cy.get('.cart-item')
-    }
+  getAllProductsNameList () {
+    return cy.get('.cart-item-link')
+  }
+  // #endregion
 
-    getAllProductsNameList () {
-        return cy.get('.cart-item-link')
-    }
-    //#endregion
+  // #region - Selectors of all available products
+  getAvailableProductsPanel () {
+    return cy.get('.auto_product-cart-section')
+  }
 
-    //#region - Selectors of all available products
-    getAvailableProductsPanel() {
-        return cy.get('.auto_product-cart-section')
-    }
+  getAvailableProductsDetailsList () {
+    return this.getAvailableProductsPanel().find('.cart-item')
+  }
+  // #endregion
 
-    getAvailableProductsDetailsList () {
-        return this.getAvailableProductsPanel().find('.cart-item')
-    }
-    //#endregion
+  // #region - Selectors of grocery products
+  getGroceryItemsTotalPaymentAmount () {
+    return cy.get('wow-checkout-order-review .woolworths .payment-amount .amount')
+  }
 
-    //#region - Selectors of grocery products
-    getGroceryItemsTotalPaymentAmount () {
-        return cy.get('wow-checkout-order-review .woolworths .payment-amount .amount')
-    }
+  getAvailableGroceryProductsDetailsList () {
+    return this.getAvailableProductsPanel().children('wow-cart-item-checkout').find('.cart-item')
+  }
+  // #endregion
 
-    getAvailableGroceryProductsDetailsList () {
-        return this.getAvailableProductsPanel().children('wow-cart-item-checkout').find('.cart-item')
-    }
-    //#endregion
+  // #region - Selectors of everyday market products
+  getMarketProductsPanel () {
+    return cy.get('wow-checkout-grouped-market-product-list')
+  }
 
-    //#region - Selectors of everyday market products
-    getMarketProductsPanel () {
-        return cy.get('wow-checkout-grouped-market-product-list')
-    }
+  getAvailableMarketProductsDetailsList () {
+    return this.getMarketProductsPanel().find('.cart-item')
+  }
+  // #endregion
 
-    getAvailableMarketProductsDetailsList () {
-        return this.getMarketProductsPanel().find('.cart-item')
-    }
-    //#endregion
+  // #region - Selectors of restricted products panel
+  getRestrictedProductsNotificationPanel () {
+    return cy.get('.auto_group-restricted-fulfilment-window')
+  }
 
-    //#region - Selectors of restricted products panel
-    getRestrictedProductsNotificationPanel () {
-        return cy.get('.auto_group-restricted-fulfilment-window')
-    }
+  getRestrictedProductsDetailsList () {
+    return this.getRestrictedProductsNotificationPanel().find('.cart-item')
+  }
 
-    getRestrictedProductsDetailsList () {
-        return this.getRestrictedProductsNotificationPanel().find('.cart-item')
-    }
-    
-    getRestrictedProductsNotificationParagraph () {
-        return this.getRestrictedProductsNotificationPanel().find('p')
-    }
-    
-    getRestrictedProductsNotificationChangeDeliveryWindowLink () {
-        return this.getRestrictedProductsNotificationPanel().find('button.linkButton')
-    }
-    //#endregion
+  getRestrictedProductsNotificationParagraph () {
+    return this.getRestrictedProductsNotificationPanel().find('p')
+  }
 
-    //#region - Selectors of unavalialbe products panel
-    getUnavailableProductsNotificationPanel () {
-        return cy.get('.auto_group-restricted-location')
-    }
-    
-    getUnavailableProductsList () {
-        return this.getUnavailableProductsNotificationPanel().find('.cart-item')
-    }
-    
-    getUnavailableProductsNotificationParagraph () {
-        return this.getUnavailableProductsNotificationPanel().find('p.title')
-    }
-    
-    getUnavailableProductsNotificationRemoveItemsLink () {
-        return this.getUnavailableProductsNotificationPanel().find('button.linkButton')
-    }
-    //#endregion
+  getRestrictedProductsNotificationChangeDeliveryWindowLink () {
+    return this.getRestrictedProductsNotificationPanel().find('button.linkButton')
+  }
+  // #endregion
 
-    //#region - General actions in checkout page
-    modifyItemQuantityByName (productName: string, expectedAmount: number) {
-        this.findItemDetailsByName(productName)
-          .find('.cartControls-quantityInput')
-          .clear()
-          .type(expectedAmount.toString())
-          .should('have.value', expectedAmount)
-    }
+  // #region - Selectors of unavalialbe products panel
+  getUnavailableProductsNotificationPanel () {
+    return cy.get('.auto_group-restricted-location')
+  }
 
-    removeItemByName (productName: string) {
-        this.findItemDetailsByName(productName)
-          .find('.remove-button')
-          .click()
-    }
-    
-    removeItemsByNames (productNameList: string[]) {
-        for (const eachName of productNameList) {
-          this.removeItemByName(eachName)
-        }
-    }
-    
-    removeAllUnavailableItems () {
-        this.getUnavailableProductsNotificationRemoveItemsLink().click()
-    }
+  getUnavailableProductsList () {
+    return this.getUnavailableProductsNotificationPanel().find('.cart-item')
+  }
 
-    changeSubstitutionsByProductName (productName: string, expectedValue: boolean) {
-        this.findItemDetailsByName(productName)
-            .find('shared-checkbox').then( sharedCheckbox => {
-                cy.wrap(sharedCheckbox).invoke('attr', 'data-checked').then(dataCheckedAttribute => {
-                    if((dataCheckedAttribute === 'true') != expectedValue){
-                        cy.wrap(sharedCheckbox).click()
-                    }
-                })
-            })
+  getUnavailableProductsNotificationParagraph () {
+    return this.getUnavailableProductsNotificationPanel().find('p.title')
+  }
 
-        this.findItemDetailsByName(productName)
-            .find('shared-checkbox').invoke('attr', 'data-checked').then(dataCheckedAttribute => {
-                if((dataCheckedAttribute === 'true') != expectedValue)
-                {
-                    throw new Error("test failed because not able to set substitutions");
-                }
-            })
+  getUnavailableProductsNotificationRemoveItemsLink () {
+    return this.getUnavailableProductsNotificationPanel().find('button.linkButton')
+  }
+  // #endregion
+
+  // #region - General actions in checkout page
+  modifyItemQuantityByName (productName: string, expectedAmount: number) {
+    this.findItemDetailsByName(productName)
+      .find('.cartControls-quantityInput')
+      .clear()
+      .type(expectedAmount.toString())
+      .should('have.value', expectedAmount)
+  }
+
+  removeItemByName (productName: string) {
+    this.findItemDetailsByName(productName)
+      .find('.remove-button')
+      .click()
+  }
+
+  removeItemsByNames (productNameList: string[]) {
+    for (const eachName of productNameList) {
+      this.removeItemByName(eachName)
     }
+  }
 
-    addOrEditPersonalShopperNoteToProduct(productName: string, shopperNotes: string)
-    {
-        this.findItemDetailsByName(productName)
-            .find('shared-product-note').click()
-            .find('shared-textbox input').clear().type(shopperNotes).should('have.value', shopperNotes)
-            .parents('shared-product-note')
-            .find('shared-button button').click();
-    }
+  removeAllUnavailableItems () {
+    this.getUnavailableProductsNotificationRemoveItemsLink().click()
+  }
 
-    changeGroceriesPackageOption(packageOption: string){
-        this.getOrderReviewChangeSelectionLink().invoke('attr', 'aria-expanded').then(ariaExpandedAttribute => {
-            if(ariaExpandedAttribute == "false"){
-                this.getOrderReviewChangeSelectionLink().click()
-            }
+  changeSubstitutionsByProductName (productName: string, expectedValue: boolean) {
+    this.findItemDetailsByName(productName)
+      .find('shared-checkbox').then(sharedCheckbox => {
+        cy.wrap(sharedCheckbox).invoke('attr', 'data-checked').then(dataCheckedAttribute => {
+          if ((dataCheckedAttribute === 'true') != expectedValue) {
+            cy.wrap(sharedCheckbox).click()
+          }
         })
+      })
 
-        if(packageOption.toLowerCase().includes("reusable")){
-            this.getPackageOptionReusableBagsButton().click()
+    this.findItemDetailsByName(productName)
+      .find('shared-checkbox').invoke('attr', 'data-checked').then(dataCheckedAttribute => {
+        if ((dataCheckedAttribute === 'true') != expectedValue) {
+          throw new Error('test failed because not able to set substitutions')
         }
-        else if(packageOption.toLowerCase().includes("paper")){
-            this.getPackageOptionPaperBagsButton().click()
-        }
-        else{
-            throw new Error("test fails because package option is not matching")
-        }
-    }
-    //#endregion
+      })
+  }
 
-    // #endregion - private methods
-    private findItemDetailsByName (productName: string) {
-        return this.getAllProductsNameList()
-        .should('have.lengthOf.greaterThan', 0)
-        .contains(productName)
-        .parents('.cart-item')
+  addOrEditPersonalShopperNoteToProduct (productName: string, shopperNotes: string) {
+    this.findItemDetailsByName(productName)
+      .find('shared-product-note').click()
+      .find('shared-textbox input').clear().type(shopperNotes).should('have.value', shopperNotes)
+      .parents('shared-product-note')
+      .find('shared-button button').click()
+  }
+
+  changeGroceriesPackageOption (packageOption: string) {
+    this.getOrderReviewChangeSelectionLink().invoke('attr', 'aria-expanded').then(ariaExpandedAttribute => {
+      if (ariaExpandedAttribute == 'false') {
+        this.getOrderReviewChangeSelectionLink().click()
+      }
+    })
+
+    if (packageOption.toLowerCase().includes('reusable')) {
+      this.getPackageOptionReusableBagsButton().click()
+    } else if (packageOption.toLowerCase().includes('paper')) {
+      this.getPackageOptionPaperBagsButton().click()
+    } else {
+      throw new Error('test fails because package option is not matching')
     }
-    // #endregion
+  }
+  // #endregion
+
+  // #endregion - private methods
+  private findItemDetailsByName (productName: string) {
+    return this.getAllProductsNameList()
+      .should('have.lengthOf.greaterThan', 0)
+      .contains(productName)
+      .parents('.cart-item')
+  }
+  // #endregion
 }
 
 export const onCheckoutReviewItemsPanel = new CheckoutReviewItemsPanel()
