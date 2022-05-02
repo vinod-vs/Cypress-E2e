@@ -45,7 +45,7 @@ export class FMSWindowSelector {
       })
   }
 
-  selectNextAvailableDay () {
+  selectLatestAvailableDay () {
     cy.get('.day-dropdown > option')
       .each(dayOption => {
         if (!dayOption.prop('disabled')) {

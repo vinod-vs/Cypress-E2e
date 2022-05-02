@@ -88,6 +88,7 @@
         "oqsGetOrderStatusEndpoint": "api/orders/TRADER_ORDER_ID/status",
         "bootstrapEndpoint": "/api/ui/v2/bootstrap",
         "packagingPreferencesEndpoint": "/api/v3/ui/PackagingPreferences",
+        "emailOtpEndpoint": "/api/v3/ui/authentication/otp?isInitial=true&Channel=1",
         "otpEndpoint": "/api/v3/ui/authentication/otp",
         "otpValidationSwitch": true,
         "otpStaticCode": "123456",

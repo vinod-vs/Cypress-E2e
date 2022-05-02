@@ -246,7 +246,7 @@ export class SideCartPage {
         onSideCartPage.getAllRemoveItemButtonsForItemsUnderNotification().click({ multiple: true })
       }
     })
-    onSideCartPage.getCloseSideCartButton().click()
+    onSideCartPage.getCloseSideCartButton().click({force: true})
   }
 }
 export const onSideCartPage = new SideCartPage()

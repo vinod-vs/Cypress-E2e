@@ -1,7 +1,7 @@
 export class CheckoutReviewItemsPanel {
   // #region - General selectors
-  getSaveDetailsButton () {
-    return cy.get('button.shopper-action').contains('Save details')
+  getContinueButton () {
+    return cy.get('button.shopper-action').contains('Continue')
   }
 
   getOrderReviewErrorParagraph () {

@@ -36,6 +36,15 @@ Cypress.Commands.add('loginWithNewShopperViaApi', () => {
   })
 })
 
+Cypress.Commands.add('emailTheOptCode', () => {
+  cy.api({
+    method: 'GET',
+    url: Cypress.env('emailOtpEndpoint')
+  }).then((response) => {
+    expect(response.body).to.have.property('Successful', true)
+  })
+})
+
 Cypress.Commands.add('postOneTimePasswordRequest', (oneTimePassword) => {
   cy.api({
     method: 'POST',
@@ -50,23 +59,35 @@ Cypress.Commands.add('postOneTimePasswordRequest', (oneTimePassword) => {
 })
 
 // this is only for B2C at the moment
-Cypress.Commands.add('loginViaApiWith2FA', (shopper, otpValidationSwitch, otpCode) => {
-  cy.loginViaApi(shopper).then((response) => {
-    cy.validate2FALoginStatus(response, otpValidationSwitch, otpCode)
+Cypress.Commands.add('loginViaApiWith2FA', (shopper, otpValidationSwitch = null, otpCode = null) => {
+  cy.loginViaApi(shopper).then((loginResponse) => {
+    const flagValue = otpValidationSwitch === null ? Cypress.env('otpValidationSwitch') : otpValidationSwitch
+    if(flagValue){
+      expect(loginResponse).to.have.property('LoginResult', 'PartialSuccess')
+      if(otpCode === null){
+        cy.emailTheOptCode().then(()=>{
+          cy.getMailosaurEmailByEmailAddress(shopper.email).then(email => {
+            const otpCodefromEmail = email.subject.substr(0, 6)
+            cy.log('Your otp is: ' + otpCodefromEmail)
+            cy.validate2FALoginStatus(otpCodefromEmail)
+          })
+        })
+      }
+      else{
+        cy.validate2FALoginStatus(otpCode)
+      } 
+    }
+    else{
+      expect(loginResponse).to.have.property('LoginResult', 'Success')
+    }
+    cy.getCookie('w-rctx').should('exist')
   })
 })
 
-// this is only for B2C at the moment
-Cypress.Commands.add('validate2FALoginStatus', (userCredentialLoginResponse, otpValidationSwitch, otpCode) => {
-  if (otpValidationSwitch) {
-    expect(userCredentialLoginResponse).to.have.property('LoginResult', 'PartialSuccess')
-    cy.postOneTimePasswordRequest(otpCode).then((otpAuthResponse) => {
-      expect(otpAuthResponse.body).to.have.property('Successful', true)
-    })
-  } else {
-    expect(userCredentialLoginResponse).to.have.property('LoginResult', 'Success')
-  }
-  cy.getCookie('w-rctx').should('exist')
+Cypress.Commands.add('validate2FALoginStatus', (otpCode) => {
+  cy.postOneTimePasswordRequest(otpCode).then((otpAuthResponse) => {
+    expect(otpAuthResponse.body).to.have.property('Successful', true)
+  })
 })
 
 Cypress.Commands.add('loginViaApiAndHandle2FA', (shopper) => {
