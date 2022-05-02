@@ -68,7 +68,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
        
         // Increase the Product item Quantity in sidecart
         onSideCartPage.getAvailableProductsInCartPanel().should('be.visible')
-        onSideCartPage.getAvailableProductsIncrementButtonList().click({multiple:true})
+        onSideCartPage.getAvailableProductsIncrementButtonList().should('not.be.disabled').click({multiple:true})
 
         cy.intercept('api/v3/ui/fulfilment/windows?*').as('fulfilmentWindow')
 
@@ -79,18 +79,6 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         onSideCartPage.gotoCheckout()
   
         cy.wait('@fulfilmentWindow')
-
-        onCheckoutPage.onCheckoutFulfilmentSelectionPanel.getSummarisedFulfilmentAddressElement().then(address => {
-          cy.wrap(address.text()).as('expectedAddress')
-        })
-  
-        onCheckoutPage.onCheckoutFulfilmentWindowPanel.getSummarisedFulfilmentDay().then(fulfilmentDay => {
-          cy.wrap(fulfilmentDay).as('expectedFulfilmentDay')
-        })
-  
-        onCheckoutPage.onCheckoutFulfilmentWindowPanel.getSummarisedFulfilmentTime().then(fulfilmentTime => {
-          cy.wrap(fulfilmentTime).as('expectedFulfilmentTime')
-        })
   
         onCheckoutPage.onCheckoutPaymentPanel.getPaymentTotalAmountElement().then(totalAmount => {
           cy.wrap(totalAmount.text()).as('expectedTotalAmount')
