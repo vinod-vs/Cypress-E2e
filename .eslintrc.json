@@ -1,9 +1,13 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
     "cypress",
     "chai-friendly"
+  ],
+  "ignorePatterns": [
+    "*.d.ts"
   ],
   "rules": {
     "cypress/no-assigning-return-values": "warn",
@@ -12,7 +16,71 @@
     "cypress/no-force": "warn",
     "cypress/no-async-tests": "warn",
     "cypress/no-pause": "warn",
-    "no-unused-expressions": "warn",
+    "@typescript-eslint/type-annotation-spacing": "warn",
+    "@typescript-eslint/unified-signatures": "warn",
+    "@typescript-eslint/prefer-function-type": "warn",
+    "@typescript-eslint/no-empty-interface": "error",
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "class",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": false
+        }
+      },
+      {
+        "selector": "variable",
+        "format": ["camelCase", "UPPER_CASE"],
+        "leadingUnderscore": "allow",
+        "trailingUnderscore": "allow"
+      }
+    ],
+    "spaced-comment": [
+      "warn",
+      "always",
+      {
+        "markers": ["/", "/**"]
+      }
+    ],
+    "curly": "error",
+    "eqeqeq": "error",
+    "eol-last": "error",
+    "guard-for-in": "warn",
+    "no-labels": [
+      "error",
+      {
+        "allowLoop": true,
+        "allowSwitch": true
+      }
+    ],
+    "@typescript-eslint/member-ordering": [
+      "warn",
+      {
+        "default": {
+          "memberTypes": [
+            "static-field",
+            "instance-field",
+            "static-method",
+            "instance-method"
+          ]
+        }
+      }
+    ],
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "no-bitwise": "warn",
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "constructor-super": "error",
+    "no-empty": "warn",
+    "no-empty-function": "warn",
+    "no-eval": "error",
+    //"no-unused-expressions": "warn",
     "chai-friendly/no-unused-expressions": "off",
     "no-unused-vars": "warn",
     "no-undef": "warn",
