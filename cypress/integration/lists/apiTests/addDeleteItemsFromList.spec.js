@@ -28,18 +28,18 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
     })
 
     it('Should create a new list, add items in the list and delete the list', () => {
-      //Login to the application
-     if (Cypress.env('fileConfig') === 'b2c') {
+      // Login to the application
+      if (Cypress.env('fileConfig') === 'b2c') {
         cy.loginViaApi(b2cShopper).then((response) => {
           cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-       })
+        })
       } else if (Cypress.env('fileConfig') === 'b2b') {
         cy.loginViaApi(b2bShopper).then((response) => {
           expect(response).to.have.property('LoginResult', 'Success')
         })
-      }    
+      }
 
-      //create a new list
+      // create a new list
       listName.Name = faker.commerce.productName()
       cy.addList(listName).then((response) => {
         expect(response).to.have.property('Message', 'The new list has been created sucessfully')
@@ -47,7 +47,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         createdListId.listId = response.ListId
       })
 
-      // searching  an item 
+      // searching  an item
       searchBody.SearchTerm = 'Milk'
       cy.productSearch(searchBody).then((response) => {
         expect(response.SearchResultsCount).to.be.greaterThan(0)
@@ -55,7 +55,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         cy.wrap(response.Products[0].Products[0].Stockcode).as('stockCode')
       })
 
-      //Adding the item to the list
+      // Adding the item to the list
       cy.get('@stockCode').then(stockCode => {
         listItemBody.StockCode = stockCode
         cy.get('@listId').then(listId => {
@@ -65,7 +65,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         })
       })
 
-      //Adding freetext to the list    
+      // Adding freetext to the list
       freeTextBody.text = faker.commerce.productName()
       cy.get('@listId').then(listId => {
         freeTextBody.listId = listId
@@ -74,7 +74,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         })
       })
 
-      //Verify if freeText added in list
+      // Verify if freeText added in list
       cy.get('@listId').then(listId => {
         cy.getFreeTextFromList(listId).then((response) => {
           expect(response.body[0].Text).to.be.eqls(freeTextBody.text)
@@ -82,7 +82,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         })
       })
 
-      //Removing the item from the list
+      // Removing the item from the list
       cy.get('@stockCode').then(stockCode => {
         removeItemBody.StockCode = stockCode
         cy.get('@listId').then(listId => {
@@ -100,27 +100,27 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         })
       })
 
-      //Verifying if the item has been removed from the list
+      // Verifying if the item has been removed from the list
       cy.get('@listId').then(listId => {
         cy.getProductsFromList(listId).then((response) => {
           expect(response.body.Items.length).be.equal(0)
         })
       })
 
-      //Verifying if freetext has been removed      
+      // Verifying if freetext has been removed
       cy.get('@listId').then(listId => {
         cy.getFreeTextFromList(listId).then((response) => {
-          expect(response.body.length).to.be.equal(1);
+          expect(response.body.length).to.be.equal(1)
         })
       })
     })
 
     after(() => {
-      cy.get('@listId').then(listId =>{
-      cy.deleteList(listId).then((response) => {
-        expect(response.status).to.eq(200)
+      cy.get('@listId').then(listId => {
+        cy.deleteList(listId).then((response) => {
+          expect(response.status).to.eq(200)
+        })
       })
     })
-   })
   })
 })

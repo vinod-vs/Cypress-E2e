@@ -20,7 +20,7 @@ Cypress.Commands.add('getProductsFromList', (listId) => {
 Cypress.Commands.add('getFreeTextFromList', (listId) => {
   cy.api({
     method: 'GET',
-    url: Cypress.env('myListsEndPointV1') + listId + '/freetexttags',
+    url: Cypress.env('myListsEndPointV1') + listId + '/freetexttags'
 
   }).then((response) => {
     return response
@@ -30,7 +30,7 @@ Cypress.Commands.add('getFreeTextFromList', (listId) => {
 Cypress.Commands.add('getRenameList', (listId) => {
   cy.api({
     method: 'GET',
-    url: Cypress.env('myListsEndPointV3') + listId,
+    url: Cypress.env('myListsEndPointV3') + listId
   }).then((response) => {
     return response
   })

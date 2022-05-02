@@ -35,39 +35,39 @@ Cypress.Commands.add('selectRandomWindowInCheckout', (fulfilmentType, fulfilment
 
     cy.getRandomAvailableWindowViaApi(addressId, areaId, suburbId, fulfilmentType, fulfilmentWindowType)
   })
-  .then((window) => {
-    let todayDate = new Date() 
-    let dayToSelect
-    const today = 'Today'
-    const tomorrow = 'Tomorrow'
-    const windowStartDate = new Date(window.StartDateTime)
-    const windowEndDate = new Date(window.EndDateTime)
+    .then((window) => {
+      const todayDate = new Date()
+      let dayToSelect
+      const today = 'Today'
+      const tomorrow = 'Tomorrow'
+      const windowStartDate = new Date(window.StartDateTime)
+      const windowEndDate = new Date(window.EndDateTime)
 
-    if (fulfilmentWindowType !== windowType.DELIVERY_NOW) {
-      if (todayDate.getDay() === windowStartDate.getDay()) {
-        dayToSelect = today
-      } else if ((todayDate.getDay() + 1) === windowStartDate.getDay()) {
-        dayToSelect = tomorrow
-      }
-  
-      if (dayToSelect === today || dayToSelect === tomorrow) {
-        cy.formatToAmPm(windowStartDate).then(($startTime) => {
-          cy.formatToAmPm(windowEndDate).then(($endTime) => {
-            onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(dayToSelect, $startTime + ' to ' + $endTime)
-          }) 
-        })
-      } else { // Named days, e.g. Wednesday
-        cy.getDayOfWeek(windowStartDate).then((day) => {
+      if (fulfilmentWindowType !== windowType.DELIVERY_NOW) {
+        if (todayDate.getDay() === windowStartDate.getDay()) {
+          dayToSelect = today
+        } else if ((todayDate.getDay() + 1) === windowStartDate.getDay()) {
+          dayToSelect = tomorrow
+        }
+
+        if (dayToSelect === today || dayToSelect === tomorrow) {
           cy.formatToAmPm(windowStartDate).then(($startTime) => {
             cy.formatToAmPm(windowEndDate).then(($endTime) => {
-              onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(day, $startTime + ' to ' + $endTime)
-            }) 
+              onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(dayToSelect, $startTime + ' to ' + $endTime)
+            })
           })
-        })  
+        } else { // Named days, e.g. Wednesday
+          cy.getDayOfWeek(windowStartDate).then((day) => {
+            cy.formatToAmPm(windowStartDate).then(($startTime) => {
+              cy.formatToAmPm(windowEndDate).then(($endTime) => {
+                onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(day, $startTime + ' to ' + $endTime)
+              })
+            })
+          })
+        }
+      } else if (fulfilmentWindowType === windowType.DELIVERY_NOW) {
+        dayToSelect = today
+        onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(dayToSelect, window.TimeWindow)
       }
-    } else if (fulfilmentWindowType === windowType.DELIVERY_NOW) {
-      dayToSelect = today
-      onCheckoutPage.onCheckoutFulfilmentWindowPanel.inCheckoutTimeSlotSelector.selectWindow(dayToSelect, window.TimeWindow)
-    }
-  })
+    })
 })

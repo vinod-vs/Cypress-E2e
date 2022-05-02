@@ -274,5 +274,45 @@
     {
         "groupId": "6243979bb814cc46dacd41cd",
         "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"SubscriptionId\":\"123456\"}}"
-    } 
+    },
+    {
+        "groupId": "62426554b814cc46dacd41be",
+        "dynamicJson": "{\"ShopperId\":\"8454441\"}"
+    },
+    {
+        "groupId": "624265eb1351fbc68b9d858f",
+        "dynamicJson": "{\"AreaId\":\"346\"}"
+    },
+    {
+        "groupId": "62426927b814cc46dacd41bf",
+        "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"87966\"]}"
+    },
+    {
+        "groupId": "624269a11351fbc68b9d8590",
+        "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"87966\",\"142893\"]}"
+    },
+    {
+        "groupId": "62426a25b814cc46dacd41c0",
+        "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"1\"]}"
+    },
+    {
+        "groupId": "6267848e4d2c57af6e16996c",
+        "dynamicJson": "{\"ShopperId\":\"84544411\"}"
+    },
+    {
+        "groupId": "626784df12240ebc732424cd",
+        "dynamicJson": "{\"AreaId\":\"3461\"}"
+    },
+    {
+        "groupId": "626785424d2c57af6e16996d",
+        "dynamicJson": "{\"ProductIds\":[\"3691\",\"75263\",\"87966\"]}"
+    },
+    {
+        "groupId": "6267857e12240ebc732424ce",
+        "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"87966\"]}"
+    },
+    {
+        "groupId": "626785ba12240ebc732424cf",
+        "dynamicJson": "{\"ProductIds\":[\"3691\",\"1\"]}"
+    }
 ]

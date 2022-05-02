@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import giftCardDetails from '../../../../fixtures/payment/giftCard.json'
 import '../../../giftCardService/api/commands/giftCardService'
 
@@ -138,7 +140,7 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
     })
   }
   cy.log(giftcardPaymentInstrumentIds)
-  return cy.wrap(giftcardPaymentInstrumentIds).as('giftcardPaymentInstrumentIds') 
+  return cy.wrap(giftcardPaymentInstrumentIds).as('giftcardPaymentInstrumentIds')
 })
 
 // This command is to make payment using giftcards only
