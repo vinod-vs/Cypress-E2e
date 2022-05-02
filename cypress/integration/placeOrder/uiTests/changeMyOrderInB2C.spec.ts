@@ -28,7 +28,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
     const searchTerm = 'Pet'
     const trolleyThreshold = 50.00
     const platform = Cypress.env('b2cPlatform')
-
+    
   describe('[UI] Change Order in MyOrders for order placed by B2C customer', () => {    
     before('open application', () => {
         cy.clearCookies({ domain: null })
@@ -42,8 +42,11 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       // Place an order via api
         cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
         cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
-     
+
+        //creditCard.save = true
+        creditCardPayment.save = true
         cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then((confirmOrderResponse: any) => {
+
       // Save the Order Id of the order placed    
         const orderId = confirmOrderResponse.Order.OrderId
 
@@ -61,7 +64,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         onOrderDetailsPage.getMyOrderModalCheckbox().then(checkbox => {
         cy.wrap(checkbox).should('not.be.visible').check({force:true}).should('be.checked')
         })
-        onOrderDetailsPage.getChangeMyOrderModalButton().should('contain', 'Change my order').click()
+        onOrderDetailsPage.getChangeMyOrderModalButton().should('contain', 'Change my order').click({force:true})
         cy.wait(500)
        
         // Increase the Product item Quantity in sidecart
@@ -70,15 +73,14 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
 
         cy.intercept('api/v3/ui/fulfilment/windows?*').as('fulfilmentWindow')
 
+        onSideCartPage.getTotalAmountElement().then(totalAmount => {
+          cy.wrap(totalAmount.text()).as('expectedTotalAmount')
+        })
+
         onSideCartPage.gotoCheckout()
-  
-        onHaveYouForgottenPage.continueToCheckout()
   
         cy.wait('@fulfilmentWindow')
 
-        onCheckoutPage.onCheckoutPaymentPanel.getPaymentTotalAmountElement().then(totalAmount => {
-          cy.wrap(totalAmount.text()).as('expectedTotalAmount')
-        })
         onCheckoutPage.onCheckoutFulfilmentSelectionPanel.getSummarisedFulfilmentAddressElement().then(address => {
           cy.wrap(address.text()).as('expectedAddress')
         })
@@ -94,34 +96,13 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         onCheckoutPage.onCheckoutPaymentPanel.getPaymentTotalAmountElement().then(totalAmount => {
           cy.wrap(totalAmount.text()).as('expectedTotalAmount')
         })
-        onCheckoutPage.onCheckoutPaymentPanel.payWithNewCreditCard(creditcardPayment.aa, creditcardPayment.dd, creditcardPayment.ee, creditcardPayment.bb)
+
+       onCheckoutPage.onCheckoutPaymentPanel.payWithExistingCreditCard('0321', creditCardPayment.bb)
         cy.wait(500)
 
       // Verify order confirmation page
         onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')
         cy.url().should('include', '/confirmation')
-        cy.get<string>('@expectedAddress').then(expectedAddress => {
-          onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedAddress)
-        })
-  
-        cy.get<string>('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
-  
-      // Below code is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time, 
-      // if script selects same day window, the checkout page will show day of week of tomorrow but order confirmaiton page shows 'Tomorrow'
-        const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
-        cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek : string) => {
-          if(expectedFulfilmentDay.includes(tomorrowDayOfWeek)){
-            onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', 'Tomorrow')
-          }
-          else{
-            onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
-            }
-          })
-        })
-  
-        cy.get<string>('@expectedFulfilmentTime').then(expectedFulfilmentTime => {
-          onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentTime)
-        })
   
         cy.get<string>('@expectedTotalAmount').then(expectedTotalAmount => {
           onOrderConfirmationPage.getOrderPaymentSummaryTotalAmountElement().should('contain.text', expectedTotalAmount)
