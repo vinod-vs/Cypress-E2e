@@ -102,6 +102,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         //  cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
           doubleRewardPoints = Math.round((checkOutResponse.Model.Order.MarketSubtotal + checkOutResponse.Model.Order.WoolworthsSubtotal - checkOutResponse.Model.Order.TotalDeferredDiscountAmount) * 2 )
           cy.log(" double RewardsPoints Calculated is = " + doubleRewardPoints )
+          cy.wait(Cypress.config("tenSecondWait"))
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource).to.be.equal(duDiscountSource)
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target).to.be.equal(duTarget)
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount).to.be.equal(duDiscountAmount)
