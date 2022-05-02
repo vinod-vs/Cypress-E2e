@@ -8,8 +8,8 @@
     "SalePrice" :6,
     "Quantity":1
   },{
-    "stockcode": 782278,
-    "SalePrice" :50.95,
+    "stockcode": 572424,
+    "SalePrice" :50,
     "Quantity":2
   },{
     "stockcode": 571823,
@@ -33,7 +33,7 @@
     "SalePrice" :28.8 ,
     "Quantity" :2
   },{
-    "stockcode": 211374,
+    "stockcode": 795910,
     "Quantity" :1,
     "SalePrice1" :0,
     "CreditsUsed1":20,
