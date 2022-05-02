@@ -43,7 +43,6 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
         cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
         cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
 
-        //creditCard.save = true
         creditCardPayment.save = true
         cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then((confirmOrderResponse: any) => {
 
