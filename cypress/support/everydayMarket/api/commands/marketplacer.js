@@ -337,7 +337,7 @@ Cypress.Commands.add('updateShippingInformation', (shippingId, decodedInvoiceId,
   const apiKey = getApiKeyForSeller(sellerName)
   const requestBody = partialDispatchOfLineItemsInInvoice
   requestBody.data.attributes.shipment_tracking_number = postageTrackingnumber
-  const endPoint = String(Cypress.env('marketplacerPartialDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId)+'/'
+  const endPoint = String(Cypress.env('marketplacerPartialDispatchInvoiceEndpoint')).replace('INVOICE_ID', decodedInvoiceId) + '/'
   cy.log(endPoint)
   cy.api({
     method: 'PUT',

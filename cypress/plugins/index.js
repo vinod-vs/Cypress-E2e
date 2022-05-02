@@ -55,7 +55,7 @@ module.exports = (on, config) => {
               }
               const docsLength = docs.length
               for (let i = 0; i < docsLength; i++) {
-                if (docs[i][filterKey] == orderId) {
+                if (docs[i][filterKey] === orderId) {
                   client.close()
                   resolve(docs[i])
                   return docs[i]

@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-/* eslint-disable no-unused-expressions */
 
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
@@ -71,9 +70,9 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
           expect(response.TransactionReceipt, 'Transaction Receipt').to.not.be.null
           expect(response.PlacedOrderId, 'Placed Order Id').to.not.be.null
-  
+
           confirmOrderParameter.placedOrderId = response.PlacedOrderId
-        })    
+        })
       })
 
       cy.confirmOrder(confirmOrderParameter).then((response) => {

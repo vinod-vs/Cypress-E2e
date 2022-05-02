@@ -7,4 +7,3 @@ Cypress.Commands.add('addList', (listname) => {
     return response.body
   })
 })
-
