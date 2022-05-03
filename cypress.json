@@ -50,6 +50,7 @@
         "myListsEndPointV3": "/api/v3/ui/mylists/",
         "listPastShops": "api/v3/ui/pastshops/",
         "suggestedLists": "apis/ui/suggestedlists/",
+        "categorisedCheckbox": "apis/ui/UserPreferences/SetUserPreferenceListViewGroupBy/",
         "allure": true,
         "allureResultsPath": "cypress/allure-results",
         "ordersApiEndpoint": "https://marketk8saae.uat.wx-d.net/order-api/",
