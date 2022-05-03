@@ -28,7 +28,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    it('Verify the Tiger offer points for product with minimum Spend ', () => {
+    /*it('Verify the Tiger offer points for product with minimum Spend ', () => {
       // add the items to Trolley
       cy.addAvailableQuantityLimitedItemsToTrolley(promotions.TigerOffers[0].stockcode.toString(), <number>promotions.TigerOffers[0].minQty)
 
@@ -39,7 +39,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       cy.navigateToCheckout().then((response: any) => {
         expect(response.Model.Order.TotalRewardsPointsEarned).to.be.eqls(promotions.TigerOffers[0].TotalRewardsPointsEarned)
       })
-    })
+    })*/
 
     it('Verify the Tiger offer points for product with minimum Quantity', () => {
       // add the items to Trolley
