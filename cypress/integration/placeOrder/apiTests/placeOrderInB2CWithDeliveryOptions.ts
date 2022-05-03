@@ -57,7 +57,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
 
     it('Should place an order with store pick up notes', () => {
       cy.searchBillingAddressViaApi(addressSearchBody.search).then((response: any) => {
-        cy.setBillingAddressViaApi(response.body.Response[0].Id)
+        cy.setBillingAddressViaApi(response.body.Response[0].Id)  
       })
       cy.setFulfilmentLocationWithWindow(fulfilmentType.PICK_UP, storeSearchBody.postCode, windowType.PICK_UP)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)

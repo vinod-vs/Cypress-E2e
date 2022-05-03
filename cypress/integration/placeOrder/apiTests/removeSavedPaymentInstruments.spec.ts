@@ -17,11 +17,11 @@ TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
 
     it('Should remove via API saved credit cards added to a B2C Customer Account', () => {
       creditCard.save = true
-
+      
       cy.addCreditCardViaApi(creditCard).then((response: any) => {
         instrumentId = response.paymentInstrument.itemId
         cy.getDigitalPaymentInstruments().then((response: any) => {
-          const hasInstrumentId = response.CreditCard.Instruments.filter((instrument: { [x: string]: any }) => instrument.PaymentInstrumentId === instrumentId)
+          const hasInstrumentId = response.CreditCard.Instruments.filter((instrument: { [x: string]: any }) => instrument['PaymentInstrumentId'] === instrumentId)
           expect(hasInstrumentId, 'Credit Card added to account').to.not.be.null
         })
       })
@@ -29,14 +29,14 @@ TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
         cy.getDigitalPaymentInstruments().then((response: any) => {
           expect(response.CreditCard.Instruments.length, 'Number of Credit Cards in Customer Account').to.eql(0)
         })
-      })
+      })  
     })
 
     it('Should remove via API saved gift cards added to a B2C Customer Account', () => {
       cy.addGiftCardToAccount(giftCard).then((response: any) => {
         instrumentId = response.GiftCard.PaymentInstrumentId
         cy.getDigitalPaymentInstruments().then((response: any) => {
-          const hasInstrumentId = response.GiftCard.Instruments.filter((instrument: { [x: string]: any }) => instrument.PaymentInstrumentId === instrumentId)
+          const hasInstrumentId = response.GiftCard.Instruments.filter((instrument: { [x: string]: any }) => instrument['PaymentInstrumentId'] === instrumentId)
           expect(hasInstrumentId, 'Gift Card added to account').to.not.be.null
         })
       })
@@ -44,7 +44,7 @@ TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
         cy.getDigitalPaymentInstruments().then((response: any) => {
           expect(response.CreditCard.Instruments.length, 'Number of Gift Cards in Customer Account').to.eql(0)
         })
-      })
+      }) 
     })
-  })
+  }) 
 })

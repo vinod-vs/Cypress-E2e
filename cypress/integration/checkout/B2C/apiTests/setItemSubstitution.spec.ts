@@ -20,13 +20,13 @@ TestFilter(['API', 'B2C', 'Checkout', 'SPUD', 'P1'], () => {
           subsItems.push({
             Stockcode: response[x].stockCode,
             AllowSubstitution: true
-          })
+          })  
         }
         subsItems = { ...subsItems, Stockcode: response[response.length - 1].stockCode, AllowSubstitution: false }
         substitutionRequest.Items = subsItems
 
         cy.setItemSubstitutionviaAPI(substitutionRequest).then((response: any) => {
-          expect(response.ErrorMessage, 'Error Message on post to /substitution').to.be.empty
+          expect (response.ErrorMessage, 'Error Message on post to /substitution').to.be.empty
         })
       })
     })

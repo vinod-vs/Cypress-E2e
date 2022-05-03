@@ -34,7 +34,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
 
       cy.searchBillingAddressViaApi(addressSearchBody.search).then((response: any) => {
-        cy.setBillingAddressViaApi(response.body.Response[0].Id)
+        cy.setBillingAddressViaApi(response.body.Response[0].Id)  
       })
 
       cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response: any) => {
@@ -71,10 +71,11 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.digitalPay(digitalPayment).then((response: any) => {
+        
         cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
           expect(response.TransactionReceipt, 'Transaction Receipt').to.not.be.null
           expect(response.PlacedOrderId, 'Placed Order Id').to.not.be.null
-
+  
           confirmOrderParameter.placedOrderId = response.PlacedOrderId
         })
       })

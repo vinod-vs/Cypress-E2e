@@ -19,12 +19,12 @@ TestFilter(['B2C', 'API', 'P1', 'Checkout', 'SPUD'], () => {
   describe('[API] Place an order on B2C platform via PayPal with a previously linked account', () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null })
-      cy.clearLocalStorage({ domain: null })
+      cy.clearLocalStorage({ domain: null})
       cy.loginViaApiAndHandle2FA(shopper.ppAccount1)
       cy.removeSavedCreditAndGiftCardsViaAPI()
       cy.clearTrolley()
     })
-
+  
     it('Should place an order with full payment via a previously linked PayPal account', () => {
       cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)

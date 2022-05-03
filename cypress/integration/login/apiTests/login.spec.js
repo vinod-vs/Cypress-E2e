@@ -18,14 +18,13 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           runMode: 1
         }
       }, () => {
-        if(b2cShoppers[n].type != 'business'){
-          cy.loginViaApiWith2FA(b2cShoppers[n], Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-        }
-        else{
-          cy.loginViaApi(b2cShoppers[n]).then((response) => {
+        cy.loginViaApi(b2cShoppers[n]).then((response) => {
+          if (b2cShoppers[n].type == 'business') {
             expect(response).to.have.property('LoginResult', 'Success')
-          })
-        }
+          } else {
+            cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+          }
+        })
       })
     })
   })

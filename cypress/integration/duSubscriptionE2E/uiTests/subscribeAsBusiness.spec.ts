@@ -17,37 +17,43 @@ TestFilter(['B2C', 'UI', 'Delivery Unlimited Subscriptions - Business', 'P0'], (
       cy.clearCookies({ domain: null })
       cy.clearCookie('w-rctx')
       cy.clearLocalStorage({ domain: null })
+  
     })
 
     it('Subscribe to Delivery Unlimited monthly plan - Business user', () => {
+
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
       signUpDetails.password = 'Test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-      cy.getDOB('personal').then((value) => {
-        signUpDetails.dateOfBirth = value
+      cy.getDOB('personal').then((value)=> {
+          signUpDetails.dateOfBirth = value
       })
-      signUpDetails.abn = '88000014675'
-      signUpDetails.companyName = 'WOOLWORTHS GROUP LIMITED'
+      signUpDetails.abn = "88000014675"
+      signUpDetails.companyName = "WOOLWORTHS GROUP LIMITED"
       cy.signUpBusinessUser(signUpDetails)
       cy.subscribeToDUMonthlyBusiness(signUpDetails)
     })
 
     it('Subscribe to Delivery Unlimited yearly plan - Business user', () => {
+
       signUpDetails.firstName = faker.name.firstName()
       signUpDetails.lastName = faker.name.lastName()
       signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
       signUpDetails.password = 'Test1234'
       signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-      cy.getDOB('personal').then((value) => {
-        signUpDetails.dateOfBirth = value
+      cy.getDOB('personal').then((value)=> {
+          signUpDetails.dateOfBirth = value
       })
-      signUpDetails.abn = '88000014675'
-      signUpDetails.companyName = 'WOOLWORTHS GROUP LIMITED'
+      signUpDetails.abn = "88000014675"
+      signUpDetails.companyName = "WOOLWORTHS GROUP LIMITED"
 
       cy.signUpBusinessUser(signUpDetails)
       cy.subscribeToDUYearlyBusiness(signUpDetails)
+
     })
+
   })
+
 })

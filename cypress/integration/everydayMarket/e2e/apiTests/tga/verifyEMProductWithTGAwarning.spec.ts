@@ -36,12 +36,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   })
 })
 
-function serachForEDMproductWithTGAAndVerfiy (tgaTestdata) {
+
+function serachForEDMproductWithTGAAndVerfiy(tgaTestdata) {
   searchRequest.SearchTerm = tgaTestdata
   cy.productSearch(searchRequest).then((response) => {
     expect(response.SearchResultsCount).to.be.greaterThan(0)
-    cy.searchEMProductAndStashTheResponse(response, TGA, 'TGA').then((response) => {
-      expect(TGA.productWarningsAct).to.be.equal(TGA.TGAWarning)
+    cy.searchEMProductAndStashTheResponse(response,TGA,'TGA').then((response) => {
+      expect(TGA.productWarningsAct).to.be.equal(TGA.TGAWarning);
     })
   })
 }
+

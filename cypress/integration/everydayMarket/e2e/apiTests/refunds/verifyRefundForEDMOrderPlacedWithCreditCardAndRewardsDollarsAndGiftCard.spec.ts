@@ -62,10 +62,10 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
               function: function (response: any) {
                 if (!response.body.data.some((element: any) => element.domainEvent === 'MarketOrderRefund') ||
                   !response.body.data.some((element: any) => element.domainEvent === 'RefundCompleted')) {
-                  cy.log('Expected MarketOrderRefund and RefundCompleted events to be present')
-                  throw new Error('Expected MarketOrderRefund and RefundCompleted events to be present')
-                }
-              },
+                    cy.log('Expected MarketOrderRefund and RefundCompleted events to be present')
+                    throw new Error('Expected MarketOrderRefund and RefundCompleted events to be present')
+                  }
+                },
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
             })
@@ -76,9 +76,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           cy.log('Refund details: ' + JSON.stringify(refundsDetails))
           cy.getAllRefundPaymentsByRefundId(refundsDetails.refunds[0].id).as('refundPaymentsDetails')
         })
-        cy.get('@refundPaymentsDetails').then((refundPaymentsDetails: any) => {
+        cy.get('@refundPaymentsDetails').then((refundPaymentsDetails: any) => {        
           cy.log('Refund payments: ' + JSON.stringify(refundPaymentsDetails))
-
+          
           // Find credit card refund payment
           cy.findCCRefundPayment(refundPaymentsDetails, data.invoices[0].invoiceTotal + data.shippingAmount - 0.01 - rewardsDollarsToRedeem).then((isFound: any) => {
             cy.log('Expected credit card refund: ' + (data.invoices[0].invoiceTotal + data.shippingAmount - 0.01 - rewardsDollarsToRedeem).toString())

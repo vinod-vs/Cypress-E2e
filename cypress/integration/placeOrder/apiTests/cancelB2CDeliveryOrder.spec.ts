@@ -28,7 +28,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.wrap(confirmOrderResponse.Order.OrderId).as('orderId')
       })
     })
-
+    
     it('Place an order for B2C customer, then cancel the order', () => {
       cy.get('@orderId').then(($orderId: any) => {
         cy.cancelOrder($orderId).then((response: any) => {

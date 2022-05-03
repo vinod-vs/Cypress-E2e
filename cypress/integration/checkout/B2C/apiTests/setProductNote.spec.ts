@@ -15,9 +15,9 @@ TestFilter(['B2C', 'API', 'SPUD', 'Checkout', 'P1'], () => {
     it('Should add a product note for an item in the trolley', () => {
       cy.addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley('Bread', 2).then((response: any) => {
         shopperNote.Stockcode = response[0].stockCode
-        shopperNote.ProductNote = 'Product Note added via API'
+        shopperNote.ProductNote = 'Product Note added via API' 
       })
-
+      
       cy.addProductNoteViaApi(shopperNote).then((response: any) => {
         expect(response.ErrorMessage, 'Error Message on post to /ProductNote').to.be.empty
       })

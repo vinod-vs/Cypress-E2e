@@ -75,6 +75,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           // Verify the projection details
           lib.verifyInitialOrderDetails(response, testData, shopperId)
 
+          
           testData.encodedEdmInvoiceId = encodedEdmInvoiceId
           testData.encodedEdmLineitemId = encodedEdmLineitemId
           // Invoke the events api and verify the content
@@ -97,12 +98,12 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           if (Cypress.env('marketRewardPointsValidationSwitch')) {
             cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
 
-            cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-              expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
-              testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
-              cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
-            })
-          }
+          cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+            expect(response.queryCardDetailsResp.pointBalance).to.be.greaterThan(0)
+            testData.rewardPointBefore = response.queryCardDetailsResp.pointBalance
+            cy.log('rewardPointBefore: ' + testData.rewardPointBefore)
+          })
+        }
 
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.items[0].sellerName).then((response) => {
@@ -191,8 +192,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
               // Asmin instore return
               const returnRequestLineItem = [{ stockCode: testData.items[0].stockCode, quantity: testData.items[0].quantity, amount: testData.items[0].pricePerItem, reason: 'Item is faulty', weight: 12, notes: 'Customer Return from EM Test Automation_Full_Return' }]
               cy.log(returnRequestLineItem)
-
-              cy.refundRequestCreateInitiatedBy(encodedEdmInvoiceId, encodedEdmLineitemId, testData.items[0].quantity, true, initiator).then((response) => {
+             
+              cy.refundRequestCreateInitiatedBy(encodedEdmInvoiceId, encodedEdmLineitemId,testData.items[0].quantity,true,initiator).then((response) => {
                 // Verify Order Projection details
                 cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
                   function: function (response) {
@@ -234,7 +235,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                     retries: Cypress.env('marketApiRetryCount'),
                     timeout: Cypress.env('marketApiTimeout')
                   }).as('finalProjection').then((response) => {
-                    // invoice details verification
+                    //invoice details verification
                     expect(response.invoices[0].invoiceStatus).to.be.equal('REFUNDED')
                     expect(response.invoices[0].wowStatus).to.be.equal('Shipped')
                     expect(response.invoices[0].orderTrackingStatus).to.be.equal('Cancelled')
@@ -247,17 +248,17 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                     expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantity).to.be.equal(Number(testData.items[0].quantity))
                     expect(response.invoices[0].refunds[0].refundItems[0].lineItem.refundableQuantity).to.be.equal(0)
                     expect(response.invoices[0].refunds[0].refundItems[0].lineItem.quantityPlaced).to.be.equal(Number(testData.items[0].quantity))
-                    // Refund-> Notes verification
-                    expect(response.invoices[0].refunds[0].notes[0].id).to.not.be.null
-                    expect(response.invoices[0].refunds[0].notes[0].note).to.be.equal("Automation refundRequestCreate note: I don't want this")
-                    expect(response.invoices[0].refunds[0].notes[0].timestamp).to.not.be.null
-                    expect(response.invoices[0].refunds[0].notes[1].id).to.not.be.null
-                    expect(response.invoices[0].refunds[0].notes[1].note).to.be.equal("Automation refundRequestReturn note: I don't want this")
-                    expect(response.invoices[0].refunds[0].notes[1].timestamp).to.not.be.null
-                    expect(response.invoices[0].refunds[0].notes[2].id).to.not.be.null
-                    expect(response.invoices[0].refunds[0].notes[2].note).to.be.equal('Auto-refund cancellation')
-                    expect(response.invoices[0].refunds[0].notes[2].timestamp).to.not.be.null
-                    expect(response.invoices[0].returns.length).to.be.equal(0)
+                   // Refund-> Notes verification
+                   expect(response.invoices[0].refunds[0].notes[0].id).to.not.be.null
+                   expect(response.invoices[0].refunds[0].notes[0].note).to.be.equal("Automation refundRequestCreate note: I don't want this")
+                   expect(response.invoices[0].refunds[0].notes[0].timestamp).to.not.be.null
+                   expect(response.invoices[0].refunds[0].notes[1].id).to.not.be.null
+                   expect(response.invoices[0].refunds[0].notes[1].note).to.be.equal("Automation refundRequestReturn note: I don't want this")
+                   expect(response.invoices[0].refunds[0].notes[1].timestamp).to.not.be.null
+                   expect(response.invoices[0].refunds[0].notes[2].id).to.not.be.null
+                   expect(response.invoices[0].refunds[0].notes[2].note).to.be.equal('Auto-refund cancellation')
+                   expect(response.invoices[0].refunds[0].notes[2].timestamp).to.not.be.null
+                   expect(response.invoices[0].returns.length).to.be.equal(0)
                     // Verify the MP and shipping invoices are available for the customer
                     cy.verifyOrderInvoice(testData)
                     // Verify "Total Refund Amount" after refund approved by Admin
@@ -267,17 +268,17 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                     if (Cypress.env('marketRewardPointsValidationSwitch')) {
                       cy.log('marketRewardPointsValidationSwitch is enabled. Performing validations.')
 
-                      cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
-                        testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
-                        const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
-                        cy.log('Testdata JSON: ' + JSON.stringify(testData))
-                        cy.log('EDM Total: ' + testData.edmTotal)
-                        cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
-                        cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
-                        cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
-                        expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
-                      })
-                    }
+                    cy.getRewardsCardDetails(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber).then((response) => {
+                      testData.rewardPointAfter = response.queryCardDetailsResp.pointBalance
+                      const expectedRewardsPoints = Math.floor(Number(testData.edmTotal) + Number(testData.rewardPointBefore))
+                      cy.log('Testdata JSON: ' + JSON.stringify(testData))
+                      cy.log('EDM Total: ' + testData.edmTotal)
+                      cy.log('Previous Rewards Balance: ' + testData.rewardPointBefore)
+                      cy.log('Current Rewards Balance: ' + testData.rewardPointAfter)
+                      cy.log('Expected New Rewards Balance to be greated than: ' + expectedRewardsPoints)
+                      expect(response.queryCardDetailsResp.pointBalance).to.be.gte(expectedRewardsPoints)
+                    })
+                  }
                     // Verify the events api
                     cy.orderEventsApiWithRetry(orderReference, {
                       function: function (response) {

@@ -27,7 +27,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-
+    
     // Using faker to add ramdom values for the user
     availablePlans.businessPlans.forEach((plan) => {
       it(`Should subscribe for a new delivery unlimited plan ${plan.Name} for ${plan.SubscriberType}`, () => {
@@ -39,10 +39,10 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.getDOB('personal').then((value) => {
           signUpDetails.dateOfBirth = value
         })
-        signUpDetails.abn = '88000014675'
-        signUpDetails.companyName = 'WOOLWORTHS GROUP LIMITED'
-        signUpDetails.businessType = 'Retail Service'
-        signUpDetails.isBusinessPurchase = 'true'
+        signUpDetails.abn = "88000014675"
+        signUpDetails.companyName = "WOOLWORTHS GROUP LIMITED"
+        signUpDetails.businessType = "Retail Service"
+        signUpDetails.isBusinessPurchase = "true"
 
         cy.logOutViaApi().then((response: any) => {
           expect(response.status).to.eq(200)
@@ -108,10 +108,10 @@ TestFilter(['B2C', 'API', 'P0'], () => {
             cy.creditcardTokenisation(ccDetails.amex, creditcardSessionHeader).then((response: any) => {
               expect(response.status).to.have.property('responseText', 'ACCEPTED')
               expect(response.status).to.have.property('responseCode', '00')
-
+              
               payAndSubscribe.planId = plan.PlanId
               payAndSubscribe.paymentInstrumentId = response.paymentInstrument.itemId
-
+              
               cy.payAndSubscribeViaApi(payAndSubscribe).then((response: any) => {
                 expect(response.status).to.eq(200)
                 expect(response.body.Subscription).to.have.property('PlanId', plan.PlanId)
@@ -130,6 +130,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           signUpDetails.createdTime = new Date().toLocaleString()
 
           cy.writeTestDataUsed(`${Cypress.env('duSubscriptionTestDataFilePath')}/businessSubscriptionUsedData.json`, signUpDetails)
+        
         })
       })
     })

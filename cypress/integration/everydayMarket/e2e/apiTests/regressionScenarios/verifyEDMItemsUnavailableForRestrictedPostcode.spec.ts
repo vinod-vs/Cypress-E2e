@@ -35,10 +35,10 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
 
       // Add Pet Culture items to trolley
       cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
-
+      
       // Set delivery fulfilment to 49-51 Murray Street, Hobart (Pet Culture non serviced postcode 7000)
-      cy.setFulfilmentLocationWithoutWindow(fulfilmentType.DELIVERY, { ...addressSearch, search: nonServicedAddress })
-
+      cy.setFulfilmentLocationWithoutWindow(fulfilmentType.DELIVERY, { ...addressSearch, search: nonServicedAddress})
+      
       cy.viewTrolley().as('trolleyResponse')
 
       // The Pet Culture item should become unavailable after setting fulfilment to a non serviced postcode

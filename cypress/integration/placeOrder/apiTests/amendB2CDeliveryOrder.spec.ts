@@ -27,7 +27,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
       cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
-
+      
       cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
         cy.wrap(confirmOrderResponse.Order.OrderId).as('initialOrderId')
         cy.wrap(confirmOrderResponse.Order.TotalIncludingGst).as('initialOrderTotal')
@@ -44,7 +44,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       // Below is a workaround for issue on UAT whereby products from initial order become unavailable on starting an amendment
       cy.getUnavailableStockCodes().then((stockCodes: any) => {
         if (stockCodes.length > 0) {
-          cy.removeItems({ ...removeItemsRequestBody, StockCodes: stockCodes })
+          cy.removeItems({ ...removeItemsRequestBody, StockCodes: stockCodes})
         }
       })
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 30.00)
@@ -54,12 +54,13 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           if ($response.TrolleyRequest.Totals.Total > initialTotal) {
             cy.log('Amended Total > Initial Order Total')
             cy.placeOrderViaApiWithAddedCreditCard(platform)
-          } else {
-            cy.log('Amended Total <= Initial Order Total')
-            cy.zero()
           }
-        })
-      })
+          else {
+            cy.log('Amended Total <= Initial Order Total')
+            cy.zero() 
+          }
+        }) 
+      }) 
     })
   })
 })

@@ -61,13 +61,13 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
             multipleGiftCardPayment.payments[0].amount = card1Payment
           })
         })
-
+      
         cy.generateGiftCards(balToPay).then((response: any) => {
           multipleGiftCardPayment.payments[1].paymentInstrumentId = response[0].InstrumentId
           multipleGiftCardPayment.payments[1].amount = balToPay - card1Payment
         })
         cy.placeOrderViaApiWithPaymentRequest(multipleGiftCardPayment)
-      })
+      })  
     })
   })
 })

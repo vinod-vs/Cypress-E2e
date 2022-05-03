@@ -27,9 +27,11 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
 
     it('Should create a new list, add items in the list and delete the list', () => {
       // login to the application
-     if (Cypress.env('fileConfig') === 'b2c') {
-        cy.loginViaApiWith2FA(b2cShopper, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-     } else if (Cypress.env('fileConfig') === 'b2b') {
+      if (Cypress.env('fileConfig') === 'b2c') {
+        cy.loginViaApi(b2cShopper).then((response) => {
+          cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+        })
+      } else if (Cypress.env('fileConfig') === 'b2b') {
         cy.loginViaApi(b2bShopper).then((response) => {
           expect(response).to.have.property('LoginResult', 'Success')
         })
