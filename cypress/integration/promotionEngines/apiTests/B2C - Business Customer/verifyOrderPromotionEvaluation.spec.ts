@@ -17,7 +17,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
     beforeEach(() => {
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApi(shoppers.PESBusinessAccount2).then((response: any) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+        //cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
 
@@ -46,15 +46,6 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.Model.Order.Subtotal).to.be.greaterThan(promotions.OrderPromotions[1].Subtotal)
         expect(response.Model.Order.OrderDiscountWithoutTeamDiscount).to.be.eqls(SubTotaloff)
         expect(response.Model.Order).to.have.property('DeliveryFeeDiscount', (promotions.OrderPromotions[0].DeliveryFeeDiscount))
-      })
-    })
-
-    it('Verify the Order promotion is applied on the Everyday market Delivery Fee - %OFF', () => {
-      // Set the Delivery address and add the items to Trolley
-      cy.addAvailableEDMItemsToTrolley(promotions.OrderPromotions[2].stockcode.toString(), 4)
-      cy.navigateToCheckout().then((response: any) => {
-        expect(response.Model.Order.MarketShippingFees).to.have.property('MarketShippingFeeBeforeDiscount', (promotions.OrderPromotions[2].MarketShippingFeeBeforeDiscount))
-        expect(response.Model.Order.MarketShippingFees).to.have.property('MarketShippingFeeDiscount', (promotions.OrderPromotions[2].MarketShippingFeeDiscount))
       })
     })
   })

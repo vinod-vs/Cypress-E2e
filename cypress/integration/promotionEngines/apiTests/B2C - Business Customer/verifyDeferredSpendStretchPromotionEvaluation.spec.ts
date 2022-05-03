@@ -2,6 +2,7 @@ import shoppers from '../../../../fixtures/promotionEngines/shoppers.json'
 import promotions from '../../../../fixtures/promotionEngines/promotions.json'
 import '../../../../support/login/api/commands/login'
 import '../../../../support/sideCart/api/commands/clearTrolley'
+import '../../../../support/sideCart/api/commands/viewTrolley'
 import '../../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../../support/checkout/api/commands/navigateToCheckout'
 import TestFilter from '../../../../support/TestFilter'
@@ -30,11 +31,12 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - $OFF', () => {
+    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - %OFF', () => {
 
       // add the items to Trolley and do checkout
 
-      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredSpendStretchPromotions[0].stockcode.toString(), promotions.DeferredSpendStretchPromotions[0].Quantity).then((response: any) => {
+      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredSpendStretchPromotions[0].stockcode.toString(), promotions.DeferredSpendStretchPromotions[0].Quantity)
+      cy.viewTrolley().then((response: any) => {
         expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(promotions.DeferredSpendStretchPromotions[0].TotalRewardsPointsEarned)
       })
       cy.navigateToCheckout().then((response: any) => {
@@ -42,11 +44,12 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - %OFF', () => {
+    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - $OFF', () => {
 
       //  add the items to Trolley and do checkout
 
-      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredSpendStretchPromotions[1].stockcode.toString(), promotions.DeferredSpendStretchPromotions[1].Quantity).then((response: any) => {
+      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredSpendStretchPromotions[1].stockcode.toString(), promotions.DeferredSpendStretchPromotions[1].Quantity)
+      cy.viewTrolley().then((response: any) => {
         expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(promotions.DeferredSpendStretchPromotions[1].TotalRewardsPointsEarned)
       })
       cy.navigateToCheckout().then((response: any) => {

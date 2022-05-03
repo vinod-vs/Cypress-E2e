@@ -31,7 +31,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - $OFF', () => {
+    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - %OFF', () => {
 
       // add the items to Trolley and do checkout
 
@@ -44,7 +44,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - %OFF', () => {
+    it('Verify the Deferred Spend Stretch product promotion is applied on the specified SAP Category - $OFF', () => {
 
       //  add the items to Trolley and do checkout
 

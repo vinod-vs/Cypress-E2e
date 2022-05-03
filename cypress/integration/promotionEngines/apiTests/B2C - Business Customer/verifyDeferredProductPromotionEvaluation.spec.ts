@@ -45,13 +45,5 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(promotions.DeferredProductPromotions[1].TotalRewardsPointsEarned)
       })
     })
-
-    it('Verify the Deferred Product promotion is applied for a EverydayMarket Product ', () => {
-      // Set the Delivery address and add the items to Trolley
-      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredProductPromotions[2].stockcode.toString(), promotions.DeferredProductPromotions[2].Quantity)
-      cy.viewTrolley().then((response: any) => {
-        expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(promotions.DeferredProductPromotions[2].TotalRewardsPointsEarned)
-      })
-    })
   })
 })

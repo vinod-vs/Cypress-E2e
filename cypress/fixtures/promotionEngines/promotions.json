@@ -56,15 +56,15 @@
      "TotalRewardsPointsEarned" :8
    }],
   "DeferredSpendStretchPromotions": [{
-     "searchTerm": "drinks",
-     "stockcode": "7475",
-     "TotalRewardsPointsEarned" :422,
-     "Quantity":4
+     "searchTerm": "Jam/Spread",
+     "stockcode": "438614",
+     "TotalRewardsPointsEarned" :330,
+     "Quantity":1
   },{
     "searchTerm": "pantry",
-    "stockcode": "438614",
-    "TotalRewardsPointsEarned" :330,
-    "Quantity":1
+    "stockcode": "725872",
+    "TotalRewardsPointsEarned" :406,
+    "Quantity":2
   }],
   "DeferredOrderPromotions": [{
     "searchTerm": "beauty",
@@ -89,7 +89,7 @@
       "Subtotal":200 
      },{
       "searchTerm": "health",
-      "stockcode": 1073745925,
+      "stockcode": 1073753792,
       "Quantity":1,
       "MarketShippingFeeBeforeDiscount":10,
       "MarketShippingFeeDiscount":0.5,
@@ -116,10 +116,10 @@
     "PercentOFF":0.1,
     "MarketShippingFeeCouponCode":"10%OFFMARKETSHIPPINGFEE"
   },{
-    "searchTerm":"30011",
+    "searchTerm":"798377",
     "Quantity": 1,
-    "ClassicProductPromoCouponCode":"4$coupon",
-    "DollarOFF":4 
+    "ClassicProductPromoCouponCode":"5$OFFCOUPON",
+    "DollarOFF":5
   }],
   "TigerOffers" : [{
     "stockcode": 77069,

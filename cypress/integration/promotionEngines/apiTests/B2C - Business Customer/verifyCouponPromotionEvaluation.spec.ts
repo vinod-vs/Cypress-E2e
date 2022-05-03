@@ -89,24 +89,6 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    it('Verify the Coupon promotion is applied on the Market Shipping Fee - %OFF', () => {
-
-      // Set the Delivery address and add the items to Trolley
-      cy.addAvailableEDMItemsToTrolley(<string>promotions.CouponPromotions[1].searchTerm, (promotions.CouponPromotions[1].searchTerm, <number>promotions.CouponPromotions[1].Quantity))
-      cy.navigateToCheckout().then((response: any) => {
-        expect(response.Model.Order.MarketSubtotal).to.be.greaterThan(0)
-      })
-
-      //Market Shipping Fee Discount
-      cy.addPromotionCode(<string>promotions.CouponPromotions[1].MarketShippingFeeCouponCode).then((response: any) => {
-        const marketShippingFeeDiscount = parseFloat(((response.Model.Order.MarketShippingFees.MarketShippingFeeBeforeDiscount) * (<number>promotions.CouponPromotions[1].PercentOFF)).toFixed(2))
-        expect(response.Model.Order.MarketShippingFees).to.have.property('MarketShippingFeeDiscount', marketShippingFeeDiscount)
-      })
-      cy.removePromotionCode(<string>promotions.CouponPromotions[1].MarketShippingFeeCouponCode).then((response: any) => {
-        expect(response.Model.Order.MarketShippingFees.MarketShippingFeeDiscount).to.be.eqls(0)
-      })
-    })
-
     it('Verify the Coupon promotion is applied in combination with Classic Product Promotion', () => {
 
       // Set the Delivery address and add the items to Trolley
