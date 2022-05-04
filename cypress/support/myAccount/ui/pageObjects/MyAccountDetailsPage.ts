@@ -1,108 +1,99 @@
 export class MyAccountDetailsPage {
+  getMyPersonalDetailsText () {
+    return cy.get('#personal-details-title')
+  }
 
-    getMyPersonalDetailsText () {
-      return cy.get('#personal-details-title')
-    }
-  
-    getMyPersonalDetailsNameEditLink () {
-      return cy.get('#edit-link-full-name')
-    }
+  getMyPersonalDetailsNameEditLink () {
+    return cy.get('#edit-link-full-name')
+  }
 
-    getMyPersonalDetailsDOBEditLink () {
-      return cy.get('#edit-link-dob')
-    }
+  getMyPersonalDetailsDOBEditLink () {
+    return cy.get('#edit-link-dob')
+  }
 
-    getMyPersonalDetailsFirstNameInput () {
-        return cy.get('#personalDetails-firstName')
-      }
+  getMyPersonalDetailsFirstNameInput () {
+    return cy.get('#personalDetails-firstName')
+  }
 
-    getMyPersonalDetailsFirstNameError () {
-        return cy.get('#personalDetails-firstName~shared-validation-messages div')
-      }  
+  getMyPersonalDetailsFirstNameError () {
+    return cy.get('#personalDetails-firstName~shared-validation-messages div')
+  }
 
-    getMyPersonalDetailsLastNameInput () {
-        return cy.get('#personalDetails-lastName')
-      }
+  getMyPersonalDetailsLastNameInput () {
+    return cy.get('#personalDetails-lastName')
+  }
 
-    getMyPersonalDetailsLastNameError () {
-        return cy.get('#personalDetails-lastName~shared-validation-messages div')
-      }
+  getMyPersonalDetailsLastNameError () {
+    return cy.get('#personalDetails-lastName~shared-validation-messages div')
+  }
 
-    getMyPersonalDetailsDOBInput () {
-        return cy.get('#personalDetailsDOB-dateOfBirth')
-      }  
-    
-    getMyPersonalDetailsDOBError () {
-        return cy.get('#personalDetailsDOB-dateOfBirth~shared-validation-messages div')
-      } 
-     
-    getSaveChangesButtonforName() {
-      return cy.get('.success.l.m.full-width.mobile-full-width')
-     }
+  getMyPersonalDetailsDOBInput () {
+    return cy.get('#personalDetailsDOB-dateOfBirth')
+  }
 
-     getSaveChangesButtonforDOB() {
-      return cy.get('.success.l.m.full-width.mobile-full-width')
-     } 
+  getMyPersonalDetailsDOBError () {
+    return cy.get('#personalDetailsDOB-dateOfBirth~shared-validation-messages div')
+  }
 
-    getCancelButtonName() {
-        return cy.get('#cancel-link-full-name')
-       }     
+  getSaveChangesButtonforName () {
+    return cy.get('.success.l.m.full-width.mobile-full-width')
+  }
 
-    getCancelButtonDOB() {
-        return cy.get('#cancel-link-dob')
-       }   
-    getUpdatedName() {
-        return cy.get('#fullNameLabel')
+  getSaveChangesButtonforDOB () {
+    return cy.get('.success.l.m.full-width.mobile-full-width')
+  }
 
-       }   
-    getSuccessTittle() {
-        return cy.get('p.title')
-       }   
-       
-    addSecondaryPhoneNumber()
-    {
+  getCancelButtonName () {
+    return cy.get('#cancel-link-full-name')
+  }
 
-      return cy.get ("#addSecondaryPhoneLink")
-    } 
+  getCancelButtonDOB () {
+    return cy.get('#cancel-link-dob')
+  }
 
+  getUpdatedName () {
+    return cy.get('#fullNameLabel')
+  }
 
-    getMySecondaryPhoneNumberInput () 
-    {
-      return cy.get ('#personalDetails-firstName')
-  
-    }
+  getSuccessTittle () {
+    return cy.get('p.title')
+  }
 
-    getCancelButtonSecondaryPhoneNumber() 
-    {
-      return cy.get('#cancelButton')
-    } 
+  addSecondaryPhoneNumber () {
+    return cy.get('#addSecondaryPhoneLink')
+  }
 
-    getSaveChangesButtonforSecondaryPhoneNumber()
-    {
-      return cy.get('#saveDetailsButton')
-    } 
+  getMySecondaryPhoneNumberInput () {
+    return cy.get('#personalDetails-firstName')
+  }
 
-    getMySecondaryNumberEditLink () {
-      return cy.get('#editSecondaryPhoneLink')
-    }
+  getCancelButtonSecondaryPhoneNumber () {
+    return cy.get('#cancelButton')
+  }
 
-    getUpdatedMySecondaryNumber () {
-      return cy.get('#secondaryPhoneLabel')
-    }
+  getSaveChangesButtonforSecondaryPhoneNumber () {
+    return cy.get('#saveDetailsButton')
+  }
 
-    getEmailAddressField () {
-      return cy.get('#emailLabel')
-    }
+  getMySecondaryNumberEditLink () {
+    return cy.get('#editSecondaryPhoneLink')
+  }
 
-    getContactNumber () {
-      return cy.get('#phoneLabel')
-    }
+  getUpdatedMySecondaryNumber () {
+    return cy.get('#secondaryPhoneLabel')
+  }
 
-    getEmailAddress () {
-      return cy.get('#emailLabel')
-    }
+  getEmailAddressField () {
+    return cy.get('#emailLabel')
+  }
 
+  getContactNumber () {
+    return cy.get('#phoneLabel')
+  }
+
+  getEmailAddress () {
+    return cy.get('#emailLabel')
+  }
 }
 
-  
-  export const onMyAccountDetailsPage = new MyAccountDetailsPage()
+export const onMyAccountDetailsPage = new MyAccountDetailsPage()

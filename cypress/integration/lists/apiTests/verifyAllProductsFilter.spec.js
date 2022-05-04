@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
 import b2cShopper from '../../../fixtures/login/b2cLogin.json'
-import b2bShopper from '../../../fixtures/login/b2bLogin.json'
 import TestFilter from '../../../support/TestFilter'
 import allProductsbody from '../../../fixtures/lists/allProducts.json'
 import '../../../support/login/api/commands/login'
@@ -19,9 +18,7 @@ TestFilter(['API', 'B2C', 'P0'], () => {
     })
 
     it('Should verify that the All Products Filter API is working as expected', () => {
-      cy.loginViaApi(b2cShopper).then((response) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-      })
+      cy.loginViaApiWith2FA(b2cShopper, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
 
       // Fetch the Product name and its brand and set it to the filter
       cy.getAllProducts(allProductsbody).then((response) => {

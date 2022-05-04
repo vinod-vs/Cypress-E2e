@@ -11,7 +11,7 @@ export class MyAccountPage {
     return cy.get('nav[role="navigation"] > a[href*="deliveryunlimited"]')
   }
 
-  getLeftNavigationMenu() {
+  getLeftNavigationMenu () {
     return cy.get('.left-panel a.navigation-link')
   }
 }

@@ -11,35 +11,34 @@ import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/Checkou
 import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage'
 import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage'
 import addressTestData from '../../../fixtures/checkout/addressSearch.json'
-import storeTestData from '../../../fixtures/checkout/storeSearch.json'
+import storeTestData from '../../../fixtures/checkout/storeSearchBVT.json'
 import creditcardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import TestFilter from '../../../support/TestFilter'
-
 
 TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
   describe('[UI] Place orders by new user', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
-      cy.clearCookies({ domain: null });
-      cy.clearLocalStorage({ domain: null });
+      cy.clearCookies({ domain: null })
+      cy.clearLocalStorage({ domain: null })
     })
 
-    beforeEach(() => {  
-      cy.loginWithNewShopperViaApi();
+    beforeEach(() => {
+      cy.loginWithNewShopperViaApi()
 
-      onHomePage.loadHomePage();
+      onHomePage.loadHomePage()
 
-      onFMSRibbon.getFMSRibbonAddressLink().click({waitForAnimations: false});
+      onFMSRibbon.getFMSRibbonAddressLink().click({ waitForAnimations: false })
     })
 
     it('Place a delivery order with woolworths items', () => {
-      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer("Delivery");
-      onFMSAddressSelector.getDeliveryTab().click();
-      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer('Delivery')
+      onFMSAddressSelector.getDeliveryTab().click()
+      onFMSAddressSelector.searchForNewDeliveryAddress(addressTestData.search)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
 
-      onFMSWindowSelector.selectNextAvailableDay();
-      onFMSWindowSelector.selectLastTimeslot();
+      onFMSWindowSelector.selectAvailableDayAfterTomorrow()
+      onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
       onHomePage.getSearchHeader().click()
@@ -59,12 +58,12 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
     })
 
     it('Place a pickup order with woolworths groceries', () => {
-      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer("Pickup");
-      onFMSAddressSelector.getPickupTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer('Pickup')
+      onFMSAddressSelector.getPickupTab().click()
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
 
-      onFMSWindowSelector.selectNextAvailableDay();
+      onFMSWindowSelector.selectAvailableDayAfterTomorrow()
       onFMSWindowSelector.selectLastTimeslot();
       onFMSWindowSelector.getContinueShoppingButton().click()
 
@@ -87,13 +86,13 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
     })
 
     it('Place a direct to boot order with woolworths groceries', () => {
-      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer("DTB");
-      onFMSAddressSelector.getDirectToBootTab().click();
-      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb);
-      onFMSAddressSelector.getSaveAndContinueButton().click();
+      onFMSAddressSelector.chooseFulfilmentOptionForFirstTimeCustomer('DTB')
+      onFMSAddressSelector.getDirectToBootTab().click()
+      onFMSAddressSelector.searchForStoreBySuburbName(storeTestData.suburb)
+      onFMSAddressSelector.getSaveAndContinueButton().click()
 
-      onFMSWindowSelector.selectNextAvailableDay();
-      onFMSWindowSelector.selectLastTimeslot();
+      onFMSWindowSelector.selectAvailableDayAfterTomorrow()
+      onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
       onHomePage.getSearchHeader().click()
@@ -114,55 +113,38 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onCheckoutPage.onCheckoutPaymentPanel.searchForNewBillingAddress(storeTestData.billingAddress)
     })
 
-    afterEach(()=>{
+    afterEach(() => {
+      // Wrap order basic info from checkout page and save into alias
+      let expectedFulfilmentAddressAlias = 'expectedAddress'
+      let expectedFulfilmentDayAlias = 'expectedFulfilmentDay'
+      let expectedFulfilmentTimeAlias = 'expectedFulfilmentTime'
+      let expectedTotalAmountAlias = 'expectedTotalAmount'
+
       onCheckoutPage.onCheckoutFulfilmentSelectionPanel.getSummarisedFulfilmentAddressElement().then(address => {
-        cy.wrap(address.text()).as('expectedAddress')
+        cy.wrap(address.text()).as(expectedFulfilmentAddressAlias);
       })
 
       onCheckoutPage.onCheckoutFulfilmentWindowPanel.getSummarisedFulfilmentDay().then(fulfilmentDay => {
-        cy.wrap(fulfilmentDay).as('expectedFulfilmentDay')
+        cy.wrap(fulfilmentDay).as(expectedFulfilmentDayAlias);
       })
 
       onCheckoutPage.onCheckoutFulfilmentWindowPanel.getSummarisedFulfilmentTime().then(fulfilmentTime => {
-        cy.wrap(fulfilmentTime).as('expectedFulfilmentTime')
+        cy.wrap(fulfilmentTime).as(expectedFulfilmentTimeAlias);
       })
 
       onCheckoutPage.onCheckoutPaymentPanel.getPaymentTotalAmountElement().then(totalAmount => {
-        cy.wrap(totalAmount.text()).as('expectedTotalAmount')
+        cy.wrap(totalAmount.text()).as(expectedTotalAmountAlias);
       })
 
+      // Pay with instrument
       onCheckoutPage.onCheckoutPaymentPanel.payWithNewCreditCard(creditcardPayment.aa, creditcardPayment.dd, creditcardPayment.ee, creditcardPayment.bb)
 
-      // Verify order confirmation page
-      onOrderConfirmationPage.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received')
-      cy.url().should('include', '/confirmation')
-
-      cy.get<string>('@expectedAddress').then(expectedAddress => {
-        onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedAddress)
-      })
-
-      cy.get<string>('@expectedFulfilmentDay').then(expectedFulfilmentDay => {
-
-        // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time, 
-        // if script selects same day window, the checkout page will show day of week of tomorrow but order confirmaiton page shows 'Tomorrow'
-        const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
-        cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek : string) => {
-          if(expectedFulfilmentDay.includes(tomorrowDayOfWeek)){
-            onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', 'Tomorrow')
-          }
-          else{
-            onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay)
-          }
-        })
-      })
-
-      cy.get<string>('@expectedFulfilmentTime').then(expectedFulfilmentTime => {
-        onOrderConfirmationPage.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentTime)
-      })
-
-      cy.get<string>('@expectedTotalAmount').then(expectedTotalAmount => {
-        onOrderConfirmationPage.getOrderPaymentSummaryTotalAmountElement().should('contain.text', expectedTotalAmount)
-      })
+     // Verify order confirmation page
+     onOrderConfirmationPage.VerifyOrderConfirmationHeader()
+     onOrderConfirmationPage.VerifyFulfilmentAddress(expectedFulfilmentAddressAlias)
+     onOrderConfirmationPage.VerifyFulfilmentDay(expectedFulfilmentDayAlias)
+     onOrderConfirmationPage.VerifyFulfilmentTime(expectedFulfilmentTimeAlias)
+     onOrderConfirmationPage.VerifyTotalAmount(expectedTotalAmountAlias)
     })
   })
 })

@@ -4,5 +4,5 @@ Cypress.Commands.add('getDeliveryInfo', () => {
     url: Cypress.env('deliveryInfoEndpoint')
   }).then((response: any) => {
     return response.body
-  }) 
+  })
 })

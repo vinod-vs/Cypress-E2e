@@ -1,25 +1,25 @@
-import { onHomepage } from "../pageObjects/Homepage";
-import { HomepageTopMenu } from "./HomepageTopMenu";
+import { onHomepage } from '../pageObjects/Homepage'
+import { HomepageTopMenu } from './HomepageTopMenu'
 
-Cypress.Commands.add("selectTopMenu", (menuToSelect) => {
+Cypress.Commands.add('selectTopMenu', (menuToSelect) => {
   switch (menuToSelect) {
     case HomepageTopMenu.ORDER_MANAGEMENT:
-      onHomepage.getOrderManagementPanel().click();
-      break;
+      onHomepage.getOrderManagementPanel().click()
+      break
     case HomepageTopMenu.SEARCH_MANAGEMENT:
-      onHomepage.getSearchManagementPanel().click();
-      break;
+      onHomepage.getSearchManagementPanel().click()
+      break
     case HomepageTopMenu.INTEGRATION_MANAGEMENT:
-      onHomepage.getIntegrationManagementPanel().click();
-      break;
+      onHomepage.getIntegrationManagementPanel().click()
+      break
     case HomepageTopMenu.IDENTITY_MANAGEMENT:
-      onHomepage.getIdentityManagementPanel().click();
-      break;
+      onHomepage.getIdentityManagementPanel().click()
+      break
     case HomepageTopMenu.B2B_MANAGEMENT:
-      onHomepage.getB2BManagementPanel().click();
-      break;
+      onHomepage.getB2BManagementPanel().click()
+      break
     default:
-      onHomepage.getSiteManagementPanel().click();
-      break;
+      onHomepage.getSiteManagementPanel().click()
+      break
   }
-});
+})

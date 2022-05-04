@@ -8,7 +8,6 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import TestFilter from '../../../support/TestFilter'
 
 TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
-
   describe('[API] Verify RTL Tiger Offer Points', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -17,9 +16,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
 
     beforeEach(() => {
       // Login using shopper saved in the fixture and verify it's successful
-      cy.loginViaApi(shoppers.PESAccount1).then((response: any) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-      })
+      cy.loginViaApiWith2FA(shoppers.PESAccount1, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
     })
 
     afterEach(() => {
@@ -30,7 +27,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
 
     it('Verify the Tiger offer points for product with minimum Spend ', () => {
       // add the items to Trolley
-      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.TigerOffers[0].stockcode.toString(), <number>promotions.TigerOffers[0].minQty)
+      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.TigerOffers[0].stockcode.toString(), promotions.TigerOffers[0].minQty)
 
       cy.viewTrolley().then((response: any) => {
         expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(promotions.TigerOffers[0].TotalRewardsPointsEarned)
@@ -43,7 +40,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
 
     it('Verify the Tiger offer points for product with minimum Quantity', () => {
       // add the items to Trolley
-      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.TigerOffers[1].stockcode.toString(), <number>promotions.TigerOffers[1].minQty)
+      cy.addAvailableQuantityLimitedItemsToTrolley(promotions.TigerOffers[1].stockcode.toString(), promotions.TigerOffers[1].minQty)
 
       cy.viewTrolley().then((response: any) => {
         expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(promotions.TigerOffers[1].TotalRewardsPointsEarned)
@@ -53,8 +50,5 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.Model.Order.TotalRewardsPointsEarned).to.be.eqls(promotions.TigerOffers[1].TotalRewardsPointsEarned)
       })
     })
-
-
-
   })
 })

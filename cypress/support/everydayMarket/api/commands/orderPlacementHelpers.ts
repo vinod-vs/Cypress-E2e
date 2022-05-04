@@ -29,7 +29,7 @@ import '../../../utilities/api/apiUtilities'
 import '../../../utilities/ui/utility'
 import '../../../shared/api/commands/bootstrap'
 
-let instrumentIdsArr: any[] = []
+const instrumentIdsArr: any[] = []
 
 Cypress.Commands.add('prepareAnySingleLineItemEdmOrder', (searchTerm, quantity) => {
   // Set fulfilment using the new /windows endpoint
@@ -62,22 +62,24 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId) => {
   cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
 
   if (doUnavailableItemsExist()) {
-    let req = {...removeItemsRequestBody,
-      Stockcodes: getUnavailableItemsStockcodes()}
+    const req = {
+      ...removeItemsRequestBody,
+      Stockcodes: getUnavailableItemsStockcodes()
+    }
     // Remove unavailable items from trolley
     cy.removeItems(req)
     // Add available non-restricted groceries items to trolley again in case total goes below threshold
     cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
   }
-  
+
   // Place and confirm the order using credit card
   placeOrderUsingCreditCard()
   return payOrder()
 })
 
-function getUnavailableItemsStockcodes() {
-  const unavailableItemsArr: number[] = [] 
-  
+function getUnavailableItemsStockcodes () {
+  const unavailableItemsArr: number[] = []
+
   cy.getBootstrapResponse().then((response: any) => {
     response.TrolleyRequest.UnavailableItems.filter((item: { Stockcode: number }) => unavailableItemsArr.push(item.Stockcode))
   })
@@ -85,7 +87,7 @@ function getUnavailableItemsStockcodes() {
   return unavailableItemsArr
 }
 
-function doUnavailableItemsExist(): boolean {
+function doUnavailableItemsExist (): boolean {
   return cy.getBootstrapResponse().then((response: any) => {
     if (response.TrolleyRequest.UnavailableItems.length === 0) {
       return false
@@ -111,14 +113,14 @@ function placeOrderUsingCreditCard () {
   cy.navigatingToCreditCardIframe().its('IframeUrl').invoke('split', '/').its(5).as('ccSessionId')
   // Get expected CC to use from env
   cy.getExpectedCCCardDetails()
-  
+
   // Grab Digital pay instrument Id for the test credit card set in the fixture
   cy.get('@ccSessionId').then((ccSessionId) => {
     cy.get('@creditCardToUse').then((creditCardToUse) => {
       cy.creditcardTokenisation(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response: any) => {
         cy.getCCPaymentInstrumentId(response).then((id: number) => {
           instrumentIdsArr.push(id)
-        }) 
+        })
       })
     })
   })
@@ -128,8 +130,8 @@ function placeOrderUsingGiftCard () {
   // Override the fixture with our own test gift card details
   const giftCardReq = {
     ...giftCardRequest,
-    cardNumber: "6280005550107005580",
-    pinCode: "0869",
+    cardNumber: '6280005550107005580',
+    pinCode: '0869',
     save: false
   }
 
@@ -165,9 +167,9 @@ function payOrder () {
           ...digitalPaymentRequest,
           payments: [{
             ...digitalPaymentRequest.payments[0],
-            amount: amount-0.01,
+            amount: amount - 0.01,
             paymentInstrumentId: instrumentIdsArr[0]
-          },{
+          }, {
             ...digitalPaymentRequest.payments[1],
             amount: 0.01,
             paymentInstrumentId: instrumentIdsArr[1]
