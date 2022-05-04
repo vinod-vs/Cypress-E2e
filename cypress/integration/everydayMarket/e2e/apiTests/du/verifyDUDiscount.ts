@@ -46,7 +46,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       const duTarget = 'MarketShippingFee'
       const duDiscountAmount = 10
       const marketEMShippingFee= 0
-      const purchaseQty = 2
+      const purchaseQty = 1
       const marketSubTotalLowerLimit = 50
       const marketSubTotalUpperLimit = 100
       //let shopperId: any;
