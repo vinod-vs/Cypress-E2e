@@ -10,7 +10,20 @@
     "password": "woolies123",
     "shopperId": "8485726",
     "platform": "B2C"
+  },
+  "PESBusinessAccount": {
+    "email": "pes-auto-business@woolworths.com.au",
+    "password": "woolies123",
+    "shopperId": "8485726",
+    "platform": "B2C"
+  },
+  "PESBusinessAccount2": {
+    "email": "pes-auto-business2@woolworths.com.au",
+    "password": "woolies123",
+    "shopperId": "8534456",
+    "platform": "B2C"
   }
 }
+
 
   
