@@ -11,6 +11,10 @@
   "ignorePatterns": [
     "*.d.ts"
   ],
+  "parserOptions": {
+    "project": ["tsconfig.json"],
+    "createDefaultProgram": true
+  },
   "rules": {
     "cypress/no-assigning-return-values": "warn",
     "cypress/no-unnecessary-waiting": "warn",
@@ -97,19 +101,11 @@
     "no-undef-init": "warn",
     "no-var": "warn",
     "prefer-const": "warn",
-    "space-before-function-paren": ["error", "warn"],
+    "space-before-function-paren": "warn",
     "quotes": ["warn", "single"],
     "brace-style": ["warn", "1tbs"],
     "quote-props": ["warn", "always"],
-    "keyword-spacing": [
-      "warn",
-      {
-        "before": true
-      },
-      {
-        "after": true
-      }
-    ],
+    "keyword-spacing": "warn",
     "no-bitwise": "warn",
     "no-console": "warn",
     "no-debugger": "warn",
@@ -143,9 +139,7 @@
     "import/no-unused-modules": [
       "warn",
       {
-        "missingExports": true
-      },
-      {
+        "missingExports": true,
         "unusedExports": false
       }
     ],
@@ -156,14 +150,10 @@
     "import/extensions": [
       "warn",
       {
-        "js": "never"
-      },
-      {
-        "ts": "never"
-      },
-      {
+        "js": "never",
+        "ts": "never",
         ".json": "always"
-      } 
+      }
     ],
     "import/newline-after-import": "warn",
     "import/no-named-default": "warn",
