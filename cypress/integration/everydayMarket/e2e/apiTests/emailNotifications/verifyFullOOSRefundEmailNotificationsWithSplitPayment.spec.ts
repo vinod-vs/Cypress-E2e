@@ -20,6 +20,8 @@ import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/mailosaur/api/commands/mailosaurHelpers'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
 import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import '../../../../../support/rewards/api/commands/rewards'
+import rewardsDetails from '../../../../../fixtures/everydayMarket/rewards.json'
 
 const { JSDOM } = require('jsdom')
 const testData: any = tests.VerifyEmailNotificationsEDMOnly
@@ -34,6 +36,7 @@ let lineItemLegacyId: any
 let encodedEdmInvoiceId: any
 let encodedEdmLineitemId: any
 const sentFrom: string = 'shoponline@woolworths.com.au'
+let rewardsCardNumber: any = shopper.rewardsCardNumber
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
   describe('[API] RP-5571 - Email Notifications | Verify Market full OOS Refund email notification with split payments', () => {
@@ -41,6 +44,17 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
+
+    after(() => {
+        // Make sure we add back some points so that the account has some money
+        cy.addRewardPoints(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber, 10000)
+  
+        // Reset Redeem to 0. If the test fails inbetween and the reward dollars was set,
+        // future order placements and payments from the account will keep on failing with an error from RPG.
+        // Resetting to 0 will avoid this
+        cy.redeemRewardsDollars(0)
+      })
+
 
     it('[API] RP-5571 - Email Notifications | Verify Market full OOS Refund email notification with split payments', () => {
       // Login and place the order from testdata
