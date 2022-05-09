@@ -179,8 +179,8 @@ Cypress.Commands.add('verifyAftershipShipmentStatusEmailDetails', (id,trackNo,se
         switch(id) {
           case "InTransit":
             expectedSubject = 'Your Everyday Market order ' + edmOrderId + ' is on its way'
-            //expectedSellerCarrierText = 'Great news! The following Everyday Market item(s) from ' + sellerName + ' have\n\t\t\t\t\t\t\tbeen shipped \t\t\t\t\t\t\t\t\tby ' + carrierName + '\n and is/are on their way to you:'
-            expectedSellerCarrierText = 'Great news! The following Everyday Market item(s) from ' + sellerName + ' have been shipped by ' + carrierName + ' and is/are on their way to you:'
+            expectedSellerCarrierText = 'Great news! The following Everyday Market item(s) from ' + sellerName + ' have\n\t\t\t\t\t\t\tbeen shipped \t\t\t\t\t\t\t\t\tby ' + carrierName + '\n and is/are on their way to you:'
+            //expectedSellerCarrierText = 'Great news! The following Everyday Market item(s) from ' + sellerName + ' have been shipped by ' + carrierName + ' and is/are on their way to you:'
             thankYouOrderText = 'Thank you for your recent order with us: ' + edmOrderId
             console.log('thankYouOrderText: ' + thankYouOrderText)
             expect(emailDetails.body).to.include(thankYouOrderText)
