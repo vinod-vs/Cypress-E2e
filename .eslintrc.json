@@ -4,7 +4,8 @@
   "plugins": [
     "@typescript-eslint",
     "cypress",
-    "chai-friendly"
+    "chai-friendly",
+    "import"
   ],
   "ignorePatterns": [
     "*.d.ts"
@@ -123,7 +124,50 @@
     "no-irregular-whitespace": "warn",
     "no-case-declarations": "warn",
     "no-regex-spaces": "warn",
-    "valid-typeof": "warn"
+    "valid-typeof": "warn",
+    "import/no-unresolved": "warn",
+    "import/named": "warn",
+    "import/default": "warn",
+    "import/namespace": "warn",
+    "import/no-absolute-path": "warn",
+    "import/no-self-import": "warn",
+    "import/no-useless-path-segments": "warn",
+    "import/no-relative-packages": "warn",
+    "import/export": "warn",
+    "import/no-named-as-default": "warn",
+    "import/no-named-as-default-member": "warn",
+    "import/no-deprecated": "warn",
+    "import/no-extraneous-dependencies": "warn",
+    "import/no-mutable-exports": "warn",
+    "import/no-unused-modules": [
+      "warn",
+      {
+        "missingExports": true
+      },
+      {
+        "unusedExports": false
+      }
+    ],
+    "import/first": "warn",
+    "import/exports-last": "warn",
+    "import/no-duplicates": "warn",
+    "import/no-namespace": "warn",
+    "import/extensions": [
+      "warn",
+      {
+        "js": "never"
+      },
+      {
+        "ts": "never"
+      },
+      {
+        ".json": "always"
+      } 
+    ],
+    "import/newline-after-import": "warn",
+    "import/no-named-default": "warn",
+    "import/group-exports": "warn",
+    
   },
   "env": {
     "cypress/globals": true,
