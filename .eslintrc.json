@@ -23,12 +23,12 @@
     "@typescript-eslint/strict-boolean-expressions": "warn",
     "@typescript-eslint/type-annotation-spacing": "warn",
     "indent": "off",
-    "@typescript-eslint/indent": ["error"],
+    "@typescript-eslint/indent": ["warn"],
     "semi": "off",
     "@typescript-eslint/semi": ["warn"],
     "@typescript-eslint/unified-signatures": "warn",
     "@typescript-eslint/prefer-function-type": "warn",
-    "@typescript-eslint/no-empty-interface": "error",
+    "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/restrict-plus-operands": "warn",
     "@typescript-eslint/naming-convention": [
       "warn",
@@ -59,12 +59,12 @@
         "markers": ["/", "/**"]
       }
     ],
-    "curly": "error",
-    "eqeqeq": "error",
-    "eol-last": "error",
+    "curly": "warn",
+    "eqeqeq": "warn",
+    "eol-last": "warn",
     "guard-for-in": "warn",
     "no-labels": [
-      "error",
+      "warn",
       {
         "allowLoop": true,
         "allowSwitch": true
@@ -84,23 +84,23 @@
       }
     ],
     "@typescript-eslint/explicit-member-accessibility": "off",
-    "@typescript-eslint/no-misused-new": "error",
+    "@typescript-eslint/no-misused-new": "warn",
     "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-shadow": [
-      "error",
+      "warn",
       {
         "hoist": "all"
       }
     ],
     "no-throw-literal": "warn",
-    "no-fallthrough": "error",
-    "no-undef-init": "error",
+    "no-fallthrough": "warn",
+    "no-undef-init": "warn",
     "no-var": "warn",
     "prefer-const": "warn",
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": ["error", "warn"],
     "quotes": ["warn", "single"],
-    "brace-style": ["error", "1tbs"],
-    "quote-props": ["error", "always"],
+    "brace-style": ["warn", "1tbs"],
+    "quote-props": ["warn", "always"],
     "keyword-spacing": [
       "warn",
       {
@@ -113,10 +113,10 @@
     "no-bitwise": "warn",
     "no-console": "warn",
     "no-debugger": "warn",
-    "constructor-super": "error",
+    "constructor-super": "warn",
     "no-empty": "warn",
     "no-empty-function": "warn",
-    "no-eval": "error",
+    "no-eval": "warn",
     "no-unused-expressions": "warn",
     "chai-friendly/no-unused-expressions": "off",
     "no-unused-vars": "warn",
@@ -174,5 +174,5 @@
     "cypress/globals": true,
     "browser": true
   },
-  "extends": "eslint:recommended"
+  "extends": []
 }
