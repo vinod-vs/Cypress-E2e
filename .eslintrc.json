@@ -5,7 +5,8 @@
     "@typescript-eslint",
     "cypress",
     "chai-friendly",
-    "import"
+    "import",
+    "deprecation"
   ],
   "ignorePatterns": [
     "*.d.ts"
@@ -167,7 +168,7 @@
     "import/newline-after-import": "warn",
     "import/no-named-default": "warn",
     "import/group-exports": "warn",
-    
+    "deprecation/deprecation": "warn"
   },
   "env": {
     "cypress/globals": true,
