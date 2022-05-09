@@ -41,7 +41,7 @@ let encodedEdmInvoiceId: any
 let encodedEdmLineitemId: any
 const sentFrom: string = 'shoponline@woolworths.com.au'
 
-TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API' , 'EmailNotifications'], () => {
   describe('[API] RP-5606 - Verify EDM order, Seller and Tracking number details of the Shipment Email Notification', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -78,23 +78,6 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           testData.edmOrderId = edmOrderId
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
-
-     
-          // Invoke the events api and verify the content
-          cy.orderEventsApiWithRetry(orderReference, {
-            function: function (response) {
-              if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
-                cy.log('Expected OrderPlaced & MarketOrderPlaced were not present')
-                throw new Error('Expected OrderPlaced & MarketOrderPlaced were not present')
-              }
-            },
-            retries: Cypress.env('marketApiRetryCount'),
-            timeout: Cypress.env('marketApiTimeout')
-          }).then((response) => {
-            lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
-            lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
-          })
 
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, trackNo, testData.carrier, testData.items[0].sellerName).then((response) => {
@@ -171,9 +154,10 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
               }).then((response) => {
                 // Verify the event has got"MarketShipmentStatusUpdated" for the respective Shipment Status {'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED', 'AVAILABLE_FOR_PICKUP'}
                 lib.verifyShipmentStatusDetails(response, 'MarketShipmentStatusUpdated', testData, shopperId, id)                          
-                // Verify the shipment status Notification email
+
+                // Verify the Aftership shipment Notification email for each of the status ['InTransit', 'OutForDelivery', 'Delivered', 'AwaitingCollection']
                 cy.wait(5000)
-                cy.verifyshipmentstatusEmailDetails(id,trackNo,sellerName,carrierName)
+                cy.verifyAftershipShipmentStatusEmailDetails(id,trackNo,sellerName,carrierName)
               })
             })
           })
@@ -183,7 +167,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   })
 })
 
-Cypress.Commands.add('verifyshipmentstatusEmailDetails', (id,trackNo,sellerName,carrierName) => {
+Cypress.Commands.add('verifyAftershipShipmentStatusEmailDetails', (id,trackNo,sellerName,carrierName) => {
   let expectedSubject: any
   let expectedSellerCarrierText: any  
   let expectedSellerCarrierAdditionalTxt: any  
@@ -195,8 +179,9 @@ Cypress.Commands.add('verifyshipmentstatusEmailDetails', (id,trackNo,sellerName,
         switch(id) {
           case "InTransit":
             expectedSubject = 'Your Everyday Market order ' + edmOrderId + ' is on its way'
-            expectedSellerCarrierText = 'Great news! The following Everyday Market item(s) from ' + sellerName + ' have\n\t\t\t\t\t\t\tbeen shipped \t\t\t\t\t\t\t\t\tby ' + carrierName + '\n and is/are on their way to you:'
-            const thankYouOrderText = 'Thank you for your recent order with us: ' + edmOrderId
+            //expectedSellerCarrierText = 'Great news! The following Everyday Market item(s) from ' + sellerName + ' have\n\t\t\t\t\t\t\tbeen shipped \t\t\t\t\t\t\t\t\tby ' + carrierName + '\n and is/are on their way to you:'
+            expectedSellerCarrierText = 'Great news! The following Everyday Market item(s) from ' + sellerName + ' have been shipped by ' + carrierName + ' and is/are on their way to you:'
+            thankYouOrderText = 'Thank you for your recent order with us: ' + edmOrderId
             console.log('thankYouOrderText: ' + thankYouOrderText)
             expect(emailDetails.body).to.include(thankYouOrderText)
             break
@@ -241,15 +226,12 @@ Cypress.Commands.add('verifyshipmentstatusEmailDetails', (id,trackNo,sellerName,
 
           // Validate the estimated arrival for order on its way and out for delivery
           if (id.indexOf("AvailableForPickup") == -1 ) {expect(emailDetails.body).to.include('Estimated arrival')}
-           expect(emailDetails.dom.window.document.querySelector("td[align='right']>a[href*='/mypost/track/#/details/"+ trackNo +"']") !== null).to.be.true
-           console.log("Track my Order Validation : "+ emailDetails.dom.window.document.querySelector("td[align='right']>a[href*='/mypost/track/#/details/"+ trackNo +"']" ))
+           expect(emailDetails.dom.window.document.querySelector("td[align='right']>a[href*='/mypost/track/#/details/"+ trackNo +"']") !== null).to.be.true           
           }
 
-        //Verify links          
-        expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/page/help-and-support-faq']") !== null).to.be.true
-        console.log("FAQ Link Validation : " + emailDetails.dom.window.document.querySelector("a[href*='/shop/page/help-and-support-faq']"))
-        expect(emailDetails.dom.window.document.querySelector("a[href*='/Shop/Discover/about-us/terms-and-conditions']") !== null).to.be.true       
-        console.log("Terms and conditions Link Validation : " + emailDetails.dom.window.document.querySelector("a[href*='/Shop/Discover/about-us/terms-and-conditions']"))
-    })
+          //Verify links          
+          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/page/help-and-support-faq']") !== null).to.be.true          
+          expect(emailDetails.dom.window.document.querySelector("a[href*='/Shop/Discover/about-us/terms-and-conditions']") !== null).to.be.true                    
+        })
   })
 }) 
