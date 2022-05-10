@@ -78,12 +78,12 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API' , 'EmailNotifications'], () => {
           testData.edmOrderId = edmOrderId
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
-
+           
           // Dispatch the complete order from MP and verify the events and order statuses
           cy.fullDispatchAnInvoice(testData.edmInvoiceId, trackNo, testData.carrier, testData.items[0].sellerName).then((response) => {
             // Iterate the four shipment status
-            const AfterShipStatus = [afterShipShipmentStatus.IN_TRANSIT, afterShipShipmentStatus.OUT_FOR_DELIVERY, afterShipShipmentStatus.DELIVERED, afterShipShipmentStatus.AVAILABLE_FOR_PICKUP]
-            const ids = AfterShipStatus
+            const afterShipStatus = [afterShipShipmentStatus.IN_TRANSIT, afterShipShipmentStatus.OUT_FOR_DELIVERY, afterShipShipmentStatus.DELIVERED, afterShipShipmentStatus.AVAILABLE_FOR_PICKUP]
+            const ids = afterShipStatus
             ids.forEach(id => {
               // After dispatch, Invoke the order api and verify the projection content is updated acordingly
               cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
