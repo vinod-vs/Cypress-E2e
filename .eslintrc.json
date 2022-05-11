@@ -25,8 +25,8 @@
     "eqeqeq": "warn",
     "eol-last": "warn",
     "no-var": "warn",
-    "no-unused-expressions": "warn",
-    "chai-friendly/no-unused-expressions": "off",
+    "no-unused-expressions": "off",
+    "chai-friendly/no-unused-expressions": "warn",
     "no-unused-vars": "warn",
     "no-undef": "warn",
     "prefer-const": "warn",
@@ -135,7 +135,7 @@
     "import/no-unused-modules": [
       "warn",
       {
-        "missingExports": true,
+        "missingExports": false,
         "unusedExports": false
       }
     ],
