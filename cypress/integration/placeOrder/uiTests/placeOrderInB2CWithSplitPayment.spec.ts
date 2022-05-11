@@ -7,7 +7,6 @@ import { onSideCartPage } from '../../../support/sideCart/ui/pageObjects/SideCar
 import { onSearchResultsPage } from '../../../support/search/ui/pageObjects/SearchResultsPage'
 import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage'
 import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/CheckoutPage'
-import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage'
 import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage'
 import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
 import addressTestData from '../../../fixtures/checkout/addressSearch.json'
@@ -44,10 +43,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onHomePage.getSearchHeader().click()
-      onHomePage.getSearchHeader().type('health').type('{enter}')
-
-      onSearchResultsPage.addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
 
       onSideCartPage.getViewCartButton().click()
 

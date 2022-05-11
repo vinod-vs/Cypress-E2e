@@ -202,9 +202,9 @@ export class SideCartPage {
   }
 
   removeAllItems () {
-    cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
+    cy.checkIfElementExists('.notification-group').then((result: boolean) => {
       if (result) {
-        cy.get('.auto_group-restricted-location button.linkButton').click({ multiple: true })
+        this.getAllRemoveItemButtonsForItemsUnderNotification().click({ multiple: true })
         cy.wait(500)
       }
     })
