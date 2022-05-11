@@ -34,21 +34,20 @@ Cypress.Commands.add('removePaymentInstrument', (paymentInstrumentId: string | C
   cy.request({
     method: 'POST',
     url: Cypress.env('deletePaymentInstrument'),
-    body: {"paymentInstrumentId" : paymentInstrumentId},
+    body: { paymentInstrumentId: paymentInstrumentId },
     failOnStatusCode: false
   }).then((response) => {
     if (response.body.Success !== true) {
       cy.request({
         method: 'POST',
         url: Cypress.env('deletePaymentInstrument'),
-        body: {"paymentInstrumentId" : paymentInstrumentId},
+        body: { paymentInstrumentId: paymentInstrumentId },
         failOnStatusCode: false
       }).then((secondResponse) => {
         expect(secondResponse.body.Success, 'Deleting Payment Instrument: ' + paymentInstrumentId).to.be.equal(true)
         return secondResponse.body
-      })   
+      })
     }
     return response.body
   })
 })
-

@@ -1,45 +1,43 @@
 class EditSessionGroupV2Page {
+  getNameInput () {
+    return cy.get('#Name')
+  }
 
-    getNameInput () {
-        return cy.get('#Name')
-    }
+  getDescriptionInput () {
+    return cy.get('#Description')
+  }
 
-    getDescriptionInput () {
-        return cy.get('#Description')
-    }
+  getDomainInput () {
+    return cy.get('#Domain')
+  }
 
-    getDomainInput () {
-        return cy.get('#Domain')
-    }
+  getUpdateButton () {
+    return cy.get('input[value="Update"]')
+  }
 
-    getUpdateButton () {
-        return cy.get('input[value="Update"]')
-    }
+  getAddAttribute () {
+    return cy.get('a:contains("Add Attribute")')
+  }
 
-    getAddAttribute () {
-        return cy.get('a:contains("Add Attribute")')
-    }
+  getAttributeGroupOption (groupName: string) {
+    return cy.get('[value="' + groupName + '"]')
+  }
 
-    getAttributeGroupOption (groupName:string) {
-        return cy.get('[value="' + groupName + '"]')
-    }
+  getAttributeNameOption (attributeName: string) {
+    return cy.get('[value="' + attributeName + '"]')
+  }
 
-    getAttributeNameOption (attributeName:string) {
-        return cy.get('[value="' + attributeName + '"]')
-    }
+  getAddedAttribute (groupName: string, attributeName: string) {
+    return cy.contains(groupName + '.' + attributeName)
+  }
 
-    getAddedAttribute(groupName:string, attributeName:string) {
-        return cy.contains(groupName + '.' + attributeName)
-    }
+  getGroupList () {
+    return cy.get('#GroupList')
+  }
 
-    getGroupList() {
-        return cy.get('#GroupList')
-    }
-
-    getAttributeList() {
-        return cy.get('#AttributeList')
-    }
-
+  getAttributeList () {
+    return cy.get('#AttributeList')
+  }
 }
 
-export const editSessionGroupV2Page = new EditSessionGroupV2Page();
+export const editSessionGroupV2Page = new EditSessionGroupV2Page()

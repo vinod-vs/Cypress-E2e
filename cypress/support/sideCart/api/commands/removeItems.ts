@@ -20,13 +20,13 @@ Cypress.Commands.add('removeUnavailableItemsFromTrolley', () => {
         cy.log('Grocery Items are unavailable by location')
         unavailableStockCodes.push(item.Stockcode)
       }
-      
+
       if (unavailableStockCodes.length === 0) {
-        return cy.removeItem({ Stockcode: unavailableStockCodes[0], "evaluateRewardPoints": false })
+        return cy.removeItem({ Stockcode: unavailableStockCodes[0], evaluateRewardPoints: false })
       } else {
-        return cy.removeItems({ StockCodes: unavailableStockCodes, "evaluateRewardPoints": false })
+        return cy.removeItems({ StockCodes: unavailableStockCodes, evaluateRewardPoints: false })
       }
-    }  
+    }
   })
 })
 
@@ -55,23 +55,23 @@ Cypress.Commands.add('removeRestrictedItemsFromTrolley', () => {
     if (availableItems.length > 0) {
       removeAvailableNonGroupRestrictedItems(availableItems)
     }
-  })  
+  })
 })
 
-function removeAvailableGroupRestrictedItems(property: any) {
+function removeAvailableGroupRestrictedItems (property: any) {
   const restrictedItems: number[] = []
   for (const item of property) {
     restrictedItems.push(item.Stockcode)
   }
 
   if (restrictedItems.length === 1) {
-    cy.removeItem({ Stockcode: restrictedItems[0], "evaluateRewardPoints": false })
+    cy.removeItem({ Stockcode: restrictedItems[0], evaluateRewardPoints: false })
   } else {
-    cy.removeItems({ Stockcodes: restrictedItems, "evaluateRewardPoints": false })
+    cy.removeItems({ Stockcodes: restrictedItems, evaluateRewardPoints: false })
   }
 }
 
-function removeAvailableNonGroupRestrictedItems(availableItems: any) {
+function removeAvailableNonGroupRestrictedItems (availableItems: any) {
   for (const item of availableItems) {
     const ageRestrictedStockCodes: number[] = []
     if (item.AgeRestricted === true) {
@@ -79,11 +79,10 @@ function removeAvailableNonGroupRestrictedItems(availableItems: any) {
       ageRestrictedStockCodes.push(item.Stockcode)
 
       if (ageRestrictedStockCodes.length === 1) {
-        return cy.removeItem({ Stockcode: ageRestrictedStockCodes[0], "evaluateRewardPoints": false })
+        return cy.removeItem({ Stockcode: ageRestrictedStockCodes[0], evaluateRewardPoints: false })
       } else {
-        return cy.removeItems({ StockCodes: ageRestrictedStockCodes, "evaluateRewardPoints": false })
-      } 
+        return cy.removeItems({ StockCodes: ageRestrictedStockCodes, evaluateRewardPoints: false })
+      }
     }
   }
 }
-  

@@ -176,8 +176,7 @@ export function verifyInitialOrderDetails (response, testData, shopperId) {
   expect(response.invoices[0].lineItems[0].variantId).to.not.be.null
   expect(response.invoices[0].lineItems[0].variantLegacyId).to.not.be.null
   // Rewards Details
-  // expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETREWARD')
-  expect(response.invoices[0].lineItems[0].reward.offerId).to.not.be.null
+  expect(response.invoices[0].lineItems[0].reward.offerId).to.be.equal('MARKETPOINTS')
   expect(response.invoices[0].lineItems[0].reward.deferredDiscountAmount).to.not.be.null
   expect(response.invoices[0].lineItems[0].reward.quantity).to.be.equal(Number(testData.items[0].quantity))
 }

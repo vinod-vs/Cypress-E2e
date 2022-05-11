@@ -58,7 +58,7 @@ export class SideCartPage {
 
   getTotalAmountElementOnHeader () {
     return cy.get('#wx-header-checkout-amount')
-  }      
+  }
   // #endregion
 
   // #region - Selectors of all products
@@ -163,13 +163,13 @@ export class SideCartPage {
   }
 
   closeSideCart () {
-    this.getCloseSideCartButton().click({force:true})
+    this.getCloseSideCartButton().click({ force: true })
   }
 
   gotoCheckout () {
     cy.wait(500)
     cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
-      if(result){
+      if (result) {
         cy.get('.auto_group-restricted-location button.linkButton').click()
         cy.wait(500)
       }
@@ -203,15 +203,15 @@ export class SideCartPage {
 
   removeAllItems () {
     cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
-      if(result){
-        cy.get('.auto_group-restricted-location button.linkButton').click({multiple:true})
+      if (result) {
+        cy.get('.auto_group-restricted-location button.linkButton').click({ multiple: true })
         cy.wait(500)
       }
     })
 
-    cy.checkIfElementExists('.empty-cart-title').then((exist:boolean) => {
-      if(!exist){
-        this.getClearEntireCartLink().click({force:true})
+    cy.checkIfElementExists('.empty-cart-title').then((exist: boolean) => {
+      if (!exist) {
+        this.getClearEntireCartLink().click({ force: true })
         this.getConfirmClearCartLink().click()
         cy.wait(500)
       }
@@ -233,20 +233,20 @@ export class SideCartPage {
       .parents('.cart-item-details')
   }
   // #endregion
-  
+
   getAllRemoveItemButtonsForItemsUnderNotification () {
     return cy.get('.notification-group').find('.cart-item-remove-button')
   }
 
-  removeAllItemsUnderNotificationGroupsFromCart(){
+  removeAllItemsUnderNotificationGroupsFromCart () {
     onSideCartPage.getViewCartButton().click()
     cy.wait(500)
     cy.checkIfElementExists('.notification-group').then((existanceNG: boolean) => {
-      if(existanceNG===true){
+      if (existanceNG) {
         onSideCartPage.getAllRemoveItemButtonsForItemsUnderNotification().click({ multiple: true })
       }
     })
-    onSideCartPage.getCloseSideCartButton().click()
+    onSideCartPage.getCloseSideCartButton().click({force: true})
   }
 }
 export const onSideCartPage = new SideCartPage()

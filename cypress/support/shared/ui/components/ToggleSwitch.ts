@@ -1,73 +1,73 @@
 import { setComponentBase } from '../../../utilities/ui/utility'
 
 export class ToggleSwitch {
-  private toggleSwitchTag = 'shared-toggle-switch';
-  private toggleBase = 'toggleBase';
-  private dataChecked = "data-checked";
+  private readonly toggleSwitchTag = 'shared-toggle-switch'
+  private readonly toggleBase = 'toggleBase'
+  private readonly dataChecked = 'data-checked'
 
-  constructor(elLocator: Cypress.Chainable<JQuery<HTMLElement>>) {
-    setComponentBase(elLocator, this.toggleSwitchTag).as(this.toggleBase);
+  constructor (elLocator: Cypress.Chainable<JQuery<HTMLElement>>) {
+    setComponentBase(elLocator, this.toggleSwitchTag).as(this.toggleBase)
   }
 
-  private toggleSwitchEl(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.get('@' + this.toggleBase).find('input');
+  private toggleSwitchEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('@' + this.toggleBase).find('input')
   }
 
-  private toggleSliderEl(): Cypress.Chainable<JQuery<HTMLElement>> {
+  private toggleSliderEl (): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get('@' + this.toggleBase).find('.toggle-slider')
   }
 
-  private switchState(state: boolean): ToggleSwitch {
+  private switchState (state: boolean): ToggleSwitch {
     this.toggleSwitchEl().invoke('attr', this.dataChecked).then((isChecked) => {
-      if (isChecked === 'false' && state === true) {
+      if (isChecked === 'false' && state) {
         cy.log('Switch state is true & off')
         this.toggleSliderEl().click()
-      } else if (isChecked === 'true' && state === false) {
+      } else if (isChecked === 'true' && !state) {
         cy.log('Switch state is false & on')
-        this.toggleSliderEl().click();
+        this.toggleSliderEl().click()
       }
     })
-    return this;
+    return this
   }
 
   /**
    * Set the toggle to on or off. Current state will be checked before making the requested
    * toggle state change.
-   * 
+   *
    * @param state true or false for on or off state
    * @returns ToggleSwitch instance
    */
-  public setToggleState(state: boolean): ToggleSwitch {
-    return this.switchState(state);
+  public setToggleState (state: boolean): ToggleSwitch {
+    return this.switchState(state)
   }
 
   /**
    * Get the state of the Togggle, i.e. "On" or "Off".
-   * 
+   *
    * @returns true or false as a Chainable<boolean>
    */
-  public getToggleState(): Cypress.Chainable<boolean> {
+  public getToggleState (): Cypress.Chainable<boolean> {
     return this.toggleSwitchEl().invoke('attr', this.dataChecked).then(($state) => {
       if ($state === 'true') {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     })
   }
 
   /**
    * Is the Toggle enabled/editable.
-   * 
+   *
    * @returns true or false as a Chainable<boolean>
    */
-  public isEnabled(): Cypress.Chainable<boolean> {
+  public isEnabled (): Cypress.Chainable<boolean> {
     return cy.get('@' + this.toggleBase).find('input').then(($btn) => {
       if ($btn.is(':disabled')) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
-    }) 
+    })
   }
 }

@@ -8,6 +8,16 @@ Cypress.Commands.add('productSearch', (searchBody) => {
   })
 })
 
+Cypress.Commands.add('specialSearch', (searchBody) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('specialSearchEndpoint'),
+    body: searchBody
+  }).then((response) => {
+    return cy.wrap(response.body)
+  })
+})
+
 Cypress.Commands.add('findAvailableNonRestrictedWowItems', (response) => {
   const productArr = []
 

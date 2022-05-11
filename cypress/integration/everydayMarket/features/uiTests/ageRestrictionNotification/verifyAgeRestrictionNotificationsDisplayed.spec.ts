@@ -30,14 +30,14 @@ TestFilter(['FEATURE', 'AGERESTRICTION'], () => {
       // Search for age restricted item
       onHomePage.getSearchHeader().click()
       onHomePage.getSearchHeader().type(searchTerm).type('{enter}')
-      
+
       // Add the item to cart
       onSearchResultsPage.addItemToCart(1).click()
 
       // Go to checkout
       onSideCartPage.getViewCartButton().click()
       onSideCartPage.getCheckoutButton().click({ multiple: true, force: true })
-      
+
       // Verify the restricted item notification is displayed on checkout page
       onCheckoutPage.onCheckoutMarketplaceFulfilmentWindowPanel.restrictedNotification().getPrimaryHeaderText().should('contain', 'restricted')
       onCheckoutPage.onCheckoutMarketplaceFulfilmentWindowPanel.selectContinue()
