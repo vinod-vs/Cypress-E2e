@@ -95,7 +95,7 @@
     "no-throw-literal": "warn",
     "no-fallthrough": "warn",
     "no-undef-init": "warn",
-    "no-var": "error",
+    "no-var": "warn",
     "prefer-const": "warn",
     "space-before-function-paren": "warn",
     "quotes": ["warn", "single"],
