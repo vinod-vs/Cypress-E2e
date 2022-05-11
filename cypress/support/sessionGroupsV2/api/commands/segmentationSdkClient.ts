@@ -8,3 +8,14 @@ Cypress.Commands.add('evaluateSessionGroup', (requestBody) => {
     return response.body
   })
 })
+
+Cypress.Commands.add('evaluateMultipleSessionGroups', (requestBody) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('segmentationSdkClientEndpointMulti'),
+    body: requestBody
+  }).then((response: { status: any, body: any }) => {
+    expect(response.status).to.eq(200)
+    return response.body[0]
+  })
+})

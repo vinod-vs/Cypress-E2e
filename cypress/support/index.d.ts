@@ -165,6 +165,7 @@ declare namespace Cypress {
     addMultiSellerAvailableEDMItemsToTrolley(searchTerm: string, quantity: number): void
     addYearsToCurrentDate(noOfYearsToAdd: any): any
     evaluateSessionGroup(requestBody: any): any
+    evaluateMultipleSessionGroups(requestBody: any): any
     generateRandomString(numChars?: number): Cypress.Chainable<string>
     changeDateFormatToAddSlash(date: any): any
     searchCustomerByEmailInSM(email: any): void
