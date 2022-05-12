@@ -11,4 +11,3 @@ log
 results
 local.log
 cypress.env.json
-.vscode
