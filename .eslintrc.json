@@ -33,7 +33,7 @@
     "space-before-function-paren": "warn",
     "quotes": ["warn", "single"],
     "brace-style": ["warn", "1tbs"],
-    "quote-props": ["warn", "always"],
+    "quote-props": ["warn", "consistent-as-needed"],
     "@typescript-eslint/triple-slash-reference": "warn",
     "@typescript-eslint/no-var-requires": "warn",
     "@typescript-eslint/strict-boolean-expressions": "warn",
