@@ -23,10 +23,22 @@ Cypress.Commands.add('authorizeGiftingService', () => {
   })
 })
 
-Cypress.Commands.add('generateANewGiftCard', (giftCardAmount) => {
+/**
+ *
+ * @param {*} giftCardAmount
+ * @param {*} args[0] NumberOfCards -> if passed, its value will be used in the field NumberOfCards. If not, the default value of 1 from the request json will be used
+ *
+ */
+Cypress.Commands.add('generateANewGiftCard', (giftCardAmount, ...args) => {
   cy.authorizeGiftingService().as('giftingServiceAuthToken')
   cy.get('@giftingServiceAuthToken').then((giftingServiceAuthToken: any) => {
     generateGiftCardRequest.Cards[0].Amount = giftCardAmount
+
+    //Set the number of gift cards required count if passed
+    if (args.length > 0) {
+      generateGiftCardRequest.NumberOfCards = args[0]
+      cy.log('Required NumberOfCards is ' + args[0])
+    }
 
     cy.api({
       method: 'POST',
