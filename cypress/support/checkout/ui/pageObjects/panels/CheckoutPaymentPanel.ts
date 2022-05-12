@@ -325,7 +325,13 @@ export class CheckoutPaymentPanel {
 
     cy.wait('@paymentRequest').then(()=>{
       cy.wait(500)
-      cy.get('.digitalPayErrorDisplay-errorMessage').should('not.exist')
+      cy.checkIfElementExists('.digitalPayErrorDisplay-errorMessage').then( (result:boolean) => {
+        if(result){
+          cy.get('.digitalPayErrorDisplay-errorMessage').then(errorTextElement => {
+            throw new Error('Payment failed because of digital pay error: ' + errorTextElement.text())
+          })
+        }
+      })
     })
   }
 
