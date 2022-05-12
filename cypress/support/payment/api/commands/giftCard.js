@@ -40,7 +40,7 @@ Cypress.Commands.add('checkAndGetGiftCardPaymentInstrumentWithExpectedBalance', 
     expect(paymentInstruments.GiftCard.Enabled).to.be.equal(true)
 
     const giftcardPaymentInstruments = paymentInstruments.GiftCard.Instruments.filter(instrument => instrument.Allowed && !instrument.Expired && instrument.Balance >= expectedGiftCardBalance)
-    cy.log('giftcardPaymentInstruments: ' + JSON.stringify(giftcardPaymentInstruments))
+    cy.log('Already available giftcardPaymentInstruments: ' + JSON.stringify(giftcardPaymentInstruments))
 
     // If there no gift card with the required balance, create a new gift card, add to account and get the paymentInstrumentId of it
     if (giftcardPaymentInstruments.length === 0) {
@@ -99,47 +99,37 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
     lastCardValue = expectedGiftCardBalance
   }
   cy.log('Number of cards required is ' + cardsRequired)
-
   const giftcardPaymentInstrumentIds = []
 
-  // Create Each Card, Link it to Account, add it to the above return array
-  for (let i = 1; i <= cardsRequired; i++) {
-    cy.log('Adding gift card num ' + i)
+  // Generate New Cards of required count with maxAmount value
+  cy.generateANewGiftCard(maxAmount, cardsRequired).as('newGiftCards')
 
-    // Set New Card Value
-    let newCardValue
-    if (i < cardsRequired) {
-      newCardValue = maxAmount
-    } else if (i === cardsRequired) {
-      newCardValue = lastCardValue
-    }
-    cy.log('Card value is ' + newCardValue)
-    // Generate New Card
-    cy.generateANewGiftCard(newCardValue).as('newGiftCard')
-
-    // Get Giftcard details and Add to account
-    cy.get('@newGiftCard').then((newGiftCard) => {
-      giftCardDetails.cardNumber = newGiftCard.Cards[0].CardNumber
-      giftCardDetails.pinCode = newGiftCard.Cards[0].CardPin
+  // Get Giftcard details and Add to account
+  cy.get('@newGiftCards').then((newGiftCards) => {
+    newGiftCards.Cards.forEach(function (item, i) {
+      giftCardDetails.cardNumber = newGiftCards.Cards[i].CardNumber
+      giftCardDetails.pinCode = newGiftCards.Cards[i].CardPin
 
       // Add the new gift card to account
       cy.addGiftCardToAccount(giftCardDetails).then((response) => {
-        cy.log('Payment instrument id is ' + response.body.GiftCard.PaymentInstrumentId)
-        giftcardPaymentInstrumentIds.push({ InstrumentId: response.body.GiftCard.PaymentInstrumentId, amount: newCardValue })
-      })
-      cy.log('Added newly created gift card to account: ' + JSON.stringify(giftCardDetails))
-
-      // Get all giftcards
-      cy.getDigitalPaymentInstruments().as('paymentInstrumentsResponse')
-      cy.get('@paymentInstrumentsResponse').then((paymentInstruments) => {
-        expect(paymentInstruments.GiftCard).to.not.be.null
-        expect(paymentInstruments.GiftCard).to.not.be.empty
-        expect(paymentInstruments.GiftCard.Enabled).to.be.equal(true)
-        expect(paymentInstruments.GiftCard.Instruments.length).to.be.greaterThan(0)
+        cy.log('Added newly created gift card to account: ' + JSON.stringify(giftCardDetails))
+        cy.log('Payment instrument id of the newly added giftcard is ' + response.body.GiftCard.PaymentInstrumentId)
+        // If last card, set the lastCardValue as amount. Else set the maxAmount
+        if (i === (newGiftCards.Cards.length - 1)) { giftcardPaymentInstrumentIds.push({ InstrumentId: response.body.GiftCard.PaymentInstrumentId, amount: lastCardValue }) } else { giftcardPaymentInstrumentIds.push({ InstrumentId: response.body.GiftCard.PaymentInstrumentId, amount: maxAmount }) }
       })
     })
-  }
-  cy.log(giftcardPaymentInstrumentIds)
+  })
+
+  // Verify the new gift cards are added
+  cy.getDigitalPaymentInstruments().as('paymentInstrumentsResponse')
+  cy.get('@paymentInstrumentsResponse').then((paymentInstruments) => {
+    expect(paymentInstruments.GiftCard).to.not.be.null
+    expect(paymentInstruments.GiftCard).to.not.be.empty
+    expect(paymentInstruments.GiftCard.Enabled).to.be.equal(true)
+    expect(paymentInstruments.GiftCard.Instruments.length).to.be.gte(cardsRequired)
+  })
+
+  cy.log('giftcardPaymentInstrumentIds after adding new gift cards ' + giftcardPaymentInstrumentIds)
   return cy.wrap(giftcardPaymentInstrumentIds).as('giftcardPaymentInstrumentIds')
 })
 
