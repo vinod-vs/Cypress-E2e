@@ -21,10 +21,11 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+
+TestFilter(['B2C', 'API', 'P0', 'SPUD'], () => {
   describe('[API] Place a Direct to boot order in B2C platform using Credit Card', () => {
     const creditCard = Cypress.env('creditCard')
-
+    
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
