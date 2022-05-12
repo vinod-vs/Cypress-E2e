@@ -141,22 +141,18 @@ export class OrderConfirmationPage {
     })
   }
 
-  VerifySplitPaymentCreditCardAmount(paidGiftCardAmount: number){
+  VerifySplitPaymentCreditCardAmount(paidGiftCardAmount: number, expectedTotalAmountAliasString: string){
     this.getOrderSplitPaymentPaidWithCreditCardAmount().then(creditCardAmountElement => {
-      const creditCardPaidAmount = creditCardAmountElement.text().trim().substring(1)
-      this.getOrderPaymentSummaryTotalAmountElement().should(totalAmountElement => {
-        const totalPaidAmount = totalAmountElement.text().trim().substring(1);
-        expect(Number(creditCardPaidAmount)).to.equal(Number(totalPaidAmount) - paidGiftCardAmount)
+      cy.get<string>('@' + expectedTotalAmountAliasString).then(expectedTotalAmount => {
+        expect(Number(creditCardAmountElement.text().trim().substring(1))).to.equal(Number(expectedTotalAmount.substring(1)) - paidGiftCardAmount)
       })
     })
   }
 
-  VerifySplitPaymentPayPalAmount(paidGiftCardAmount: number){
+  VerifySplitPaymentPayPalAmount(paidGiftCardAmount: number, expectedTotalAmountAliasString: string){
     this.getOrderSplitPaymentPaidWithPayPalAmount().then(paypalAmountElement => {
-      const paypalPaidAmount = paypalAmountElement.text().trim().substring(1)
-      this.getOrderPaymentSummaryTotalAmountElement().should(totalAmountElement => {
-        const totalPaidAmount = totalAmountElement.text().trim().substring(1);
-        expect(Number(paypalPaidAmount)).to.equal(Number(totalPaidAmount) - paidGiftCardAmount)
+      cy.get<string>('@'+ expectedTotalAmountAliasString).then(expectedTotalAmount => {
+        expect(Number(paypalAmountElement.text().trim().substring(1))).to.equal(Number(expectedTotalAmount.substring(1)) - paidGiftCardAmount)
       })
     })
   }

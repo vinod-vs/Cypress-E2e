@@ -85,7 +85,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
       onOrderConfirmationPage.VerifyTotalAmount(expectedTotalAmountAlias)
 
       onOrderConfirmationPage.VerifySplitPaymentGiftCardAmount(giftCardToBePaidAmount)
-      onOrderConfirmationPage.VerifySplitPaymentCreditCardAmount(giftCardToBePaidAmount)
+      onOrderConfirmationPage.VerifySplitPaymentCreditCardAmount(giftCardToBePaidAmount, expectedTotalAmountAlias)
     })
 
     it('Place a delivery order by spliting payment with gift card and existing paypal', () => {
@@ -100,7 +100,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
       onOrderConfirmationPage.VerifyTotalAmount(expectedTotalAmountAlias)
 
       onOrderConfirmationPage.VerifySplitPaymentGiftCardAmount(giftCardToBePaidAmount)
-      onOrderConfirmationPage.VerifySplitPaymentPayPalAmount(giftCardToBePaidAmount)
+      onOrderConfirmationPage.VerifySplitPaymentPayPalAmount(giftCardToBePaidAmount, expectedTotalAmountAlias)
     })
   })
 })
