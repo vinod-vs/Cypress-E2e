@@ -43,7 +43,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         expect(response.Address.AreaId).to.not.be.null
 
         expect(response.Address.SuburbId).to.greaterThan(0)
-cy.wait(2000)
+
         expect(response.Address.SuburbId).to.not.be.null
       })
 
