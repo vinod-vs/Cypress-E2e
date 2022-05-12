@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import TestFilter from '../../../support/TestFilter'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import removeItemsRequestBody from '../../../fixtures/sideCart/removeItems.json'
@@ -16,11 +14,10 @@ import '../../../support/payment/api/commands/zero'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
   const searchTerm = 'Freezer'
-  const trolleyThreshold = 60.00
+  const trolleyThreshold = 90.00
   const platform = Cypress.env('b2cPlatform')
 
-  // Skip test until issue with Fulfilment window being lost on amendment is resolved
-  describe.skip('[API] Amend placed order for B2C customer', () => {
+  describe('[API] Amend placed order for B2C customer', () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -32,34 +29,60 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.wrap(confirmOrderResponse.Order.OrderId).as('initialOrderId')
         cy.wrap(confirmOrderResponse.Order.TotalIncludingGst).as('initialOrderTotal')
       })
-    })
 
-    it('Place an order for B2C customer, then amend the order and place amended order with additional items', () => {
       cy.get('@initialOrderId').then(($orderId: any) => {
         cy.amendOrder($orderId).then((response: any) => {
-          expect(response.status, 'Amend status').to.eq(200)
+          expect(response.Success, 'Amend Initiation Successful').to.be.true
+          cy.getCurrentlyAmendingOrder().then((order: any) => {
+            expect(order.OrderId, 'Currently Amending Order').to.equal($orderId)
+            expect(order.AmendCutoffTime, 'Amend Cut off time').to.not.be.empty
+          })
+        })
+      })
+      removeUnavailableStockCodes()  
+    })
+
+    it('Should place an order for B2C customer, then amend the order and place amended order with additional order total', () => {
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 30.00)
+
+      cy.getBootstrapResponse().then(($response: any) => {
+        cy.get('@initialOrderTotal').then((initialTotal: any) => {
+          expect($response.TrolleyRequest.Totals.Total, 'Amended Order Total').to.be.greaterThan(initialTotal)
         })
       })
 
-      // Below is a workaround for issue on UAT whereby products from initial order become unavailable on starting an amendment
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then((response: any) => {
+        expect(response.Order.OrderId, 'Order ID').to.not.be.null
+        expect(response.Order.OrderStatus, 'Order Status').to.equal('Placed')
+        expect(response.Order.AmendCutoff, 'Amend Cutoff Time').to.not.be.empty
+      })  
+    })
+
+    it('Should place an order for B2C customer, then amend the order and place amended order with the same or reduced total value', () => {
+      cy.zero().then((response: any) => {
+        expect(response.Result, "Zero Amend Request").to.eql(true)
+        expect(response.PlacedOrderId, 'Placed Order ID').to.not.be.null
+        expect(response.OrderReference, 'Order Reference').to.not.be.empty
+      })
+    })
+
+    it('Should cancel amendment of an order for B2C customer', () => {
+      cy.getCurrentlyAmendingOrder().then(($order: any) => {
+        cy.cancelAmendingOrder($order.OrderId, true).then(() => {
+          cy.getCurrentlyAmendingOrder().then((response: any) => {
+            expect(response.OrderId, 'Amending Order Id').to.be.null
+          })
+        })
+      }) 
+    })
+
+    // Workaround for issue on UAT whereby products from initial order become unavailable on starting an amendment
+    function removeUnavailableStockCodes() {
       cy.getUnavailableStockCodes().then((stockCodes: any) => {
         if (stockCodes.length > 0) {
           cy.removeItems({ ...removeItemsRequestBody, StockCodes: stockCodes })
         }
       })
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 30.00)
-
-      cy.getBootstrapResponse().then(($response: any) => {
-        cy.get('@initialOrderTotal').then((initialTotal: any) => {
-          if ($response.TrolleyRequest.Totals.Total > initialTotal) {
-            cy.log('Amended Total > Initial Order Total')
-            cy.placeOrderViaApiWithAddedCreditCard(platform)
-          } else {
-            cy.log('Amended Total <= Initial Order Total')
-            cy.zero()
-          }
-        })
-      })
-    })
+    }
   })
 })

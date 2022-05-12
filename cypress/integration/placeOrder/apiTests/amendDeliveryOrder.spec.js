@@ -25,9 +25,8 @@ TestFilter(['B2B', 'API', 'P0'], () => {
         digitalPayment, confirmOrderParameter)
         .then((response) => {
           const orderId = response.Order.OrderId
-          cy.amendOrder(orderId).then((response) => {
-            expect(response.status).to.eq(200)
-          })
+          // RC 28/04/22: amendOrder cmd now verifies amend success status
+          cy.amendOrder(orderId)
         })
     })
   })

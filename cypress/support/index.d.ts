@@ -170,5 +170,7 @@ declare namespace Cypress {
     changeDateFormatToAddSlash(date: any): any
     searchCustomerByEmailInSM(email: any): void
     getEmailDetails(emailId: string, expectedEmailSubject: string, sentFrom: string): any
+    getCurrentlyAmendingOrder(): any;
+    cancelAmendingOrder(orderId: Cypress.Chainable<number>, revertAmend: boolean): any;
   }
 }
