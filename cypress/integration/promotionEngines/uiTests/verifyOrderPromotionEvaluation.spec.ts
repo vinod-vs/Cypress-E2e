@@ -34,7 +34,7 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
       cy.get(onSearchResultsPage.getAddToCartByItemLocatorString1()).click()
       cy.wait(1000)
 
-      onHomePage.getViewCartButton().click()
+      onHomePage.getViewCart().click()
       onSideCartPage.gotoCheckout()
       onCheckoutPage.onCheckoutPaymentPanel.getOrderDiscountAmountElement().should('contain', '$' + promotions.OrderPromotions[3].OrderDiscountWithoutTeamDiscount + '.00')
       onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeDiscountAmountElement().should('contain', '$' + promotions.OrderPromotions[3].DeliveryFeeDiscount + '.00')
@@ -68,18 +68,19 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
         totalCost = totalCost + itemCost
       }
 
-      onHomePage.getViewCartButton().click()
+      onHomePage.getViewCart().click()
       onSideCartPage.gotoCheckout()
       onCheckoutPage.onCheckoutPaymentPanel.getOrderDiscountAmountElement().should('contain', '$' + totalCost + '.00')
       onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeAmountElement().then(function (deliveryFeeElement) {
-        onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeDiscountAmountElement().should('contain', deliveryFeeElement.text())
+      onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeDiscountAmountElement().should('contain', '$' + promotions.OrderPromotions[3].DeliveryFeeDiscount + '.00')
       })
     })
 
     afterEach(() => {
       // clear cart
       onCheckoutPage.getContinueShoppingLink().click()
-      onHomePage.getViewCartButton().click()
+      cy.wait(1000)
+      onHomePage.getViewCart().click()
       onSideCartPage.removeAllItems()
     })
   })

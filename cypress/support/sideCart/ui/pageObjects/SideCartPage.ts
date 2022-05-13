@@ -44,6 +44,11 @@ export class SideCartPage {
     return cy.get('.cartLoyalty-pointsTotal')
   }
 
+  getRewardcreditscheckElement(){
+    return cy.get('[id^=shared-toggle-switch]').click({ force: true }) 
+    
+  }
+
   getTotalAmountElement () {
     return cy.get('.cart-checkout-total__currency')
   }
@@ -73,7 +78,7 @@ export class SideCartPage {
 
   // #region - Selectors of available products panel
   getAvailableProductsInCartPanel () {
-    return cy.get('.auto_products-in-cart')
+    return cy.get('.auto_products-in-cart') 
   }
 
   getAvailableProductsList () {
@@ -100,6 +105,14 @@ export class SideCartPage {
     return this.getAvailableProductsInCartPanel().find('.price')
   }
 
+  getAvailableCreditItemsProductsInCartPanel (){
+    return cy.get('.rewards-credits-items')
+  }
+  getAvailableCreditItemsProductPriceDivList(){
+    return this.getAvailableCreditItemsProductsInCartPanel().find('.price')  
+
+  }
+  
   getAvailableProductsRemoveButtonList () {
     return this.getAvailableProductsInCartPanel().find('.cart-item-remove-button')
   }
@@ -163,7 +176,7 @@ export class SideCartPage {
   }
 
   closeSideCart () {
-    this.getCloseSideCartButton().click({ force: true })
+    this.getCloseSideCartButton().click({ force: true })   
   }
 
   gotoCheckout () {

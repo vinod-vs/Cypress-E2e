@@ -16,7 +16,7 @@ export class HomePage {
   }
 
   getClearSearchHeader () {
-    return cy.get('.headerSearch-actionButton')
+    return cy.get('.headerSearch-actionButton')  
   }
 
   getCartAmount () {
@@ -32,9 +32,19 @@ export class HomePage {
   }
 
   getViewCartButton () {
-    return cy.get('#viewCartPanel > .button')
+    return cy.get('#viewCartPanel > .button') 
+      
   }
 
+  getViewCart () {
+    return cy.get('#wx-label-checkout-action')
+    
+   }
+
+   getItemnotFound() {
+     return cy.get('.no-results-primary-text')
+     
+   }
   getSecondCategoryMenuItem () {
     return cy.get('.categoryHeader-navigation .categoryHeader-navigationLink:nth-child(2)')
   }
@@ -50,6 +60,10 @@ export class HomePage {
   getCartAmountInHeader () {
     return cy.get('.orderAmount')
   }
+  okgotit () {
+    return cy.get('.productSaveToList-coachMark-coachMarkConfirm ng-tns-c66-13')
+  }
+
 }
 
 export const onHomePage = new HomePage()
