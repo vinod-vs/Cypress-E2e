@@ -201,7 +201,7 @@ export class CheckoutPaymentPanel {
 
   payWithNewCreditCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
     this.inputNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
-    this.getPlaceOrderButton().click()
+    this.placeOrder()
   }
 
   inputExistingCreditCardDetails (cardNumberLast4Digit: string, cvv: string) {
@@ -218,7 +218,7 @@ export class CheckoutPaymentPanel {
 
   payWithExistingCreditCard (cardNumberLast4Digit: string, cvv: string) {
     this.inputExistingCreditCardDetails(cardNumberLast4Digit, cvv)
-    this.getPlaceOrderButton().click()
+    this.placeOrder()
   }
 
   selectExistingPaypal () {
@@ -233,7 +233,7 @@ export class CheckoutPaymentPanel {
 
   payWithExistingPayPal () {
     this.selectExistingPaypal()
-    this.getPlaceOrderButton().click()
+    this.placeOrder()
   }
 
   inputNewGiftCardDetails (giftCardNumber: string, pin: string, amount: number) {
@@ -270,13 +270,13 @@ export class CheckoutPaymentPanel {
   splitPayWithNewCreditCardAndNewGiftCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string, giftCardNumber: string, pin: string, amount: number) {
     this.inputNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
     this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
-    this.getPlaceOrderButton().click()
+    this.placeOrder()
   }
 
   splitPayWithExistingPaypalAndNewGiftCard (giftCardNumber: string, pin: string, amount: number) {
     this.selectExistingPaypal()
     this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
-    this.getPlaceOrderButton().click()
+    this.placeOrder()
   }
 
   redeemRewardsDollars (dollarAmount: number) {
@@ -315,6 +315,26 @@ export class CheckoutPaymentPanel {
   // #endregion
 
   // #region - private methods
+  private placeOrder () {
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('digitalPaymentEndpoint'),
+    }).as('paymentRequest')
+
+    this.getPlaceOrderButton().click()
+
+    cy.wait('@paymentRequest').then(()=>{
+      cy.wait(500)
+      cy.checkIfElementExists('.digitalPayErrorDisplay-errorMessage').then( (result:boolean) => {
+        if(result){
+          cy.get('.digitalPayErrorDisplay-errorMessage').then(errorTextElement => {
+            throw new Error('Payment failed because of digital pay error: ' + errorTextElement.text())
+          })
+        }
+      })
+    })
+  }
+
   private getAmountElementByPaymentTitle (titleText: string) {
     return this.getPaymentDetailsContainer().find('.payment-row')
       .contains(titleText)
