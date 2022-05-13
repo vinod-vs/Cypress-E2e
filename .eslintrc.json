@@ -132,13 +132,6 @@
     "import/no-deprecated": "warn",
     "import/no-extraneous-dependencies": "warn",
     "import/no-mutable-exports": "warn",
-    "import/no-unused-modules": [
-      "warn",
-      {
-        "missingExports": false,
-        "unusedExports": false
-      }
-    ],
     "import/first": "warn",
     "import/exports-last": "warn",
     "import/no-duplicates": "warn",
