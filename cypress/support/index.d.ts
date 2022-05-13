@@ -69,6 +69,7 @@ declare namespace Cypress {
     validateOrderDetailsOnSM(isMarketOnly: boolean): any
     addAvailableEDMItemsToTrolley(searchTerm: string, quantity: number): void
     addAvailableNonRestrictedWowItemsToTrolley(searchTerm: string): void
+    getNonRestrictedWowItemSetFromApiSearch(searchRequestPayload: any): any
     amendOrder(traderOrderId: number): any
     getExpectedCCCardDetails(): void
     getCCPaymentInstrumentId(creditCardPaymentResponse: any): any
@@ -164,9 +165,12 @@ declare namespace Cypress {
     addMultiSellerAvailableEDMItemsToTrolley(searchTerm: string, quantity: number): void
     addYearsToCurrentDate(noOfYearsToAdd: any): any
     evaluateSessionGroup(requestBody: any): any
+    evaluateMultipleSessionGroups(requestBody: any): any
     generateRandomString(numChars?: number): Cypress.Chainable<string>
     changeDateFormatToAddSlash(date: any): any
     searchCustomerByEmailInSM(email: any): void
     getEmailDetails(emailId: string, expectedEmailSubject: string, sentFrom: string): any
+    getCurrentlyAmendingOrder(): any;
+    cancelAmendingOrder(orderId: Cypress.Chainable<number>, revertAmend: boolean): any;
   }
 }

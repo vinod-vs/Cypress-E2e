@@ -1,5 +1,7 @@
-import { onHomePage } from "../../../homePage/ui/pageObjects/HomePage"
-import { onSideCartPage } from "../../../sideCart/ui/pageObjects/SideCartPage"
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onSideCartPage } from '../../../sideCart/ui/pageObjects/SideCartPage'
+import searchRequestPayload from '../../../../fixtures/search/productSearch.json'
+import '../../../../support/search/api/commands/search'
 
 export class SearchResultsPage {
   addItemToCart (itemPositionNumber) {
@@ -168,8 +170,11 @@ export class SearchResultsPage {
     }) 
   }
 
-  addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(minSpendThreshold)
+  searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
   {
+    onHomePage.getSearchHeader().click()
+    onHomePage.getSearchHeader().type(searchTerm).type('{enter}')
+
     cy.checkIfElementExists('.no-results-primary-text').then(result => {
       if(result == true){
         throw new Error('Unable to find any result')
@@ -185,22 +190,22 @@ export class SearchResultsPage {
       else{
         let searchResultPageStartIndex = 1
         this.getAllPageNumberElements().last().then(lastPageNumberElement => {
-          this.#ddAvailableProductsToCartFromAllPagesRecursively(minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
+          this.#addAvailableProductsToCartFromAllPagesRecursively(searchTerm, minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
         })
       }
     })  
   }
 
-  #addAvailableProductsToCartFromCurrentPage(minSpendThreshold)
+  #addAvailableProductsToCartFromCurrentPage(searchTerm, minSpendThreshold)
   {
     cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
       if(result){
-        this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+        this.#addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
       }
     })
   }
 
-  #ddAvailableProductsToCartFromAllPagesRecursively(minSpendThreshold, currentPageIndex, lastPageIndex)
+  #addAvailableProductsToCartFromAllPagesRecursively(searchTerm, minSpendThreshold, currentPageIndex, lastPageIndex)
   {
     if(currentPageIndex > lastPageIndex)
     {
@@ -214,17 +219,17 @@ export class SearchResultsPage {
 
     cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
       if(result){
-        this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+        this.#addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
       }
       else{
         this.getGoNextButton().click()
         cy.wait('@productSearch')
-        this.#ddAvailableProductsToCartFromAllPagesRecursively(minSpendThreshold, currentPageIndex + 1, lastPageIndex)
+        this.#addAvailableProductsToCartFromAllPagesRecursively(searchTerm, minSpendThreshold, currentPageIndex + 1, lastPageIndex)
       }
     })
   }
 
-  #addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+  #addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
   {
     cy.intercept({
       method: 'POST',
@@ -237,20 +242,50 @@ export class SearchResultsPage {
         cy.wait('@productSearch')
       }
       else{
-        cy.get('[class="shelfProductTile tile"]').then(tileList => {
-          this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, 0, tileList.length)
-        })
-        
-        onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
-          if(Number(totalAmountEle.text().substring(1)) < Number(minSpendThreshold)) {
-            this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+        cy.checkIfElementExists('.paging-pageNumber').then(result => {
+          if(result){
+            cy.get('.paging-section a.is-selected').invoke('attr', 'href').then(href => {
+              const pageNumber = Number(href.substring(href.lastIndexOf('=') + 1))
+              cy.wrap(pageNumber).as('currentPageNumber')
+            })
+
+            cy.get('wow-record-count div').then(recordCountElement => {
+              let recordCountRange = recordCountElement.text().substring(0, recordCountElement.text().indexOf('of'))
+              //below unicode '–' got from UI, it is different with normal char '-'
+              let recordCountArray = recordCountRange.split('–')
+              let pageSize = Number(recordCountArray[1].trim()) - Number(recordCountArray[0].trim()) + 1
+              cy.wrap(pageSize).as('pageSize')
+            })  
           }
-        })   
-      }   
+          else{
+            cy.wrap(1).as('currentPageNumber')
+            cy.wrap(50).as('pageSize')
+          }
+        })
+
+        //fetch result set from API then add products referring to api result set
+        cy.get('@currentPageNumber').then(currentPageNumber => {
+          cy.get('@pageSize').then(pageSize => {
+            cy.getNonRestrictedWowItemSetFromApiSearch({...searchRequestPayload, PageNumber: currentPageNumber, PageSize: pageSize, SearchTerm: searchTerm, SortType: 'PriceDesc'}).then(apiResultSet => {
+              cy.get('.shelfProductTile').then(tileList => {
+                this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, 0, tileList.length, apiResultSet)
+              })
+            })  
+          })    
+        })
+      }
+      
+      onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+        if(Number(totalAmountEle.text().substring(1)) < Number(minSpendThreshold)) {
+          this.getGoNextButton().click()
+          cy.wait('@productSearch')
+          this.#addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
+        }
+      }) 
     })
   }
 
-  #traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex, totalProductCount)
+  #traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex, totalProductCount, apiProductSearchResultSetAsReference)
   {
     cy.intercept({
       method: 'POST',
@@ -262,19 +297,19 @@ export class SearchResultsPage {
       cy.wait('@productSearch')
     }
     else{
-      cy.get('[class="shelfProductTile tile"]').eq(currentProductIndex).then(element => {
-        if(element.find('[alt="Everyday Market Product"]').length == 0 && element.find('.restriction-message').length == 0){
+      cy.get('.shelfProductTile').eq(currentProductIndex).then(element => {
+        if(apiProductSearchResultSetAsReference.some(o => o.DisplayName == element.find('.shelfProductTile-descriptionLink').text().trim())){
           cy.wrap(element).find('.cartControls-addCart').click({force: true})
           this.#increaseProductQuantityUntilReachMinSpendThreshold(minSpendThreshold, element)
           
           onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
             if(Number(totalAmountEle.text().substring(1)) < Number(minSpendThreshold)) {
-              this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex + 1, totalProductCount)
+              this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex + 1, totalProductCount, apiProductSearchResultSetAsReference)
             }
           })
         }
         else{
-          this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex + 1, totalProductCount)
+          this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex + 1, totalProductCount, apiProductSearchResultSetAsReference)
         }
       })
     } 

@@ -10,7 +10,6 @@ import { onOrderDetailsPage } from '../../../support/myOrder/ui/pageObjects/Orde
 import {onSideCartPage} from '../../../support/sideCart/ui/pageObjects/SideCartPage'
 import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/CheckoutPage'
 import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage'
-import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage'
 import { onSearchResultsPage } from '../../../support/search/ui/pageObjects/SearchResultsPage'
 import '../../../support/login/api/commands/login'
 import '../../../support/delivery/api/commands/options'
@@ -73,10 +72,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
           onSideCartPage.removeAllItemsUnderNotificationGroupsFromCart()
 
           // Increase the Order total by adding more products to cart
-          onHomePage.getSearchHeader().click()
-          onHomePage.getSearchHeader().type('health').type('{enter}')
-    
-          onSearchResultsPage.addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(100)
+          onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 100)
     
           onSideCartPage.getViewCartButton().click()
 

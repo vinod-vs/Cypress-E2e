@@ -110,6 +110,7 @@
         "substitutionEndpoint": "/apis/ui/Checkout/substitution",
         "productNoteEndpoint": "/apis/ui/Checkout/ProductNote",
         "segmentationSdkClientEndpoint": "https://dxk8saae.uat.wx-d.net/utsdktestclient/api/v1/Sdk/isingroupbyid/dictionary",
+        "segmentationSdkClientEndpointMulti": "https://dxk8saae.uat.wx-d.net/utsdktestclient/api/v1/Sdk/isingroupsbyid/dictionary",
         "consignmentEndpoint": "https://uat.mobile-api.woolworths.com.au/consignment/aftership/v1/trackings"
     },
     "viewportHeight": 1080,

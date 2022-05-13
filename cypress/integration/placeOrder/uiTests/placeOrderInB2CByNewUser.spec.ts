@@ -41,10 +41,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onHomePage.getSearchHeader().click()
-      onHomePage.getSearchHeader().type('health').type('{enter}')
-
-      onSearchResultsPage.addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
 
       onSideCartPage.getViewCartButton().click()
 
@@ -67,10 +64,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onFMSWindowSelector.selectLastTimeslot();
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onHomePage.getSearchHeader().click()
-      onHomePage.getSearchHeader().type('health').type('{enter}')
-
-      onSearchResultsPage.addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
 
       onSideCartPage.getViewCartButton().click()
 
@@ -95,10 +89,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onHomePage.getSearchHeader().click()
-      onHomePage.getSearchHeader().type('health').type('{enter}')
-
-      onSearchResultsPage.addAvailableProductsFromSearchResultToCartUntilReachMinSpendThreshold(30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
 
       onSideCartPage.getViewCartButton().click()
 
