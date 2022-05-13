@@ -8,6 +8,11 @@
     "import",
     "deprecation"
   ],
+  "extends": [
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
   "ignorePatterns": [
     "*.d.ts"
   ],
@@ -152,6 +157,5 @@
   "env": {
     "cypress/globals": true,
     "browser": true
-  },
-  "extends": []
+  }
 }
