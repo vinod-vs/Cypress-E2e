@@ -9,6 +9,7 @@ import '../../../../../support/siteManagement/ui/commands/orderManagement'
 import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/invoices/api/commands/commands'
 import '../../../../../support/refunds/api/commands/commands'
+import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
 
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
@@ -39,6 +40,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     })
 
     it("[API]  RP-5538-EM|MP|SM-VerifyDeliveryUnlimitedDiscountForEMitemsAndDisplayedInSM", () => {
+      const testData = tests.VerifyDispatchOfEDMOrderForDU
       const searchTerm = 'treats'   // 'everyday market'
       const duDiscountSource = 'DeliveryPlusSubscription'
       const duTarget = 'MarketShippingFee'
@@ -51,12 +53,14 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       let req: any;
       let orderId: any;
       let WoolworthsSubtotal: any;
-      let edmOrderId: any;
-      let edmInvoiceId: any;
       let checkOutResponse:any;
       let response:any;
       let marketSubtotal:any
       let doubleRewardPoints:any
+      let edmOrderId: any;
+      let edmInvoiceId: any;
+      let encodedEdmInvoiceId:any
+      let encodedEdmLineitemId:any
 
       const shopperId = shoppers.emAccountWithRewards27.shopperId
 
@@ -88,7 +92,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         cy.log("checkOutResponse DU DiscountTarget is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target)
         cy.log("checkOutResponse marketEMShipping Fee is = " + checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee)
         cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
-
+        //cy.log("checkOutResponse DeliveryUnlimitedEligibility.Eligibility is = " + checkOutResponse.Model.Order.MarketOrder.DeliveryUnlimitedEligibility.Eligibility)
 
         if(marketSubtotal >= marketSubTotalLowerLimit && marketSubtotal <= marketSubTotalUpperLimit)
         {
@@ -100,11 +104,13 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         //  cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
           doubleRewardPoints = Math.round((checkOutResponse.Model.Order.MarketSubtotal + checkOutResponse.Model.Order.WoolworthsSubtotal - checkOutResponse.Model.Order.TotalDeferredDiscountAmount) * 2 )
           cy.log(" double RewardsPoints Calculated is = " + doubleRewardPoints )
-          cy.wait(Cypress.config("tenSecondWait"))
+          //cy.wait(Cypress.config("tenSecondWait"))
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource).to.be.equal(duDiscountSource)
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target).to.be.equal(duTarget)
           expect(checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount).to.be.equal(duDiscountAmount)
           expect(checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee).to.be.equal(marketEMShippingFee)
+          expect(checkOutResponse.Model.Order.MarketOrder.DeliveryUnlimitedEligibility.Eligibility).to.be.equal("Eligible")
+          expect(checkOutResponse.Model.Order.MarketOrder.IsDeliveryUnlimitedEligible).to.be.equal(true)
         // Temp -->  expect(checkOutResponse.Model.Order.TotalRewardsPointsEarned).to.be.equal(doubleRewardPoints)
         
       //Place Order
@@ -132,12 +138,17 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         //  .then((response) => 
         //  { //edmOrderId = response.body.data.element.domainEvent
         //    edmInvoiceId = response.invoices[0].legacyId;
-        //    cy.log( "In finalProjection the MPOrder Id: " + edmOrderId + ", and MPInvoice Id: " + edmInvoiceId )    
+        //   //cy.log( "In finalProjection the MPOrder Id: " + edmOrderId + ", and MPInvoice Id: " + edmInvoiceId )  
+        //    cy.log( "In finalProjection the MPInvoice Id: " + edmInvoiceId )     
         //  }) // ENDS - .then((response) => {
 
+        //Add Validation for Newly Added API attribute for DU Eligible- as per Ticket - done         //https://woolworthsdigital.atlassian.net/browse/MPWEB-1622 
+        //Now, Dispatch EM items and then Verify the 'RedeemMarketOrderSavings'Event
+        //https://marketk8saae.uat.wx-d.net/order-api/api/v1/events?shopperId=8518293&orderReference=96XZN-2JSP0W&domainEvent=RedeemMarketOrderSavings
+        //IMPROVISE - How to Find all the EM Orders Placed and Dispatch ALL EM Orders
 
 
-      /*  cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
+        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
           function: function (response) 
           { if (response.body.invoices[0].wowStatus !== "Placed") 
             { cy.log("wowStatus was " + response.body.invoices[0].wowStatus + " instead of Placed" );
@@ -147,14 +158,175 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
           retries: Cypress.env('marketApiRetryCount'),
           timeout: Cypress.env('marketApiTimeout')
         })      // ENDS - cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
-          .as("finalProjection")
-          .then((response) => 
-          { edmOrderId = response.invoices[0].legacyIdFormatted;
-            edmInvoiceId = response.invoices[0].legacyId;
-            cy.log( "In finalProjection the MPOrder Id: " + edmOrderId + ", and MPInvoice Id: " + edmInvoiceId );     
+        .as("finalProjection").then((response) => 
+          {
+            edmOrderId = response.invoices[0].legacyIdFormatted
+            edmInvoiceId = response.invoices[0].legacyId
+            encodedEdmInvoiceId = response.invoices[0].invoiceId
+            encodedEdmLineitemId = response.invoices[0].lineItems[0].lineItemId
+            testData.edmOrderId = edmOrderId
+            testData.edmInvoiceId = edmInvoiceId
+            cy.log('In finalProjection the MPOrder Id: ' + edmOrderId + ' , and MPInvoice Id: ' + edmInvoiceId)              
+
+          // Dispatch the complete order from MP and verify the events and order statuses
+          //cy.log("testData.items[0].sellerName >>>>>>>>>>>>>>>>>>>>>>>>>>>  " + testData.items[0].sellerName)
+          cy.log("response.invoices[0].seller. >>>>>>>>>>>>>>>>>>>>>>>>>>>  " + response.invoices[0].seller.sellerName)
+          cy.log("response.invoices[0].seller.sellerId >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + response.invoices[0].seller.sellerId)
+
+          cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, response.invoices[0].seller.sellerName)
+          //cy.fullDispatchAnInvoice(testData.edmInvoiceId, testData.trackingNumber, testData.carrier, testData.items[0].sellerName)
+          .then((response) => {
+            // After dispatch, Invoke the order api and verify the projection content is updated acordingly
+            cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, req.orderId, {
+              function: function (response) {
+                if (response.body.invoices[0].wowStatus !== 'Shipped') {
+                  cy.log('EM Order Status was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
+                  throw new Error('EM Order Status was ' + response.body.invoices[0].wowStatus + ' instead of Shipped')
+                }
+              },
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout')
+              //timeout: 40000
+            }).then((response) => {
+              // Order details
+              //lib.verifyCommonOrderDetails(response, testData, shopperId)
+              // Seller details
+              expect(response.invoices[0].seller.sellerId).to.not.be.null
+              cy.log("response.invoices[0].seller. ===============================  " + response.invoices[0].seller.sellerName)
+              cy.log("response.invoices[0].seller.sellerId =============================== " + response.invoices[0].seller.sellerId)
+              //expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
+              
+              cy.orderEventsApiForRedeemMarketOrderSavings(req.orderReference, {
+                function: function (response) {
+                  if (!response.body.data.some((element) => element.domainEvent === 'RedeemMarketOrderSavings')) 
+                  {
+                    cy.log('Expected RedeemMarketOrderSavings is not present')
+                    throw new Error('Expected RedeemMarketOrderSavings is not present')
+                  }
+                },
+                retries: Cypress.env('marketApiRetryCount'),
+                timeout: Cypress.env('marketApiTimeout')
+              }) //.then((response) => {
+
+
+
+
+
+              // After dispatch, Invoke the events api and verify the events are updated acordingly
+            /*  cy.orderEventsApiWithRetry(req.orderReference, {
+                function: function (response) {
+                  if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
+                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
+                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
+                    cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
+                    throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
+                  }
+                },
+                retries: Cypress.env('marketApiRetryCount'),
+                timeout: Cypress.env('marketApiTimeout')
+              }).then((response) => {
+                // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
+                //lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
+                // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
+                //lib.verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
+                // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
+                //lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
+              })
+              */
+
+              /*
+              cy.refundRequestCreateInitiatedBy(encodedEdmInvoiceId, encodedEdmLineitemId, testData.items[0].quantity, true, initiator)
+              .then((response) => {
+                // Verify Order Projection details
+                cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+                  retries: Cypress.env('marketApiRetryCount'),
+                  timeout: Cypress.env('marketApiTimeout')
+                }).then((response) => {
+                  //  verify the response status in graphQL endpoint
+                  cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
+                    expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
+                  }) // end of refund request return
+                  // Verify Order Projection details
+                  cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
+                    function: function (response) {
+                      if (response.body.invoices[0].invoiceStatus !== 'REFUNDED') {
+                        cy.log('invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
+                        throw new Error('invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
+                      }
+                    },
+                    retries: Cypress.env('marketApiRetryCount'),
+                    timeout: Cypress.env('marketApiTimeout')
+                  }).as('finalProjection').then((response) => {
+                    // Invoke OQS TMO api and validate it against the projection
+                    lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
+                  })
+                })
+              })  // ENDS - cy.refundRequestCreateInitiatedBy
+              */
+
+
+
+
+
+              
+
+            }) // ENDS - }).then((response) => {
+          }) // ENDS - cy.fullDispatchAnInvoice
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
           }) // ENDS - .then((response) => {
-      */
-           
+      
+
+
+      // Method to Hit the ReDeem Event-
+      Cypress.Commands.add( 'orderEventsApiForRedeemMarketOrderSavings',
+        (traderOrderReference, retryOptions) => {
+          const endPoint = String(
+            //https://marketk8saae.uat.wx-d.net/order-api/api/v1/events?shopperId=8518293&orderReference=96XZN-2LCT1Z&domainEvent=RedeemMarketOrderSavings
+            Cypress.env('ordersApiEndpoint') + Cypress.env('ordersApiEventsEndpoint') + '?orderReference=' + traderOrderReference + '&domainEvent=RedeemMarketOrderSavings'
+          )
+          cy.retryRequest(endPoint, {
+            method: 'GET',
+            retries: retryOptions.retries,
+            timeout: retryOptions.timeout,
+            function: retryOptions.function
+          }).then((response) => {
+            expect(response.status).to.eq(200)
+            return response.body
+          })
+        }
+      )
+          
+
+
+
+
+
       })  // ENDS - cy.get('@confirmedTraderOrder').then((confirmedOrder) => {         
      
         
@@ -170,7 +342,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
       }  // ENDS- IF        
         else {
-          cy.log("DU Discount is Not Applicable")
+          cy.log("DU Discount is Not Applicable Because in checkOutResponse EM Subtotal is = " + checkOutResponse.Model.Order.MarketSubtotal)
         }  // ENDS - Else 
       })  // ENDS- cy.navigateToCheckout().then((checkOutResponse) => {
       
