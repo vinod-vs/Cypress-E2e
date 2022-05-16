@@ -56,8 +56,10 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0).then((response) => {
-        expect(response[0].stockcode, 'At least 1 product added to trolley').to.not.be.null
+        expect(response[0].stockCode, 'At least 1 product added to trolley').to.not.be.null
       })
+
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Kitchen, 50.0')
 
       cy.navigateToCheckout().then((response) => {
         expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(0)
