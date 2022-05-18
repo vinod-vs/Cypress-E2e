@@ -156,6 +156,8 @@
   },
   "env": {
     "cypress/globals": true,
-    "browser": true
+    "browser": true,
+    "amd": true,
+    "jquery": true
   }
 }
