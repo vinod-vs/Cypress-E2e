@@ -31,6 +31,7 @@ import eventsRequest from '../../../../../fixtures/wowDispatch/wowDispatchDataPr
 import '../../../../../support/wowDispatch/wowStatusUpdates'
 
 import { onOrderManagement } from '../../../../../support/siteManagement/ui/pageObjects/OrderManagement'
+import { json } from 'stream/consumers'
 
 TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   describe('[API]  RP-5538-EM|MP|SM-VerifyDeliveryUnlimitedDiscountForEMitemsAndDisplayedInSM', () => {
@@ -46,7 +47,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       const duTarget = 'MarketShippingFee'
       const duDiscountAmount = 10
       const marketEMShippingFee= 0
-      const purchaseQty = 1
+      const purchaseQty = 2
       const marketSubTotalLowerLimit = 50
       const marketSubTotalUpperLimit = 100
       //let shopperId: any;
@@ -208,6 +209,23 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }) //.then((response) => {
 
+              //Now, Hit the MyOrderDetails Page API and Verify the DU Discount Details-
+              //https://test.mobile-api.woolworths.com.au/wow/v1/orders/api/orders/140168388
+//On My Order Details Page Verify- Order Number Response (140150997)  →   MarketOrders → OrderDiscountDetailsList → DiscountSourceId: "16764"
+//  Source: "DeliveryPlusSubscription"     Target: "MarketShippingFee"
+
+    cy.myOrderDetailsDiscount(req.orderId).as('myOrderDetailsDiscount')
+    cy.get('@myOrderDetailsDiscount').then((duDiscountDetails) => 
+    {
+      cy.log("================================="  + duDiscountDetails.OrderDiscountDetailsList[0])
+    })
+
+          
+
+
+
+
+
 
 
 
@@ -276,53 +294,43 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           
           }) // ENDS - .then((response) => {
       
 
 
       // Method to Hit the ReDeem Event-
-      Cypress.Commands.add( 'orderEventsApiForRedeemMarketOrderSavings',
-        (traderOrderReference, retryOptions) => {
+      Cypress.Commands.add('orderEventsApiForRedeemMarketOrderSavings', (traderOrderReference, retryOptions) => {
           const endPoint = String(
             //https://marketk8saae.uat.wx-d.net/order-api/api/v1/events?shopperId=8518293&orderReference=96XZN-2LCT1Z&domainEvent=RedeemMarketOrderSavings
             Cypress.env('ordersApiEndpoint') + Cypress.env('ordersApiEventsEndpoint') + '?orderReference=' + traderOrderReference + '&domainEvent=RedeemMarketOrderSavings'
           )
-          cy.retryRequest(endPoint, {
+          cy.retryRequest(endPoint, 
+            {
+              method: 'GET',
+              retries: retryOptions.retries,
+              timeout: retryOptions.timeout,
+              function: retryOptions.function
+            }).then((response) => {
+            expect(response.status).to.eq(200)
+            return response.body
+          })
+        }) //ENDS - Cypress.Commands.add( 'orderEventsApiForRedeemMarketOrderSavings',
+          
+
+        Cypress.Commands.add('myOrderDetailsDiscount', (orderId) => {
+          //cy.getCookies().then((cookies1) => {cy.log("cookies are ---" + JSON.stringify(cookies1))})
+          cy.api({
             method: 'GET',
-            retries: retryOptions.retries,
-            timeout: retryOptions.timeout,
-            function: retryOptions.function
+            headers: { 'x-api-key': 'OZTQsBAyFNPq7q2AS80UGvKwPERyu8uF' },   
+            //url: Cypress.env('amendOrderEndPoint'),
+            url: 'https://test.mobile-api.woolworths.com.au/wow/v1/orders/api/orders/' + orderId ,
           }).then((response) => {
             expect(response.status).to.eq(200)
             return response.body
           })
-        }
-      )
-          
-
+        })
+        
 
 
 
