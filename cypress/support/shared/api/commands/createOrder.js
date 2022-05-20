@@ -14,10 +14,7 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
     digitalPayment, confirmOrderParameter) {
     let productStockCode
     searchBody.SearchTerm = 'Health & Beauty'
-    return cy.loginViaApi(shopper)
-      .then((response) => {
-        cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-
+    return cy.loginViaApiWith2FA(shopper, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode')).then(()=>{
         return cy.searchDeliveryAddress(addressSearchBody).then(() => {
           cy.addDeliveryAddress().then(() => {
             cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then(() => {

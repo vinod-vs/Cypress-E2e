@@ -4,14 +4,14 @@ export class MyAccountPage {
   }
 
   getMyAccountHeaderLink () {
-    return cy.get('a#wx-link-login-desktop')
+    return cy.get('button#wx-link-login-desktop')
   }
 
   getDeliveryUnlimitedSideNavLink () {
     return cy.get('nav[role="navigation"] > a[href*="deliveryunlimited"]')
   }
 
-  getLeftNavigationMenu() {
+  getLeftNavigationMenu () {
     return cy.get('.left-panel a.navigation-link')
   }
 }

@@ -1,238 +1,347 @@
 import 'cypress-iframe'
+import { searchForNewAddress } from '../../../../shared/ui/components/AddressSelectorTextField'
 
-export class CheckoutPaymentPanel{
-    getPlaceOrderButton () {
-        return cy.get('.payment-placeOrderButtonContainer button')
-    }
-    //#region - Everyday Rewards
-    getRewardsContainer () {
-        return cy.get('wow-checkout-rewards-container')
-    }
+export class CheckoutPaymentPanel {
+  private readonly billingAddressSelectorTexFieldLocator = '#billingAddressSelector'
+  private readonly billingAddressResultListLocator = '#billingAddressSelector-listbox > li > div'
 
-    getRewardsDollarsToggleButton () {
-        return this.getRewardsContainer().find('.toggle-button')
-    }
+  getPlaceOrderButton () {
+    return cy.get('.payment-placeOrderButtonContainer button')
+  }
 
-    getRewardsDollarsBalanceAmountElement () {
-        return this.getRewardsDollarsToggleButton().contains('Balance')
-    }
+  // #region - Billing Address
+  getBillingAddressTextField () {
+    return cy.get(this.billingAddressSelectorTexFieldLocator)
+  }
 
-    getRewardsDollarsDecreaseButton () {
-        return this.getRewardsContainer().find('button.increment')
-    }
+  getSearchAddressResultList () {
+    return cy.get(this.billingAddressResultListLocator)
+  }
+  // #endregion
 
-    getRewardsDollarsIncreaseButton () {
-        return this.getRewardsContainer().find('button.decrement')
-    }
+  // #region - Everyday Rewards
+  getRewardsContainer () {
+    return cy.get('wow-checkout-rewards-container')
+  }
 
-    getRewardsDollarsStepperAmountElement () {
-        return this.getRewardsContainer().find('.stepper-content')
-    }
+  getRewardsDollarsToggleButton () {
+    return this.getRewardsContainer().find('.toggle-button')
+  }
 
-    getRewardsDollarsResetLink () {
-        return this.getRewardsContainer().find('a')
-    }
+  getRewardsDollarsBalanceAmountElement () {
+    return this.getRewardsDollarsToggleButton().contains('Balance')
+  }
 
-    getRewardsDollarUseButton () {
-        return this.getRewardsContainer().find('.submit-button button')
-    }
-    //#endregion
+  getRewardsDollarsDecreaseButton () {
+    return this.getRewardsContainer().find('button.increment')
+  }
 
-    //#region  - promo code
-    getPromoCodeContainer () {
-        return cy.get('wow-checkout-promo-code-container')
-    }
+  getRewardsDollarsIncreaseButton () {
+    return this.getRewardsContainer().find('button.decrement')
+  }
 
-    getPromoCodeToggleButton () {
-        return this.getPromoCodeContainer().find('.toggle-button')
-    }
+  getRewardsDollarsStepperAmountElement () {
+    return this.getRewardsContainer().find('.stepper-content')
+  }
 
-    getPromoCodeEnterTextbox () {
-        return this.getPromoCodeContainer().find('.promo-code-input')
-    }
+  getRewardsDollarsResetLink () {
+    return this.getRewardsContainer().find('a')
+  }
 
-    getPromoCodeApplyButton () {
-        return this.getPromoCodeContainer().find('.promo-code-apply-button button')
-    }
+  getRewardsDollarUseButton () {
+    return this.getRewardsContainer().find('.submit-button button')
+  }
+  // #endregion
 
-    getPromoCodeDollarsAmount () {
-        return this.getPromoCodeContainer().find('.promo-amount')
-    }
+  // #region  - promo code
+  getPromoCodeContainer () {
+    return cy.get('wow-checkout-promo-code-container')
+  }
 
-    getPromoCodeRemoveButton () {
-        return this.getPromoCodeContainer().find('.promo-remove-button')
-    }
-    //#endregion
+  getPromoCodeToggleButton () {
+    return this.getPromoCodeContainer().find('.toggle-button')
+  }
 
-    //#region - payment details
-    getPaymentDetailsContainer () {
-        return cy.get('wow-checkout-payment-details')
-    }
-    
-    getPaymentYouHaveSavedAmountElement () {
-        return this.getPaymentDetailsContainer().find('.payment-save-earn .rewards-credits-redeemed')
-    }
+  getPromoCodeEnterTextbox () {
+    return this.getPromoCodeContainer().find('.promo-code-input')
+  }
 
-    getPaymentRewardsPointElement () {
-        return this.getPaymentDetailsContainer().find('.rewards span')
-    }
+  getPromoCodeApplyButton () {
+    return this.getPromoCodeContainer().find('.promo-code-apply-button button')
+  }
 
-    getPaymentSubtotalAmountElement () {
-        return this.getPaymentDetailsContainer().find('#checkout-items-subtotal .payment-amount')
-    }
+  getPromoCodeDollarsAmount () {
+    return this.getPromoCodeContainer().find('.promo-amount')
+  }
 
-    getOrderDiscountAmountElement () {
-        return this.getAmountElementByPaymentTitle('Order discount')
-    }
+  getPromoCodeRemoveButton () {
+    return this.getPromoCodeContainer().find('.promo-remove-button')
+  }
+  // #endregion
 
-    getPaymentPaperBagsAmountElement () {
-        return this.getAmountElementByPaymentTitle('bags')
-    }
+  // #region - payment details
+  getPaymentDetailsContainer () {
+    return cy.get('wow-checkout-payment-details')
+  }
 
-    getPaymentServiceFeeAmountElement () {
-        return this.getAmountElementByPaymentTitle('Service fee')
-    }
+  getPaymentYouHaveSavedAmountElement () {
+    return this.getPaymentDetailsContainer().find('.payment-save-earn .rewards-credits-redeemed')
+  }
 
-    getPaymentServiceFeeDiscountAmountElement () {
-        return this.getAmountElementByPaymentTitle('Service fee discount')
-    }
+  getPaymentRewardsPointElement () {
+    return this.getPaymentDetailsContainer().find('.rewards span')
+  }
 
-    getPaymentDeliveryFeeAmountElement () {
-        return this.getAmountElementByPaymentTitle('Delivery fee')
-    }
+  getPaymentSubtotalAmountElement () {
+    return this.getPaymentDetailsContainer().find('#checkout-items-subtotal .payment-amount')
+  }
 
-    getPaymentDeliveryFeeDiscountAmountElement () {
-        return this.getAmountElementByPaymentTitle('Delivery fee discount')
-    }
-    
-    getPaymentTotalAmountElement () {
-        return this.getAmountElementByPaymentTitle('Total')
-    }
+  getOrderDiscountAmountElement () {
+    return this.getAmountElementByPaymentTitle('Order discount')
+  }
 
-    getPaymentRewardsDollarsRedeemedAmountElement () {
-        return this.getAmountElementByPaymentTitle('Everyday Rewards dollars')
-    }
+  getPaymentPaperBagsAmountElement () {
+    return this.getAmountElementByPaymentTitle('bags')
+  }
 
-    getPaymentStillToPayAmountElement() {
-        return this.getAmountElementByPaymentTitle('Still to pay')
-    }
-    //#endregion
+  getPaymentServiceFeeAmountElement () {
+    return this.getAmountElementByPaymentTitle('Service fee')
+  }
 
-    //#region - credit card 
-    getCreditCardInstrumentToggleButton () {
-        return cy.get('wow-credit-card-instruments .toggle-button')
-    }
+  getPaymentServiceFeeDiscountAmountElement () {
+    return this.getAmountElementByPaymentTitle('Service fee discount')
+  }
 
-    getSaveCreditCardForLaterCheckbox () {
-        return cy.get('.auto_credit-card-save-for-later .checkbox-box')
-    }
+  getPaymentDeliveryFeeAmountElement () {
+    return this.getAmountElementByPaymentTitle('Delivery fee')
+  }
 
-    getCreditCardManagementLink () {
-        return cy.get('.digitalPayInstruments-manage')
-    }
+  getPaymentDeliveryFeeDiscountAmountElement () {
+    return this.getAmountElementByPaymentTitle('Delivery fee discount')
+  }
 
-    getAddNewCreditCardButton () {
-        return cy.get('.creditCards-add-button')
-    }
-    //#endregion
+  getPaymentTotalAmountElement () {
+    return this.getAmountElementByPaymentTitle('Total')
+  }
 
-    //#region - paypal
-    getLinkNewPaypalInstrumentButton () {
-        return cy.get('wow-paypal-instrument .paypal-manage-action')
-    }
+  getPaymentRewardsDollarsRedeemedAmountElement () {
+    return this.getAmountElementByPaymentTitle('Everyday Rewards dollars')
+  }
 
-    getExistingPaypalInstrumentItem () {
-        return cy.get('.paypal-list-item .digitalPayListItem')
-    }
-    //#endregion
+  getPaymentStillToPayAmountElement () {
+    return this.getAmountElementByPaymentTitle('Still to pay')
+  }
+  // #endregion
 
-    //#region - gift card
-    getGiftCardInstrumentToggleButton () {
-        return cy.get('wow-gift-card-instruments .toggle-button')
-    }
-    //#endregion
+  // #region - credit card
+  getCreditCardInstrumentToggleButton () {
+    return cy.get('wow-credit-card-instruments .toggle-button')
+  }
 
-    //#region - general actions
-    AddNewCreditCardDetails (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
-        cy.iframe('.creditCardAdd-iframe').find('#card_number').type(cardNumber)
-        cy.iframe('.creditCardAdd-iframe').find('#expiry_month').type(expiryMonth)
-        cy.iframe('.creditCardAdd-iframe').find('#exp_year').type(expiryYear)
-        cy.iframe('.creditCardAdd-iframe').find('#cvv_csv').type(cvv)
-    }
+  getSaveCreditCardForLaterCheckbox () {
+    return cy.get('.auto_credit-card-save-for-later .checkbox-box')
+  }
 
-    PayWithNewCreditCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
-        cy.checkIfElementExists('.creditCards-add-button').then((exist:boolean) => {
-            if(!exist){
-                this.getCreditCardInstrumentToggleButton().click()
-            }
-            else{
-                this.getAddNewCreditCardButton().click()
-            }
-        })
-        this.AddNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
-        this.getPlaceOrderButton().click()
-    }
+  getCreditCardManagementLink () {
+    return cy.get('.digitalPayInstruments-manage')
+  }
 
-    PayWithExistingCreditCard (cardNumberLast4Digit: string, cvv: string) {
-        var iframeTitleSelectorString = '[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
-        cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText')
-        .contains(cardNumberLast4Digit)
-        .click()
+  getAddNewCreditCardButton () {
+    return cy.get('.creditCards-add-button')
+  }
+  // #endregion
 
-        cy.iframe(iframeTitleSelectorString).find('#cvv_csv').type(cvv)
-        this.getPlaceOrderButton().click()
-    }
+  // #region - paypal
+  getLinkNewPaypalInstrumentButton () {
+    return cy.get('wow-paypal-instrument .paypal-manage-action')
+  }
 
-    PayWithExistingPayPal () {
-        this.getExistingPaypalInstrumentItem()
-        .invoke('attr', 'class')
-        .then(classValue => {
-            if(!classValue?.includes('selected')){
-                this.getExistingPaypalInstrumentItem().click()
-            }   
-        })
-        this.getPlaceOrderButton().click()
-    }
+  getExistingPaypalInstrumentItem () {
+    return cy.get('.paypal-list-item .digitalPayListItem')
+  }
+  // #endregion
 
-    RedeemRewardsDollars (dollarAmount: number) {
-        this.getRewardsDollarsToggleButton()
-        .invoke('attr', 'aria-pressed')
-        .then(attributeValue => {
-            if(attributeValue?.includes('false')){
-                this.getRewardsDollarsToggleButton().click()
-            }
-        })
+  // #region - gift card
+  getGiftCardInstrumentToggleButton () {
+    return cy.get('wow-gift-card-instruments .toggle-button')
+  }
 
-        var currentAmount = 0
-        while(currentAmount < dollarAmount) {
-            this.getRewardsDollarsIncreaseButton().click()
-            currentAmount = currentAmount + 10
+  getNewGiftCardNumberTextbox () {
+    return cy.get('wow-gift-card-add-payment #newGiftCardNumber')
+  }
+
+  getNewGiftCardPinTextbox () {
+    return cy.get('wow-gift-card-add-payment #newGiftCardPin')
+  }
+
+  getNewGiftCardAmountTextBox () {
+    return cy.get('wow-gift-card-add-payment #newGiftCardAmount')
+  }
+
+  getNewGiftCardBalanceElement () {
+    return cy.get('wow-gift-card-add-payment #newGiftCardBalance')
+  }
+  // #endregion
+
+  // #region - general actions
+  inputNewCreditCardDetails (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
+    cy.checkIfElementExists('.creditCards-add-button').then((exist: boolean) => {
+      if (!exist) {
+        this.getCreditCardInstrumentToggleButton().click()
+      } else {
+        this.getAddNewCreditCardButton().click()
+      }
+    })
+
+    cy.iframe('.creditCardAdd-iframe').find('#card_number').type(cardNumber)
+    cy.iframe('.creditCardAdd-iframe').find('#expiry_month').type(expiryMonth)
+    cy.iframe('.creditCardAdd-iframe').find('#exp_year').type(expiryYear)
+    cy.iframe('.creditCardAdd-iframe').find('#cvv_csv').type(cvv)
+  }
+
+  payWithNewCreditCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
+    this.inputNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
+    this.placeOrder()
+  }
+
+  inputExistingCreditCardDetails (cardNumberLast4Digit: string, cvv: string) {
+    const iframeTitleSelectorString = '[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
+    const getiframeTitleSelectorString = 'iframe[title="CVV for card ending in ' + cardNumberLast4Digit + '"' + ']'
+    cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText', { timeout: 10000 }).should('be.visible')
+    cy.checkIfElementExists(getiframeTitleSelectorString).then((existance: boolean) => {
+      if (!existance) {
+        cy.get('wow-credit-card-item .digitalPayListItem .creditCardItem-mainText').contains(cardNumberLast4Digit).click()
+      }
+    })
+    cy.iframe(iframeTitleSelectorString).find('#cvv_csv').type(cvv)
+  }
+
+  payWithExistingCreditCard (cardNumberLast4Digit: string, cvv: string) {
+    this.inputExistingCreditCardDetails(cardNumberLast4Digit, cvv)
+    this.placeOrder()
+  }
+
+  selectExistingPaypal () {
+    this.getExistingPaypalInstrumentItem()
+      .invoke('attr', 'class')
+      .then(classValue => {
+        if (!classValue?.includes('selected')) {
+          this.getExistingPaypalInstrumentItem().click()
         }
+      })
+  }
 
-        this.getRewardsDollarUseButton().click()
-    }
+  payWithExistingPayPal () {
+    this.selectExistingPaypal()
+    this.placeOrder()
+  }
 
-    AddPromoCode (promoCode: string) {
-        this.getPromoCodeToggleButton()
-        .invoke('attr', 'aria-pressed')
-        .then(attributeValue => {
-            if(attributeValue?.includes('false')){
-                this.getPromoCodeToggleButton().click()
-            }
+  inputNewGiftCardDetails (giftCardNumber: string, pin: string, amount: number) {
+    this.getGiftCardInstrumentToggleButton()
+      .invoke('attr', 'aria-pressed')
+      .then(attributeValue => {
+        if (attributeValue?.includes('false')) {
+          this.getGiftCardInstrumentToggleButton().click()
+        }
+      })
+
+    cy.intercept(Cypress.env('unsavedGiftCardBalanceEndpoint')).as('checkNewGiftCardBalance')
+    this.getNewGiftCardNumberTextbox().type(giftCardNumber)
+    this.getNewGiftCardPinTextbox().type(pin)
+    cy.wait('@checkNewGiftCardBalance')
+
+    this.getNewGiftCardBalanceElement()
+      .should('not.be.disabled')
+      .then(element => {
+        cy.wrap(element).find('div').then(availableBalanceEle => {
+          const balanceText = availableBalanceEle.text().substring(1)
+          expect(amount).not.greaterThan(Number(balanceText))
         })
-        this.getPromoCodeEnterTextbox().type(promoCode)
-        this.getPromoCodeApplyButton().click()
-    }
-    //#endregion
+      })
 
-    //#region - private methods
-    private getAmountElementByPaymentTitle (titleText: string) {
-        return this.getPaymentDetailsContainer().find('.payment-row')
-                .contains(titleText)
-                .parent()
-                .children('.payment-amount')
+    this.getNewGiftCardAmountTextBox().clear().type(String(amount))
+  }
+
+  payWithNewGiftCard (giftCardNumber: string, pin: string, amount: number) {
+    this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
+    this.getPlaceOrderButton().click()
+  }
+
+  splitPayWithNewCreditCardAndNewGiftCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string, giftCardNumber: string, pin: string, amount: number) {
+    this.inputNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
+    this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
+    this.placeOrder()
+  }
+
+  splitPayWithExistingPaypalAndNewGiftCard (giftCardNumber: string, pin: string, amount: number) {
+    this.selectExistingPaypal()
+    this.inputNewGiftCardDetails(giftCardNumber, pin, amount)
+    this.placeOrder()
+  }
+
+  redeemRewardsDollars (dollarAmount: number) {
+    this.getRewardsDollarsToggleButton()
+      .invoke('attr', 'aria-pressed')
+      .then(attributeValue => {
+        if (attributeValue?.includes('false')) {
+          this.getRewardsDollarsToggleButton().click()
+        }
+      })
+
+    let currentAmount = 0
+    while (currentAmount < dollarAmount) {
+      this.getRewardsDollarsIncreaseButton().click()
+      currentAmount = currentAmount + 10
     }
-    //#endregion
+
+    this.getRewardsDollarUseButton().click()
+  }
+
+  addPromoCode (promoCode: string) {
+    this.getPromoCodeToggleButton()
+      .invoke('attr', 'aria-pressed')
+      .then(attributeValue => {
+        if (attributeValue?.includes('false')) {
+          this.getPromoCodeToggleButton().click()
+        }
+      })
+    this.getPromoCodeEnterTextbox().type(promoCode)
+    this.getPromoCodeApplyButton().click()
+  }
+
+  searchForNewBillingAddress (addressKeyword: string) {
+    searchForNewAddress(this.billingAddressSelectorTexFieldLocator, this.billingAddressResultListLocator, addressKeyword)
+  }
+  // #endregion
+
+  // #region - private methods
+  private placeOrder () {
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('digitalPaymentEndpoint'),
+    }).as('paymentRequest')
+
+    this.getPlaceOrderButton().click()
+
+    cy.wait('@paymentRequest').then(()=>{
+      cy.wait(500)
+      cy.checkIfElementExists('.digitalPayErrorDisplay-errorMessage').then( (result:boolean) => {
+        if(result){
+          cy.get('.digitalPayErrorDisplay-errorMessage').then(errorTextElement => {
+            throw new Error('Payment failed because of digital pay error: ' + errorTextElement.text())
+          })
+        }
+      })
+    })
+  }
+
+  private getAmountElementByPaymentTitle (titleText: string) {
+    return this.getPaymentDetailsContainer().find('.payment-row')
+      .contains(titleText)
+      .parent()
+      .children('.payment-amount')
+  }
+  // #endregion
 }
 
 export const onCheckoutPaymentPanel = new CheckoutPaymentPanel()

@@ -6,7 +6,8 @@ Cypress.Commands.add('amendOrder', (orderId) => {
     url: Cypress.env('amendOrderEndPoint'),
     body: { OrderId: orderId }
   }).then((response) => {
-    return response
+    expect(response.status, 'Amend status').to.eq(200)
+    return response.body
   })
 })
 
@@ -29,8 +30,8 @@ Cypress.Commands.add('cancelAmendingOrder', (traderOrderId, revertExistingAmend)
     url: Cypress.env('amendOrderEndPoint'),
     body: requestBody
   }).then((response) => {
-    expect(response.status).to.eq(200)
-    expect(response.body.Success).to.eq(true)
+    expect(response.status, 'Cancel Order Amendment status').to.eq(200)
+    expect(response.body.Success, 'Cancel Order Amendment success').to.eq(true)
     return response.body
   })
 })

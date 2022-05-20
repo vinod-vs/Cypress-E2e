@@ -1,6 +1,6 @@
 [
   {
-   "searchTerm": "Apricot Kernel Oil",
+   "searchTerm": "1073744556",
    "basePrice":30,
    "salePrice":"",
    "cupCalcBasedOn":"basePrice",
@@ -15,7 +15,7 @@
    "measureType":"volume"
    },
    {
-     "searchTerm": "Calcium Ascorbate",
+     "searchTerm": "1073744648",
      "basePrice":19.95,
      "salePrice":15.95,
      "cupCalcBasedOn":"salePrice",
@@ -31,7 +31,7 @@
      "measureType":"weight"
    },
    {
-     "searchTerm": "Giant Cypress ",
+     "searchTerm": "1073741957",
      "basePrice":12.50,
      "salePrice":10,
      "cupCalcBasedOn":"salePrice",
@@ -46,7 +46,7 @@
      "measureType":"weight"
    },
    {
-    "searchTerm": "Coat Dog Treats",
+    "searchTerm": "1073744438",
     "basePrice":31.49,
     "salePrice":"",
     "cupCalcBasedOn":"basePrice",
@@ -61,7 +61,7 @@
     "measureType":"area"
    },
    {
-    "searchTerm": "Mutli Variant-reversible Bed",
+    "searchTerm": "1073741981",
     "basePrice":109.95,
     "salePrice":"",
     "cupCalcBasedOn":"basePrice",

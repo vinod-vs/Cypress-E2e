@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-expressions */
+
+import '../../../../support/payment/api/commands/digitalPayment'
 /*
     This cypress command searches for the paypal accounts linked to the logged in account.
     Gets the first enabled paypal accounts paypalPaymentInstrumentId and places an order with it.
@@ -19,7 +22,8 @@ Cypress.Commands.add('payWithLinkedPaypalAccount', (digitalPaymentRequest) => {
     expect(paymentInstruments.Paypal.Enabled).to.be.equal(true)
     expect(paymentInstruments.Paypal.Instruments.length).to.be.greaterThan(0)
 
-    const paypalPaymentInstruments = paymentInstruments.Paypal.Instruments.filter(instrument => instrument.Status === 'VERIFIED' && instrument.Allowed)
+    // const paypalPaymentInstruments = paymentInstruments.Paypal.Instruments.filter(instrument => instrument.Status === 'VERIFIED' && instrument.Allowed)
+    const paypalPaymentInstruments = paymentInstruments.Paypal.Instruments.filter(instrument => instrument.Allowed)
     cy.log('paypalPaymentInstruments: ' + JSON.stringify(paypalPaymentInstruments))
     expect(paypalPaymentInstruments).to.have.length(1)
     const paypalPaymentInstrumentId = paypalPaymentInstruments[0].PaymentInstrumentId
@@ -35,5 +39,12 @@ Cypress.Commands.add('payWithLinkedPaypalAccount', (digitalPaymentRequest) => {
       expect(response.status).to.eq(200)
       return response.body
     })
+  })
+})
+
+Cypress.Commands.add('getLinkedPayPalAccountInstrumentId', () => {
+  cy.getDigitalPaymentInstruments().then((instruments) => {
+    const paypalInstruments = instruments.Paypal.Instruments.filter(instrument => instrument.Status === 'VERIFIED' && instrument.Allowed)
+    return paypalInstruments[0].PaymentInstrumentId
   })
 })

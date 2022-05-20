@@ -31,6 +31,11 @@ Another report is in allure, hosted in Azure Blob storage: https://wowe2eautomat
 4. After the test runs, check the `cypress/allure-reports` folder. The json reports should be there.
 5. To generate the HTML report, simply run `npm run allure:trend`.
 
+# Running in parallel via cypress-parallel Locally and on Azure Pipelines
+* Just use the below command to execute tests in parallel
+npx cypress-parallel -s cypress:run -t <No of parallel threads> -d '<path to desired spec files>' -a '"<cypress dynamic config>" --browser <desired browser type> "--config <any desired cypress config>"'
+* Example command to execute everyday market api tests on 4 thread -> npx cypress-parallel -s cypress:run -t 4 -d 'cypress/integration/everydayMarket/apiTests/**' -a '"--env fileConfig=edm,tags=EDM-E2E-API/EDM-E2E-HYBRID,card=diners" --browser chrome "--config retries=1,baseUrl=https://adminuatsite.woolworths.com.au/"' -m false
+
 # Contributing / PR Guidelines
 If you wish to contribute, please create a feature branch under https://wowonline.visualstudio.com/Woolworths%20Online/_git/WOW-E2E-API-Automation and create a pull request for review. 
 
@@ -78,6 +83,11 @@ Here "API", "B2C" are the tags for this test suite mentioned inside the 'TestFil
 * For running the tests use environment variable like this:
     --env fileConfig=b2b
 
+# Creating your local environment config file
+* A local config file can be used to represent variables created on a CI pipeline or task group, or to create variables that are solely intended for local execution.
+* Your local config file should be called "cypress.env.json", and be in the root of the project (as with cypress.json file). It is not under source control.
+* Use Cypress.env('propertyName') to reference your defined variables within the framework.    
+
 # Setting fulfilment (type + window)
 From your test, use fulfilment fixture files (fulfilmentType.js & fulfilmentWindowType.js) to specify the fulfilment selection type (i.e. Delivery, Pick up, DTB) &
 fulfilment window type (i.e. Fleet, Delivery Now etc.)
@@ -98,6 +108,7 @@ Test scripts will do 2FA validation based on setting 'otpValidationSwitch' value
 * while writing API tests for any existing b2c user login, simply call cy.loginViaApiWith2FA() by passing in shopperdetails, otpValidationSwitch value and static code value.
 * for any new b2c user sign up and login via API, simply call cy.loginWithNewShopperViaApi()
 * for UI tests remains the same still using cy.loginViaUi() by passing in the shopper details
+* to login and dynamically handle the 2FA if or if not shown irespective of the flag, use the cypress command cy.loginViaApiAndHandle2FA(shopper) under support/login/api/commands/login.js
 
 # Mailosaur email service integration
 Now we have integrated with Mailosaur email service. If your tests need get email information (like subject, content, etc), highly suggest to create your test account with given Mailosaur server domain address.
@@ -111,5 +122,14 @@ For your email related test, you might want
     cy.getMailosaurEmailByEmailAddress(emailAddress).then(email => {
         expect(email.subject).to.equal('Reset your password')
     })
+  3. In order to parse html body of the email to verify or get any specific text from the email, install JSDOM, using command - "npm install jsdom --save-dev"
+     More details on this can be found at - https://mailosaur.com/docs/test-cases/html-content/
 More info: [How to test email and SMS with Cypress] (https://mailosaur.com/docs/frameworks-and-tools/cypress/)
+
+# Preserve cookies
+ 1. for personal details api, we need to pass the below cookies   which expires after a certain period of time.   
+       "INGRESSCOOKIE"
+        "w-8484730-uldtvc"
+        "w-loggedin"
+  2. Preserve the cookies in the test case   
 

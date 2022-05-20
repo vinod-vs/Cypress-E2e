@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 Cypress.Commands.add('navigatingToCreditCardIframe', () => {
   cy.request('POST', Cypress.env('creditCardIframeEndpoint')).then((response) => {
     return response.body
@@ -11,6 +13,7 @@ Cypress.Commands.add('addCreditCardViaApi', (creditCardDetails) => {
       creditcardSessionId: urlSplit[urlSplit.length - 1]
     }
     cy.creditcardTokenisation(creditCardDetails, creditCardSessionHeader).then((response) => {
+      expect(response.status.responseCode, 'Credit Card initialisation response code').to.eql('00')
       return response.body
     })
   })
@@ -31,7 +34,7 @@ Cypress.Commands.add('creditcardTokenisation', (creditcardPayment, creditcardSes
 
 Cypress.Commands.add('getCCPaymentInstrumentId', (creditCardPaymentResponse) => {
   let paymentInstrumentId = 0
-  if (creditCardPaymentResponse.itemId != undefined || creditCardPaymentResponse.itemId != null) {
+  if (creditCardPaymentResponse.itemId !== undefined || creditCardPaymentResponse.itemId !== null) {
     paymentInstrumentId = creditCardPaymentResponse.itemId
     cy.log('Credit card instrument ID creditCardPaymentResponse.itemId: ' + creditCardPaymentResponse.itemId)
   } else {

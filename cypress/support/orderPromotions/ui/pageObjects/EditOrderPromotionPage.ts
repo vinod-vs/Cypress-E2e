@@ -1,41 +1,39 @@
 class EditOrderPromotionPage {
+  getNameInput () {
+    return cy.get('#Name')
+  }
 
-    getNameInput() {
-        return cy.get('#Name')
-    }
+  getStartDateInput () {
+    return cy.get('#StartDate')
+  }
 
-    getStartDateInput() {
-        return cy.get('#StartDate')
-    }
+  getEndDateInput () {
+    return cy.get('#EndDate')
+  }
 
-    getEndDateInput() {
-        return cy.get('#EndDate')
-    }
+  getEligibleShoppersInput () {
+    return cy.xpath('//*[text()=\'Eligible Shoppers\']/../select')
+  }
 
-    getEligibleShoppersInput() {
-        return cy.xpath('//*[text()=\'Eligible Shoppers\']/../select')
-    }
+  getQualifyingAmountInput () {
+    return cy.get('#MinimumOrderValue')
+  }
 
-    getQualifyingAmountInput() {
-        return cy.get('#MinimumOrderValue')
-    }
+  getTargetInput () {
+    return cy.get('#Target')
+  }
 
-    getTargetInput() {
-        return cy.get('#Target')
-    }
+  getDiscountTypeInput () {
+    return cy.get('#AwardType')
+  }
 
-    getDiscountTypeInput() {
-        return cy.get('#AwardType')
-    }
+  getAmountInput () {
+    return cy.get('#Amount')
+  }
 
-    getAmountInput() {
-        return cy.get('#Amount')
-    }
-
-    getUpdateButton() {
-        return cy.get('input[value="Update"]')
-    }
-
+  getUpdateButton () {
+    return cy.get('input[value="Update"]')
+  }
 }
 
-export const editOrderPromotionPage = new EditOrderPromotionPage();
+export const editOrderPromotionPage = new EditOrderPromotionPage()

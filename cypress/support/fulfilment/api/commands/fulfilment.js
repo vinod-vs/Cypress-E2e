@@ -44,12 +44,12 @@ Cypress.Commands.add('searchPickupDTBStores', (storeType, searchTerm) => {
       url: Cypress.env('pickupSearchEndpoint'),
       qs: { postcode: postCode, fulfilmentMethods: storeType }
     }).then((response) => {
-        const store = response.body[0]
-        addressId = store.AddressId
-        fulfilmentAreaId = store.AreaId
+      const store = response.body[0]
+      addressId = store.AddressId
+      fulfilmentAreaId = store.AreaId
 
-        return store
-      })
+      return store
+    })
   })
 })
 
@@ -124,7 +124,6 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
     throw new Error('No windows found for window type: ' + selectedWindowType)
   }
 
-  days:
   for (x = windowResponse.body.Days.length - 1; x >= 0; x--) {
     const day = daysResp[x]
     if (day.Available === true) {
@@ -132,45 +131,45 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
         const time = daysResp[x].Times[y]
         switch (selectedWindowType) {
           case windowType.FLEET_DELIVERY:
-            if (time.Available === true && time.IsExpress === false && time.IsCrowdSourced === false && time.NormalAllocationStatus === '') {
+            if (time.Available === true && time.IsExpress === false && time.IsCrowdSourced === false) {
               timesArr.push(time)
             }
             break
           case windowType.CROWD_DELIVERY:
-            if (time.Available === true && time.IsCrowdSourced === true && time.NormalAllocationStatus === '') {
+            if (time.Available === true && time.IsCrowdSourced === true) {
               timesArr.push(time)
             }
             break
           case windowType.DELIVERY_NOW:
-            if (time.Available === true && time.IsExpress === true && time.NormalAllocationStatus === '') {
+            if (time.Available === true && time.IsExpress === true) {
               timesArr.push(time)
             }
             break
           case windowType.ECO:
-            if (time.Available === true && time.IsEcoWindow === true && time.NormalAllocationStatus === '') {
+            if (time.Available === true && time.IsEcoWindow === true) {
               timesArr.push(time)
             }
             break
           case windowType.MORNING:
             startTime = new Date(time.StartDateTime).getHours()
-            if (time.Available === true && time.IsCrowdSourced === false && (startTime < 12) && time.NormalAllocationStatus === '') {
-              timesArr.push(time)    
+            if (time.Available === true && time.IsCrowdSourced === false && (startTime < 12)) {
+              timesArr.push(time)
             }
             break
           case windowType.EVENING:
             startTime = new Date(time.StartDateTime).getHours()
-            if (time.Available === true && time.IsCrowdSourced === false && (startTime >= 17) && time.NormalAllocationStatus === '') {
-              timesArr.push(time)  
+            if (time.Available === true && time.IsCrowdSourced === false && (startTime >= 17)) {
+              timesArr.push(time)
             }
             break
           case windowType.LIQUOR_RESTRICTED:
             startTime = new Date(time.StartDateTime).getHours()
-            if (time.Available === true && (startTime < 6) && time.NormalAllocationStatus === '') {
+            if (time.Available === true && (startTime < 6)) {
               timesArr.push(time)
             }
-            break     
+            break
           default: // pick up/DTB - neither have window types
-            if (time.Available === true && time.NormalAllocationStatus === '') {
+            if (time.Available === true) {
               timesArr.push(time)
             }
             break
@@ -179,8 +178,8 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
 
       if (timesArr.length > 0) {
         windowDate = day.Date // for fulfilment request
-        
-        break days
+
+        break
       }
     }
   }
@@ -194,10 +193,20 @@ function selectRandomWindow (windowArr) {
   return cy.wrap(selectedWindow)
 }
 
+function formatFulfilmentLocationRequest (locationRequest) {
+  let location
+  if (typeof locationRequest === 'string') {
+    location = ({ search: locationRequest })
+  } else {
+    location = locationRequest // should already be formatted correctly as object
+  }
+  return location
+}
+
 Cypress.Commands.add('setFulfilmentLocationWithoutWindow', (fulType, fulfilmentLocation) => {
   switch (fulType) {
     case fulfilmentType.DELIVERY:
-      cy.searchDeliveryAddress({ search: fulfilmentLocation }).then(() => {
+      cy.searchDeliveryAddress(formatFulfilmentLocationRequest(fulfilmentLocation)).then(() => {
         cy.addDeliveryAddress()
       })
       break
@@ -212,7 +221,7 @@ Cypress.Commands.add('setFulfilmentLocationWithoutWindow', (fulType, fulfilmentL
 Cypress.Commands.add('setFulfilmentLocationWithWindow', (fulType, fulfilmentLocation, windowType) => {
   switch (fulType) { // set Fulfilment
     case fulfilmentType.DELIVERY:
-      cy.searchDeliveryAddress({ search: fulfilmentLocation }).then(() => {
+      cy.searchDeliveryAddress(formatFulfilmentLocationRequest(fulfilmentLocation)).then(() => {
         cy.addDeliveryAddress()
       })
       break
@@ -261,7 +270,7 @@ Cypress.Commands.add('getFulfilmentWindowViaApi', (selectedWindowType) => {
     }).then((response) => {
       getAvailableWindowsByWindowType(response, selectedWindowType).then((availWindows) => {
         if (availWindows.length === 0) {
-          throw ('No windows found for window type: ' + selectedWindowType)
+          throw new Error('No windows found for window type: ' + selectedWindowType)
         } else {
           return selectRandomWindow(availWindows)
         }

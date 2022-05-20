@@ -5,7 +5,6 @@ import TestFilter from '../../../support/TestFilter'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import '../../../support/orders/api/commands/cancelOrder'
 import '../../../support/sideCart/api/commands/addItemsToTrolley'
 import '../../../support/login/api/commands/login'
@@ -23,13 +22,13 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.clearLocalStorage({ domain: null })
 
       cy.loginWithNewShopperViaApi()
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
         cy.wrap(confirmOrderResponse.Order.OrderId).as('orderId')
       })
     })
-    
+
     it('Place an order for B2C customer, then cancel the order', () => {
       cy.get('@orderId').then(($orderId: any) => {
         cy.cancelOrder($orderId).then((response: any) => {

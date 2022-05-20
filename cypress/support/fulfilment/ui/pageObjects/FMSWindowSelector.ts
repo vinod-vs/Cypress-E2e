@@ -1,5 +1,9 @@
 export class FMSWindowSelector {
   // #region - Selectors
+  getSelectFullfilmentTimeHeading () {
+    return cy.get('.time-slot-title')
+  }
+
   getDayDropdown () {
     return cy.get('.day-dropdown')
   }
@@ -23,7 +27,9 @@ export class FMSWindowSelector {
   getAllTimeSlotList () {
     return cy.get('.time-slot-list > section > div')
   }
+  // #endregion
 
+  // #region - General actions
   selectSameDay () {
     this.selectDayByKeyword('Today')
   }
@@ -32,29 +38,54 @@ export class FMSWindowSelector {
     this.selectDayByKeyword('Tomorrow')
   }
 
-  selectNextAvailableDay () {
+  selectLastDay () {
+    cy.get('.day-dropdown > option')
+      .last().then(dayOption => {
+        cy.wrap(dayOption).parent().select(dayOption.text())
+      })
+  }
+
+  selectLatestAvailableDay () {
     cy.get('.day-dropdown > option')
       .each(dayOption => {
-        if(!dayOption.prop('disabled'))
-        {
+        if (!dayOption.prop('disabled')) {
           cy.wrap(dayOption).parent().select(dayOption.text())
-          return false;
+          return false
         }
       })
   }
-  // #endregion
 
-  // #region - General actions
+  selectAvailableDayAfterTomorrow () {
+    cy.get('.day-dropdown > option')
+      .each(dayOption => {
+        if (!(dayOption.text().includes('Select a day') || dayOption.text().includes('Today') || dayOption.text().includes('Tomorrow') || dayOption.text().includes('Closed'))) {
+          this.getDayDropdown().select(dayOption.text())
+          return false
+        }
+      })
+  }
+
   selectDayByKeyword (dayKeyword: string) {
     cy.get('.day-dropdown > option')
       .contains(dayKeyword)
       .then(dayOption => {
         cy.wrap(dayOption).parent().select(dayOption.text())
-    })
+      })
   }
 
   selectTimeSlotByTime (startTimeString: string, endTimeString = 'undefined') {
     this.selectTimeSlotStartFromIndex(0, startTimeString, endTimeString)
+  }
+
+  selectDeliveryNowTimeslot () {
+    cy.get('wow-time-slot-badges span').each(eachBadgeSpan => {
+      if (eachBadgeSpan.text() == 'Delivery Now') {
+        cy.intercept(Cypress.env('bootstrapEndpoint')).as('bootstrap')
+        cy.wrap(eachBadgeSpan).parents('.time-slot-badge-container').click()
+        cy.wait('@bootstrap')
+        return false
+      }
+    })
   }
 
   selectFirstTimeslot () {

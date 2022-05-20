@@ -3,4 +3,3 @@ Cypress.Commands.add('viewTrolley', () => {
     return response.body
   })
 })
-  

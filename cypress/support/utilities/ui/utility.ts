@@ -15,14 +15,30 @@ Cypress.Commands.add('checkIfElementExists', (elementLocatorString) => {
   })
 })
 
+Cypress.Commands.add('checkIfElementVisible', (element) => {
+  cy.get('body').then($body => {
+    if ($body.find(element).length > 0) {
+      cy.get(element).then($el => {
+        if ($el.is(':visible')) {
+          return true
+        } else {
+          return false
+        }
+      })
+    } else {
+      return false
+    }
+  })
+})
+
 Cypress.Commands.add('getDOB', (element) => {
-  let dob = new Date()
+  const dob = new Date()
   if (element == 'senior') {
     dob.setFullYear(dob.getFullYear() + Math.floor(Math.random() * 28) - 90)
   } else {
     dob.setFullYear(dob.getFullYear() + Math.floor(Math.random() * 40) - 60)
   }
-  let dobStr = (appendZeroes(dob.getDay() + 1)) + '/' + appendZeroes(dob.getMonth() + 1) + '/' + dob.getFullYear()
+  const dobStr = (appendZeroes(dob.getDay() + 1)) + '/' + appendZeroes(dob.getMonth() + 1) + '/' + dob.getFullYear()
   return cy.wrap(dobStr)
 })
 
@@ -51,12 +67,13 @@ Cypress.Commands.add('getDateTime', () => {
 Cypress.Commands.add('getDayOfWeek', (dateObject) => {
   const dayOfWeek = dateObject.getDay()
 
-  return cy.wrap(isNaN(dayOfWeek)? null :
-    ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek])
+  return cy.wrap(isNaN(dayOfWeek)
+    ? null
+    : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek])
 })
 
 Cypress.Commands.add('convertShortWeekDayToLong', (shortWeekday) => {
-  switch(shortWeekday){
+  switch (shortWeekday) {
     case 'Mon':
       return 'Monday'
     case 'Tue':
@@ -76,53 +93,76 @@ Cypress.Commands.add('convertShortWeekDayToLong', (shortWeekday) => {
   }
 })
 
-Cypress.Commands.add('generateRandomString', () => {
+Cypress.Commands.add('generateRandomString', (numChars?: number) => {
+  let strLength
   let text = ''
   const alpha = 'abcdefghijklmnopqrstuvwxyz'
 
-  for (let i = 0; i < alpha.length; i++) {
-    text += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  if (typeof numChars !== undefined) {
+    strLength = numChars!
+  } else {
+    strLength = alpha.length
   }
 
+  for (let i = 0; i < strLength; i++) {
+    text += alpha.charAt(Math.floor(Math.random() * alpha.length))
+  }
   return cy.wrap(text)
 })
 
 Cypress.Commands.add('formatToAmPm', (date) => {
   let hours = date.getHours()
   let minutes = date.getMinutes()
-  let ampm = hours >= 12 ? 'pm' : 'am'
+  const ampm = hours >= 12 ? 'pm' : 'am'
   hours = hours % 12
-  hours = hours ? hours : 12 // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes
-  let strTime = hours + ':' + minutes + ' ' + ampm
+  hours = hours || 12 // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0' + minutes : minutes
+  const strTime = hours + ':' + minutes + ' ' + ampm
 
   return cy.wrap(strTime)
 })
 
 Cypress.Commands.add('removeNewLineCarriageReturn', (text) => {
- return cy.wrap(text.replace('(\\r?\\n)+',  ''))
+  return cy.wrap(text.replace('(\\r?\\n)+', ''))
 })
 
 Cypress.Commands.add('removeDateOrdinals', (text) => {
   return text.replace(/st|nd|rd|th/g, '')
 })
 
+Cypress.Commands.add('addYearsToCurrentDate', (noOfYearsToAdd: any) => {
+  const today = new Date()
+  const todayPlusYears = new Date(today.getFullYear() + parseInt(noOfYearsToAdd), today.getMonth(), today.getDate())
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const date = todayPlusYears.getDate()
+  const monthName = monthNames[todayPlusYears.getMonth()]
+  const year = todayPlusYears.getFullYear()
+  return cy.wrap(date.toString() + ' ' + monthName + ' ' + year.toString())
+})
+
+// input date in format dd mmm yyyy, it returns the same date in formate dd/mm/yyyy
+Cypress.Commands.add('changeDateFormatToAddSlash', (date: any) => {
+  const givenDate = new Date(date)
+  const day = givenDate.getDate()
+  let month = givenDate.getMonth()
+  month++
+  const year = givenDate.getFullYear()
+  if (month >= 10) { return cy.wrap(day + '/' + month + '/' + year) }
+  if (month < 10) { return cy.wrap(day + '/0' + month + '/' + year) }
+})
 
 /*
- * TODO: Look into why this isn't working as a Custom Command. For now, implement as a standard function 
+ * TODO: Look into why this isn't working as a Custom Command. For now, implement as a standard function
 */
-export function setComponentBase(elLocator: Cypress.Chainable<JQuery<HTMLElement>>, tagName: string) {
+export function setComponentBase (elLocator: Cypress.Chainable<JQuery<HTMLElement>>, tagName: string) {
   return elLocator.then(($locator) => {
-    console.log('$Loc is: ' , $locator)
+    console.log('$Loc is: ', $locator)
     if ($locator.prop('tagName').toLowerCase() !== tagName) {
       cy.log('IN IF')
-      return elLocator.find(tagName);
-    } else { 
+      return elLocator.find(tagName)
+    } else {
       cy.log('IN ELSE')
-      return elLocator;
-    }  
+      return elLocator
+    }
   })
 }
-
-
-

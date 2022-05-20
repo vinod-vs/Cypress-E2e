@@ -1,4 +1,7 @@
-import { onSideCartPage } from "cypress/support/sideCart/ui/pageObjects/SideCartPage"
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onSideCartPage } from '../../../sideCart/ui/pageObjects/SideCartPage'
+import searchRequestPayload from '../../../../fixtures/search/productSearch.json'
+import '../../../../support/search/api/commands/search'
 
 export class SearchResultsPage {
   addItemToCart (itemPositionNumber) {
@@ -89,32 +92,120 @@ export class SearchResultsPage {
     return cy.get('.sort-by-dropdown button')
   }
 
-  addAvailableProductsToCartFromSearchResult(minSpendThreshold)
-  {
-    cy.checkIfElementExists('.no-results-primary-text').then(result => {
-      if(result == true){
-        throw new Error('Unable to find any result')
-      }
-    })
+  getSortProductsDropdownOptionsSpan (){
+    return cy.get('span.dropdown-item__button')
+  }
 
-    this.getSortByDropdownButton().click({force: true})
+  getOkButtonInRestrictedItemsPopup() {
+    return cy.get('.primary > .ng-star-inserted').contains('Ok, got it')
+  }
+
+  sortSearchResultProductsBy(sortByOptionText) {
+    this.getSortByDropdownButton().should('be.visible').click({force: true})
 
     cy.intercept({
       method: 'POST',
       url: Cypress.env('productSearchEndpoint'),
     }).as('productSearch')
 
-    cy.get('.sort-by-dropdown ul').contains('Price High to Low').click()
+    cy.get('.sort-by-dropdown ul').contains(sortByOptionText).click()
     
     cy.wait('@productSearch')
+  }
 
-    let searchResultPageStartIndex = 1
-    this.getAllPageNumberElements().last().then(lastPageNumberElement => {
-      this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
+  sortCategoryProductsBy(sortByOptionText) {
+    this.getSortByDropdownButton().should('be.visible').click({force: true})
+
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('browseCategoryendpoint'),
+    }).as('browseCategory')
+
+    cy.get('.sort-by-dropdown ul').contains(sortByOptionText).click()
+    
+    cy.wait('@browseCategory')
+  }
+
+  addRandomProductsFromEachDepartmentToCartUntilReachSpendThreshold (spendThreshold) {
+    var cartAmountText=""
+    var cartAmount=0
+    var totalCartValue = parseFloat(spendThreshold)
+
+    onHomePage.getSecondCategoryMenuItem().click({force: true})
+    cy.wait(2000)
+    onHomePage.getSubMenuItemLinks().first().click()
+    onHomePage.getSubMenuItemLinks().contains('Show All').click()
+
+    this.sortCategoryProductsBy('Price High to Low')
+    //get all main menus to travel thru each main menu > first sub menu to add first available item to cart
+    onHomePage.getCategoryMenuItemLinks().not('.categoryHeader-navigationLink.is-special').not('[href="/shop/browse/bakery"]').each(($el, $index, $list) => {
+      //get cart total
+      onHomePage.getCartAmountInHeader().then(($cartAmtEl) => {
+        cartAmountText=$cartAmtEl.text()
+        cartAmountText=cartAmountText.substring(1,cartAmountText.length)
+        cartAmount = parseFloat(cartAmountText)
+        //add Item to cart only if current cart value is less than expected cart value
+        if(cartAmount < totalCartValue){
+          //navigate to menu and click on first 'Add to cart' button if visible
+          cy.wrap($el).click({force:true})
+          onHomePage.getSubMenuItemLinks().first().click()
+          onHomePage.getSubMenuItemLinks().contains('Show All').click()
+          cy.wait(Cypress.config('fiveSecondWait'))
+          cy.checkIfElementVisible('.cartControls-addButton').then((visibleAddCart) => {
+            if(visibleAddCart===true){
+              this.getAllAddToCartButtons().first().should('be.visible').click()
+            }
+          })
+          cy.wait(Cypress.config('halfSecondWait'))
+          //click on 'OK got it' button if resticted items popup appears
+          cy.checkIfElementVisible('.primary > .ng-star-inserted').then((visiblePopupBtn) => {
+            if(visiblePopupBtn===true){
+              this.getOkButtonInRestrictedItemsPopup().should('be.visible').click()
+            }
+          })
+          //check cart if any items are under any notifications and remove them
+          onSideCartPage.removeAllItemsUnderNotificationGroupsFromCart()
+        }
+      })
+    }) 
+  }
+
+  searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
+  {
+    onHomePage.getSearchHeader().click()
+    onHomePage.getSearchHeader().type(searchTerm).type('{enter}')
+
+    cy.checkIfElementExists('.no-results-primary-text').then(result => {
+      if(result == true){
+        throw new Error('Unable to find any result')
+      }
+    })
+
+    this.sortSearchResultProductsBy('Price High to Low')
+
+    cy.checkIfElementExists('.paging-pageNumber').then(result => {
+      if(!result){
+        this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold)
+      }
+      else{
+        let searchResultPageStartIndex = 1
+        this.getAllPageNumberElements().last().then(lastPageNumberElement => {
+          this.#addAvailableProductsToCartFromAllPagesRecursively(searchTerm, minSpendThreshold, searchResultPageStartIndex, Number(lastPageNumberElement.text()))
+        })
+      }
+    })  
+  }
+
+  #addAvailableProductsToCartFromCurrentPage(searchTerm, minSpendThreshold)
+  {
+    cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
+      if(result){
+        this.#addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
+      }
     })
   }
 
-  #addAvailableProductsToCartFromCurrentPage(minSpendThreshold, currentPageIndex, lastPageIndex)
+  #addAvailableProductsToCartFromAllPagesRecursively(searchTerm, minSpendThreshold, currentPageIndex, lastPageIndex)
   {
     if(currentPageIndex > lastPageIndex)
     {
@@ -128,57 +219,113 @@ export class SearchResultsPage {
 
     cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
       if(result){
-        this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold, 0)
+        this.#addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
       }
       else{
         this.getGoNextButton().click()
         cy.wait('@productSearch')
-        this.#addAvailableProductsToCartFromCurrentPage(minSpendThreshold, currentPageIndex + 1, lastPageIndex)
+        this.#addAvailableProductsToCartFromAllPagesRecursively(searchTerm, minSpendThreshold, currentPageIndex + 1, lastPageIndex)
       }
     })
   }
 
-  #addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+  #addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
   {
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('productSearchEndpoint'),
+    }).as('productSearch')
+
     cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
       if(!result){
         this.getGoNextButton().click()
+        cy.wait('@productSearch')
       }
       else{
-        this.getAllAddToCartButtons().first().parents('shared-cart-buttons').then(sharedCartButton => {
-          cy.wrap(sharedCartButton).find('.cartControls-addCart').click({force: true})      
-          this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButton)
-        })
-  
-        onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
-          if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
-            return false
+        cy.checkIfElementExists('.paging-pageNumber').then(result => {
+          if(result){
+            cy.get('.paging-section a.is-selected').invoke('attr', 'href').then(href => {
+              const pageNumber = Number(href.substring(href.lastIndexOf('=') + 1))
+              cy.wrap(pageNumber).as('currentPageNumber')
+            })
+
+            cy.get('wow-record-count div').then(recordCountElement => {
+              let recordCountRange = recordCountElement.text().substring(0, recordCountElement.text().indexOf('of'))
+              //below unicode '–' got from UI, it is different with normal char '-'
+              let recordCountArray = recordCountRange.split('–')
+              let pageSize = Number(recordCountArray[1].trim()) - Number(recordCountArray[0].trim()) + 1
+              cy.wrap(pageSize).as('pageSize')
+            })  
           }
           else{
-            this.#addAvailableProductsUntilReachMinSpendThreshold(minSpendThreshold)
+            cy.wrap(1).as('currentPageNumber')
+            cy.wrap(50).as('pageSize')
           }
         })
-      }   
+
+        //fetch result set from API then add products referring to api result set
+        cy.get('@currentPageNumber').then(currentPageNumber => {
+          cy.get('@pageSize').then(pageSize => {
+            cy.getNonRestrictedWowItemSetFromApiSearch({...searchRequestPayload, PageNumber: currentPageNumber, PageSize: pageSize, SearchTerm: searchTerm, SortType: 'PriceDesc'}).then(apiResultSet => {
+              cy.get('.shelfProductTile').then(tileList => {
+                this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, 0, tileList.length, apiResultSet)
+              })
+            })  
+          })    
+        })
+      }
+      
+      onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+        if(Number(totalAmountEle.text().substring(1)) < Number(minSpendThreshold)) {
+          this.getGoNextButton().click()
+          cy.wait('@productSearch')
+          this.#addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
+        }
+      }) 
     })
   }
 
-  #keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButtonJquery)
+  #traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex, totalProductCount, apiProductSearchResultSetAsReference)
+  {
+    cy.intercept({
+      method: 'POST',
+      url: Cypress.env('productSearchEndpoint'),
+    }).as('productSearch')
+
+    if(currentProductIndex >= totalProductCount){
+      this.getGoNextButton().click()
+      cy.wait('@productSearch')
+    }
+    else{
+      cy.get('.shelfProductTile').eq(currentProductIndex).then(element => {
+        if(apiProductSearchResultSetAsReference.some(o => o.DisplayName == element.find('.shelfProductTile-descriptionLink').text().trim())){
+          cy.wrap(element).find('.cartControls-addCart').click({force: true})
+          this.#increaseProductQuantityUntilReachMinSpendThreshold(minSpendThreshold, element)
+          
+          onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
+            if(Number(totalAmountEle.text().substring(1)) < Number(minSpendThreshold)) {
+              this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex + 1, totalProductCount, apiProductSearchResultSetAsReference)
+            }
+          })
+        }
+        else{
+          this.#traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex + 1, totalProductCount, apiProductSearchResultSetAsReference)
+        }
+      })
+    } 
+  }
+
+  #increaseProductQuantityUntilReachMinSpendThreshold(minSpendThreshold, shelfProductTileElement)
   {
     cy.wait(1000)
     onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
-      if(Number(totalAmountEle.text().substring(1)) >= Number(minSpendThreshold)) {
-        return false
-      }
-      else{
-        cy.wrap(sharedCartButtonJquery).find('.cartControls-incrementButton').then(incrementButton => {
+      if(Number(totalAmountEle.text().substring(1)) < Number(minSpendThreshold)) {
+        cy.wrap(shelfProductTileElement).find('.cartControls-incrementButton').then(incrementButton => {
           if(!incrementButton.prop('disabled')){
             cy.wrap(incrementButton).click({force : true})
-            this.#keepAddingUntilReachMinSpendThreshold(minSpendThreshold, sharedCartButtonJquery)
+            this.#increaseProductQuantityUntilReachMinSpendThreshold(minSpendThreshold, shelfProductTileElement)
           }
-          else{
-            return false
-          } 
-        })      
+        })   
       }
     })
   }

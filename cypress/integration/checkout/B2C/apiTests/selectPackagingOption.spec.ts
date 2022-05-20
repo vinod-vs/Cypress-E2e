@@ -17,7 +17,7 @@ TestFilter(['API', 'B2C', 'Checkout', 'P2'], () => {
     })
 
     it('Should select a packaging option for a Delivery (without Order placement)', () => {
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Bread', 50.00)
       cy.setPackagingOption(PackagingOptions.ReusableBags).then((response: any) => {
         const packagingSelection = response.PackagingPreferences.filter((preference: any) => preference.Code === PackagingOptions.ReusableBags)
@@ -26,4 +26,4 @@ TestFilter(['API', 'B2C', 'Checkout', 'P2'], () => {
       })
     })
   })
-}) 
+})

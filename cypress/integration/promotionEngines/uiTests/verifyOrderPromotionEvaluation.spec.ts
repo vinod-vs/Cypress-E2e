@@ -10,10 +10,8 @@ import { onCheckoutPage } from 'cypress/support/checkout/ui/pageObjects/Checkout
 import '../../../support/login/ui/commands/login'
 import '../../../support/utilities/ui/utility'
 
-
 TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
   describe('[UI] Verify Order Promotion Evaluation', () => {
-    
     beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -21,7 +19,6 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
     })
 
     it('Verify the Order promotion is applied on the grocery subtotal - $OFF and delivery Fee - $OFF', () => {
-
       // Search for untraceable item stockcode
       onHomePage.getSearchHeader().click()
       onHomePage.getSearchHeader().type(promotions.OrderPromotions[3].stockcode.toString()).type('{enter}')
@@ -37,18 +34,16 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
       cy.get(onSearchResultsPage.getAddToCartByItemLocatorString1()).click()
       cy.wait(1000)
 
-      onHomePage.getViewCartButton().click()
+      onHomePage.getViewCart().click()
       onSideCartPage.gotoCheckout()
-      onCheckoutPage.onCheckoutPaymentPanel.getOrderDiscountAmountElement().should('contain', "$" + promotions.OrderPromotions[3].OrderDiscountWithoutTeamDiscount + ".00")
-      onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeDiscountAmountElement().should('contain', "$" + promotions.OrderPromotions[3].DeliveryFeeDiscount + ".00")
-
+      onCheckoutPage.onCheckoutPaymentPanel.getOrderDiscountAmountElement().should('contain', '$' + promotions.OrderPromotions[3].OrderDiscountWithoutTeamDiscount + '.00')
+      onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeDiscountAmountElement().should('contain', '$' + promotions.OrderPromotions[3].DeliveryFeeDiscount + '.00')
     })
 
     it('Verify the Order promotion is applied on the grocery subtotal - %OFF and delivery Fee - %OFF', () => {
-
-      var promotionQualifyAmount = 100
-      var itemCost =  promotions.OrderPromotions[3].Subtotal
-      var totalCost = 0
+      const promotionQualifyAmount = 100
+      const itemCost = promotions.OrderPromotions[3].Subtotal
+      let totalCost = 0
 
       // Search for untraceable item stockcode
       onHomePage.getSearchHeader().click()
@@ -67,27 +62,26 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
       cy.wait(1000)
       totalCost = itemCost
 
-      //add more items
-      while(totalCost < promotionQualifyAmount) {
+      // add more items
+      while (totalCost < promotionQualifyAmount) {
         onSearchResultsPage.getIncreaseQuantityButton().click()
         totalCost = totalCost + itemCost
       }
 
-      onHomePage.getViewCartButton().click()
+      onHomePage.getViewCart().click()
       onSideCartPage.gotoCheckout()
-      onCheckoutPage.onCheckoutPaymentPanel.getOrderDiscountAmountElement().should('contain', "$" + totalCost + ".00")
+      onCheckoutPage.onCheckoutPaymentPanel.getOrderDiscountAmountElement().should('contain', '$' + totalCost + '.00')
       onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeAmountElement().then(function (deliveryFeeElement) {
-        onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeDiscountAmountElement().should('contain', deliveryFeeElement.text())
+      onCheckoutPage.onCheckoutPaymentPanel.getPaymentDeliveryFeeDiscountAmountElement().should('contain', '$' + promotions.OrderPromotions[3].DeliveryFeeDiscount + '.00')
       })
-
     })
 
     afterEach(() => {
-      //clear cart
+      // clear cart
       onCheckoutPage.getContinueShoppingLink().click()
-      onHomePage.getViewCartButton().click()
+      cy.wait(1000)
+      onHomePage.getViewCart().click()
       onSideCartPage.removeAllItems()
     })
-
   })
 })

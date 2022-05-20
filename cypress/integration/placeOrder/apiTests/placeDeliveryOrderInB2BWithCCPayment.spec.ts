@@ -22,7 +22,7 @@ const searchTerm = 'Fish'
 const trolleyThreshold = 50.00
 const platform = Cypress.env('b2bPlatform')
 
-TestFilter(['B2B' ,'API', 'P0'], () => {
+TestFilter(['B2B', 'API', 'P0'], () => {
   describe('[API] Place a delivery order on Woolworths at Work website using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -76,7 +76,7 @@ TestFilter(['B2B' ,'API', 'P0'], () => {
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })
 
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then(() => {
+      cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then(() => {
       })
     })
   })

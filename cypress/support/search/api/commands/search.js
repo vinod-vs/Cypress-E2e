@@ -1,9 +1,17 @@
-let productArr
-
 Cypress.Commands.add('productSearch', (searchBody) => {
   cy.api({
     method: 'POST',
     url: Cypress.env('productSearchEndpoint'),
+    body: searchBody
+  }).then((response) => {
+    return cy.wrap(response.body)
+  })
+})
+
+Cypress.Commands.add('specialSearch', (searchBody) => {
+  cy.api({
+    method: 'POST',
+    url: Cypress.env('specialSearchEndpoint'),
     body: searchBody
   }).then((response) => {
     return cy.wrap(response.body)
@@ -18,6 +26,7 @@ Cypress.Commands.add('findAvailableNonRestrictedWowItems', (response) => {
       response.Products[x].Products[0].IsInStock === true &&
       response.Products[x].Products[0].ProductRestrictionMessage === null &&
       response.Products[x].Products[0].ProductWarningMessage === null &&
+      response.Products[x].Products[0].IsRestrictedByDeliveryMethod === false &&
       response.Products[x].Products[0].IsMarketProduct === false) {
       productArr.push(response.Products[x].Products[0])
     }
@@ -25,6 +34,12 @@ Cypress.Commands.add('findAvailableNonRestrictedWowItems', (response) => {
 
   return productArr
 })
+
+Cypress.Commands.add('getNonRestrictedWowItemSetFromApiSearch', (searchRequestPayload) => {
+  cy.productSearch(searchRequestPayload).then(searchResponse => {
+    return cy.findAvailableNonRestrictedWowItems(searchResponse)
+  })
+}) 
 
 export function getAgeRestrictedWowItems (productResponse) {
   const productArr = []

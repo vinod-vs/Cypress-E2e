@@ -5,16 +5,15 @@ import { CheckoutPaymentPanel } from './panels/CheckoutPaymentPanel'
 import { CheckoutMarketplaceFulfilmentWindowPanel } from './panels/CheckoutMarketplaceFulfilmentWindowPanel'
 
 export class CheckoutPage {
-  onCheckoutFulfilmentSelectionPanel = new CheckoutFulfilmentSelectionPanel();
-  onCheckoutFulfilmentWindowPanel = new CheckoutFulfilmentWindowPanel();
-  onCheckoutReviewItemsPanel = new CheckoutReviewItemsPanel();
-  onCheckoutPaymentPanel = new CheckoutPaymentPanel();
-  onCheckoutMarketplaceFulfilmentWindowPanel = new CheckoutMarketplaceFulfilmentWindowPanel();
+  onCheckoutFulfilmentSelectionPanel = new CheckoutFulfilmentSelectionPanel()
+  onCheckoutFulfilmentWindowPanel = new CheckoutFulfilmentWindowPanel()
+  onCheckoutReviewItemsPanel = new CheckoutReviewItemsPanel()
+  onCheckoutPaymentPanel = new CheckoutPaymentPanel()
+  onCheckoutMarketplaceFulfilmentWindowPanel = new CheckoutMarketplaceFulfilmentWindowPanel()
 
-  getContinueShoppingLink() {
-    return cy.get('.continue-shopping-link')
+  getContinueShoppingLink () {
+       return cy.get('.continue-shopping-link.ng-star-inserted') 
   }
-
 }
 
 export const onCheckoutPage = new CheckoutPage()

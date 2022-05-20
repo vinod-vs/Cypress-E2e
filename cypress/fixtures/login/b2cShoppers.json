@@ -21,5 +21,11 @@
         "password": "test1234",
         "platform": "B2C",
         "type": "personal"
+    },
+    {
+        "email": "uat_cypresstest@82f8rhkb.mailosaur.net",
+        "password": "Test1234",
+        "platform": "B2C",
+        "type": "personal"
     }
 ]

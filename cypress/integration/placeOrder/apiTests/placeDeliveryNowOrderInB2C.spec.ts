@@ -3,7 +3,6 @@
 import TestFilter from '../../../support/TestFilter'
 import addressSearchBody from '../../../fixtures/fulfilmentLocation/deliveryNowWaverton.json'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import '../../../support/signUp/api/commands/signUp'
 import '../../../support/login/api/commands/login'
 import '../../../support/checkout/api/commands/checkoutHelper'
@@ -42,7 +41,7 @@ TestFilter(['B2C', 'API', 'P1', 'SPUD', 'Checkout'], () => {
       })
 
       cy.completeWindowFulfilmentViaApi().then((response: any) => {
-        expect(response, 'Fulfilment').to.have.property('IsSuccessful', true)  
+        expect(response, 'Fulfilment').to.have.property('IsSuccessful', true)
       })
 
       cy.addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm, 20)
@@ -56,10 +55,10 @@ TestFilter(['B2C', 'API', 'P1', 'SPUD', 'Checkout'], () => {
           throw new Error('No Available Items found for Delivery Now')
         }
       })
-      
-      cy.placeOrderViaApiWithAddedCreditCard(creditCardPayment, platform).then((confirmOrderResponse: any) => {
+
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
         expect(confirmOrderResponse.Order.OrderId, 'Order ID').to.not.be.null
       })
-    })  
+    })
   })
 })

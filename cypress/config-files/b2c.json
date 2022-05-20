@@ -51,6 +51,7 @@
         "rocketMongoURI": "mongodb+srv://ordersdb-tests-user:nhayjFujzRYAt1Nt@uat-orders-0.7lxuc.mongodb.net/ordersdb?retryWrites=true&w=majority",
         "rocketMongoDB": "ordersdb",
         "rocketMongoDBCollection": "orders",
-        "b2cPlatform": "B2C"
+        "b2cPlatform": "B2C",
+        "siteAdminUat": "https://adminuatsite.woolworths.com.au/"
     }
 }

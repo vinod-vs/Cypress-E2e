@@ -5,6 +5,7 @@ import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWo
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
   cy.request('POST', Cypress.env('addItemsToTrolleyEndpoint'), addItemsBody).then((response) => {
+    expect(response.status).to.eq(200)
     return response.body
   })
 })
@@ -19,7 +20,7 @@ Cypress.Commands.add('curateProductsForTrolley', (productArray) => {
 
     trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
 
-    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
     addItemsRequestBody.items = expectedTrolleyItems
 
     if (totalPrice > 60.0) {
@@ -124,16 +125,12 @@ Cypress.Commands.add('addAvailableRestrictedWowItemsToTrolley', (type, count) =>
 })
 
 function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
-  const trolleyArr = []
   const expectedTrolleyItems = []
   let totalPrice = 0.0
 
   for (const item of productArray) {
     totalPrice = totalPrice + item.Price
-
-    trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
-
-    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
 
     if (totalPrice >= totalThreshold) {
       break
@@ -147,16 +144,14 @@ function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
 function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
   const expectedTrolleyItems = []
 
-  if (productArray.length == 0) {
-    throw ('No products found for Count Limited Trolley Addition')
+  if (productArray.length === 0) {
+    throw new Error('No products found for Count Limited Trolley Addition')
   }
 
-  const trolleyArr = []
   let addedToCart = 0
 
   for (const item of productArray) {
-    trolleyArr.push({ stockcode: item.Stockcode, quantity: 1 })
-    expectedTrolleyItems.push({ stockcode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
 
     addedToCart++
     if (addedToCart === itemCount) {
@@ -165,7 +160,7 @@ function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
   }
   addItemsRequestBody.items = expectedTrolleyItems
 
-  return trolleyArr
+  return expectedTrolleyItems
 }
 
 Cypress.Commands.add('addAvailableEDMItemsToTrolley', (searchTerm, quantity) => {
@@ -214,12 +209,27 @@ Cypress.Commands.add('addEDMItemsBasedOnMinCartValueToTrolley', (testData) => {
 
       // Add the product to the trolley and pass the quantity based on the total Price
       const unitPrice = product.Products[0].Price
-      const minProductQuantity = Math.ceil(testData.minCartValue/unitPrice)
+      const minProductQuantity = Math.ceil(testData.minCartValue / unitPrice)
       const finalQty = minProductQuantity + 10
-      const totalPrice = finalQty * unitPrice
-     
+
       testData.sellerName = product.Products[0].AdditionalAttributes['Market.Seller_BusinessName']
       cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: testData.stockcode, Quantity: finalQty })
       cy.wrap(finalQty).as('finalQty')
+    })
+})
+
+Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, quantity) => {
+  // Search product by overriding the SearchTerm attribute in the search body request fixture
+  cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
+    .then((searchResponse) => {
+      cy.wrap(searchResponse.Products
+      // Filter search results by IsMarketProduct = true and IsAvailable = true
+        .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
+      // Select the Products Available - EM Multi Seller
+        .forEach(edmMultiSellerItems => {
+          cy.log("EM Seller's=  \" " + edmMultiSellerItems.Products[0].Vendor + ' " , Added Product Display Name is =  " ' + edmMultiSellerItems.Products[0].DisplayName + ' " ' + ' and StockCode is= " ' + edmMultiSellerItems.Products[0].Stockcode + ' " ')
+          cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmMultiSellerItems.Products[0].Stockcode, Quantity: quantity })
+        })
+      )
     })
 })

@@ -5,7 +5,6 @@ import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
@@ -22,8 +21,11 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+
+TestFilter(['B2C', 'API', 'P0', 'SPUD'], () => {
   describe('[API] Place a Direct to boot order in B2C platform using Credit Card', () => {
+    const creditCard = Cypress.env('creditCard')
+    
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -33,7 +35,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
 
       cy.searchBillingAddressViaApi(addressSearchBody.search).then((response: any) => {
-        cy.setBillingAddressViaApi(response.body.Response[0].Id)  
+        cy.setBillingAddressViaApi(response.body.Response[0].Id)
       })
 
       cy.searchPickupDTBStores(fulfilmentType.DIRECT_TO_BOOT, storeSearchBody.postCode).then((response: any) => {
@@ -63,18 +65,17 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         })
       })
 
-      cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response: any) => {
+      cy.creditcardTokenisation(creditCard, creditcardSessionHeader).then((response: any) => {
         expect(response.status.responseText, 'Credit Card Tokenisation').to.be.eqls('ACCEPTED')
 
         digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
       })
 
       cy.digitalPay(digitalPayment).then((response: any) => {
-        
         cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
           expect(response.TransactionReceipt, 'Transaction Receipt').to.not.be.null
           expect(response.PlacedOrderId, 'Placed Order Id').to.not.be.null
-  
+
           confirmOrderParameter.placedOrderId = response.PlacedOrderId
         })
       })

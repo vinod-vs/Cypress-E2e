@@ -1,61 +1,59 @@
 class OrderPromotionsPage {
+  open () {
+    cy.visit(Cypress.env('siteAdminUat') + 'manage/orderpromotions')
+  }
 
-    open() {
-        cy.visit('manage/orderpromotions')
-    }
+  getAddNewOrderPromotion () {
+    return cy.get('a:contains("Add New Order Promotion")')
+  }
 
-    getAddNewOrderPromotion () {
-        return cy.get('a:contains("Add New Order Promotion")')
-    }
+  getTableFrame () {
+    return cy.get('.table-frame')
+  }
 
-    getTableFrame () {
-        return cy.get('.table-frame')
-    }
+  getIdHeader () {
+    return cy.get('a:contains("ID")')
+  }
 
-    getIdHeader () {
-        return cy.get('a:contains("ID")')
-    }
+  getNameHeader () {
+    return cy.get('a:contains("Name")')
+  }
 
-    getNameHeader () {
-        return cy.get('a:contains("Name")')
-    }
+  getStartDateHeader () {
+    return cy.get('a:contains("Start Date")')
+  }
 
-    getStartDateHeader () {
-        return cy.get('a:contains("Start Date")')
-    }
+  getEndDateHeader () {
+    return cy.get('a:contains("End Date")')
+  }
 
-    getEndDateHeader () {
-        return cy.get('a:contains("End Date")')
-    }
+  getTargetHeader () {
+    return cy.get('a:contains("Target")')
+  }
 
-    getTargetHeader () {
-        return cy.get('a:contains("Target")')
-    }
+  getSessionGroupHeader () {
+    return cy.get('a:contains("Session Group")')
+  }
 
-    getSessionGroupHeader () {
-        return cy.get('a:contains("Session Group")')
-    }
+  getRankHeader () {
+    return cy.get('a:contains("Rank")')
+  }
 
-    getRankHeader () {
-        return cy.get('a:contains("Rank")')
-    }
+  getOfferIdHeader () {
+    return cy.get('a:contains("OfferID")')
+  }
 
-    getOfferIdHeader () {
-        return cy.get('a:contains("OfferID")')
-    }
+  getDeleteHeader () {
+    return cy.get('a:contains("Delete")')
+  }
 
-    getDeleteHeader () {
-        return cy.get('a:contains("Delete")')
-    }
+  getOrderPromotionEntry (orderPromotionName: string) {
+    return cy.get('a:contains("' + orderPromotionName + '")')
+  }
 
-    getOrderPromotionEntry (orderPromotionName:string) {
-        return cy.get('a:contains("'+ orderPromotionName +'")')
-    }
-
-    getDeleteOrderPromotion (orderPromotionName:string) {
-        return cy.xpath('//a[text()=\'' + orderPromotionName + '\']/../..//td[@class=\'delete\']')
-    }
-
+  getDeleteOrderPromotion (orderPromotionName: string) {
+    return cy.xpath('//a[text()=\'' + orderPromotionName + '\']/../..//td[@class=\'delete\']')
+  }
 }
 
-export const orderPromotionsPage = new OrderPromotionsPage();
+export const orderPromotionsPage = new OrderPromotionsPage()

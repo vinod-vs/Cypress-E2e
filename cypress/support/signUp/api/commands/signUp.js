@@ -45,7 +45,9 @@ Cypress.Commands.add('setSignUpDetails', () => {
 
   signUpDetails.firstName = faker.name.firstName()
   signUpDetails.lastName = faker.name.lastName()
-  signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
+  cy.generateRandomString(6).then((value) => {
+    signUpDetails.emailAddress = faker.internet.userName() + value + '@' + Cypress.env('mailosaur_serverDomain')
+  })
   signUpDetails.mobilePhone = faker.phone.phoneNumber('0400000000')
   signUpDetails.idLikeToReceiveEmailsAboutProductsAndServices = true
   cy.getDOB('personal').then((value) => {

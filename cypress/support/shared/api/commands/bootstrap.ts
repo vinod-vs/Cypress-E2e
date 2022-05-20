@@ -12,8 +12,8 @@ Cypress.Commands.add('getUnavailableStockCodes', () => {
 
   cy.getBootstrapResponse().then(($bootstrap: any) => {
     const unavailableItemsArr: any[] = $bootstrap.TrolleyRequest.UnavailableItems
-    if (!unavailableItemsArr.length) {
-      return unavailableStockcodes;
+    if (unavailableItemsArr.length === 0) {
+      return unavailableStockcodes
     } else {
       return unavailableItemsArr.filter((item: { Stockcode: number }) => unavailableStockcodes.push(item.Stockcode))
     }

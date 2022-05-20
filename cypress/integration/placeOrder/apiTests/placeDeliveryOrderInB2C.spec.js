@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
-/* eslint-disable no-unused-expressions */
 
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
-import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
@@ -21,6 +19,8 @@ import '../../../support/checkout/api/commands/checkoutHelper'
 
 TestFilter(['B2C', 'API', 'P0'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
+    const creditCard = Cypress.env('creditCard')
+
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -30,7 +30,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.loginWithNewShopperViaApi()
 
       cy.searchDeliveryAddress(addressSearchBody).then((response) => {
-        expect(response.Id, 'AddressId').to.not.be.null
+        expect(response.Id, 'AddressId').to.not.be.empty
       })
 
       cy.addDeliveryAddress().then((response) => {
@@ -56,8 +56,10 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0).then((response) => {
-        expect(response[0].stockcode, 'At least 1 product added to trolley').to.not.be.null
+        expect(response[0].stockCode, 'At least 1 product added to trolley').to.not.be.null
       })
+
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Kitchen, 50.0')
 
       cy.navigateToCheckout().then((response) => {
         expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(0)
@@ -71,7 +73,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
       })
 
-      cy.creditcardTokenisation(creditCardPayment, creditcardSessionHeader).then((response) => {
+      cy.creditcardTokenisation(creditCard, creditcardSessionHeader).then((response) => {
         expect(response.status.responseText, 'Credit Card tokenisation status').to.be.eqls('ACCEPTED')
         expect(response.status.error, 'Credit Card Tokenisation error').to.be.null
 
@@ -79,16 +81,16 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.digitalPay(digitalPayment).then((response) => {
-        if (response.PaymentResponses !== null) { 
-          expect(response.PaymentResponses[0].ErrorDetail, 'Error Status on Payment Instrument Type of ' + 
+        if (response.PaymentResponses !== null) {
+          expect(response.PaymentResponses[0].ErrorDetail, 'Error Status on Payment Instrument Type of ' +
           response.PaymentResponses[0].PaymentInstrumentType).to.be.null
-          
+
           cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
             expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
             expect(response.PlacedOrderId, 'Placed Order ID').to.not.be.null
-  
+
             confirmOrderParameter.placedOrderId = response.PlacedOrderId
-          }) 
+          })
         } else {
           cy.checkForOrderPlacementErrorsAndThrow(response)
         }
