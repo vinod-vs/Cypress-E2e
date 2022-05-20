@@ -1,0 +1,163 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "cypress",
+    "chai-friendly",
+    "import",
+    "deprecation"
+  ],
+  "extends": [
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "ignorePatterns": [
+    "*.d.ts"
+  ],
+  "parserOptions": {
+    "project": ["tsconfig.json"],
+    "createDefaultProgram": true
+  },
+  "rules": {
+    "cypress/no-assigning-return-values": "warn",
+    "cypress/no-unnecessary-waiting": "warn",
+    "cypress/assertion-before-screenshot": "warn",
+    "cypress/no-force": "warn",
+    "cypress/no-async-tests": "warn",
+    "cypress/no-pause": "warn",
+    "eqeqeq": "warn",
+    "eol-last": "warn",
+    "no-var": "warn",
+    "no-unused-expressions": "off",
+    "chai-friendly/no-unused-expressions": "warn",
+    "no-unused-vars": "warn",
+    "no-undef": "warn",
+    "prefer-const": "warn",
+    "space-before-function-paren": "warn",
+    "quotes": ["warn", "single"],
+    "brace-style": ["warn", "1tbs"],
+    "quote-props": ["warn", "consistent-as-needed"],
+    "@typescript-eslint/triple-slash-reference": "warn",
+    "@typescript-eslint/no-var-requires": "warn",
+    "@typescript-eslint/strict-boolean-expressions": "warn",
+    "@typescript-eslint/type-annotation-spacing": "warn",
+    "@typescript-eslint/unified-signatures": "warn",
+    "@typescript-eslint/prefer-function-type": "warn",
+    "@typescript-eslint/no-empty-interface": "warn",
+    "@typescript-eslint/restrict-plus-operands": "warn",
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "class",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": false
+        }
+      },
+      {
+        "selector": "variable",
+        "format": ["camelCase", "UPPER_CASE"],
+        "leadingUnderscore": "allow",
+        "trailingUnderscore": "allow"
+      }
+    ],
+    "no-trailing-spaces": "warn",
+    "spaced-comment": [
+      "warn",
+      "always",
+      {
+        "markers": ["/", "/**"]
+      }
+    ],
+    "curly": "warn",
+    "guard-for-in": "warn",
+    "no-labels": [
+      "warn",
+      {
+        "allowLoop": true,
+        "allowSwitch": true
+      }
+    ],
+    "@typescript-eslint/member-ordering": [
+      "warn",
+      {
+        "default": {
+          "memberTypes": [
+            "static-field",
+            "instance-field",
+            "static-method",
+            "instance-method"
+          ]
+        }
+      }
+    ],
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/no-misused-new": "warn",
+    "@typescript-eslint/no-non-null-assertion": "warn",
+    "@typescript-eslint/no-shadow": [
+      "warn",
+      {
+        "hoist": "all"
+      }
+    ],
+    "no-throw-literal": "warn",
+    "no-fallthrough": "warn",
+    "no-undef-init": "warn",
+    "keyword-spacing": "warn",
+    "no-bitwise": "warn",
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "constructor-super": "warn",
+    "no-empty": "warn",
+    "no-empty-function": "warn",
+    "no-eval": "warn",
+    "no-useless-escape": "warn",
+    "no-irregular-whitespace": "warn",
+    "no-case-declarations": "warn",
+    "no-regex-spaces": "warn",
+    "valid-typeof": "warn",
+    "import/no-unresolved": "warn",
+    "import/named": "warn",
+    "import/default": "warn",
+    "import/namespace": "warn",
+    "import/no-absolute-path": "warn",
+    "import/no-self-import": "warn",
+    "import/no-useless-path-segments": "warn",
+    "import/no-relative-packages": "warn",
+    "import/export": "warn",
+    "import/no-named-as-default": "warn",
+    "import/no-named-as-default-member": "warn",
+    "import/no-deprecated": "warn",
+    "import/no-extraneous-dependencies": "warn",
+    "import/no-mutable-exports": "warn",
+    "import/first": "warn",
+    "import/exports-last": "warn",
+    "import/no-duplicates": "warn",
+    "import/no-namespace": "warn",
+    "import/extensions": [
+      "warn",
+      {
+        "js": "never",
+        "ts": "never",
+        "json": "always"
+      }
+    ],
+    "import/newline-after-import": "warn",
+    "import/no-named-default": "warn",
+    "import/group-exports": "warn",
+    "deprecation/deprecation": "warn"
+  },
+  "env": {
+    "cypress/globals": true,
+    "browser": true,
+    "amd": true,
+    "jquery": true
+  }
+}

@@ -12,7 +12,7 @@ export class CheckoutPage {
   onCheckoutMarketplaceFulfilmentWindowPanel = new CheckoutMarketplaceFulfilmentWindowPanel()
 
   getContinueShoppingLink () {
-    return cy.get('.continue-shopping-link')
+       return cy.get('.continue-shopping-link.ng-star-inserted') 
   }
 }
 

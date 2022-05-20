@@ -22,6 +22,8 @@
   },{
     "stockcode": 838986,
     "SalePrice" :11.50,
+    "SalePrice$":11,
+    "SalePriceC":50,
     "Quantity":1
   }],
   "ProductPromotions": [{
@@ -31,9 +33,11 @@
   },{
     "stockcode": 726244,
     "SalePrice" :28.8 ,
+    "SalePrice$":28,
+    "SalePriceC":80,
     "Quantity" :2
   },{
-    "stockcode": 795910,
+    "stockcode": 211374,
     "Quantity" :1,
     "SalePrice1" :0,
     "CreditsUsed1":20,
@@ -97,7 +101,7 @@
   },{
     "searchTerm": "health",
     "stockcode": 683857,
-    "OrderDiscountWithoutTeamDiscount":5,
+    "OrderDiscountWithoutTeamDiscount":10,
     "DeliveryFeeDiscount":5,
     "Subtotal":60 
 }],

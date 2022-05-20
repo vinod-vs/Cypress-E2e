@@ -1,0 +1,5 @@
+"/.config-files/**",
+"/.downloads/**",
+"/fixtures"/**,
+/node_modules/**,
+"**/*.d.ts"
