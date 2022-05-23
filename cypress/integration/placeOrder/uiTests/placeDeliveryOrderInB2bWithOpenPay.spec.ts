@@ -34,7 +34,7 @@ TestFilter(["B2B", "UI", "P0"], () => {
         .contains("My Account")
         .should("be.visible");
       cy.get('[erlabel="My Lists"]').contains("Lists").should("be.visible");
-      cy.get('[routerlink="/shop/discover/work-delivery"]').should(
+      cy.get('[routerlink="/shop/discover/centre"]').should(
         "be.visible"
       );
 
@@ -94,11 +94,11 @@ TestFilter(["B2B", "UI", "P0"], () => {
         .contains("Show filters")
         .and("be.visible");
       cy.get(".inline-dropdown__label").contains("Sort by").and("be.visible");
-      cy.get("shared-product-tile > .shelfProductTile").should("be.visible");
+      cy.get('shared-product-tile > shared-product-tile-v1 > .shelfProductTile').should("be.visible");
       cy.scrollTo("top");
 
       //get product to be added to cart
-      cy.get("shared-product-tile.ng-star-inserted > .shelfProductTile")
+      cy.get("shared-product-tile > shared-product-tile-v1 > .shelfProductTile")
         .contains(
           "Moccona Freeze Dried Instant Coffee Classic Medium Roast 200g"
         )
@@ -213,7 +213,7 @@ TestFilter(["B2B", "UI", "P0"], () => {
         if (textBtn.includes("Delivery time")) {
           cy.contains("Delivery time").should("be.visible");
           cy.get(
-            ".wow-row > :nth-child(2) > :nth-child(1) > p.ng-star-inserted"
+            ".wow-row > :nth-child(3) > :nth-child(1) > p.ng-star-inserted"
           ).contains(" Estimated time of delivery: ");
         }
       });
@@ -265,6 +265,11 @@ TestFilter(["B2B", "UI", "P0"], () => {
         .invoke("text")
         .as("currentOrdrTotal");
 
+        cy.get('#checkout-items-subtotal > .payment-amount')
+        .invoke("text").as("subTotal1");
+
+        cy.get(':nth-child(2) > .payment-amount').invoke("text").as("delFeeInTotal")
+
       cy.get("@deliveryFees1").then((fee) => {
         const delFee = parseFloat(fee.text().substring(1));
         cy.log(delFee);
@@ -311,6 +316,10 @@ TestFilter(["B2B", "UI", "P0"], () => {
 
       const sumfn = (a: any, b: any) => {
         return (a + b).toFixed(2);
+      };
+
+      const sumfn1 = (a: any, b: any) => {
+        return (a + b);
       };
 
       cy.get("#checkout-items-subtotal > .payment-amount")
@@ -364,40 +373,72 @@ TestFilter(["B2B", "UI", "P0"], () => {
             })
           })
          
-      //   cy.get(".payment-breakdown > :nth-child(5) > .payment-title")
-      //     .should("be.visible")
-      //     .contains("Total (incl. GST)");
-      //   cy.get(".payment-breakdown > :nth-child(5) > .payment-amount")
-      //     .should("be.visible")
-      //     .contains("$62.10");
+        cy.get(".payment-breakdown > :nth-child(5) > .payment-title")
+          .should("be.visible")
+          .contains("Total (incl. GST)");
+      
+      
+      
+          
+        cy.get(".payment-breakdown > :nth-child(5) > .payment-amount")
+          .should("be.visible")
+          .then((totalIncGST)=>{
+            cy.wrap({ TotalStringToNumfn: fn })
+            .invoke("TotalStringToNumfn", totalIncGST)
+            .as("totalIncGST"); // true
+        
+
+        cy.get("@subTotal1").then((subTotal1) => {
+          cy.wrap({ subTotal1StringToNumfn: func })
+          .invoke("subTotal1StringToNumfn",subTotal1);
+       
+
+        cy.get("@delFeeInTotal").then((delFeeInTotal) => {
+          cy.wrap({ delFeeInTotalStringToNumfn: func })
+          .invoke("delFeeInTotalStringToNumfn",delFeeInTotal);
+      
+
+        cy.get("@totalIncGST").then((elTotal) => {
+          cy.wrap({ SumTotal: sumfn })
+                  .invoke("SumTotal", func(subTotal1), func(delFeeInTotal))
+                  .should("eq", elTotal);
+
+        })
+      })
+    })
+  })
 
       //   //Select open pay and clicking
-      //   cy.get("#digitalPayListItem1 > .digitalPayListItem-icon").should(
-      //     "be.visible"
-      //   );
-      //   cy.get(
-      //     "#digitalPayListItem1 > .digitalPayListItem-contentContainer .title-text"
-      //   )
-      //     .should("be.visible")
-      //     .contains("Paid on Work Account");
-      //   cy.get(
-      //     "#digitalPayListItem1 > .digitalPayListItem-contentContainer .sub-text"
-      //   )
-      //     .should("be.visible")
-      //     .contains("Powered by Openpay")
-      //     .click();
+        cy.get(".digitalPayListItem-icon").eq(0).should(
+          "be.visible"
+        );
+        cy.get(
+          "#digitalPayListItem1 > .digitalPayListItem-contentContainer .title-text"
+        )
+          .should("be.visible")
+          .contains("Paid on Work Account");
+        cy.get(
+          "#digitalPayListItem1 > .digitalPayListItem-contentContainer .sub-text"
+        )
+          .should("be.visible")
+          .contains("Powered by Openpay")
+          .click();
+
+       
 
       //Enter purchase order number
-      //   cy.get("#purchaseOrderInput")
-      //     .should("be.visible")
-      //     .and("has.attr", "placeholder", "Purchase order number *")
-      //     .clear()
-      //     .type("1111");
-      //   cy.get(".shopper-action")
-      //     .should("be.visible")
-      //     .contains("Place order")
-      //     .click();
-      //   cy.url().should("include", "/shop/confirmation?orderId=*");
+        cy.get("#purchaseOrderInput")
+          .should("be.visible")
+          .and("has.attr", "placeholder", "Purchase order number *")
+          .clear()
+          .type("1111");
+        cy.get(".shopper-action")
+          .should("be.visible")
+          .and('not.be.disabled')
+          .contains("Place order")
+          .click();
+          cy.wait(10000);
+        cy.url();
     });
   });
 });
