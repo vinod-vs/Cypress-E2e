@@ -48,7 +48,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       const duTarget = 'MarketShippingFee'
       const duDiscountAmount = 10
       const marketEMShippingFee= 0
-      const purchaseQty = 1
+      const purchaseQty = 2
       const marketSubTotalLowerLimit = 50
       const marketSubTotalUpperLimit = 100
       //let shopperId: any;
@@ -328,7 +328,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         }) //ENDS - Cypress.Commands.add( 'orderEventsApiForRedeemMarketOrderSavings',
           
 
-        Cypress.Commands.add('myOrderDetailsDiscount', (orderId) => {
+        Cypress.Commands.add('myOrderDetailsDUDiscount', (orderId) => {
           //cy.getCookies().then((cookies1) => {cy.log("cookies are ---" + JSON.stringify(cookies1))})
           cy.api({
             method: 'GET',
