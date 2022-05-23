@@ -44,10 +44,11 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       const testData = tests.VerifyDispatchOfEDMOrderForDU
       const searchTerm = 'treats'   // 'everyday market'
       const duDiscountSource = 'DeliveryPlusSubscription'
+      const duDiscountSourceId = 16764
       const duTarget = 'MarketShippingFee'
       const duDiscountAmount = 10
       const marketEMShippingFee= 0
-      const purchaseQty = 2
+      const purchaseQty = 1
       const marketSubTotalLowerLimit = 50
       const marketSubTotalUpperLimit = 100
       //let shopperId: any;
@@ -62,6 +63,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       let edmInvoiceId: any;
       let encodedEdmInvoiceId:any
       let encodedEdmLineitemId:any
+
 
       const shopperId = shoppers.emAccountWithRewards27.shopperId
 
@@ -209,16 +211,24 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }) //.then((response) => {
 
-              //Now, Hit the MyOrderDetails Page API and Verify the DU Discount Details-
-              //https://test.mobile-api.woolworths.com.au/wow/v1/orders/api/orders/140168388
-//On My Order Details Page Verify- Order Number Response (140150997)  →   MarketOrders → OrderDiscountDetailsList → DiscountSourceId: "16764"
-//  Source: "DeliveryPlusSubscription"     Target: "MarketShippingFee"
-
-    cy.myOrderDetailsDiscount(req.orderId).as('myOrderDetailsDiscount')
-    cy.get('@myOrderDetailsDiscount').then((duDiscountDetails) => 
+   // Verify DU Discount Details on the My Order Details Page,  Hit the MyOrderDetails Page API and Verify the DU Discount Details
+    cy.myOrderDetailsDUDiscount(req.orderId).as('myOrderDetailsDUDiscount')
+    cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) => 
     {
-      cy.log("================================="  + duDiscountDetails.OrderDiscountDetailsList[0])
-    })
+      cy.log("OrderDiscountDetailsList[0].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId)
+      cy.log("OrderDiscountDetailsList[0].Source = "  + duDiscountDetails.OrderDiscountDetailsList[0].Source)
+      cy.log("OrderDiscountDetailsList[0].Target = "  + duDiscountDetails.OrderDiscountDetailsList[0].Target)
+      cy.log("MarketShippingFeeBeforeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount)
+      cy.log("MarketShippingFeeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount)
+      cy.log("MarketShippingFee = "  + duDiscountDetails.PaymentDetails.MarketShippingFee)
+
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId).contains(duDiscountSourceId)
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].Source).contains(duDiscountSource)
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].Target).contains(duTarget)
+      expect(duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount).equals(10)
+      expect(duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount).equals(10)
+      expect(duDiscountDetails.PaymentDetails.MarketShippingFee).equals(0)
+    })  // ENDS - cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) =>
 
           
 
