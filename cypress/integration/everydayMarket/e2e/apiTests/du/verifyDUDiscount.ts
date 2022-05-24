@@ -339,7 +339,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             expect(response.status).to.eq(200)
             return response.body
           })
-        })
+        }) // ENDS - Cypress.Commands.add('myOrderDetailsDUDiscount', (orderId) => {
         
 
 
