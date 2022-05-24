@@ -48,7 +48,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       const duTarget = 'MarketShippingFee'
       const duDiscountAmount = 10
       const marketEMShippingFee= 0
-      const purchaseQty = 2
+      const purchaseQty = 1
       const marketSubTotalLowerLimit = 50
       const marketSubTotalUpperLimit = 100
       //let shopperId: any;
@@ -75,7 +75,9 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       cy.log('LoggedIn Rewards Card Number is = ' + shoppers.emAccountWithRewards27.rewardsCardNumber)
 
       // Add Wow + EM Multi Seller Items in the Cart
-      cy.prepareAnyMultiSellerLineItemWowAndEdmOrder(searchTerm, purchaseQty)
+      //cy.prepareAnyMultiSellerLineItemWowAndEdmOrder(searchTerm, purchaseQty)
+      
+      cy.prepareLineItemForWowAndEdmOrderForDU(searchTerm, purchaseQty)
 
       // Add EM ONLY Multi Seller Items in the Cart
       //cy.prepareAnyMultiSellerLineItemEdmOrder(searchTerm, purchaseQty)
@@ -90,13 +92,13 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         cy.log("checkOutResponse Total Deferred Discount Amount is = " + checkOutResponse.Model.Order.TotalDeferredDiscountAmount)  
         marketSubtotal = checkOutResponse.Model.Order.MarketSubtotal 
 
-        cy.log("checkOutResponse DU DiscountSource is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource)
-        cy.log("checkOutResponse DU Discount Amount is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount)
-        cy.log("checkOutResponse DU DiscountTarget is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target)
-        cy.log("checkOutResponse marketEMShipping Fee is = " + checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee)
-        cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
-        //cy.log("checkOutResponse DeliveryUnlimitedEligibility.Eligibility is = " + checkOutResponse.Model.Order.MarketOrder.DeliveryUnlimitedEligibility.Eligibility)
-
+        //cy.log("checkOutResponse DU DiscountSource is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].DiscountSource)
+        //cy.log("checkOutResponse DU Discount Amount is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Amount)
+        //cy.log("checkOutResponse DU DiscountTarget is = " + checkOutResponse.Model.Order.MarketShippingFees.Promotions[0].Target)
+        //cy.log("checkOutResponse marketEMShipping Fee is = " + checkOutResponse.Model.Order.MarketShippingFees.MarketShippingFee)
+        //cy.log("checkOutResponse doubleRewardPointsEarned is = " + checkOutResponse.Model.Order.TotalRewardsPointsEarned)
+          //cy.log("checkOutResponse DeliveryUnlimitedEligibility.Eligibility is = " + checkOutResponse.Model.Order.MarketOrder.DeliveryUnlimitedEligibility.Eligibility)
+ 
         if(marketSubtotal >= marketSubTotalLowerLimit && marketSubtotal <= marketSubTotalUpperLimit)
         {
           cy.log(" ---------- DU Discount is Applicable and Discount Details Below ----------")

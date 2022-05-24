@@ -234,19 +234,23 @@ Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, qu
   })  
 }) 
 
-      /* BACK UP
-Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, quantity) => {
-  // Search product by overriding the SearchTerm attribute in the search body request fixture
-  cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
-    .then((searchResponse) => {
-      cy.wrap(searchResponse.Products
-      // Filter search results by IsMarketProduct = true and IsAvailable = true
-        .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
-      // Select the Products Available - EM Multi Seller
-        .forEach(edmMultiSellerItems => {
-          cy.log("EM Seller's=  \" " + edmMultiSellerItems.Products[0].Vendor + " \" , Added Product Display Name is =  \" " + edmMultiSellerItems.Products[0].DisplayName + " \" " + " and StockCode is= \" " + edmMultiSellerItems.Products[0].Stockcode + " \" " + " and Price is= \" " + edmMultiSellerItems.Products[0].Price + " \" ")
-          cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmMultiSellerItems.Products[0].Stockcode, Quantity: quantity }) 
-        }) 
-      ) 
-  })  
-})    BACK UP */
+Cypress.Commands.add('addAvailableEDMItemsToTrolleyForDU', (searchTerm, quantity) => {
+    // Search product by overriding the SearchTerm attribute in the search body request fixture
+    cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
+      .then((searchResponse) => {
+        cy.wrap(searchResponse.Products
+        // Filter search results by IsMarketProduct = true and IsAvailable = true
+          .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
+        // Pick the first result
+          .shift()).then((edmItem) => {
+          // Add the product to the trolley and pass the quantity in the param to override the quantity attribute
+          // in the trolley request body fixture
+          cy.log("EM Seller's=  \" " + edmItem.Products[0].Vendor + " \" , Added Product Display Name is =  \" " + edmItem.Products[0].DisplayName + " \" " + " and StockCode is= \" " + edmItem.Products[0].Stockcode + " \" " + " and Price is= \" " + edmItem.Products[0].Price + " \" ")         
+          const unitPrice = edmItem.Products[0].Price
+          const minProductQuantity = Math.floor(100 / unitPrice)  
+          const finalQty = minProductQuantity
+          cy.log("FINAL QUANTITY of the Product is =========== " +finalQty)
+          cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmItem.Products[0].Stockcode, Quantity: finalQty })
+        }) //ENDS - .shift()).then((edmItem) => 
+      })
+  })
