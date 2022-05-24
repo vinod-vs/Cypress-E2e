@@ -3,6 +3,53 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+parameters:
+  - name: browser
+    displayName: Browser
+    type: string
+    default: electron
+    values:
+      - chrome
+      - edge
+      - firefox
+      - electron
+
+  - name: tags
+    displayName: Test Tags
+    type: string
+    default: E2E
+    values:
+      - API
+      - UI
+      - B2C
+      - B2B
+      - P0
+      - P1
+      - P2
+      - P3
+      - E2E
+      - EDM
+      - Checkout
+      - SM
+      - Login
+
+  - name: fileConfig
+    displayName: Config File Name
+    type: string
+    default: b2c
+    values:
+      - b2c
+      - b2b
+      - edm
+
+  - name: otpValidationSwitch
+    displayName: One Time Password Validation Switch
+    type: string
+    default: false
+    values:
+      - true
+      - false
+
 trigger: none
 
 pool:
