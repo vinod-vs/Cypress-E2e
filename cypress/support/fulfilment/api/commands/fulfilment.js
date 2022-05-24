@@ -19,6 +19,7 @@ Cypress.Commands.add('searchDeliveryAddress', (suburb) => {
     url: Cypress.env('addressSearchEndpoint'),
     body: suburb
   }).then((response) => {
+    expect(response.status, 'Address Search endpoint response status').to.eql(200)
     const address = response.body.Response[0]
     deliveryAddressId = address.Id
 
@@ -59,10 +60,9 @@ Cypress.Commands.add('addDeliveryAddress', () => {
     url: Cypress.env('addressAutoEndpoint'),
     body: { AddressId: deliveryAddressId }
   }).then((response) => {
+    expect(response.status, 'Auto Address endpoint response').to.eql(200)
     addressId = response.body.Address.AddressId
-
     fulfilmentAreaId = response.body.Address.AreaId
-
     deliverySuburbId = response.body.Address.SuburbId
 
     return response.body
@@ -268,6 +268,7 @@ Cypress.Commands.add('getFulfilmentWindowViaApi', (selectedWindowType) => {
       method: 'GET',
       url: Cypress.env('windowsEndpoint') + queryString
     }).then((response) => {
+      expect(response.status, 'Windows endpoint status response').to.eql(200)
       getAvailableWindowsByWindowType(response, selectedWindowType).then((availWindows) => {
         if (availWindows.length === 0) {
           throw new Error('No windows found for window type: ' + selectedWindowType)
@@ -326,6 +327,7 @@ function completeFulfilment (fulfilmentRequest) {
     url: Cypress.env('fulfilmentEndpoint'),
     body: fulfilmentRequest
   }).then((response) => {
+    expect(response.status, 'Fulfilment endpoint response status').to.eql(200)
     return response.body
   })
 }

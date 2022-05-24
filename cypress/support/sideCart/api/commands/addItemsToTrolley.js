@@ -5,7 +5,7 @@ import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWo
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
   cy.request('POST', Cypress.env('addItemsToTrolleyEndpoint'), addItemsBody).then((response) => {
-    expect(response.status).to.eq(200)
+    expect(response.status, 'Trolley Add Items response status').to.eq(200)
     return response.body
   })
 })

@@ -4,6 +4,7 @@ Cypress.Commands.add('productSearch', (searchBody) => {
     url: Cypress.env('productSearchEndpoint'),
     body: searchBody
   }).then((response) => {
+    expect(response.status, 'Product Search endpoint response status').to.eql(200)
     return cy.wrap(response.body)
   })
 })
