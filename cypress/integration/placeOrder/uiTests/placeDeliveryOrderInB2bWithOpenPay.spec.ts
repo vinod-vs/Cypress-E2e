@@ -13,8 +13,9 @@ import { text } from "stream/consumers";
 import { parseHTML } from "cypress/types/jquery";
 import { any } from "cypress/types/bluebird";
 
-TestFilter(["B2B", "UI", "P0"], () => {
-  describe("[UI] My payment methods page for eligible B2B shoppers", () => {
+TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
+  describe("[UI] Place orders on B2B using Open Pay", () => {
+    // pre-requisite to clear all cookies before login
     beforeEach(() => {
       cy.clearCookies({ domain: null });
       cy.clearLocalStorage({ domain: null });
@@ -25,6 +26,7 @@ TestFilter(["B2B", "UI", "P0"], () => {
       // Login to the site
       cy.loginViaUi(shoppers[2]);
       cy.viewport(1536, 1080);
+
       //Validate that the user is on the fulfilmentMethod page to select one
       cy.url().should("include", "/shop/fulfilmentmethod");
       cy.get(".coreHeader-logo").click();
@@ -69,19 +71,10 @@ TestFilter(["B2B", "UI", "P0"], () => {
           expect(mainLnk[0].innerText.toLocaleLowerCase()).to.contain(
             "Coffee".toLocaleLowerCase()
           );
-          // expect(mainLnk[0]).to.be.visible
+
         })
         .click();
 
-      // cy.get("@leftMenuLnk")
-      //   .eq(0)
-      //   .then((subLnk) => {
-      //     expect(subLnk[0].innerText.toLocaleLowerCase()).to.contain(
-      //       "Show all Coffee".toLocaleLowerCase()
-      //     );
-      //     expect(subLnk[0]).to.be.visible
-      //   })
-      //   .click();
 
       //asserting if components in page is visible to do next steps. Giving sometime for the page to load basically. network calls not working for some reason else that would be the best way to do
       cy.get(".browseContainer-title").then((el) => {
@@ -224,13 +217,19 @@ TestFilter(["B2B", "UI", "P0"], () => {
         const textBtn1 = body.contents().text();
         if (textBtn1.includes("Select a time")) {
           cy.get("wow-time-slot-time button").each(($el) => {
-            cy.wrap($el).click().should("have.attr", "aria-checked", "true");
+            cy.log($el.text())
 
-            cy.get(".panel-actions-button > .shopper-action", { timeout: 5000 })
-              .scrollIntoView()
-              .contains("Continue")
-              .click();
-            return false;
+
+
+            if(!$el.contents().text().includes("Original price: ")) {
+                cy.wrap($el).should('have.not.contain.text','Original price: ').click().should("have.attr", "aria-checked", "true");
+                cy.get(".panel-actions-button > .shopper-action", { timeout: 5000 })
+                .scrollIntoView()
+                .contains("Continue")
+                .click();
+              return false;
+            }
+
           });
         }
       });
@@ -303,7 +302,7 @@ TestFilter(["B2B", "UI", "P0"], () => {
         "$"
       );
 
-      cy.get("#checkout-items-subtotal > .payment-title")
+      cy.get("#checkout-items-subtotal > .payment-title").scrollIntoView()
         .should("be.visible")
         .contains("Subtotal");
 
@@ -436,9 +435,24 @@ TestFilter(["B2B", "UI", "P0"], () => {
           .should("be.visible")
           .and('not.be.disabled')
           .contains("Place order")
-          .click();
-          cy.wait(10000);
-        cy.url();
+          .click();    
+          
+          //waiting for the confirm order api to be called
+          cy.intercept({
+            method: "GET",
+            url: "/apis/ui/Checkout/ConfirmOrder?*",
+          }).as("confirmOrder");
+          cy.wait("@confirmOrder").should((xhr) => {
+          
+            //  expect(xhr.state,'Complete');
+            expect(xhr.response, "statusCode").is.not.null;
+            expect(xhr.response?.body.Order.OrderId,"OrderId").is.not.null;
+          });
+
+          cy.url().should("include", "/shop/confirmation")
+          cy.get('.confirmation-container__header').contains('Order received')
+          cy.get('.confirmation-fulfilment-details__header').contains(' Delivery details ')
+
     });
   });
 });
