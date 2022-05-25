@@ -1,3 +1,5 @@
+import { error } from "console"
+
 export class FMSWindowSelector {
   // #region - Selectors
   getSelectFullfilmentTimeHeading () {
@@ -69,6 +71,9 @@ export class FMSWindowSelector {
     cy.get('.day-dropdown > option')
       .contains(dayKeyword)
       .then(dayOption => {
+        if(dayOption.text().includes('Closed')){
+          throw new Error("The day you selected: " + dayKeyword + " is closed");
+        }
         cy.wrap(dayOption).parent().select(dayOption.text())
       })
   }
