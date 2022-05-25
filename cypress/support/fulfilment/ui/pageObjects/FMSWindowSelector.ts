@@ -1,5 +1,3 @@
-import { error } from "console"
-
 export class FMSWindowSelector {
   // #region - Selectors
   getSelectFullfilmentTimeHeading () {
