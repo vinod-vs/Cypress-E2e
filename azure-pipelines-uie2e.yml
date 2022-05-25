@@ -61,9 +61,9 @@ pool:
   name: wlx-ubuntu1804
 
 resources:
-  # webhooks:
-  #   - webhook: "MyWebhooktrigger" ### Webhook alias
-  #     connection: "MyWebhookConnection" ### Incoming webhook service connection
+  webhooks:
+    - webhook: "MyWebhooktrigger" ### Webhook alias
+      connection: "MyWebhookConnection" ### Incoming webhook service connection
   pipelines:
     - pipeline: Cypress_E2E_B2C_UI_Automation
       source: Woolworths.Frontend
