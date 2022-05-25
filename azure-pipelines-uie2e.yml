@@ -52,9 +52,6 @@ parameters:
 
 trigger: none
 
-pool:
-  name: wlx-ubuntu1804
-
 resources:
   pipelines:
     - pipeline: Cypress_E2E_B2C_UI_Automation
