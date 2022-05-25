@@ -116,7 +116,7 @@
     "viewportHeight": 1080,
     "viewportWidth": 1536,
     "defaultCommandTimeout": 30000,
-    "chromeWebSecurity": true,
+    "chromeWebSecurity": false,
     "pageLoadTimeout": 100000,
     "requestTimeout": 30000,
     "numTestsKeptInMemory": 40,
