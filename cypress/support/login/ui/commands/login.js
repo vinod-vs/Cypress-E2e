@@ -4,7 +4,7 @@ import { onDeliveryDateAndWindowPage } from '../../../fulfilment/ui/pageObjects/
 import { onTwoStepAuthPage } from '../pageObjects/TwoStepAuthPage'
 
 Cypress.Commands.add('loginViaUi', (shopper) => {
-  cy.visit('shop/securelogin', { headers: { "Accept-Encoding": "gzip, deflate" } })
+  cy.visit('shop/securelogin')
 
   cy.wait(1000)
   onLoginPage.getEmailAddress().type(shopper.email)
