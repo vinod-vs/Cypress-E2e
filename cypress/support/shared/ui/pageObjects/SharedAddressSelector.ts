@@ -86,6 +86,10 @@ export class SharedAddressSelector {
     return cy.get('.shopper-action')
   }
 
+  getHomePage () {
+    return cy.get(".coreHeader-logo")
+  }
+
   // #region - General actions
   chooseFulfilmentOptionForFirstTimeCustomer (fulfilmentOption: string) {
     if (fulfilmentOption.toUpperCase().includes('DELIVERY')) {

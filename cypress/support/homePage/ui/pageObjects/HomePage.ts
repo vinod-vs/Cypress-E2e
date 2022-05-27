@@ -64,6 +64,10 @@ export class HomePage {
     return cy.get('.productSaveToList-coachMark-coachMarkConfirm ng-tns-c66-13')
   }
 
+  getDiscoverCenterLinkB2B (){
+   return cy.get('a.coreHeaderNav-link[href="/shop/discover/centre"]')
+  }
+
 }
 
 export const onHomePage = new HomePage()

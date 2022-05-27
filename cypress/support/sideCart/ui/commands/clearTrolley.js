@@ -59,3 +59,17 @@ Cypress.Commands.add('verifyEmptyCart', () => {
   // Verify the cart is empty
   onSideCartPage.checkIfSidecartIsEmpty()
 })
+
+Cypress.Commands.add('clearSideCartB2B', () => {    
+  onSideCartPage.getViewCartB2B().should('have.text', 'View cart').click();
+      cy.get("body").then((body) => {
+        if (body.find(".empty-cart-title").length > 0) {
+          onSideCartPage.getEmptyCartTitleB2B().should("have.text", "Your cart is empty");
+        } else {
+          onSideCartPage.getRemoveAllB2B().scrollIntoView().click();
+          onSideCartPage.getConfirmClearSideCartB2B().scrollIntoView().click();
+          onSideCartPage.getEmptyCartTitleB2B().should("have.text", "Your cart is empty");
+        }
+        onSideCartPage.getContinueShoppingBtnB2B().should("be.visible").click();
+      });
+})

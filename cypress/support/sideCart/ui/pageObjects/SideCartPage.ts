@@ -261,5 +261,25 @@ export class SideCartPage {
     })
     onSideCartPage.getCloseSideCartButton().click({force: true})
   }
+
+  getViewCartB2B () {
+   return cy.get("div.headerCheckout-checkout")
+  }
+
+  getRemoveAllB2B () {
+   return cy.get("button.product-actionsClearCart")
+  }
+
+  getConfirmClearSideCartB2B () {
+    return cy.get("#btnclearAllCartItems > .primary")
+  }
+
+  getEmptyCartTitleB2B () {
+    return  cy.get("h4.empty-cart-title")
+  }
+
+  getContinueShoppingBtnB2B (){
+    return cy.get("#btnContinueShopping > button.primary")
+  }
 }
 export const onSideCartPage = new SideCartPage()

@@ -1,17 +1,15 @@
 /// <reference types="cypress" />
 
 import shoppers from "../../../fixtures/myAccount/b2bShoppers.json";
-import creditCard from "../../../fixtures/myAccount/creditCard.json";
 import TestFilter from "../../../support/TestFilter";
 import "../../../support/login/ui/commands/login";
 import "../../../support/myAccount/ui/commands/myAccount";
 import "../../../support/myAccount/ui/commands/myPaymentMethods";
 import "../../../support/logout/ui/commands/logout";
-import { add, has } from "cypress/types/lodash";
-import exp from "constants";
-import { text } from "stream/consumers";
-import { parseHTML } from "cypress/types/jquery";
-import { any } from "cypress/types/bluebird";
+import { onFMSAddressSelector } from '../../../support/fulfilment/ui/pageObjects/FMSAddressSelector';
+import {onHomePage} from '../../../support/homePage/ui/pageObjects/HomePage';
+import '../../../support/sideCart/ui/commands/clearTrolley';
+
 
 TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
   describe("[UI] Place orders on B2B using Open Pay", () => {
@@ -23,39 +21,31 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
     });
 
     it("Be able to place delivery order using OpenPay type payment method", () => {
-      // Login to the site
+      // login to the site
       cy.loginViaUi(shoppers[2]);
       cy.viewport(1536, 1080);
 
-      //Validate that the user is on the fulfilmentMethod page to select one
+      //validate that the user is on the fulfilmentMethod page but selecting FMS windows in checkout for this test
       cy.url().should("include", "/shop/fulfilmentmethod");
-      cy.get(".coreHeader-logo").click();
 
-      //assert if user is on WAW home page now
-      cy.get(".button--primary.ng-star-inserted")
+      //clicking on WAW logo to redirect to B2B home page
+      onFMSAddressSelector.getHomePage().click();
+
+      //assert if user is on WAW home page now, also allows sometime for the page to load completely
+      onHomePage.getB2BMyAccount()
+      //cy.get(".button--primary.ng-star-inserted")
         .contains("My Account")
         .should("be.visible");
-      cy.get('[erlabel="My Lists"]').contains("Lists").should("be.visible");
-      cy.get('[routerlink="/shop/discover/centre"]').should(
-        "be.visible"
-      );
 
-      //make sure cart is empty, if not clear it- make this a function
-      cy.get("#viewCartPanel > .button")
-        .should("have.text", "View cart")
-        .click();
+      onHomePage.getListsLink()
+      .contains("Lists").should("be.visible");
+      
+     onHomePage.getDiscoverCenterLinkB2B().should('be.visible');
 
-      cy.get("body").then((body) => {
-        if (body.find(".empty-cart-title").length > 0) {
-          cy.get(".empty-cart-title").should("have.text", "Your cart is empty");
-        } else {
-          cy.get(".product-actionsClearCart").scrollIntoView().click();
-          cy.get("#btnclearAllCartItems > .primary").scrollIntoView().click();
-          cy.get(".empty-cart-title").should("have.text", "Your cart is empty");
-        }
-
-        cy.get("#btnContinueShopping > .primary").should("be.visible").click();
-      });
+      //make sure side cart is empty, if not clear it- make this a function
+      
+      cy.clearSideCartB2B();
+      
 
       //click on coffee category- make it a function
       cy.scrollTo("top");
