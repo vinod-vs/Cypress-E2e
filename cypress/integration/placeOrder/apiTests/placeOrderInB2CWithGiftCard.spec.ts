@@ -19,6 +19,8 @@ import '../../../support/checkout/api/commands/checkoutHelper'
 TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
   // Skip until Gifting Service authorisation is more stable
   describe.skip('[API] Place an order on the B2C site with a gift card payment', () => {
+    const instrumentIdAssertionMsg = 'Gift Card Payment Instrument ID returned from DigitalPay'
+
     beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
@@ -33,7 +35,7 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
         const balToPay: number = response.Model.Order.BalanceToPay
 
         cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balToPay).then((response: any) => {
-          expect(response, 'Gift Card Payment Instrument ID not returned from DigitalPay').to.not.be.null
+          expect(response, instrumentIdAssertionMsg).to.exist
           giftCardPayment.payments[0].paymentInstrumentId = response
           giftCardPayment.payments[0].amount = balToPay
         })
@@ -52,18 +54,18 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
         const card1Payment = 0.01
 
         // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
-        cy.addGiftCardToAccount(giftCard).then((response: any) => {
-          expect(response.status).to.eq(200)
-        }).then(() => {
+        cy.addGiftCardToAccount(giftCard).then(() => {
           cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(card1Payment).then((response: any) => {
-            expect(response, 'Gift Card Payment Instrument ID returned from DigitalPay').to.not.be.null
+            expect(response, instrumentIdAssertionMsg).to.exist
             multipleGiftCardPayment.payments[0].paymentInstrumentId = response
             multipleGiftCardPayment.payments[0].amount = card1Payment
           })
         })
 
         cy.generateGiftCards(balToPay).then((response: any) => {
-          multipleGiftCardPayment.payments[1].paymentInstrumentId = response[0].InstrumentId
+          const instrumentId = response[0].InstrumentId
+          expect(instrumentId, instrumentIdAssertionMsg).to.exist
+          multipleGiftCardPayment.payments[1].paymentInstrumentId = instrumentId
           multipleGiftCardPayment.payments[1].amount = balToPay - card1Payment
         })
         cy.placeOrderViaApiWithPaymentRequest(multipleGiftCardPayment)

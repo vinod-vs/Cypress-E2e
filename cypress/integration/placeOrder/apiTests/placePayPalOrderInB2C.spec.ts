@@ -33,6 +33,7 @@ TestFilter(['B2C', 'API', 'P1', 'Checkout', 'SPUD'], () => {
       })
 
       cy.getLinkedPayPalAccountInstrumentId().then((instrumentId: any) => {
+        expect(instrumentId, 'PayPal Instrument Id').to.exist
         digitalPayment.payments[0].paymentInstrumentId = instrumentId
         cy.placeOrderViaApiWithPaymentRequest(digitalPayment)
       })

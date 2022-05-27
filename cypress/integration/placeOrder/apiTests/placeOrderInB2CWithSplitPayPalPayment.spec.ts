@@ -48,6 +48,7 @@ TestFilter(['B2C', 'API', 'P1'], () => {
       })
 
       cy.getLinkedPayPalAccountInstrumentId().then((instrumentId: any) => {
+        expect(instrumentId, 'PayPal Instrument Id').to.exist
         splitPayPalPayment.payments[0].paymentInstrumentId = instrumentId
       })
 

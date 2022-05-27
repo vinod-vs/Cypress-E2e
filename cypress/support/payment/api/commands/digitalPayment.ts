@@ -9,6 +9,7 @@ Cypress.Commands.add('digitalPay', (digitalPayment) => {
     url: Cypress.env('digitalPaymentEndpoint'),
     body: digitalPayment
   }).then((response: any) => {
+    expect(response.status, 'Digital Payment endpoint request success status').to.eql(200)
     return response.body
   })
 })
@@ -24,7 +25,8 @@ Cypress.Commands.add('getDigitalPaymentInstruments', () => {
     method: 'GET',
     url: Cypress.env('digitalPaymentInstrumentsEndpoint')
   }).then((response: any) => {
-    expect(response.status).to.eq(200)
+    expect(response.status, 'Digital Payment Instruments get request status').to.eq(200)
+    expect(response.body.Success, 'Digital Payment Instruments response success status').to.eql(true)
     return response.body
   })
 })
@@ -48,6 +50,9 @@ Cypress.Commands.add('removePaymentInstrument', (paymentInstrumentId: string | C
         return secondResponse.body
       })
     }
+    expect(response.status, 'Remove Payment Instrument endpoint response status').to.eql(200)
+    expect(response.body, 'Remove Payment Instrument response body').to.not.be.undefined
+
     return response.body
   })
 })
