@@ -77,7 +77,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       // Add Wow + EM Multi Seller Items in the Cart
       //cy.prepareAnyMultiSellerLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       
-      cy.prepareLineItemForWowAndEdmOrderForDU(searchTerm, purchaseQty)
+      cy.prepareLineItemForWowAndEdmOrderForDU(searchTerm, purchaseQty, marketSubTotalUpperLimit)
 
       // Add EM ONLY Multi Seller Items in the Cart
       //cy.prepareAnyMultiSellerLineItemEdmOrder(searchTerm, purchaseQty)

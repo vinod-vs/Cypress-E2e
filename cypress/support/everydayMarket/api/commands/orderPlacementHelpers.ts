@@ -214,12 +214,12 @@ Cypress.Commands.add('prepareAnyMultiSellerLineItemWowAndEdmOrder', (searchTerm,
   cy.addMultiSellerAvailableEDMItemsToTrolley(searchTerm, quantity)
 })
 
-Cypress.Commands.add('prepareLineItemForWowAndEdmOrderForDU', (searchTerm, quantity) => {
+Cypress.Commands.add('prepareLineItemForWowAndEdmOrderForDU', (searchTerm, quantity, marketSubTotalUpperLimit) => {
   // Set fulfilment using the new /windows endpoint
   cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
   // Clear trolley in case there's any item
   cy.clearTrolley()
   // Add both WOW and EDM items to trolley
   cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
-  cy.addAvailableEDMItemsToTrolleyForDU(searchTerm, quantity)
+  cy.addAvailableEDMItemsToTrolleyForDU(searchTerm, quantity, marketSubTotalUpperLimit)
 })
