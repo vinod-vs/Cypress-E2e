@@ -190,3 +190,82 @@ Cypress.Commands.add('searchAndAddProductsToCartBySearchTerm', (testData) => {
     cy.wait(Cypress.config('oneSecondWait'))
   })
 })
+
+Cypress.Commands.add('navigateToCategoryAndProductSelectB2B', () => {    
+  cy.scrollTo("top");
+  onSearchResultsPage.getcategoryHeaderNavLink().click();
+      onSearchResultsPage.getcategoryMenuHeaderLink().should("have.text", " Show all Coffee & Tea ").click();
+
+      onSearchResultsPage.getNavItemLink().as("leftMenuLnk");
+      cy.get("@leftMenuLnk")
+        .eq(1)
+        .then((mainLnk) => {
+          expect(mainLnk[0].innerText.toLocaleLowerCase()).to.contain(
+            "Coffee".toLocaleLowerCase()
+          );
+
+        })
+        .click();
+        onSearchResultsPage.getPageBrowseTitle().then((el) => {
+          expect(el[0].innerText.trim().toLocaleLowerCase()).to.contain(
+            "Coffee".trim().toLocaleLowerCase()
+          );
+        });
+        onSearchResultsPage.getFilterButtonElement().should("be.visible");
+        onSearchResultsPage.getFilterButtonText()
+          .contains("Show filters")
+          .and("be.visible");
+
+        onSearchResultsPage.getSortByLabel().contains("Sort by").and("be.visible");
+        onSearchResultsPage.getShelfProductTile().should("be.visible");
+        cy.scrollTo("top");
+  
+        //get product to be added to cart
+        onSearchResultsPage.getShelfProductTile()
+          .contains(
+            "Moccona Freeze Dried Instant Coffee Classic Medium Roast 200g"
+          )
+          .click();
+  
+        //wait for the page to load-
+        cy.intercept({
+          method: "GET",
+          url: "/api/v3/ui/schemaorg/product/*",
+        }).as("productLoad");
+        cy.wait("@productLoad").should((xhr) => {          
+          expect(xhr.response, "statusCode").is.not.null;
+        });
+
+              //add two products to cart
+      cy.get(".shelfProductTile-title").should(
+        "have.text",
+        "Moccona Freeze Dried Instant Coffee Classic Medium Roast 200g"
+      );
+      cy.get(".cartControls-addButton").contains("Add to cart").click();
+      cy.scrollTo("top");
+      cy.get(".cartControls-quantityInput:visible")
+        .scrollIntoView()
+        .clear()
+        .type("2");
+      cy.scrollTo("top");
+      cy.get(".quantity-pill-container").contains("2");
+      cy.visit(
+        "/shop/productdetails/248520/moccona-freeze-dried-instant-coffee-classic-dark-roast"
+      );
+      cy.get("h1.shelfProductTile-title").should(
+        "have.text",
+        "Moccona Freeze Dried Instant Coffee Classic Dark Roast 200g"
+      );
+
+      //reusing the wait for waiting on details page
+      cy.intercept({
+        method: "GET",
+        url: "/api/v3/ui/schemaorg/product/*",
+      }).as("productLoad");
+      cy.wait("@productLoad").should((xhr) => {
+        expect(xhr.response, "statusCode").is.not.null;
+      });
+
+      cy.get(".cartControls-addButton").contains("Add to cart").click();
+      cy.scrollTo("top");
+})

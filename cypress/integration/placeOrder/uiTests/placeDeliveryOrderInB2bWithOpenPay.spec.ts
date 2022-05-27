@@ -7,8 +7,9 @@ import "../../../support/myAccount/ui/commands/myAccount";
 import "../../../support/myAccount/ui/commands/myPaymentMethods";
 import "../../../support/logout/ui/commands/logout";
 import { onFMSAddressSelector } from '../../../support/fulfilment/ui/pageObjects/FMSAddressSelector';
-import {onHomePage} from '../../../support/homePage/ui/pageObjects/HomePage';
+import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage';
 import '../../../support/sideCart/ui/commands/clearTrolley';
+import '../../../support/search/ui/commands/searchAndAddProduct';
 
 
 
@@ -49,55 +50,9 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
       
       cy.clearSideCartB2B();      
 
-      //click on coffee category- make it a function
-      cy.scrollTo("top");
-      cy.get('[href="/shop/browse/coffee-tea"]').click();
-      cy.get(".categoryHeader-menuHeaderLink")
-        .should("have.text", " Show all Coffee & Tea ")
-        .click();
+      //click on coffee category- make it a function & assert the page. Giving sometime for the page to load basically
+      cy.navigateToCategoryAndProductSelectB2B();
 
-      cy.get(".navigation-item-link").as("leftMenuLnk");
-      cy.get("@leftMenuLnk")
-        .eq(1)
-        .then((mainLnk) => {
-          expect(mainLnk[0].innerText.toLocaleLowerCase()).to.contain(
-            "Coffee".toLocaleLowerCase()
-          );
-
-        })
-        .click();
-
-
-      //asserting if components in page is visible to do next steps. Giving sometime for the page to load basically. network calls not working for some reason else that would be the best way to do
-      cy.get(".browseContainer-title").then((el) => {
-        expect(el[0].innerText.trim().toLocaleLowerCase()).to.contain(
-          "Coffee".trim().toLocaleLowerCase()
-        );
-      });
-      cy.get(".searchFilter-expandButton").should("be.visible");
-      cy.get(".searchFilter-expandButtonText")
-        .contains("Show filters")
-        .and("be.visible");
-      cy.get(".inline-dropdown__label").contains("Sort by").and("be.visible");
-      cy.get('shared-product-tile > shared-product-tile-v1 > .shelfProductTile').should("be.visible");
-      cy.scrollTo("top");
-
-      //get product to be added to cart
-      cy.get("shared-product-tile > shared-product-tile-v1 > .shelfProductTile")
-        .contains(
-          "Moccona Freeze Dried Instant Coffee Classic Medium Roast 200g"
-        )
-        .click();
-
-      //wait for the page to load-
-      cy.intercept({
-        method: "GET",
-        url: "/api/v3/ui/schemaorg/product/*",
-      }).as("productLoad");
-      cy.wait("@productLoad").should((xhr) => {
-        //  expect(xhr.state,'Complete');
-        expect(xhr.response, "statusCode").is.not.null;
-      });
 
       //add two products to cart
       cy.get(".shelfProductTile-title").should(
@@ -126,7 +81,6 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
         url: "/api/v3/ui/schemaorg/product/*",
       }).as("productLoad");
       cy.wait("@productLoad").should((xhr) => {
-        //  expect(xhr.state,'Complete');
         expect(xhr.response, "statusCode").is.not.null;
       });
 

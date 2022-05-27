@@ -329,6 +329,39 @@ export class SearchResultsPage {
       }
     })
   }
+
+  getcategoryHeaderNavLink () {
+    return cy.get('a.categoryHeader-navigationLink[href="/shop/browse/coffee-tea"]')
+  }
+  
+  getcategoryMenuHeaderLink () {
+    return cy.get('a.categoryHeader-menuHeaderLink[href="/shop/browse/coffee-tea"]')
+  }
+
+  getNavItemLink () {
+    return cy.get("a.navigation-item-link")
+  }
+  
+  getPageBrowseTitle () {
+    return cy.get('h1.browseContainer-title')
+  }
+  
+  getFilterButtonElement () {
+    return cy.get('wow-search-filter button.searchFilter-expandButton')
+  }
+  
+  getFilterButtonText () {
+    return cy.get("h2.searchFilter-expandButtonText")
+  }
+
+  getSortByLabel () {
+    return cy.get("label.inline-dropdown__label")
+  }
+
+  getShelfProductTile () {
+    return cy.get('shared-product-tile > shared-product-tile-v1 > .shelfProductTile')
+  }
+
 }
 
 export const onSearchResultsPage = new SearchResultsPage()
