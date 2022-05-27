@@ -11,6 +11,8 @@ import {onHomePage} from '../../../support/homePage/ui/pageObjects/HomePage';
 import '../../../support/sideCart/ui/commands/clearTrolley';
 
 
+
+
 TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
   describe("[UI] Place orders on B2B using Open Pay", () => {
     // pre-requisite to clear all cookies before login
@@ -24,6 +26,7 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
       // login to the site
       cy.loginViaUi(shoppers[2]);
       cy.viewport(1536, 1080);
+      
 
       //validate that the user is on the fulfilmentMethod page but selecting FMS windows in checkout for this test
       cy.url().should("include", "/shop/fulfilmentmethod");
@@ -44,8 +47,7 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
 
       //make sure side cart is empty, if not clear it- make this a function
       
-      cy.clearSideCartB2B();
-      
+      cy.clearSideCartB2B();      
 
       //click on coffee category- make it a function
       cy.scrollTo("top");
