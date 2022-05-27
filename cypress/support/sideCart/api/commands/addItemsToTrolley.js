@@ -251,7 +251,7 @@ Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, qu
   })  
 }) 
 
-Cypress.Commands.add('addAvailableEDMItemsToTrolleyForDU', (searchTerm, quantity, marketSubTotalUpperLimit) => {
+Cypress.Commands.add('addAvailableEDMItemsToTrolleyForDU', (searchTerm, marketSubTotalUpperLimit) => {
     // Search product by overriding the SearchTerm attribute in the search body request fixture
     cy.productSearch({ ...searchRequestBody, SearchTerm: searchTerm })
       .then((searchResponse) => {
@@ -265,8 +265,8 @@ Cypress.Commands.add('addAvailableEDMItemsToTrolleyForDU', (searchTerm, quantity
           cy.log("EM Seller's=  \" " + edmItem.Products[0].Vendor + " \" , Added Product Display Name is =  \" " + edmItem.Products[0].DisplayName + " \" " + " and StockCode is= \" " + edmItem.Products[0].Stockcode + " \" " + " and Price is= \" " + edmItem.Products[0].Price + " \" ")         
           const unitPriceofEmItem = edmItem.Products[0].Price
           const productQuantityInInteger = Math.floor(marketSubTotalUpperLimit / unitPriceofEmItem)  
-          const productQuantityToAdd = productQuantityInInteger
-          cy.log("EM Seller's= " + edmItem.Products[0].Vendor + ", Added Product is= " + edmItem.Products[0].DisplayName + " and StockCode is= " + edmItem.Products[0].Stockcode + " and Price is= " + edmItem.Products[0].Price + " and Quantity Added in Cart is= " + productQuantityToAdd )         
+          const productQuantityToAdd = productQuantityInInteger-1
+          cy.log("EM Seller's= " + edmItem.Products[0].Vendor + ", Added Product is= " + edmItem.Products[0].DisplayName + " and StockCode is= " + edmItem.Products[0].Stockcode + " and Price is= " + edmItem.Products[0].Price + " and Quantity Added in Cart is= " + productQuantityToAdd + " And the Total Price in Cart is = $ " + productQuantityToAdd * edmItem.Products[0].Price  )         
           //cy.log("Adding StockCode's= " + edmItem.Products[0].Stockcode + "Quantity is= "  + productQuantityToAdd)
           cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmItem.Products[0].Stockcode, Quantity: productQuantityToAdd })
         }) //ENDS - .shift()).then((edmItem) => 
