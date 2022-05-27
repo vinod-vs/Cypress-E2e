@@ -21,7 +21,7 @@ import '../../../support/login/ui/commands/login'
 
 TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
   const searchTerm = 'Kitchen'
-  const trolleyThreshold = 50.00
+  const trolleyThreshold = 50.0
   const platform = Cypress.env('b2cPlatform')
 
   describe('[UI] Cancel Order in MyOrders for order placed by B2C customer', () => {
@@ -35,31 +35,43 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       cy.loginWithNewShopperViaApi()
 
       // Place an order via api
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody, windowType.FLEET_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody,
+        windowType.ALL_AVAILABLE
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
 
-      cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then((confirmOrderResponse: any) => {
-      // Save the Order Id of the order placed
-        const orderId = confirmOrderResponse.Order.OrderId
+      cy.placeOrderViaApiWithAddedCreditCard(platform, creditCardPayment).then(
+        (confirmOrderResponse: any) => {
+          // Save the Order Id of the order placed
+          const orderId = confirmOrderResponse.Order.OrderId
 
-        // Navigate to UI - My order page
-        cy.visit('/shop/myaccount/myorders')
-        cy.wait(500)
+          // Navigate to UI - My order page
+          cy.visit('/shop/myaccount/myorders')
+          cy.wait(500)
 
-        // Passing the orderId to the Page object constructor
-        const onMyOrderPage = new MyOrderPage(orderId)
+          // Passing the orderId to the Page object constructor
+          const onMyOrderPage = new MyOrderPage(orderId)
 
-        // Get to the Order details on My Orders page and cancel the order
-        onMyOrderPage.getMyOrderNumber().should('contain', orderId)
-        onMyOrderPage.getViewOrderDetailsLink().click()
-        onOrderDetailsPage.getCancelMyOrderButton().click()
-        onOrderDetailsPage.getMyOrderModalCheckbox().then(chekbox => {
-          cy.wrap(chekbox).should('not.be.visible').check({ force: true }).should('be.checked')
-        })
-        onOrderDetailsPage.getCancelMyOrderModalButton().click()
-        cy.wait(500)
-        onOrderDetailsPage.getCancelledStatus().should('contain', 'Cancelled')
-      })
+          // Get to the Order details on My Orders page and cancel the order
+          onMyOrderPage.getMyOrderNumber().should('contain', orderId)
+          onMyOrderPage.getViewOrderDetailsLink().click()
+          onOrderDetailsPage.getCancelMyOrderButton().click()
+          onOrderDetailsPage.getMyOrderModalCheckbox().then((chekbox) => {
+            cy.wrap(chekbox)
+              .should('not.be.visible')
+              .check({ force: true })
+              .should('be.checked')
+          })
+          onOrderDetailsPage.getCancelMyOrderModalButton().click()
+          cy.wait(500)
+          onOrderDetailsPage.getCancelledStatus().should('contain', 'Cancelled')
+        }
+      )
     })
   })
 })
