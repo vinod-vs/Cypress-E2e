@@ -19,7 +19,7 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/login/ui/commands/login'
 
-TestFilter(['B2C', 'UI', 'Checkout', 'MyOrder', 'P1'], () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'MyOrder', 'P1'], () => {
   const searchTerm = 'Kitchen'
   const trolleyThreshold = 50.00
   const platform = Cypress.env('b2cPlatform')

@@ -55,8 +55,6 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.navigatingToCreditCardIframe().then((response) => {
-        expect(response, 'Credit Card Iframe loading').to.have.property('Success', true)
-
         creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
       })
 

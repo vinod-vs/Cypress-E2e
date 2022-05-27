@@ -1,5 +1,6 @@
 Cypress.Commands.add('navigateToCheckout', () => {
   cy.request('GET', Cypress.env('navigateToCheckoutEndpoint')).then((response) => {
+    expect(response.status, 'Navigate to Checkout endpoint response').to.eq(200)
     return response.body
   })
 })

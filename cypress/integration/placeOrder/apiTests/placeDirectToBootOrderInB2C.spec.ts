@@ -59,8 +59,6 @@ TestFilter(['B2C', 'API', 'P0', 'SPUD'], () => {
         digitalPayment.payments[0].amount = balanceToPay
 
         cy.navigatingToCreditCardIframe().then((response: any) => {
-          expect(response, 'Credit Card Iframe loading').to.have.property('Success', true)
-
           creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
         })
       })

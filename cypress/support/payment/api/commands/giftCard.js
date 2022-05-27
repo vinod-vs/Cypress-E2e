@@ -10,6 +10,8 @@ Cypress.Commands.add('addGiftCardToAccount', (cardRequest) => {
     body: cardRequest
   }).then((response) => {
     expect(response.status, 'Gift Card Addition status').to.eq(200)
+    expect(response.body, 'Gift Card Addition response body').to.not.be.undefined
+    
     return response.body
   })
 })
