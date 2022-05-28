@@ -174,5 +174,6 @@ declare namespace Cypress {
     cancelAmendingOrder(orderId: Cypress.Chainable<number>, revertAmend: boolean): any;
     clearSideCartB2B(): any;
     navigateToCategoryAndProductSelectB2B(): any;
+    clickToViewSideCartAndNavigateToCheckout(): any;
   }
 }

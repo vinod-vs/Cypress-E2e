@@ -285,5 +285,13 @@ export class SideCartPage {
   getQtyfieldContainer () {
     return cy.get(".quantity-pill-container")
   }
+
+  getSideCartHeaderTitle () {
+    return cy.get("h3.heading-title")
+  }
+
+  getSaveAsListFromSideCart () {
+    return cy.get(".cartSaveList > .linkButton")
+  }
 }
 export const onSideCartPage = new SideCartPage()

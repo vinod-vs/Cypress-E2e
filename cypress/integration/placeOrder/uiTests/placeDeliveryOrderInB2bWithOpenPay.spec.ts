@@ -10,6 +10,7 @@ import { onFMSAddressSelector } from '../../../support/fulfilment/ui/pageObjects
 import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage';
 import '../../../support/sideCart/ui/commands/clearTrolley';
 import '../../../support/search/ui/commands/searchAndAddProduct';
+import '../../../support/sideCart/ui/commands/cartContents';
 
 
 
@@ -53,20 +54,16 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
       //click on coffee category and adding to cart- make it a function & assert the page. Giving sometime for the page to load basically
       cy.navigateToCategoryAndProductSelectB2B();
 
-
-      //add two products to cart
-     
-      
-
       //click on view cart, expand, go to checkout
-      cy.get("#viewCartPanel > .button").contains("View cart").click();
-      cy.get(".heading-title").contains("Your Cart");
-      cy.get(".cartSaveList > .linkButton").contains("Save as a list");
-      cy.get(".product-actionsClearCart").contains("Remove all");
-      cy.get(".cart-checkout-summary > .linkButton")
-        .should("be.visible")
-        .contains(" Order summary ")
-        .click();
+     cy.clickToViewSideCartAndNavigateToCheckout();
+      // cy.get("#viewCartPanel > .button").contains("View cart").click();
+      // cy.get(".heading-title").contains("Your Cart");
+      // cy.get(".cartSaveList > .linkButton").contains("Save as a list");
+      // cy.get(".product-actionsClearCart").contains("Remove all");
+      // cy.get(".cart-checkout-summary > .linkButton")
+      //   .should("be.visible")
+      //   .contains(" Order summary ")
+      //   .click();
 
       //check if cart totals are good
       cy.get(".cart-checkout-summary__price").contains("Woolworths items");

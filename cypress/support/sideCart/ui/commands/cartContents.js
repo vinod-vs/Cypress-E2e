@@ -1,3 +1,9 @@
+import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
+import { onSearchResultsPage } from '../../../search/ui/pageObjects/SearchResultsPage'
+import {onSideCartPage} from '../../../sideCart/ui/pageObjects/SideCartPage'
+
+
+
 Cypress.Commands.add('verifyCartContent', (test) => {
   const items = test.items
   const noOfItems = test.items.length
@@ -33,4 +39,16 @@ Cypress.Commands.add('verifyCartContent', (test) => {
     index++
   })
   cy.log(JSON.stringify(test))
+})
+
+Cypress.Commands.add('clickToViewSideCartAndNavigateToCheckout', () => {
+ //click on view cart, expand, go to checkout
+ onHomePage.getViewCartButton().contains("View cart").click();
+ onSideCartPage.getSideCartHeaderTitle().contains("Your Cart");
+ onSideCartPage.getSaveAsListFromSideCart().contains("Save as a list");
+ onSideCartPage.getRemoveAllB2B().contains("Remove all");
+ onSideCartPage.getOrderSummaryButton()
+   .should("be.visible")
+   .contains(" Order summary ")
+   .click();
 })
