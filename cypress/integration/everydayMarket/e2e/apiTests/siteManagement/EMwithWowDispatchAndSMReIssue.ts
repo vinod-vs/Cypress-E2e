@@ -156,6 +156,20 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             cy.log("----Now, Verify 'Order ID' and 'Reissue Order Total' are displayed ----")
             onOrderManagement.getOrderidOnApprovedRefundDetailsScreeen().parent().invoke('text').should('contain', finalProjection.orderId)
             onOrderManagement.getReissueOrderTotalOnApprovedRefundDetailsScreeen().parent().contains('0.00')
+            
+            // Starts the Changes on 27th May 2022 To Verify 
+            //Extract the Reissue Order ID 140175087  from the ReIssue Confirmation Screen
+            //Then Search for that ReIssued OrderId and Verify that No EM Tab is present in SM
+            //Now, Perform Below Validations on the Trader Website Page- On My Order Details Page for the ReIssued Order-
+            //Verify - 'Make changes to my order' and 'Cancel my order' Buttons are NOT Present.
+
+            //Extract the ReIssue Order Id -
+            //onOrderManagement.getOrderidOnApprovedRefundDetailsScreeen().parent().invoke('text')//.should('contain', finalProjection.orderId)
+            cy.log("ReIssue Order Id is ==> " + onOrderManagement.getReissueOrderId().parent().invoke('text') ) //label[for="ReissueOrderID"]
+            const reIssueOrderId = onOrderManagement.getReissueOrderId().parent().invoke('text')
+
+
+
           }
         })
       })
