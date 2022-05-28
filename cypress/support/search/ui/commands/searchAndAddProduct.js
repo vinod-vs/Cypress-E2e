@@ -236,36 +236,37 @@ Cypress.Commands.add('navigateToCategoryAndProductSelectB2B', () => {
           expect(xhr.response, "statusCode").is.not.null;
         });
 
-              //add two products to cart
-      cy.get(".shelfProductTile-title").should(
+              //add two products to cart, check with Dayani about modifyItemQuantityByName in the sidecart pageobjects if she tried using. Does not work here.
+      onSearchResultsPage.getShelfProductTileTitle().should(
         "have.text",
         "Moccona Freeze Dried Instant Coffee Classic Medium Roast 200g"
       );
-      cy.get(".cartControls-addButton").contains("Add to cart").click();
+      onSearchResultsPage.getAllAddToCartButtons().contains("Add to cart").click();
+      
       cy.scrollTo("top");
-      cy.get(".cartControls-quantityInput:visible")
+      onSearchResultsPage.getQtyInputFieldProductTile()
         .scrollIntoView()
         .clear()
         .type("2");
       cy.scrollTo("top");
-      cy.get(".quantity-pill-container").contains("2");
+      onSideCartPage.getQtyfieldContainer().contains("2");
       cy.visit(
         "/shop/productdetails/248520/moccona-freeze-dried-instant-coffee-classic-dark-roast"
       );
-      cy.get("h1.shelfProductTile-title").should(
+      onSearchResultsPage.getShelfProductTileTitle().should(
         "have.text",
         "Moccona Freeze Dried Instant Coffee Classic Dark Roast 200g"
       );
 
       //reusing the wait for waiting on details page
-      cy.intercept({
-        method: "GET",
-        url: "/api/v3/ui/schemaorg/product/*",
-      }).as("productLoad");
+      // cy.intercept({
+      //   method: "GET",
+      //   url: "/api/v3/ui/schemaorg/product/*",
+      // }).as("productLoad");
       cy.wait("@productLoad").should((xhr) => {
         expect(xhr.response, "statusCode").is.not.null;
       });
 
-      cy.get(".cartControls-addButton").contains("Add to cart").click();
+      onSearchResultsPage.getAllAddToCartButtons().contains("Add to cart").click();
       cy.scrollTo("top");
 })

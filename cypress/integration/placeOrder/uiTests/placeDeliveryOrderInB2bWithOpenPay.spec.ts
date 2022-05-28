@@ -50,42 +50,13 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
       
       cy.clearSideCartB2B();      
 
-      //click on coffee category- make it a function & assert the page. Giving sometime for the page to load basically
+      //click on coffee category and adding to cart- make it a function & assert the page. Giving sometime for the page to load basically
       cy.navigateToCategoryAndProductSelectB2B();
 
 
       //add two products to cart
-      cy.get(".shelfProductTile-title").should(
-        "have.text",
-        "Moccona Freeze Dried Instant Coffee Classic Medium Roast 200g"
-      );
-      cy.get(".cartControls-addButton").contains("Add to cart").click();
-      cy.scrollTo("top");
-      cy.get(".cartControls-quantityInput:visible")
-        .scrollIntoView()
-        .clear()
-        .type("2");
-      cy.scrollTo("top");
-      cy.get(".quantity-pill-container").contains("2");
-      cy.visit(
-        "/shop/productdetails/248520/moccona-freeze-dried-instant-coffee-classic-dark-roast"
-      );
-      cy.get(".shelfProductTile-title").should(
-        "have.text",
-        "Moccona Freeze Dried Instant Coffee Classic Dark Roast 200g"
-      );
-
-      //reusing the wait for waiting on details page
-      cy.intercept({
-        method: "GET",
-        url: "/api/v3/ui/schemaorg/product/*",
-      }).as("productLoad");
-      cy.wait("@productLoad").should((xhr) => {
-        expect(xhr.response, "statusCode").is.not.null;
-      });
-
-      cy.get(".cartControls-addButton").contains("Add to cart").click();
-      cy.scrollTo("top");
+     
+      
 
       //click on view cart, expand, go to checkout
       cy.get("#viewCartPanel > .button").contains("View cart").click();

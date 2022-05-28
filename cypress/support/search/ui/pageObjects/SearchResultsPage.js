@@ -362,6 +362,14 @@ export class SearchResultsPage {
     return cy.get('shared-product-tile > shared-product-tile-v1 > .shelfProductTile')
   }
 
+  getShelfProductTileTitle () {
+    return cy.get("h1.shelfProductTile-title")
+  }
+
+  getQtyInputFieldProductTile () {
+    return cy.get(".cartControls-quantityInput:visible")
+  }
+  
 }
 
 export const onSearchResultsPage = new SearchResultsPage()

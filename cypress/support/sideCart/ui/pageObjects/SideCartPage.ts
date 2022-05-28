@@ -281,5 +281,9 @@ export class SideCartPage {
   getContinueShoppingBtnB2B (){
     return cy.get("#btnContinueShopping > button.primary")
   }
+
+  getQtyfieldContainer () {
+    return cy.get(".quantity-pill-container")
+  }
 }
 export const onSideCartPage = new SideCartPage()
