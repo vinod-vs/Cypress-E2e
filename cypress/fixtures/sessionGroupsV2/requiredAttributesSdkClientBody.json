@@ -1,318 +1,386 @@
 [
     {
-        "groupId": "62422e75b814cc46dacd4199",
-        "dynamicJson": "{\"FulfilmentData\":{\"FulfilmentStoreId\":\"1253\"}}"
+        "groupId": "628ee6959b46e3b5d823f4f2",
+        "dynamicJson": "{\"FulfilmentData\":{\"FulfilmentStoreId\":1253}}"
     },
     {
-        "groupId": "62422ed31351fbc68b9d856d",
+        "groupId": "628ee7539b46e3b5d823f4f3",
         "dynamicJson": "{\"FulfilmentData\":{\"DeliveryMethod\":\"Pickup\"}}"
     },
     {
-        "groupId": "62422f261351fbc68b9d856e",
+        "groupId": "628ee7c19b46e3b5d823f4f4",
         "dynamicJson": "{\"FulfilmentData\":{\"FulfilmentDeliveryMethod\":\"Courier\"}}"
     },
     {
-        "groupId": "62422f63b814cc46dacd419a",
-        "dynamicJson": "{\"FulfilmentData\":{\"AllowExpress\":\"true\"}}"
+        "groupId": "628ee82f851406eb1b43a60f",
+        "dynamicJson": "{\"FulfilmentData\":{\"AllowExpress\":true}}"
     },
     {
-        "groupId": "624230211351fbc68b9d856f",
+        "groupId": "628ee8ae9b46e3b5d823f4f5",
         "dynamicJson": "{\"FulfilmentData\":{\"AddressPostalCode\":\"2148\"}}"
     },
     {
-        "groupId": "624230fcb814cc46dacd419b",
+        "groupId": "628ee9109b46e3b5d823f4f6",
         "dynamicJson": "{\"IdentityMetadata\":{\"OriginateFrom\":\"test\"}}"
     },
     {
-        "groupId": "62423192b814cc46dacd419c",
-        "dynamicJson": "{\"LmsData\":{\"LmsSegmentIds\":\"12345\"}}"
+        "groupId": "628ee9b58852e630f6bcc016",
+        "dynamicJson": "{\"LmsData\":{\"LmsSegmentIds\":[12345]}}"
     },
     {
-        "groupId": "624231d4b814cc46dacd419d",
-        "dynamicJson": "{\"LmsData\":{\"LmsOfferIds\":\"6789\"}}"
+        "groupId": "628eebcb7c0f16d8b82cc7f3",
+        "dynamicJson": "{\"LmsData\":{\"LmsOfferIds\":[6789]}}"
     },
     {
-        "groupId": "6242324e1351fbc68b9d8571",
-        "dynamicJson": "{\"MarketOrderData\":{\"MarketOrderCount\":\"2\"}}"
+        "groupId": "628eec717c0f16d8b82cc7f4",
+        "dynamicJson": "{\"MarketOrderData\":{\"MarketOrderCount\":2}}"
     },
     {
-        "groupId": "6242365ab814cc46dacd419e",
-        "dynamicJson": "{\"OrderData\":{\"CourierOrderCount\":\"10\"}}"
+        "groupId": "628eed1c8852e630f6bcc017",
+        "dynamicJson": "{\"OrderData\":{\"CourierOrderCount\":10}}"
     },
     {
-        "groupId": "6242368b1351fbc68b9d8572",
+        "groupId": "629065cc8852e630f6bcc057",
         "dynamicJson": "{\"OrderData\":{\"PickupOrderCount\":\"5\"}}"
     },
     {
-        "groupId": "62423712b814cc46dacd419f",
-        "dynamicJson": "{\"OrderData\":{\"XpressDOrderCount\":\"8\"}}"
+        "groupId": "628eed918852e630f6bcc018",
+        "dynamicJson": "{\"OrderData\":{\"XpressDOrderCount\":8}}"
     },
     {
-        "groupId": "62423740b814cc46dacd41a0",
-        "dynamicJson": "{\"OrderData\":{\"DriveUpOrderCount\":\"6\"}}"
+        "groupId": "628eedf27c0f16d8b82cc7f5",
+        "dynamicJson": "{\"OrderData\":{\"DriveUpOrderCount\":6}}"
     },
     {
-        "groupId": "624237b41351fbc68b9d8573",
-        "dynamicJson": "{\"ShopperData\":{\"Id\":\"8454441\"}}"
+        "groupId": "628eee6a8852e630f6bcc019",
+        "dynamicJson": "{\"ShopperData\":{\"Id\":8454441}}"
     },
     {
-        "groupId": "624237e8b814cc46dacd41a1",
+        "groupId": "628eeebc7c0f16d8b82cc7f6",
         "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
     },
     {
-        "groupId": "624238d1b814cc46dacd41a2",
-        "dynamicJson": "{\"ShopperData\":{\"DateCreated\":\"15/10/2021 12:00:00 AM\"}}"
+        "groupId": "628eefbd7c0f16d8b82cc7f7",
+        "dynamicJson": "{\"ShopperData\":{\"DateCreated\":\"2021-10-14T00:00:00\"}}"
     },
     {
-        "groupId": "62423989b814cc46dacd41a3",
+        "groupId": "628ef0ab8852e630f6bcc01a",
         "dynamicJson": "{\"ShopperData\":{\"DateOfBirth\":\"1990-12-02T00:00:00\"}}"
     },
     {
-        "groupId": "62423a431351fbc68b9d8574",
-        "dynamicJson": "{\"ShopperData\":{\"IsBusinessAccount\":\"true\"}}"
+        "groupId": "628ef0ff7c0f16d8b82cc7f8",
+        "dynamicJson": "{\"ShopperData\":{\"IsBusinessAccount\":true}}"
     },
     {
-        "groupId": "62423a95b814cc46dacd41a4",
-        "dynamicJson": "{\"ShopperData\":{\"OrderCount\":\"12\"}}"
+        "groupId": "628ef16f7c0f16d8b82cc7f9",
+        "dynamicJson": "{\"ShopperData\":{\"OrderCount\":12}}"
     },
     {
-        "groupId": "624243c4b814cc46dacd41a6",
-        "dynamicJson": "{\"ShopperData\":{\"TeamMember\":\"true\"}}"
+        "groupId": "628ef1d68852e630f6bcc01b",
+        "dynamicJson": "{\"ShopperData\":{\"TeamMember\":true}}"
     },
     {
-        "groupId": "624244241351fbc68b9d8575",
+        "groupId": "628ef2677c0f16d8b82cc7fa",
         "dynamicJson": "{\"ShopperData\":{\"ShopperSource\":\"B2C\"}}"
     },
     {
-        "groupId": "624244871351fbc68b9d8576",
-        "dynamicJson": "{\"ShopperData\":{\"MarketOrderCount\":\"3\"}}"
+        "groupId": "628ef2d18852e630f6bcc01c",
+        "dynamicJson": "{\"ShopperData\":{\"MarketOrderCount\":3}}"
     },
     {
-        "groupId": "6242451cb814cc46dacd41a7",
-        "dynamicJson": "{\"ShopperDeliveryWindow\":{\"DeliveryWindowGroupName\":\"test\"}}"
+        "groupId": "628ef36f7c0f16d8b82cc7fb",
+        "dynamicJson": "{\"ShopperDeliveryWindow\":{\"DeliveryWindowGroupName\":\"0800 AM\"}}"
     },
     {
-        "groupId": "62424585b814cc46dacd41a8",
-        "dynamicJson": "{\"ShopperDeliveryWindow\":{\"DeliveryWindowId\":\"1234\"}}"
+        "groupId": "628ef4088852e630f6bcc01d",
+        "dynamicJson": "{\"ShopperDeliveryWindow\":{\"DeliveryWindowId\":370}}"
     },
     {
-        "groupId": "624247b71351fbc68b9d8577",
+        "groupId": "628ef4998852e630f6bcc01e",
         "dynamicJson": "{\"ShopperDeliveryWindow\":{\"DeliveryDate\":\"2022-03-30T00:00:00\"}}"
     },
     {
-        "groupId": "62424816b814cc46dacd41a9",
-        "dynamicJson": "{\"ShopperDeliveryWindow\":{\"DeliveryTimeSpan\":\"4\"}}"
+        "groupId": "628ef5138852e630f6bcc01f",
+        "dynamicJson": "{\"ShopperDeliveryWindow\":{\"DeliveryTimeSpan\":\"08:00am - 11:00am\"}}"
     },
     {
-        "groupId": "62424888b814cc46dacd41aa",
-        "dynamicJson": "{\"ShopperPreference\":{\"PackagingPreferenceId\":\"1234\"}}"
+        "groupId": "628ef6308852e630f6bcc020",
+        "dynamicJson": "{\"ShopperPreference\":{\"PackagingPreferenceId\":1234}}"
     },
     {
-        "groupId": "624248c1b814cc46dacd41ab",
-        "dynamicJson": "{\"ShopperPreference\":{\"RedeemRewardsCredits\":\"true\"}}"
+        "groupId": "628ef6937c0f16d8b82cc7fc",
+        "dynamicJson": "{\"ShopperPreference\":{\"RedeemRewardsCredits\":true}}"
     },
     {
-        "groupId": "6242492e1351fbc68b9d8578",
+        "groupId": "628ef70d8852e630f6bcc021",
         "dynamicJson": "{\"ShopperPrimaryAddressData\":{\"PostalCode\":\"2147\"}}"
     },
     {
-        "groupId": "624249bbb814cc46dacd41ac",
-        "dynamicJson": "{\"ShopperPrimaryAddressData\":{\"ShopperID\":\"8454441\"}}"
+        "groupId": "628efac37c0f16d8b82cc7fd",
+        "dynamicJson": "{\"ShopperPrimaryAddressData\":{\"ShopperID\":8454441}}"
     },
     {
-        "groupId": "62424a261351fbc68b9d8579",
-        "dynamicJson": "{\"ShopperPrimaryAddressData\":{\"FulfilmentStoreId\":\"1253\"}}"
+        "groupId": "628efb248852e630f6bcc022",
+        "dynamicJson": "{\"ShopperPrimaryAddressData\":{\"FulfilmentStoreId\":1253}}"
     },
     {
-        "groupId": "62424a8db814cc46dacd41ad",
-        "dynamicJson": "{\"TrolleyInfo\":{\"IsDeliveryNowSelected\":\"true\"}}"
+        "groupId": "628efbb77c0f16d8b82cc7fe",
+        "dynamicJson": "{\"TrolleyInfo\":{\"IsDeliveryNowSelected\":true}}"
     },
     {
-        "groupId": "62424ae81351fbc68b9d857a",
-        "dynamicJson": "{\"Shopper\":{\"AllowExpress\":\"true\"}}"
+        "groupId": "628efc287c0f16d8b82cc7ff",
+        "dynamicJson": "{\"Shopper\":{\"AllowExpress\":true}}"
     },
     {
-        "groupId": "62424b50b814cc46dacd41ae",
+        "groupId": "628efc897c0f16d8b82cc800",
         "dynamicJson": "{\"Shopper\":{\"FulfilmentStore\":\"BLACKTOWN\"}}"
     },
     {
-        "groupId": "62424b9f1351fbc68b9d857b",
-        "dynamicJson": "{\"Shopper\":{\"Age\":\"21\"}}"
+        "groupId": "628efce37c0f16d8b82cc801",
+        "dynamicJson": "{\"Shopper\":{\"Age\":21}}"
     },
     {
-        "groupId": "62424d781351fbc68b9d857d",
-        "dynamicJson": "{\"Shopper\":{\"EmailOptOut\":\"true\"}}"
+        "groupId": "628efd5c8852e630f6bcc023",
+        "dynamicJson": "{\"ShopperId\":8454441}"
     },
     {
-        "groupId": "62424db61351fbc68b9d8580",
-        "dynamicJson": "{\"Shopper\":{\"OneCard\":\"true\"}}"
+        "groupId": "628efe6e7c0f16d8b82cc803",
+        "dynamicJson": "{\"AreaId\":1147}"
     },
     {
-        "groupId": "62424e12b814cc46dacd41b3",
-        "dynamicJson": "{\"Shopper\":{\"ShopperID\":\"8454441\"}}"
+        "groupId": "628f00b08852e630f6bcc025",
+        "dynamicJson": "{\"Shopper\":{\"EmailOptOut\":true}}"
     },
     {
-        "groupId": "62424f22b814cc46dacd41b4",
+        "groupId": "628f02827c0f16d8b82cc804",
+        "dynamicJson": "{\"Shopper\":{\"OneCard\":true}}"
+    },
+    {
+        "groupId": "628f02df8852e630f6bcc026",
+        "dynamicJson": "{\"Shopper\":{\"ShopperID\":8454441}}"
+    },
+    {
+        "groupId": "628f035a8852e630f6bcc027",
         "dynamicJson": "{\"Shopper\":{\"DateCreated\":\"2021-10-14T00:00:00\"}}"
     },
     {
-        "groupId": "624250621351fbc68b9d8583",
-        "dynamicJson": "{\"Shopper\":{\"LmsSegmentIds\":\"1234\"}}"
+        "groupId": "628f14688852e630f6bcc02b",
+        "dynamicJson": "{\"Shopper\":{\"LmsSegmentIds\":[\"1234\"]}}"
     },
     {
-        "groupId": "624250adb814cc46dacd41b5",
-        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":\"12345\"}}"
+        "groupId": "628f14c18852e630f6bcc02c",
+        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":[\"12345\"]}}"
     },
     {
-        "groupId": "624250f2b814cc46dacd41b6",
+        "groupId": "628f15238852e630f6bcc02d",
         "dynamicJson": "{\"Site\":{\"Name\":\"Woolworths Online\"}}"
     },
     {
-        "groupId": "624253891351fbc68b9d8584",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"TrialStartDate\":\"2022-03-29T00:00:00\"}}"
-    },
-    {
-        "groupId": "624253d41351fbc68b9d8585",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"TrialEndDate\":\"2022-04-29T00:00:00\"}}"
-    },
-    {
-        "groupId": "6242542cb814cc46dacd41b7",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"NextBillingDate\":\"2022-04-30T00:00:00\"}}"
-    },
-    {
-        "groupId": "624254721351fbc68b9d8586",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"Status\":\"Active\"}}"
-    },
-    {
-        "groupId": "624254f2b814cc46dacd41b8",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"AllowedUsageType\":\"Test\"}}"
-    },
-    {
-        "groupId": "624255691351fbc68b9d8587",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"BillingPeriod\":\"Monthly\"}}"
-    },
-    {
-        "groupId": "624255c11351fbc68b9d8588",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"SubscriberType\":\"Free\"}}"
-    },
-    {
-        "groupId": "62425625b814cc46dacd41b9",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"SubscriptionType\":\"Free\"}}"
-    },
-    {
-        "groupId": "62425667b814cc46dacd41ba",
-        "dynamicJson": "{\"UserTargetingSubscription\":{\"SubscriptionID\":\"123456\"}}"
-    },
-    {
-        "groupId": "624256b41351fbc68b9d8589",
-        "dynamicJson": "{\"Order\":{\"CouponID\":\"SAVE10\"}}"
-    },
-    {
-        "groupId": "62425703b814cc46dacd41bb",
-        "dynamicJson": "{\"Order\":{\"DeliveryMethod\":\"Courier\"}}"
-    },
-    {
-        "groupId": "624257351351fbc68b9d858a",
-        "dynamicJson": "{\"Order\":{\"OrderDate\":\"2022-03-30T00:00:00\"}}"
-    },
-    {
-        "groupId": "624257cdb814cc46dacd41bc",
-        "dynamicJson": "{\"Order\":{\"DeliveryDay\":\"Sunday\"}}"
-    },
-    {
-        "groupId": "624258181351fbc68b9d858b",
-        "dynamicJson": "{\"Order\":{\"SubTotal\":\"100\"}}"
-    },
-    {
-        "groupId": "6242588bb814cc46dacd41bd",
-        "dynamicJson": "{\"DeliverySession\":{\"AddressSuburb\":\"ARMIDALE\"}}"
-    },
-    {
-        "groupId": "624258e91351fbc68b9d858c",
-        "dynamicJson": "{\"DeliverySession\":{\"AddressPostalCode\":\"2350\"}}"
-    },
-    {
-        "groupId": "624259291351fbc68b9d858d",
-        "dynamicJson": "{\"DeliverySession\":{\"AddressState\":\"NSW\"}}"
-    },
-    {
-        "groupId": "624259901351fbc68b9d858e",
-        "dynamicJson": "{\"DeliverySession\":{\"IsUsingCrowdSourcedWindows\":\"true\"}}"
-    },
-    {
-        "groupId": "624391e4b814cc46dacd41c9",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"TrialStartDate\":\"2022-03-01T00:00:00\"}}"
-    },
-    {
-        "groupId": "624392601351fbc68b9d8597",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"TrialEndDate\":\"2022-04-01T00:00:00\"}}"
-    },
-    {
-        "groupId": "624395c2b814cc46dacd41cb",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"NextBillingDate\":\"2022-04-02T00:00:00\"}}"
-    },
-    {
-        "groupId": "62439614b814cc46dacd41cc",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"Status\":\"Active\"}}"
-    },
-    {
-        "groupId": "624396bd1351fbc68b9d8598",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"AllowedUsageType\":\"Test\"}}"
-    },
-    {
-        "groupId": "624396ec1351fbc68b9d8599",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"BillingPeriod\":\"Monthly\"}}"
-    },
-    {
-        "groupId": "6243973c1351fbc68b9d859a",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"SubscriberType\":\"Free\"}}"
-    },
-    {
-        "groupId": "624397691351fbc68b9d859b",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"SubscriptionType\":\"Free\"}}"
-    },
-    {
-        "groupId": "6243979bb814cc46dacd41cd",
-        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"SubscriptionId\":\"123456\"}}"
-    },
-    {
-        "groupId": "62426554b814cc46dacd41be",
-        "dynamicJson": "{\"ShopperId\":\"8454441\"}"
-    },
-    {
-        "groupId": "624265eb1351fbc68b9d858f",
-        "dynamicJson": "{\"AreaId\":\"346\"}"
-    },
-    {
-        "groupId": "62426927b814cc46dacd41bf",
+        "groupId": "628f15937c0f16d8b82cc80a",
         "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"87966\"]}"
     },
     {
-        "groupId": "624269a11351fbc68b9d8590",
+        "groupId": "628f16688852e630f6bcc02f",
         "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"87966\",\"142893\"]}"
     },
     {
-        "groupId": "62426a25b814cc46dacd41c0",
+        "groupId": "628f16eb7c0f16d8b82cc80c",
         "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"1\"]}"
     },
     {
-        "groupId": "6267848e4d2c57af6e16996c",
-        "dynamicJson": "{\"ShopperId\":\"84544411\"}"
+        "groupId": "62900d318852e630f6bcc031",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"TrialStartDate\":\"2022-03-29T00:00:00\"}}"
     },
     {
-        "groupId": "626784df12240ebc732424cd",
-        "dynamicJson": "{\"AreaId\":\"3461\"}"
+        "groupId": "62900d958852e630f6bcc032",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"TrialEndDate\":\"2022-04-29T00:00:00\"}}"
     },
     {
-        "groupId": "626785424d2c57af6e16996d",
-        "dynamicJson": "{\"ProductIds\":[\"3691\",\"75263\",\"87966\"]}"
+        "groupId": "62900deb7c0f16d8b82cc80e",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"NextBillingDate\":\"2022-04-30T00:00:00\"}}"
     },
     {
-        "groupId": "6267857e12240ebc732424ce",
-        "dynamicJson": "{\"ProductIds\":[\"369\",\"75263\",\"87966\"]}"
+        "groupId": "62900e347c0f16d8b82cc80f",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"Status\":\"Active\"}}"
     },
     {
-        "groupId": "626785ba12240ebc732424cf",
-        "dynamicJson": "{\"ProductIds\":[\"3691\",\"1\"]}"
+        "groupId": "62900e958852e630f6bcc033",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"AllowedUsageType\":\"Test\"}}"
+    },
+    {
+        "groupId": "62900ef17c0f16d8b82cc810",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"BillingPeriod\":\"Monthly\"}}"
+    },
+    {
+        "groupId": "62900f347c0f16d8b82cc811",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"SubscriberType\":\"Free\"}}"
+    },
+    {
+        "groupId": "62900fcc8852e630f6bcc034",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"SubscriptionType\":\"Free\"}}"
+    },
+    {
+        "groupId": "629010298852e630f6bcc035",
+        "dynamicJson": "{\"UserTargetingSubscription\":{\"SubscriptionID\":123456}}"
+    },
+    {
+        "groupId": "629010868852e630f6bcc036",
+        "dynamicJson": "{\"Order\":{\"CouponID\":\"SAVE10\"}}"
+    },
+    {
+        "groupId": "629014868852e630f6bcc037",
+        "dynamicJson": "{\"Order\":{\"DeliveryMethod\":\"Courier\"}}"
+    },
+    {
+        "groupId": "629014e97c0f16d8b82cc812",
+        "dynamicJson": "{\"Order\":{\"OrderDate\":\"2022-03-30T00:00:00\"}}"
+    },
+    {
+        "groupId": "6290154f8852e630f6bcc039",
+        "dynamicJson": "{\"Order\":{\"DeliveryDay\":\"Sunday\"}}"
+    },
+    {
+        "groupId": "629015b27c0f16d8b82cc813",
+        "dynamicJson": "{\"Order\":{\"SubTotal\":100}}"
+    },
+    {
+        "groupId": "629017978852e630f6bcc03a",
+        "dynamicJson": "{\"DeliverySession\":{\"AddressSuburb\":\"ARMIDALE\"}}"
+    },
+    {
+        "groupId": "629017d58852e630f6bcc03b",
+        "dynamicJson": "{\"DeliverySession\":{\"AddressPostalCode\":\"2350\"}}"
+    },
+    {
+        "groupId": "629018178852e630f6bcc03c",
+        "dynamicJson": "{\"DeliverySession\":{\"AddressState\":\"NSW\"}}"
+    },
+    {
+        "groupId": "629018668852e630f6bcc03d",
+        "dynamicJson": "{\"DeliverySession\":{\"IsUsingCrowdSourcedWindows\":true}}"
+    },
+    {
+        "groupId": "629018ed7c0f16d8b82cc814",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"TrialStartDate\":\"2022-03-01T00:00:00\"}}"
+    },
+    {
+        "groupId": "629019327c0f16d8b82cc815",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"TrialEndDate\":\"2022-04-01T00:00:00\"}}"
+    },
+    {
+        "groupId": "629019788852e630f6bcc03e",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"NextBillingDate\":\"2022-04-02T00:00:00\"}}"
+    },
+    {
+        "groupId": "629019ca7c0f16d8b82cc816",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"Status\":\"Active\"}}"
+    },
+    {
+        "groupId": "62901a088852e630f6bcc03f",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"AllowedUsageType\":\"Test\"}}"
+    },
+    {
+        "groupId": "62901a527c0f16d8b82cc817",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"BillingPeriod\":\"Monthly\"}}"
+    },
+    {
+        "groupId": "62901a8e8852e630f6bcc040",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"SubscriberType\":\"Free\"}}"
+    },
+    {
+        "groupId": "62901ac47c0f16d8b82cc818",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"SubscriptionType\":\"Free\"}}"
+    },
+    {
+        "groupId": "62901b0a7c0f16d8b82cc819",
+        "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"SubscriptionId\":123456}}"
+    },
+    {
+        "groupId": "629048177c0f16d8b82cc81f",
+        "dynamicJson": "{\"ShopperId\":84544411,\"ProductIds\":[\"369\",\"1\",\"308940\"]}"
+    },
+    {
+        "groupId": "62904a7c8852e630f6bcc048",
+        "dynamicJson": "{\"Shopper\":{\"Age\":18}}"
+    },
+    {
+        "groupId": "62904ac88852e630f6bcc049",
+        "dynamicJson": "{\"Shopper\":{\"Age\":17}}"
+    },
+    {
+        "groupId": "62904b148852e630f6bcc04a",
+        "dynamicJson": "{\"Shopper\":{\"Age\":18}}"
+    },
+    {
+        "groupId": "62904b5a8852e630f6bcc04b",
+        "dynamicJson": "{\"Shopper\":{\"Age\":19}}"
+    },
+    {
+        "groupId": "62904bd38852e630f6bcc04c",
+        "dynamicJson": "{\"Shopper\":{\"Age\":17}}"
+    },
+    {
+        "groupId": "62904c108852e630f6bcc04d",
+        "dynamicJson": "{\"Shopper\":{\"Age\":19}}"
+    },
+    {
+        "groupId": "62904c5d7c0f16d8b82cc820",
+        "dynamicJson": "{\"Shopper\":{\"Age\":30}}"
+    },
+    {
+        "groupId": "62904cda7c0f16d8b82cc821",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
+    },
+    {
+        "groupId": "62904d267c0f16d8b82cc822",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jsvillao@gmail.com\"}}"
+    },
+    {
+        "groupId": "62904d908852e630f6bcc04e",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
+    },
+    {
+        "groupId": "62904de78852e630f6bcc04f",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
+    },
+    {
+        "groupId": "62904e417c0f16d8b82cc823",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jsvillao@gmail.com\"}}"
+    },
+    {
+        "groupId": "62904ed77c0f16d8b82cc824",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
+    },
+    {
+        "groupId": "62904f3f8852e630f6bcc050",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
+    },
+    {
+        "groupId": "62904f868852e630f6bcc051",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"pes01@woolworths.com.au\"}}"
+    },
+    {
+        "groupId": "62904ff58852e630f6bcc052",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
+    },
+    {
+        "groupId": "629050498852e630f6bcc053",
+        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@gmail.com\"}}"
+    },
+    {
+        "groupId": "629051368852e630f6bcc055",
+        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":[\"OFFER1\",\"OFFER2\"]}}"
+    },
+    {
+        "groupId": "629051c77c0f16d8b82cc825",
+        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":[\"OFFER2\",\"OFFER3\"]}}"
+    },
+    {
+        "groupId": "629052527c0f16d8b82cc826",
+        "dynamicJson": "{\"Shopper\":{\"LmsSegmentIds\":[1234,5678]}}"
+    },
+    {
+        "groupId": "629052cc8852e630f6bcc056",
+        "dynamicJson": "{\"Shopper\":{\"LmsSegmentIds\":[987,654]}}"
     }
 ]

@@ -17,18 +17,17 @@ import '../../../support/duSubscription/api/commands/checkExistingPlan'
 import '../../../support/duSubscription/api/commands/payAndSubscribe'
 import '../../../support/logout/api/commands/logout'
 import '../../../support/utilities/ui/utility'
-import { sign } from 'crypto'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+TestFilter(['B2C', 'API', 'P0', 'TOFFEE'], () => {
   describe('[API] Subscribe for a new DU Business plan', () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
 
-    // Using faker to add ramdom values for the user
+    // Using faker to add random values for the user
     availablePlans.businessPlans.forEach((plan) => {
       it(`Should subscribe for a new delivery unlimited plan ${plan.Name} for ${plan.SubscriberType}`, () => {
         signUpDetails.firstName = faker.name.firstName()
@@ -39,6 +38,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.getDOB('personal').then((value) => {
           signUpDetails.dateOfBirth = value
         })
+
         signUpDetails.abn = '88000014675'
         signUpDetails.companyName = 'WOOLWORTHS GROUP LIMITED'
         signUpDetails.businessType = 'Retail Service'
