@@ -1,114 +1,46 @@
 [
     {
-        "groupId": "6243a187b814cc46dacd41d3",
-        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":\"R10 1364378\"}}"
+        "groupId": "62901d478852e630f6bcc041",
+        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":[\"R10 1364378\"]}}"
     },
     {
-        "groupId": "6243a2c1b814cc46dacd41d4",
-        "dynamicJson": "{\"ShopperData\":{\"OrderCount\":\"0\"},\"Order\":{\"DeliveryMethod\":\"Pickup\"}}"
+        "groupId": "62903c907c0f16d8b82cc81b",
+        "dynamicJson": "{\"ShopperData\":{\"OrderCount\":0},\"Order\":{\"DeliveryMethod\":\"Pickup\"}}"
     },
     {
-        "groupId": "6243a21b1351fbc68b9d85a2",
+        "groupId": "62903d808852e630f6bcc042",
+        "dynamicJson": "{\"ShopperId\":8454441,\"Site\":{\"Name\":\"Woolworths Online API\"},\"Order\":{\"SubTotal\":\"120\"}}"
+    },
+    {
+        "groupId": "62903ef37c0f16d8b82cc81c",
         "dynamicJson": "{\"Order\":{\"CouponID\":\"LURPAK10\"}}"
     },
     {
-        "groupId": "6243a0a7b814cc46dacd41d2",
-        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":\"SEP2021\"},\"ShopperData\":{\"TeamMember\":\"false\"}}"
+        "groupId": "62903fa97c0f16d8b82cc81d",
+        "dynamicJson": "{\"Shopper\":{\"LmsOfferIds\":\"SEP2021\"},\"ShopperData\":{\"TeamMember\":false}}"
     },
     {
-        "groupId": "6243bfb01351fbc68b9d85a4",
+        "groupId": "6290408e7c0f16d8b82cc81e",
+        "dynamicJson": "{\"ShopperId\":\"8454441\",\"AreaId\":\"1\",\"Order\":{\"SubTotal\":150}}"
+    },
+    {
+        "groupId": "6290413f8852e630f6bcc043",
+        "dynamicJson": "{\"ShopperData\":{\"OrderCount\":0},\"Order\":{\"DeliveryMethod\":\"Pickup\"},\"IdentityMetadata\":{\"OriginateFrom\":\"\"}}"
+    },
+    {
+        "groupId": "629041e68852e630f6bcc044",
         "dynamicJson": "{\"Order\":{\"DeliveryMethod\":\"Courier\"},\"UsertargetingSubscription\":{\"Status\":\"Active\"}}"
     },
     {
-        "groupId": "6243c11e1351fbc68b9d85a5",
-        "dynamicJson": "{\"Shopper\":{\"ShopperID\":\"8521476\"},\"IdentityMetadata\":{\"OriginateFrom\":\"woolworths-b2b\"}}"
+        "groupId": "629042cf8852e630f6bcc045",
+        "dynamicJson": "{\"Shopper\":{\"ShopperID\":8521476},\"IdentityMetadata\":{\"OriginateFrom\":\"woolworths-b2b\"}}"
     },
     {
-        "groupId": "6243c1b01351fbc68b9d85a6",
+        "groupId": "6290436b8852e630f6bcc046",
         "dynamicJson": "{\"MarketOrderData\":{\"MarketOrderCount\":0}}"
     },
     {
-        "groupId": "6243c1f2b814cc46dacd41da",
+        "groupId": "629043c48852e630f6bcc047",
         "dynamicJson": "{\"RewardsUserTargetingSubscription\":{\"Status\":\"Active\"}}"
-    },
-    {
-        "groupId": "62672b8212240ebc732424c2",
-        "dynamicJson": "{\"ShopperData\":{\"OrderCount\":\"0\"},\"Order\":{\"DeliveryMethod\":\"Pickup\"},\"IdentityMetadata\":{\"OriginateFrom\":\"\"}}"
-    },
-    {
-        "groupId": "626234c94d2c57af6e169955",
-        "dynamicJson": "{\"ShopperId\":\"8454441\",\"AreaId\":\"1\",\"Order\":{\"SubTotal\":100}}"
-    },
-    {
-        "groupId": "62688e27717fb58c32e6ad96",
-        "dynamicJson": "{\"ShopperId\":\"84544411\",\"ProductIds\":[\"369\",\"1\"]}"
-    },
-    {
-        "groupId": "6268b6f112240ebc732424df",
-        "dynamicJson": "{\"Shopper\":{\"Age\":18}}"
-    },
-    {
-        "groupId": "6268b72212240ebc732424e0",
-        "dynamicJson": "{\"Shopper\":{\"Age\":17}}"
-    },
-    {
-        "groupId": "6268b75912240ebc732424e1",
-        "dynamicJson": "{\"Shopper\":{\"Age\":18}}"
-    },
-    {
-        "groupId": "6268b79712240ebc732424e2",
-        "dynamicJson": "{\"Shopper\":{\"Age\":19}}"
-    },
-    {
-        "groupId": "6268b7be717fb58c32e6ad9b",
-        "dynamicJson": "{\"Shopper\":{\"Age\":17}}"
-    },
-    {
-        "groupId": "6268b822717fb58c32e6ad9c",
-        "dynamicJson": "{\"Shopper\":{\"Age\":19}}"
-    },
-    {
-        "groupId": "6268b88412240ebc732424e3",
-        "dynamicJson": "{\"Shopper\":{\"Age\":\"30\"}}"
-    },
-    {
-        "groupId": "6269f5ba717fb58c32e6adaa",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "6269f63112240ebc732424ec",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"1jvillao@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a050e12240ebc732424f0",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a058a12240ebc732424f1",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a0612717fb58c32e6adae",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"pes01@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a0689717fb58c32e6adaf",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a0712717fb58c32e6adb0",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a076012240ebc732424f2",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"pes01@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a08ed12240ebc732424f3",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@woolworths.com.au\"}}"
-    },
-    {
-        "groupId": "626a0945717fb58c32e6adb1",
-        "dynamicJson": "{\"ShopperData\":{\"Email\":\"jvillao@gmail.com\"}}"
     }
 ]
