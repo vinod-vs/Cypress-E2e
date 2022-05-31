@@ -56,41 +56,35 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
 
       //click on view cart, expand, go to checkout
      cy.clickToViewSideCartAndNavigateToCheckout();
-      // cy.get("#viewCartPanel > .button").contains("View cart").click();
-      // cy.get(".heading-title").contains("Your Cart");
-      // cy.get(".cartSaveList > .linkButton").contains("Save as a list");
-      // cy.get(".product-actionsClearCart").contains("Remove all");
-      // cy.get(".cart-checkout-summary > .linkButton")
-      //   .should("be.visible")
-      //   .contains(" Order summary ")
-      //   .click();
 
       //check if cart totals are good
-      cy.get(".cart-checkout-summary__price").contains("Woolworths items");
-      cy.get(".cart-checkout-summary__price").contains(" $47.10 ");
+      cy.verifySideCartOrderSummary();
+      // cy.get("div.cart-checkout-summary__price").contains("Woolworths items");
+      // cy.get("div.cart-checkout-summary__price").contains(" $47.10 ");
 
-      cy.get(".cart-checkout-summary__section > :nth-child(2)").contains(
-        " Estimated delivery fee "
-      );
-      cy.get(".cart-checkout-summary__section > :nth-child(2)").contains(
-        "$0.00 - $15.00"
-      );
+      // cy.get("div.cart-checkout-summary__section > :nth-child(2)").contains(
+      //   " Estimated delivery fee "
+      // );
+      // cy.get("div.cart-checkout-summary__section > :nth-child(2)").contains(
+      //   "$0.00 - $15.00"
+      // );
 
-      cy.get(".cart-checkout-summary__section > :nth-child(3)").contains(
-        " Estimated packaging fee "
-      );
-      cy.get(".cart-checkout-summary__section > :nth-child(3)").contains(
-        "$0.00 - $2.50"
-      );
+      // cy.get("div.cart-checkout-summary__section > :nth-child(3)").contains(
+      //   " Estimated packaging fee "
+      // );
+      // cy.get("div.cart-checkout-summary__section > :nth-child(3)").contains(
+      //   "$0.00 - $2.50"
+      // );
 
-      cy.get(".cart-checkout-content").contains(" $47.10 ");
-      cy.get(".cart-checkout-content").contains("Excluding service fees");
+      // cy.get(".cart-checkout-content").contains(" $47.10 ");
+      // cy.get(".cart-checkout-content").contains("Excluding service fees");
 
       //click on checkout button
-      cy.get(".cart-checkout-button > .button").click();
-      cy.get(
-        "wow-checkout-fulfilment-summary.ng-star-inserted > span.ng-star-inserted"
-      ).contains("Auto Reg All trading 101 - 101 Red street, ARMIDALE 2350");
+      cy.navigateToCheckoutFromSideCart();
+      // cy.get(".cart-checkout-button > .button").click();
+      // cy.get(
+      //   "wow-checkout-fulfilment-summary.ng-star-inserted > span.ng-star-inserted"
+      // ).contains("Auto Reg All trading 101 - 101 Red street, ARMIDALE 2350");
 
       //When unavailable delivery window tile
       // cy.get('.unavailable-title').contains('We\'re sorry, Delivery windows are currently closed')

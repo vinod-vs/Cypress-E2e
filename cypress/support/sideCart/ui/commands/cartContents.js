@@ -1,6 +1,7 @@
 import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
 import { onSearchResultsPage } from '../../../search/ui/pageObjects/SearchResultsPage'
 import {onSideCartPage} from '../../../sideCart/ui/pageObjects/SideCartPage'
+import {onCheckoutPage} from '../../../checkout/ui/pageObjects/CheckoutPage'
 
 
 
@@ -52,3 +53,32 @@ Cypress.Commands.add('clickToViewSideCartAndNavigateToCheckout', () => {
    .contains(" Order summary ")
    .click();
 })
+
+Cypress.Commands.add('verifySideCartOrderSummary', () => {
+  //click on view cart, expand, go to checkout
+  onSideCartPage.getSideCartPriceTotal().contains("Woolworths items");
+  onSideCartPage.getSideCartPriceTotal().contains(" $47.10 ");
+
+      onSideCartPage.getSideCartEstimatedFee(2).contains(
+        " Estimated delivery fee "
+      );
+      onSideCartPage.getSideCartEstimatedFee(2).contains(
+        "$0.00 - $15.00"
+      );
+
+      onSideCartPage.getSideCartEstimatedFee(3).contains(
+        " Estimated packaging fee "
+      );
+      onSideCartPage.getSideCartEstimatedFee(3).contains(
+        "$0.00 - $2.50"
+      );
+
+      onSideCartPage.getSideCartTotalExclFees().contains(" $47.10 ");
+      onSideCartPage.getSideCartTotalExclFees().contains("Excluding service fees");
+ })
+
+ Cypress.Commands.add('navigateToCheckoutFromSideCart', () => {
+  //click on view cart, expand, go to checkout
+  onSideCartPage.getCheckoutButton().click();
+  onCheckoutPage.getTradingAccountInfoB2B().contains("Auto Reg All trading 101 - 101 Red street, ARMIDALE 2350");
+ })

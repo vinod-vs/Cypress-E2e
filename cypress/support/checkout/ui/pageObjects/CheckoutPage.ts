@@ -14,6 +14,14 @@ export class CheckoutPage {
   getContinueShoppingLink () {
        return cy.get('.continue-shopping-link.ng-star-inserted') 
   }
+
+  getTradingAccountInfoB2B() {
+    return cy.get(
+      "wow-checkout-fulfilment-summary.ng-star-inserted > span.ng-star-inserted"
+    )
+  }
 }
+
+
 
 export const onCheckoutPage = new CheckoutPage()

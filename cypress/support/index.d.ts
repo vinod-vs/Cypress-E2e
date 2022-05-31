@@ -175,5 +175,7 @@ declare namespace Cypress {
     clearSideCartB2B(): any;
     navigateToCategoryAndProductSelectB2B(): any;
     clickToViewSideCartAndNavigateToCheckout(): any;
+    verifySideCartOrderSummary() : any;
+    navigateToCheckoutFromSideCart() : any;
   }
 }

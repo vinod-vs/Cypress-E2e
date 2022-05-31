@@ -160,11 +160,11 @@ export class SideCartPage {
 
   // #region - General actions in side cart
   CheckIfSideCartIsOpen () {
-    cy.get('.drawer').invoke('attr', 'class').should('contain', 'is-open')
+   return cy.get('.drawer').invoke('attr', 'class').should('contain', 'is-open')
   }
 
   CheckIfSideCartIsClosed () {
-    cy.get('.drawer').invoke('attr', 'class').should('not.contain', 'is-open')
+    return cy.get('.drawer').invoke('attr', 'class').should('not.contain', 'is-open')
   }
 
   checkIfSidecartIsEmpty () {
@@ -292,6 +292,19 @@ export class SideCartPage {
 
   getSaveAsListFromSideCart () {
     return cy.get(".cartSaveList > .linkButton")
+  }
+
+  getSideCartPriceTotal () {
+    return cy.get("div.cart-checkout-summary__price")
+  }
+
+  getSideCartEstimatedFee (index: any) {
+    return cy.get(`div.cart-checkout-summary__section > :nth-child(${index})`)
+   
+  }
+  
+  getSideCartTotalExclFees () {
+    return cy.get("div.cart-checkout-content")
   }
 }
 export const onSideCartPage = new SideCartPage()
