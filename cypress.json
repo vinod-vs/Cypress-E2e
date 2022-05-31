@@ -33,6 +33,7 @@
         "removeItemEndpoint": "/apis/ui/Trolley/Remove",
         "removeItemsEndpoint": "/apis/ui/Trolley/UpdateOrRemoveItems",
         "addItemsToTrolleyEndpoint": "apis/ui/Trolley/Items",
+        "addUpdateItemsToTrolleyEndpoint": "/api/v3/ui/trolley/update",
         "redeemRewardsCreditsEndpoint": "apis/ui/UserPreferences/RedeemRewardsCredits",
         "promotionCodeEndpoint": "/apis/ui/Checkout/PromotionCode",
         "removePromotionCodeEndpoint": "/apis/ui/Checkout/RemovePromotionCode",

@@ -1,11 +1,19 @@
 import addItemsRequestBody from '../../../../fixtures/sideCart/addItemsToTrolley.json'
+import addUpdateItemsRequestBody from '../../../../fixtures/sideCart/addUpdateItemsToTrolley.json'
 import searchRequestBody from '../../../../fixtures/search/productSearch.json'
 import { restrictionType } from '../../../../fixtures/product/restrictionType.js'
 import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWowItems as groupLimitRetrictedItems, getAgeRestrictedWowItems as ageRestrictedItems } from '../../../../support/search/api/commands/search.js'
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
   cy.request('POST', Cypress.env('addItemsToTrolleyEndpoint'), addItemsBody).then((response) => {
-    expect(response.status).to.eq(200)
+    expect(response.status, 'Trolley Add Items response status').to.eq(200)
+    return response.body
+  })
+})
+
+Cypress.Commands.add('addUpdateItemsToTrolley', (addUpdateItemsBody) => {
+  cy.request('POST', Cypress.env('addUpdateItemsToTrolleyEndpoint'), addUpdateItemsBody).then((response) => {
+    expect(response.status, 'Update Trolley endpoint response').to.eq(200)
     return response.body
   })
 })
@@ -46,9 +54,14 @@ Cypress.Commands.add('addAvailableNonRestrictedPriceLimitedWowItemsToTrolley', (
 })
 
 function addToTrolleyAfterReducingProductProperties (productArr) {
+  let trolleyItems = []
+  
   productArr.map(({ name, price, isSubstitutable, shopperNotes, ...trolleyProperties }) => trolleyProperties).forEach((item) => {
-    cy.addItemsToTrolley(item)
+    trolleyItems.push(item)
   })
+
+  addUpdateItemsRequestBody.items = trolleyItems
+  cy.addUpdateItemsToTrolley(addUpdateItemsRequestBody)
 }
 
 Cypress.Commands.add('addAvailableNonRestrictedWowItemsToTrolley', (searchTerm) => {
@@ -70,7 +83,7 @@ Cypress.Commands.add('addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley
 
   cy.productSearch(searchRequestBody).then((searchResponse) => {
     cy.findAvailableNonRestrictedWowItems(searchResponse).then((itemResponse) => {
-      cy.log('Adding Available Count Limited...')
+      cy.log('Adding Available Count Limited items...')
       const productArr = getCountLimitedItemsForTrolleyAddition(itemResponse, count)
       addToTrolleyAfterReducingProductProperties(productArr)
 
@@ -130,13 +143,15 @@ function getPriceLimitedItemsForTrolleyAddition (productArray, totalThreshold) {
 
   for (const item of productArray) {
     totalPrice = totalPrice + item.Price
-    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockcode: item.Stockcode, quantity: 1,
+      source: 'LF.SearchProducts', diagnostics: 4, evaluateRewardsPoints: false,
+      offerId: null, name: item.Name, price: item.Price,
+      isSubstitutable: true, shopperNotes: '' })
 
     if (totalPrice >= totalThreshold) {
       break
     }
   }
-  addItemsRequestBody.items = expectedTrolleyItems
 
   return expectedTrolleyItems
 }
@@ -151,14 +166,16 @@ function getCountLimitedItemsForTrolleyAddition (productArray, itemCount) {
   let addedToCart = 0
 
   for (const item of productArray) {
-    expectedTrolleyItems.push({ stockCode: item.Stockcode, name: item.Name, price: item.Price, quantity: 1, isSubstitutable: true, shopperNotes: '' })
+    expectedTrolleyItems.push({ stockcode: item.Stockcode, quantity: 1,
+      source: 'LF.SearchProducts', diagnostics: 4, evaluateRewardsPoints: false,
+      offerId: null, name: item.Name, price: item.Price,
+      isSubstitutable: true, shopperNotes: '' })
 
     addedToCart++
     if (addedToCart === itemCount) {
       break
     }
   }
-  addItemsRequestBody.items = expectedTrolleyItems
 
   return expectedTrolleyItems
 }

@@ -14,6 +14,7 @@ Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (platform: string, c
     digitalPayment.payments[0].amount = balanceToPay
 
     cy.navigatingToCreditCardIframe().then((response: any) => {
+      expect(response.Success, 'Credit card iframe endpoint connection success status?').to.be.true
       creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
     })
   })
@@ -61,11 +62,13 @@ Cypress.Commands.add('checkForOrderPlacementErrorsAndThrow', (paymentResponse) =
 
 Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
   cy.digitalPay(paymentRequest).then((response: any) => {
-    if (response.PaymentResponses !== null) {
+    if (response.PaymentResponses.length > 0) {
+      cy.log('Payment Responses exist: ' + response.PaymentResponses.length)
       cy.get(response.PaymentResponses).each((instrument: any) => {
         expect(instrument.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrument.PaymentInstrumentType).to.be.null
       }).then(() => {
         cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
+          cy.log('Order Placement response is: ' + JSON.stringify(response))
           expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
           expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
 
@@ -114,7 +117,7 @@ Cypress.Commands.add('addGiftCardAndCompleteSplitPaymentOrderViaAPI', (giftCard,
   // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
   cy.addGiftCardToAccount(giftCard).then(() => {
     cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(giftCardPaymentAmount).then((response: any) => {
-      expect(response, 'DigitalPay Gift Card Payment Instrument ID').to.not.be.null
+      expect(response, 'DigitalPay Gift Card Payment Instrument ID').to.exist
       splitPaymentRequest.payments[1].paymentInstrumentId = response
     })
     cy.placeOrderViaApiWithPaymentRequest(splitPaymentRequest)

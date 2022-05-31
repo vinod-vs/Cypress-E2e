@@ -32,7 +32,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     it('Place an order for B2C customer, then cancel the order', () => {
       cy.get('@orderId').then(($orderId: any) => {
         cy.cancelOrder($orderId).then((response: any) => {
-          expect(response.status, 'Cancel Order status').to.eq(200)
+          expect(response.body.ErrorCode, 'Cancel Order Error Code').to.be.null
         })
       })
     })
