@@ -54,7 +54,7 @@ trigger: none
 
 resources:
   pipelines:
-    - pipeline: Cypress_E2E_B2C_UI_Automation
+    - pipeline: Cypress_E2E_UI_Automation
       source: Woolworths.Frontend
       project: Trader
       trigger: 
@@ -75,6 +75,30 @@ jobs:
           npm install
           npm test -- --env tags=B2C-UI-E2E,fileConfig=b2c,otpValidationSwitch=true,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
         displayName: "Npm install and run B2C UI E2E tests"
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: "JUnit"
+          testResultsFiles: "**/results-*.xml"
+          testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
+          mergeTestResults: true
+          searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
+        displayName: "Publish Test Results"
+        
+  - job: Run_B2B_UI_E2E_Tests
+    displayName: "Install Node.js and run B2B UI tests"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "14.x"
+        displayName: "Find or download node 14"
+      - script: |
+          npm install
+          npm test -- --env tags=B2B-UI-E2E,fileConfig=b2b,otpValidationSwitch=true,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
+        displayName: "Npm install and run B2B UI E2E tests"
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
