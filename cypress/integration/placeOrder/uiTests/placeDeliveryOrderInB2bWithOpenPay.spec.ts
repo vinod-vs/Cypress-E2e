@@ -85,12 +85,7 @@ TestFilter(["B2B", "UI", "P0", "Checkout", "E2E"], () => {
       // cy.get(
       //   "wow-checkout-fulfilment-summary.ng-star-inserted > span.ng-star-inserted"
       // ).contains("Auto Reg All trading 101 - 101 Red street, ARMIDALE 2350");
-
-      //When unavailable delivery window tile
-      // cy.get('.unavailable-title').contains('We\'re sorry, Delivery windows are currently closed')
-
-      //when morning window is closed as example
-      //No windows currently offered-- .no-time-slots-heading
+      
 
       //assumption- atleast one day window is selected and always available for this test
       //first waiting for the below calls and assertions since window section takes time to load and loads dynamically
