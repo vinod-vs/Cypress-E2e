@@ -54,7 +54,7 @@ trigger: none
 
 resources:
   pipelines:
-    - pipeline: Cypress_E2E_UI_Automation
+    - pipeline: Cypress_UI_E2E_Automation
       source: Woolworths.Frontend
       project: Trader
       trigger: 
@@ -85,7 +85,7 @@ jobs:
           mergeTestResults: true
           searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
         displayName: "Publish Test Results"
-        
+
   - job: Run_B2B_UI_E2E_Tests
     displayName: "Install Node.js and run B2B UI tests"
     pool:
