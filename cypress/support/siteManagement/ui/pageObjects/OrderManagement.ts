@@ -237,7 +237,7 @@ export class OrderManagement {
   }
 
   getWowSaveButton() {
-    return cy.get('input[type=submit]')
+    return cy.get('input[type=submit]:nth-child(6)')
   }
 
   getCourierRadioButton() {
@@ -282,6 +282,12 @@ export class OrderManagement {
     //Added on 28th May
     return cy.get(
       '#content-panel > div > div.tab-layout > div:nth-child(17) > label'
+    )
+  }
+
+  getOrderManagementTab() {
+    return cy.get(
+      '#manage-menu-top a[href*="/CustomerMaintenance/CustomerMaintenanceSearch"]'
     )
   }
 
