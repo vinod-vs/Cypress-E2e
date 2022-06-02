@@ -59,7 +59,7 @@ resources:
       project: Trader
       trigger: 
         stages:
-        - 'Deploy UAT AAE'
+        - Deploy_UAT_AAE
 
 jobs:
   - job: Run_B2C_UI_E2E_Tests
