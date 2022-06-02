@@ -4,7 +4,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -24,7 +24,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
             "quantity": 2,
@@ -40,7 +40,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
             "quantity": 2,
@@ -56,7 +56,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:123456",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -75,7 +75,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -94,7 +94,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -113,7 +113,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -132,7 +132,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -152,7 +152,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -173,7 +173,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 1,
@@ -192,7 +192,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -215,7 +215,7 @@
         "quantity": 1,
         "VendorName": "Healthy Life",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         }
     },
     "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
@@ -223,7 +223,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -250,7 +250,7 @@
         "quantity": 1,
         "VendorName": "Pet Culture",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         }
     },
     "VerifyEmailNotifications": {
@@ -258,7 +258,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 5,
@@ -278,7 +278,7 @@
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
             "quantity": 2,

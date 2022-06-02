@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 /* eslint-disable no-unused-expressions */
 
-import addressSearch from '../../../../fixtures/checkout/addressSearch.json'
+import addressSearch from '../../../../fixtures/everydayMarket/addressSearch.json'
 import search from '../../../../fixtures/everydayMarket/search.json'
 import { fulfilmentType } from '../../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../../fixtures/checkout/fulfilmentWindowType.js'
@@ -31,40 +31,58 @@ import '../../../shared/api/commands/bootstrap'
 
 const instrumentIdsArr: any[] = []
 
-Cypress.Commands.add('prepareAnySingleLineItemEdmOrder', (searchTerm, quantity) => {
-  // Set fulfilment using the new /windows endpoint
-  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+Cypress.Commands.add(
+  'prepareAnySingleLineItemEdmOrder',
+  (searchTerm, quantity) => {
+    // Set fulfilment using the new /windows endpoint
+    cy.setFulfilmentLocationWithWindow(
+      fulfilmentType.DELIVERY,
+      addressSearch,
+      windowType.FLEET_DELIVERY
+    )
 
-  // Clear trolley in case there's any item
-  cy.clearTrolley()
+    // Clear trolley in case there's any item
+    cy.clearTrolley()
 
-  // Add EDM items to trolley
-  cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
-})
+    // Add EDM items to trolley
+    cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
+  }
+)
 
-Cypress.Commands.add('prepareAnySingleLineItemWowAndEdmOrder', (searchTerm, quantity) => {
-  // Set fulfilment using the new /windows endpoint
-  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+Cypress.Commands.add(
+  'prepareAnySingleLineItemWowAndEdmOrder',
+  (searchTerm, quantity) => {
+    // Set fulfilment using the new /windows endpoint
+    cy.setFulfilmentLocationWithWindow(
+      fulfilmentType.DELIVERY,
+      addressSearch,
+      windowType.FLEET_DELIVERY
+    )
 
-  // Clear trolley in case there's any item
-  cy.clearTrolley()
+    // Clear trolley in case there's any item
+    cy.clearTrolley()
 
-  // Add both WOW and EDM items to trolley
-  cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
-  cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
-})
+    // Add both WOW and EDM items to trolley
+    cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
+    cy.addAvailableEDMItemsToTrolley(searchTerm, quantity)
+  }
+)
 
 Cypress.Commands.add('completeOrderAmendment', (traderOrderId) => {
   // Start amending the WOW portion of the order
   cy.amendOrder(traderOrderId)
 
   // Set fulfilment using the new /windows endpoint
-  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+  cy.setFulfilmentLocationWithWindow(
+    fulfilmentType.DELIVERY,
+    addressSearch,
+    windowType.FLEET_DELIVERY
+  )
 
   if (doUnavailableItemsExist()) {
     const req = {
       ...removeItemsRequestBody,
-      Stockcodes: getUnavailableItemsStockcodes()
+      Stockcodes: getUnavailableItemsStockcodes(),
     }
     // Remove unavailable items from trolley
     cy.removeItems(req)
@@ -77,17 +95,19 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId) => {
   return payOrder()
 })
 
-function getUnavailableItemsStockcodes () {
+function getUnavailableItemsStockcodes() {
   const unavailableItemsArr: number[] = []
 
   cy.getBootstrapResponse().then((response: any) => {
-    response.TrolleyRequest.UnavailableItems.filter((item: { Stockcode: number }) => unavailableItemsArr.push(item.Stockcode))
+    response.TrolleyRequest.UnavailableItems.filter(
+      (item: { Stockcode: number }) => unavailableItemsArr.push(item.Stockcode)
+    )
   })
 
   return unavailableItemsArr
 }
 
-function doUnavailableItemsExist (): boolean {
+function doUnavailableItemsExist(): boolean {
   return cy.getBootstrapResponse().then((response: any) => {
     if (response.TrolleyRequest.UnavailableItems.length === 0) {
       return false
@@ -108,16 +128,23 @@ Cypress.Commands.add('placeOrderUsingCreditCardAndGiftCard', () => {
   return payOrder()
 })
 
-function placeOrderUsingCreditCard () {
+function placeOrderUsingCreditCard() {
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
-  cy.navigatingToCreditCardIframe().its('IframeUrl').invoke('split', '/').its(5).as('ccSessionId')
+  cy.navigatingToCreditCardIframe()
+    .its('IframeUrl')
+    .invoke('split', '/')
+    .its(5)
+    .as('ccSessionId')
   // Get expected CC to use from env
   cy.getExpectedCCCardDetails()
 
   // Grab Digital pay instrument Id for the test credit card set in the fixture
   cy.get('@ccSessionId').then((ccSessionId) => {
     cy.get('@creditCardToUse').then((creditCardToUse) => {
-      cy.creditcardTokenisation(creditCardToUse, { ...creditcardSessionHeader, creditcardSessionId: ccSessionId }).then((response: any) => {
+      cy.creditcardTokenisation(creditCardToUse, {
+        ...creditcardSessionHeader,
+        creditcardSessionId: ccSessionId,
+      }).then((response: any) => {
         cy.getCCPaymentInstrumentId(response).then((id: number) => {
           instrumentIdsArr.push(id)
         })
@@ -126,13 +153,13 @@ function placeOrderUsingCreditCard () {
   })
 }
 
-function placeOrderUsingGiftCard () {
+function placeOrderUsingGiftCard() {
   // Override the fixture with our own test gift card details
   const giftCardReq = {
     ...giftCardRequest,
     cardNumber: '6280005550107005580',
     pinCode: '0869',
-    save: false
+    save: false,
   }
 
   // Tokenize the new gift card
@@ -144,7 +171,7 @@ function placeOrderUsingGiftCard () {
   })
 }
 
-function payOrder () {
+function payOrder() {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
   cy.get('@balanceToPay').then((amount: any) => {
@@ -155,26 +182,35 @@ function payOrder () {
         // Passed the value in the aliases as /payment request body
         cy.digitalPay({
           ...digitalPaymentRequest,
-          payments: [{
-            ...digitalPaymentRequest.payments[0],
-            amount: amount,
-            paymentInstrumentId: instrumentIdsArr[0]
-          }]
-        }).its('PlacedOrderId').as('traderPlacedOrderId')
+          payments: [
+            {
+              ...digitalPaymentRequest.payments[0],
+              amount: amount,
+              paymentInstrumentId: instrumentIdsArr[0],
+            },
+          ],
+        })
+          .its('PlacedOrderId')
+          .as('traderPlacedOrderId')
       } else if (instrumentIdsArr.length > 1) {
         // Pay using mixed payment, e.g. credit card-gift card or PayPal-gift card
         cy.digitalPay({
           ...digitalPaymentRequest,
-          payments: [{
-            ...digitalPaymentRequest.payments[0],
-            amount: amount - 0.01,
-            paymentInstrumentId: instrumentIdsArr[0]
-          }, {
-            ...digitalPaymentRequest.payments[1],
-            amount: 0.01,
-            paymentInstrumentId: instrumentIdsArr[1]
-          }]
-        }).its('PlacedOrderId').as('traderPlacedOrderId')
+          payments: [
+            {
+              ...digitalPaymentRequest.payments[0],
+              amount: amount - 0.01,
+              paymentInstrumentId: instrumentIdsArr[0],
+            },
+            {
+              ...digitalPaymentRequest.payments[1],
+              amount: 0.01,
+              paymentInstrumentId: instrumentIdsArr[1],
+            },
+          ],
+        })
+          .its('PlacedOrderId')
+          .as('traderPlacedOrderId')
       } else {
         cy.log('No payment instrument detected')
       }
@@ -188,28 +224,45 @@ function payOrder () {
   getTraderPlacedOrderId()
 }
 
-function getTraderPlacedOrderId () {
+function getTraderPlacedOrderId() {
   cy.get('@traderPlacedOrderId').then((traderPlacedOrderId) => {
-    return cy.confirmOrder({ ...confirmOrderRequest, placedOrderId: traderPlacedOrderId })
+    return cy.confirmOrder({
+      ...confirmOrderRequest,
+      placedOrderId: traderPlacedOrderId,
+    })
   })
 }
 
-Cypress.Commands.add('prepareAnyMultiSellerLineItemEdmOrder', (searchTerm, quantity) => {
-  // Set fulfilment using the new /windows endpoint
-  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
-  // Clear trolley in case there's any item
-  cy.clearTrolley()
-  cy.addMultiSellerAvailableEDMItemsToTrolley(searchTerm, quantity)
-})
+Cypress.Commands.add(
+  'prepareAnyMultiSellerLineItemEdmOrder',
+  (searchTerm, quantity) => {
+    // Set fulfilment using the new /windows endpoint
+    cy.setFulfilmentLocationWithWindow(
+      fulfilmentType.DELIVERY,
+      addressSearch,
+      windowType.FLEET_DELIVERY
+    )
+    // Clear trolley in case there's any item
+    cy.clearTrolley()
+    cy.addMultiSellerAvailableEDMItemsToTrolley(searchTerm, quantity)
+  }
+)
 
-Cypress.Commands.add('prepareAnyMultiSellerLineItemWowAndEdmOrder', (searchTerm, quantity) => {
-  // Set fulfilment using the new /windows endpoint
-  cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearch, windowType.FLEET_DELIVERY)
+Cypress.Commands.add(
+  'prepareAnyMultiSellerLineItemWowAndEdmOrder',
+  (searchTerm, quantity) => {
+    // Set fulfilment using the new /windows endpoint
+    cy.setFulfilmentLocationWithWindow(
+      fulfilmentType.DELIVERY,
+      addressSearch,
+      windowType.FLEET_DELIVERY
+    )
 
-  // Clear trolley in case there's any item
-  cy.clearTrolley()
+    // Clear trolley in case there's any item
+    cy.clearTrolley()
 
-  // Add both WOW and EDM items to trolley
-  cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
-  cy.addMultiSellerAvailableEDMItemsToTrolley(searchTerm, quantity)
-})
+    // Add both WOW and EDM items to trolley
+    cy.addAvailableNonRestrictedWowItemsToTrolley(search.searchTerm)
+    cy.addMultiSellerAvailableEDMItemsToTrolley(searchTerm, quantity)
+  }
+)
