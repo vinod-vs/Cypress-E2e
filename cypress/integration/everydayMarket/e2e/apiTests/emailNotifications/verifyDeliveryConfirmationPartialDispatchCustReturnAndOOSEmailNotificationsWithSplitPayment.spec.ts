@@ -30,7 +30,6 @@ let orderReference: any
 let edmOrderId: any
 let edmInvoiceId: any
 const shopper: any = shoppers.emailTest1
-// const shopper: any = shoppers.emAccount2
 const shopperId: any = shopper.shopperId
 const emailId: any = shopper.email
 let lineItemLegacyId: any
