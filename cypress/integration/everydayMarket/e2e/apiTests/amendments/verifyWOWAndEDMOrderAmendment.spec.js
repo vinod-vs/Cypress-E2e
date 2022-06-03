@@ -14,7 +14,7 @@ import search from '../../../../../fixtures/everydayMarket/search.json'
 import * as lib from '../../../../../support/everydayMarket/api/commands/validationHelpers'
 import * as commonLib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
+TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -47,32 +47,50 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           ...eventsRequest,
           shopperId: shopperId,
           orderId: confirmedOrder.Order.OrderId,
-          orderReference: confirmedOrder.Order.OrderReference
+          orderReference: confirmedOrder.Order.OrderReference,
         }
 
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
-            if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+            if (
+              !response.body.data.some(
+                (element) => element.domainEvent === 'OrderPlaced'
+              ) ||
+              !response.body.data.some(
+                (element) => element.domainEvent === 'MarketOrderPlaced'
+              )
+            ) {
               cy.log('Expected OrderPlaced & MarketOrderPlaced to be present')
-              throw new Error('Expected OrderPlaced & MarketOrderPlaced to be present')
+              throw new Error(
+                'Expected OrderPlaced & MarketOrderPlaced to be present'
+              )
             }
           },
           retries: Cypress.env('marketApiRetryCount'),
-          timeout: 10000
+          timeout: 10000,
         })
 
         // Call Market Order API and validate the data
-        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
-          function: function (response) {
-            if (response.body.invoices[0].orderTrackingStatus !== 'Received') {
-              cy.log('Expected orderTrackingStatus to be "Received"')
-              throw new Error('Expected orderTrackingStatus to be "Received"')
-            }
-          },
-          retries: Cypress.env('marketApiRetryCount'),
-          timeout: Cypress.env('marketApiTimeout')
-        }).its('invoices').its(0).its('legacyIdFormatted').as('invoiceIds')
+        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
+          req.shopperId,
+          req.orderId,
+          {
+            function: function (response) {
+              if (
+                response.body.invoices[0].orderTrackingStatus !== 'Received'
+              ) {
+                cy.log('Expected orderTrackingStatus to be "Received"')
+                throw new Error('Expected orderTrackingStatus to be "Received"')
+              }
+            },
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout'),
+          }
+        )
+          .its('invoices')
+          .its(0)
+          .its('legacyIdFormatted')
+          .as('invoiceIds')
 
         cy.get('@invoiceIds').then((invoiceIds) => {
           cy.ordersApiByEdmInvoiceIdWithRetry(invoiceIds, {
@@ -82,36 +100,46 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
               }
             },
             retries: Cypress.env('marketApiRetryCount'),
-            timeout: Cypress.env('marketApiTimeout')
+            timeout: Cypress.env('marketApiTimeout'),
           }).as('orderDataBeforeAmendment')
         })
 
         // Amend the WOW part of the order
-        cy.completeOrderAmendment(req.orderId).as('confirmedAmendedTraderOrder').then(() => {
-          // Call the Market Events API and save the events data in an alias
-          cy.orderEventsApiWithRetry(req.orderReference, {
-            function: function (response) {
-              if (response.body.data.filter(element => element.domainEvent === 'OrderPlaced').length != 2) {
-                cy.log('Expected OrderPlaced events count to be two')
-                throw new Error('Expected OrderPlaced events count to be two')
-              }
-            },
-            retries: Cypress.env('marketApiRetryCount'),
-            timeout: 10000
+        cy.completeOrderAmendment(req.orderId)
+          .as('confirmedAmendedTraderOrder')
+          .then(() => {
+            // Call the Market Events API and save the events data in an alias
+            cy.orderEventsApiWithRetry(req.orderReference, {
+              function: function (response) {
+                if (
+                  response.body.data.filter(
+                    (element) => element.domainEvent === 'OrderPlaced'
+                  ).length != 2
+                ) {
+                  cy.log('Expected OrderPlaced events count to be two')
+                  throw new Error('Expected OrderPlaced events count to be two')
+                }
+              },
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: 10000,
+            })
           })
-        })
 
         cy.get('@invoiceIds').then((invoiceIds) => {
           cy.get('@confirmedAmendedTraderOrder').then((amendedOrder) => {
             cy.ordersApiByEdmInvoiceIdWithRetry(invoiceIds, {
               function: function (response) {
                 if (response.body[0].orderId !== amendedOrder.Order.OrderId) {
-                  cy.log('Order ID has not been updated with the latest order amendment ID')
-                  throw new Error('Order ID has not been updated with the latest order amendment ID')
+                  cy.log(
+                    'Order ID has not been updated with the latest order amendment ID'
+                  )
+                  throw new Error(
+                    'Order ID has not been updated with the latest order amendment ID'
+                  )
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
+              timeout: Cypress.env('marketApiTimeout'),
             }).as('orderDataAfterAmendment')
 
             cy.get('@orderDataAfterAmendment').as('finalProjection')
@@ -121,12 +149,24 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                 // Validate EDM order data only has update on order ID and the rest of the data remain the same before and after amendment
                 expect({
                   ...beforeData,
-                  orderId: amendedOrder.Order.OrderId
-                }).excludingEvery(['status', 'updatedTimeStampUtc', 'createdTimeStampUtc']).to.deep.equal(afterData)
+                  orderId: amendedOrder.Order.OrderId,
+                })
+                  .excludingEvery([
+                    'status',
+                    'updatedTimeStampUtc',
+                    'createdTimeStampUtc',
+                  ])
+                  .to.deep.equal(afterData)
 
                 // Invoke OQS TMO api and validate it against the projection
                 // New trader order will be in Received state, Will be an WOW + MP Order and will have all the WOW items in it. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
-                commonLib.verifyOQSOrderStatus(afterData.orderId, 'Received', false, null, false)
+                commonLib.verifyOQSOrderStatus(
+                  afterData.orderId,
+                  'Received',
+                  false,
+                  null,
+                  false
+                )
               })
             })
           })

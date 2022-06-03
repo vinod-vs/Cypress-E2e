@@ -4,7 +4,8 @@
 
 export class Signup {
   getPageTitle () {
-    return cy.get('//form[@id="signupForm"]//h3[@class="signupForm-headerTitle"]')
+    return cy.get('//form[@id="signupForm"]//h3[@class="signupForm-headerTitle"]'
+    )
   }
 
   getFirstName () {
@@ -24,11 +25,15 @@ export class Signup {
   }
 
   getDateOfBirth () {
-    return cy.get('shared-textbox[name="DateOfBirth"] > input[name="DateOfBirth"]')
+    return cy.get(
+      'shared-textbox[name="DateOfBirth"] > input[name="DateOfBirth"]'
+    )
   }
 
   getContactNumber () {
-    return cy.get('shared-textbox[name="MobilePhone"] > input[name="MobilePhone"]')
+    return cy.get(
+      'shared-textbox[name="MobilePhone"] > input[name="MobilePhone"]'
+    )
   }
 
   getShoppingOnbehalfBusinessSelection () {
@@ -108,7 +113,7 @@ export class Signup {
   }
 
   getSubmitButton () {
-    return cy.get('form#signupForm shared-button')
+    return cy.get('shared-button > .full-width.l.m.mobile-full-width.success')
   }
 
   getCancelButton () {

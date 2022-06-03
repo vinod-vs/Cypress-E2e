@@ -42,7 +42,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       cy.setFulfilmentLocationWithWindow(
         fulfilmentType.DELIVERY,
         addressSearchBody,
-        windowType.FLEET_DELIVERY
+        windowType.ALL_AVAILABLE
       )
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
         searchTerm,
