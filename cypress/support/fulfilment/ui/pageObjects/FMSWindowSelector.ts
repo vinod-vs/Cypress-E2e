@@ -1,51 +1,51 @@
 export class FMSWindowSelector {
   // #region - Selectors
-  getSelectFullfilmentTimeHeading () {
+  getSelectFullfilmentTimeHeading() {
     return cy.get('.time-slot-title')
   }
 
-  getDayDropdown () {
+  getDayDropdown() {
     return cy.get('.day-dropdown')
   }
 
-  getContinueShoppingButton () {
+  getContinueShoppingButton() {
     return cy.get('.shopper-action')
   }
 
-  getMorningTimeSlotList () {
+  getMorningTimeSlotList() {
     return cy.get('wow-time-slots-column-side-cart').eq(0).get('.time-slot-list > section > div')
   }
 
-  getAfternoonTimeSlotList () {
+  getAfternoonTimeSlotList() {
     return cy.get('wow-time-slots-column-side-cart').eq(1).get('.time-slot-list > section > div')
   }
 
-  getEveningTimeSlotList () {
+  getEveningTimeSlotList() {
     return cy.get('wow-time-slots-column-side-cart').eq(2).get('.time-slot-list > section > div')
   }
 
-  getAllTimeSlotList () {
+  getAllTimeSlotList() {
     return cy.get('.time-slot-list > section > div')
   }
   // #endregion
 
   // #region - General actions
-  selectSameDay () {
+  selectSameDay() {
     this.selectDayByKeyword('Today')
   }
 
-  selectNextDay () {
+  selectNextDay() {
     this.selectDayByKeyword('Tomorrow')
   }
 
-  selectLastDay () {
+  selectLastDay() {
     cy.get('.day-dropdown > option')
       .last().then(dayOption => {
         cy.wrap(dayOption).parent().select(dayOption.text())
       })
   }
 
-  selectLatestAvailableDay () {
+  selectLatestAvailableDay() {
     cy.get('.day-dropdown > option')
       .each(dayOption => {
         if (!dayOption.prop('disabled')) {
@@ -55,7 +55,7 @@ export class FMSWindowSelector {
       })
   }
 
-  selectAvailableDayAfterTomorrow () {
+  selectAvailableDayAfterTomorrow() {
     cy.get('.day-dropdown > option')
       .each(dayOption => {
         if (!(dayOption.text().includes('Select a day') || dayOption.text().includes('Today') || dayOption.text().includes('Tomorrow') || dayOption.text().includes('Closed'))) {
@@ -65,7 +65,7 @@ export class FMSWindowSelector {
       })
   }
 
-  selectDayByKeyword (dayKeyword: string) {
+  selectDayByKeyword(dayKeyword: string) {
     cy.get('.day-dropdown > option')
       .contains(dayKeyword)
       .then(dayOption => {
@@ -73,11 +73,11 @@ export class FMSWindowSelector {
       })
   }
 
-  selectTimeSlotByTime (startTimeString: string, endTimeString = 'undefined') {
+  selectTimeSlotByTime(startTimeString: string, endTimeString = 'undefined') {
     this.selectTimeSlotStartFromIndex(0, startTimeString, endTimeString)
   }
 
-  selectDeliveryNowTimeslot () {
+  selectDeliveryNowTimeslot() {
     cy.get('wow-time-slot-badges span').each(eachBadgeSpan => {
       if (eachBadgeSpan.text() == 'Delivery Now') {
         cy.intercept(Cypress.env('bootstrapEndpoint')).as('bootstrap')
@@ -88,19 +88,19 @@ export class FMSWindowSelector {
     })
   }
 
-  selectFirstTimeslot () {
+  selectFirstTimeslot() {
     this.getAllTimeSlotList().first().find('input').check({ force: true })
     cy.wait(500)
   }
 
-  selectLastTimeslot () {
+  selectLastTimeslot() {
     this.getAllTimeSlotList().last().find('input').check({ force: true })
     cy.wait(500)
   }
   // #endregion
 
   // #region - private methods
-  private selectTimeSlotStartFromIndex (index: number, startTimeString: string, endTimeString = 'undefined') {
+  private selectTimeSlotStartFromIndex(index: number, startTimeString: string, endTimeString = 'undefined') {
     let found = false
 
     this.getAllTimeSlotList().its('length').then(len => {

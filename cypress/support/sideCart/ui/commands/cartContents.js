@@ -1,7 +1,6 @@
-import {onHomePage} from '../../../homePage/ui/pageObjects/HomePage'
-import { onSearchResultsPage } from '../../../search/ui/pageObjects/SearchResultsPage'
-import {onSideCartPage} from '../../../sideCart/ui/pageObjects/SideCartPage'
-import {onCheckoutPage} from '../../../checkout/ui/pageObjects/CheckoutPage'
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
+import { onSideCartPage } from '../../../sideCart/ui/pageObjects/SideCartPage'
+import { onCheckoutPage } from '../../../checkout/ui/pageObjects/CheckoutPage'
 
 
 
@@ -43,15 +42,15 @@ Cypress.Commands.add('verifyCartContent', (test) => {
 })
 
 Cypress.Commands.add('clickToViewSideCartAndNavigateToCheckout', () => {
- //click on view cart, expand, go to checkout
- onHomePage.getViewCartButton().contains("View cart").click();
- onSideCartPage.getSideCartHeaderTitle().contains("Your Cart");
- onSideCartPage.getSaveAsListFromSideCart().contains("Save as a list");
- onSideCartPage.getRemoveAllB2B().contains("Remove all");
- onSideCartPage.getOrderSummaryButton()
-   .should("be.visible")
-   .contains(" Order summary ")
-   .click();
+  //click on view cart, expand, go to checkout
+  onHomePage.getViewCartButton().contains("View cart").click();
+  onSideCartPage.getSideCartHeaderTitle().contains("Your Cart");
+  onSideCartPage.getSaveAsListFromSideCart().contains("Save as a list");
+  onSideCartPage.getRemoveAllB2B().contains("Remove all");
+  onSideCartPage.getOrderSummaryButton()
+    .should("be.visible")
+    .contains(" Order summary ")
+    .click();
 })
 
 Cypress.Commands.add('verifySideCartOrderSummary', () => {
@@ -59,26 +58,26 @@ Cypress.Commands.add('verifySideCartOrderSummary', () => {
   onSideCartPage.getSideCartPriceTotal().contains("Woolworths items");
   onSideCartPage.getSideCartPriceTotal().contains(" $47.10 ");
 
-      onSideCartPage.getSideCartEstimatedFee(2).contains(
-        " Estimated delivery fee "
-      );
-      onSideCartPage.getSideCartEstimatedFee(2).contains(
-        "$0.00 - $15.00"
-      );
+  onSideCartPage.getSideCartEstimatedFee(2).contains(
+    " Estimated delivery fee "
+  );
+  onSideCartPage.getSideCartEstimatedFee(2).contains(
+    "$0.00 - $15.00"
+  );
 
-      onSideCartPage.getSideCartEstimatedFee(3).contains(
-        " Estimated packaging fee "
-      );
-      onSideCartPage.getSideCartEstimatedFee(3).contains(
-        "$0.00 - $2.50"
-      );
+  onSideCartPage.getSideCartEstimatedFee(3).contains(
+    " Estimated packaging fee "
+  );
+  onSideCartPage.getSideCartEstimatedFee(3).contains(
+    "$0.00 - $2.50"
+  );
 
-      onSideCartPage.getSideCartTotalExclFees().contains(" $47.10 ");
-      onSideCartPage.getSideCartTotalExclFees().contains("Excluding service fees");
- })
+  onSideCartPage.getSideCartTotalExclFees().contains(" $47.10 ");
+  onSideCartPage.getSideCartTotalExclFees().contains("Excluding service fees");
+})
 
- Cypress.Commands.add('navigateToCheckoutFromSideCart', () => {
+Cypress.Commands.add('navigateToCheckoutFromSideCart', () => {
   //click on view cart, expand, go to checkout
   onSideCartPage.getCheckoutButton().click();
   onCheckoutPage.getTradingAccountInfoB2B().contains("Auto Reg All trading 101 - 101 Red street, ARMIDALE 2350");
- })
+})

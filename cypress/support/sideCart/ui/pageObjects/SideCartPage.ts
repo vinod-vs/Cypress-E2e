@@ -1,185 +1,185 @@
 export class SideCartPage {
   // #region - General selectors
-  getCloseSideCartButton () {
+  getCloseSideCartButton() {
     return cy.get('.close-button > .iconAct-Close_Cancel')
   }
 
-  getCloseSideCartButtonLocatorString () {
+  getCloseSideCartButtonLocatorString() {
     return '.close-button > .iconAct-Close_Cancel'
   }
 
-  getViewCartButton () {
+  getViewCartButton() {
     return cy.get('.checkout-button')
   }
 
-  getClearEntireCartLink () {
+  getClearEntireCartLink() {
     return cy.get('.product-actionsClearCart > span')
   }
 
-  getConfirmClearCartLink () {
+  getConfirmClearCartLink() {
     return cy.get('shared-button[ervalue="Clear cart click"]')
   }
 
-  getCheckoutButton () {
+  getCheckoutButton() {
     return cy.get('.cart-checkout-button > .button')
   }
 
-  getEmptyCartImage () {
+  getEmptyCartImage() {
     return cy.get('.empty-cart-image')
   }
 
-  getEmptyCartTitle () {
+  getEmptyCartTitle() {
     return cy.get('.empty-cart-title')
   }
 
-  getTotalItemsQuantityElemnt () {
+  getTotalItemsQuantityElemnt() {
     return cy.get('.item-count-amount')
   }
 
-  getTotalSavingAmountElement () {
+  getTotalSavingAmountElement() {
     return cy.get('.total-savings-amount')
   }
 
-  getTotalRewardsPointsElement () {
+  getTotalRewardsPointsElement() {
     return cy.get('.cartLoyalty-pointsTotal')
   }
 
-  getRewardcreditscheckElement(){
-    return cy.get('[id^=shared-toggle-switch]').click({ force: true }) 
-    
+  getRewardcreditscheckElement() {
+    return cy.get('[id^=shared-toggle-switch]').click({ force: true })
+
   }
 
-  getTotalAmountElement () {
+  getTotalAmountElement() {
     return cy.get('.cart-checkout-total__currency')
   }
 
-  getSaveAsListButton () {
+  getSaveAsListButton() {
     return cy.get('.cartSaveList-button')
   }
 
-  getOrderSummaryButton () {
+  getOrderSummaryButton() {
     return cy.get('.cart-checkout-summary__heading')
   }
 
-  getTotalAmountElementOnHeader () {
+  getTotalAmountElementOnHeader() {
     return cy.get('#wx-header-checkout-amount')
   }
   // #endregion
 
   // #region - Selectors of all products
-  getAllProductsNameList () {
+  getAllProductsNameList() {
     return cy.get('.cart-item-name')
   }
 
-  getAllProductsDetailList () {
+  getAllProductsDetailList() {
     return cy.get('.cart-item-details')
   }
   // #endregion
 
   // #region - Selectors of available products panel
-  getAvailableProductsInCartPanel () {
-    return cy.get('.auto_products-in-cart') 
+  getAvailableProductsInCartPanel() {
+    return cy.get('.auto_products-in-cart')
   }
 
-  getAvailableProductsList () {
+  getAvailableProductsList() {
     return this.getAvailableProductsInCartPanel().find('.cart-item-details')
   }
 
-  getAvailableProductsNameList () {
+  getAvailableProductsNameList() {
     return this.getAvailableProductsInCartPanel().find('.cart-item-name')
   }
 
-  getAvailableProductsDecrementButtonList () {
+  getAvailableProductsDecrementButtonList() {
     return this.getAvailableProductsInCartPanel().find('.cartControls-decrementButton')
   }
 
-  getAvailableProductsIncrementButtonList () {
+  getAvailableProductsIncrementButtonList() {
     return this.getAvailableProductsInCartPanel().find('.cartControls-incrementButton')
   }
 
-  getAvailableProductsQuantityInputList () {
+  getAvailableProductsQuantityInputList() {
     return this.getAvailableProductsInCartPanel().find('.cartControls-quantityInput')
   }
 
-  getAvailableProductsPriceDivList () {
+  getAvailableProductsPriceDivList() {
     return this.getAvailableProductsInCartPanel().find('.price')
   }
 
-  getAvailableCreditItemsProductsInCartPanel (){
+  getAvailableCreditItemsProductsInCartPanel() {
     return cy.get('.rewards-credits-items')
   }
-  getAvailableCreditItemsProductPriceDivList(){
-    return this.getAvailableCreditItemsProductsInCartPanel().find('.price')  
+  getAvailableCreditItemsProductPriceDivList() {
+    return this.getAvailableCreditItemsProductsInCartPanel().find('.price')
 
   }
-  
-  getAvailableProductsRemoveButtonList () {
+
+  getAvailableProductsRemoveButtonList() {
     return this.getAvailableProductsInCartPanel().find('.cart-item-remove-button')
   }
 
-  getBuyMoreSaveMoreCartItemMessageSection () {
+  getBuyMoreSaveMoreCartItemMessageSection() {
     return this.getAvailableProductsInCartPanel().find('.cartItemMessage')
   }
   // #endregion
 
   // #region - Selectors of restricted products panel
-  getRestrictedProductsNotificationPanel () {
+  getRestrictedProductsNotificationPanel() {
     return cy.get('.auto_group-restricted-fulfilment-window')
   }
 
-  getRestrictedProductsList () {
+  getRestrictedProductsList() {
     return this.getRestrictedProductsNotificationPanel().find('.cart-item-details')
   }
 
-  getRestrictedProductsNotificationParagraph () {
+  getRestrictedProductsNotificationParagraph() {
     return this.getRestrictedProductsNotificationPanel().find('p')
   }
 
-  getRestrictedProductsNotificationChangeDeliveryWindowLink () {
+  getRestrictedProductsNotificationChangeDeliveryWindowLink() {
     return this.getRestrictedProductsNotificationPanel().find('button.linkButton')
   }
   // #endregion
 
   // #region - Selectors of unavalialbe products panel
-  getUnavailableProductsNotificationPanel () {
+  getUnavailableProductsNotificationPanel() {
     return cy.get('.auto_group-restricted-location')
   }
 
-  getUnavailableProductsList () {
+  getUnavailableProductsList() {
     return this.getUnavailableProductsNotificationPanel().find('.cart-item-details')
   }
 
-  getUnavailableProductsNotificationParagraph () {
+  getUnavailableProductsNotificationParagraph() {
     return this.getUnavailableProductsNotificationPanel().find('p.title')
   }
 
-  getUnavailableProductsNotificationUpdateToContinueLink () {
+  getUnavailableProductsNotificationUpdateToContinueLink() {
     return this.getUnavailableProductsNotificationPanel().find('button.linkButton')
   }
   // #endregion
 
   // #region - General actions in side cart
-  CheckIfSideCartIsOpen () {
-   return cy.get('.drawer').invoke('attr', 'class').should('contain', 'is-open')
+  CheckIfSideCartIsOpen() {
+    return cy.get('.drawer').invoke('attr', 'class').should('contain', 'is-open')
   }
 
-  CheckIfSideCartIsClosed () {
+  CheckIfSideCartIsClosed() {
     return cy.get('.drawer').invoke('attr', 'class').should('not.contain', 'is-open')
   }
 
-  checkIfSidecartIsEmpty () {
+  checkIfSidecartIsEmpty() {
     this.getAllProductsNameList().should('have.lengthOf', 0)
   }
 
-  openSideCart () {
+  openSideCart() {
     this.getViewCartButton().click()
   }
 
-  closeSideCart () {
-    this.getCloseSideCartButton().click({ force: true })   
+  closeSideCart() {
+    this.getCloseSideCartButton().click({ force: true })
   }
 
-  gotoCheckout () {
+  gotoCheckout() {
     cy.wait(500)
     cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
       if (result) {
@@ -190,7 +190,7 @@ export class SideCartPage {
     this.getCheckoutButton().click()
   }
 
-  modifyItemQuantityByName (productName: string, expectedAmount: number) {
+  modifyItemQuantityByName(productName: string, expectedAmount: number) {
     this.findItemDetailsByName(productName)
       .find('.cartControls-quantityInput')
       .clear()
@@ -198,23 +198,23 @@ export class SideCartPage {
       .should('have.value', expectedAmount)
   }
 
-  removeItemByName (productName: string) {
+  removeItemByName(productName: string) {
     this.findItemDetailsByName(productName)
       .find('.cart-item-remove-button')
       .click()
   }
 
-  removeItemsByNames (productNameList: string[]) {
+  removeItemsByNames(productNameList: string[]) {
     for (const eachName of productNameList) {
       this.removeItemByName(eachName)
     }
   }
 
-  removeAllUnavailableItems () {
+  removeAllUnavailableItems() {
     this.getUnavailableProductsNotificationUpdateToContinueLink().click()
   }
 
-  removeAllItems () {
+  removeAllItems() {
     cy.checkIfElementExists('.notification-group').then((result: boolean) => {
       if (result) {
         this.getAllRemoveItemButtonsForItemsUnderNotification().click({ multiple: true })
@@ -231,7 +231,7 @@ export class SideCartPage {
     })
   }
 
-  cleanupTrolley () {
+  cleanupTrolley() {
     this.openSideCart()
     this.removeAllItems()
     this.closeSideCart()
@@ -239,7 +239,7 @@ export class SideCartPage {
   // #endregion
 
   // #endregion - private methods
-  private findItemDetailsByName (productName: string) {
+  private findItemDetailsByName(productName: string) {
     return this.getAllProductsNameList()
       .should('have.lengthOf.greaterThan', 0)
       .contains(productName)
@@ -247,11 +247,11 @@ export class SideCartPage {
   }
   // #endregion
 
-  getAllRemoveItemButtonsForItemsUnderNotification () {
+  getAllRemoveItemButtonsForItemsUnderNotification() {
     return cy.get('.notification-group').find('.cart-item-remove-button')
   }
 
-  removeAllItemsUnderNotificationGroupsFromCart () {
+  removeAllItemsUnderNotificationGroupsFromCart() {
     onSideCartPage.getViewCartButton().click()
     cy.wait(500)
     cy.checkIfElementExists('.notification-group').then((existanceNG: boolean) => {
@@ -259,51 +259,51 @@ export class SideCartPage {
         onSideCartPage.getAllRemoveItemButtonsForItemsUnderNotification().click({ multiple: true })
       }
     })
-    onSideCartPage.getCloseSideCartButton().click({force: true})
+    onSideCartPage.getCloseSideCartButton().click({ force: true })
   }
 
-  getViewCartB2B () {
-   return cy.get("div.headerCheckout-checkout")
+  getViewCartB2B() {
+    return cy.get("div.headerCheckout-checkout")
   }
 
-  getRemoveAllB2B () {
-   return cy.get("button.product-actionsClearCart")
+  getRemoveAllB2B() {
+    return cy.get("button.product-actionsClearCart")
   }
 
-  getConfirmClearSideCartB2B () {
+  getConfirmClearSideCartB2B() {
     return cy.get("#btnclearAllCartItems > .primary")
   }
 
-  getEmptyCartTitleB2B () {
-    return  cy.get("h4.empty-cart-title")
+  getEmptyCartTitleB2B() {
+    return cy.get("h4.empty-cart-title")
   }
 
-  getContinueShoppingBtnB2B (){
+  getContinueShoppingBtnB2B() {
     return cy.get("#btnContinueShopping > button.primary")
   }
 
-  getQtyfieldContainer () {
+  getQtyfieldContainer() {
     return cy.get(".quantity-pill-container")
   }
 
-  getSideCartHeaderTitle () {
+  getSideCartHeaderTitle() {
     return cy.get("h3.heading-title")
   }
 
-  getSaveAsListFromSideCart () {
+  getSaveAsListFromSideCart() {
     return cy.get(".cartSaveList > .linkButton")
   }
 
-  getSideCartPriceTotal () {
+  getSideCartPriceTotal() {
     return cy.get("div.cart-checkout-summary__price")
   }
 
-  getSideCartEstimatedFee (index: any) {
+  getSideCartEstimatedFee(index: any) {
     return cy.get(`div.cart-checkout-summary__section > :nth-child(${index})`)
-   
+
   }
-  
-  getSideCartTotalExclFees () {
+
+  getSideCartTotalExclFees() {
     return cy.get("div.cart-checkout-content")
   }
 }
