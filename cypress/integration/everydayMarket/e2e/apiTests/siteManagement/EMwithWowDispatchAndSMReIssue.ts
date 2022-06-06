@@ -48,6 +48,8 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       let edmOrderId: any
       let edmInvoiceId: any
 
+      let reIssueOrderIdNumber
+
       const shopperId = shoppers.emAccountWithRegression.shopperId
       const testData = wowDispatchData.wowDispatchJSON
 
@@ -247,6 +249,24 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               .getReissueOrderTotalOnApprovedRefundDetailsScreeen()
               .parent()
               .contains('0.00')
+            //Extract the ReIssue Order Id -
+            onOrderManagement
+              .getReissueOrderId()
+              .parent()
+              .invoke('text')
+              .then((reIssueOrderIdLabelText) => {
+                cy.wrap(reIssueOrderIdLabelText).as('reIssueOrderId')
+              })
+            cy.get('@reIssueOrderId').then((reIssueOrderId) => {
+              cy.log(' reIssueOrderId Full Label Text is=' + reIssueOrderId)
+              let pattern = /[0-9]+/g
+              reIssueOrderIdNumber = String(reIssueOrderId.match(pattern))
+              cy.log('ReIssue Order Id Generated is=' + reIssueOrderIdNumber)
+              //Now, Search for that ReIssued OrderId in Site Management
+              cy.searchAnOrderOnSM(reIssueOrderIdNumber)
+              // And Verify that No EM Tab is present in SM for the ReIssued OrderId
+              onOrderManagement.getEDMTab().should('not.exist')
+            })
           }
         })
       })
