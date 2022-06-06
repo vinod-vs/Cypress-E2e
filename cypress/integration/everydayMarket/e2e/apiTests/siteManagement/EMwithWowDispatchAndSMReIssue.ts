@@ -39,7 +39,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     })
 
     it('[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue', () => {
-      const searchTerm = 'treats' // 'everyday market'
+      const searchTerm = 'pets' // 'everyday market'
       const purchaseQty = 2
       //let shopperId: any
       let req: any

@@ -69,6 +69,9 @@ export class FMSWindowSelector {
     cy.get('.day-dropdown > option')
       .contains(dayKeyword)
       .then(dayOption => {
+        if(dayOption.text().includes('Closed')){
+          throw new Error("The day you selected: " + dayKeyword + " is closed");
+        }
         cy.wrap(dayOption).parent().select(dayOption.text())
       })
   }
@@ -78,12 +81,14 @@ export class FMSWindowSelector {
   }
 
   selectDeliveryNowTimeslot () {
-    cy.get('wow-time-slot-badges span').each(eachBadgeSpan => {
-      if (eachBadgeSpan.text() == 'Delivery Now') {
+    cy.checkIfElementExists('.delivery-now').then((result:boolean) => {
+      if(!result){
+        throw new Error("No Delivery Now window for selected address")
+      }
+      else{
         cy.intercept(Cypress.env('bootstrapEndpoint')).as('bootstrap')
-        cy.wrap(eachBadgeSpan).parents('.time-slot-badge-container').click()
+        cy.get('.delivery-now').parents('.time-slot-badge-container').click({force: true})
         cy.wait('@bootstrap')
-        return false
       }
     })
   }

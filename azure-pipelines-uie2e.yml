@@ -1,0 +1,111 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+parameters:
+  - name: browser
+    displayName: Browser
+    type: string
+    default: electron
+    values:
+      - chrome
+      - edge
+      - firefox
+      - electron
+
+  - name: tags
+    displayName: Test Tags
+    type: string
+    default: E2E
+    values:
+      - API
+      - UI
+      - B2C
+      - B2B
+      - P0
+      - P1
+      - P2
+      - P3
+      - E2E
+      - EDM
+      - Checkout
+      - SM
+      - Login
+
+  - name: fileConfig
+    displayName: Config File Name
+    type: string
+    default: b2c
+    values:
+      - b2c
+      - b2b
+      - edm
+
+  - name: otpValidationSwitch
+    displayName: One Time Password Validation Switch
+    type: string
+    default: false
+    values:
+      - true
+      - false
+
+trigger: none
+
+resources:
+  pipelines:
+    - pipeline: Cypress_UI_E2E_Automation
+      source: Woolworths.Frontend
+      project: Trader
+      trigger: 
+        stages:
+        - 'Deploy UAT AAE'
+
+jobs:
+  - job: Run_B2C_UI_E2E_Tests
+    displayName: "Install Node.js and run B2C UI tests"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "14.x"
+        displayName: "Find or download node 14"
+      - script: |
+          npm install
+          npm test -- --env tags=B2C-UI-E2E,fileConfig=b2c,otpValidationSwitch=true,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
+        displayName: "Npm install and run B2C UI E2E tests"
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: "JUnit"
+          testResultsFiles: "**/results-*.xml"
+          testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
+          mergeTestResults: true
+          searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
+        displayName: "Publish Test Results"
+
+  - job: Run_B2B_UI_E2E_Tests
+    displayName: "Install Node.js and run B2B UI tests"
+    pool:
+      name: wlx-ubuntu1804
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "14.x"
+        displayName: "Find or download node 14"
+      - script: |
+          npm install
+          npm test -- --env tags=B2B-UI-E2E,fileConfig=b2b,otpValidationSwitch=true,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
+        displayName: "Npm install and run B2B UI E2E tests"
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: "JUnit"
+          testResultsFiles: "**/results-*.xml"
+          testRunTitle: WOWE2EAPI-$(Build.BuildNumber)
+          mergeTestResults: true
+          searchFolder: "$(System.DefaultWorkingDirectory)/cypress/results"
+        displayName: "Publish Test Results"

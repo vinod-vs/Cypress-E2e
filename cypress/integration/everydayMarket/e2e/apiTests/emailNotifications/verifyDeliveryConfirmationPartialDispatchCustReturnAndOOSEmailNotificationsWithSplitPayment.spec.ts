@@ -148,8 +148,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
           }).as('partialDispatchEvents')
         })
 
+        //Commenting this as this email notification is currently toggled off
         // Verify the delivery confirmation email
-        cy.verifyOrderOnItsWayEmailDetails(testData).then((orderOnItsWayEmailVerification) => {
+        //cy.verifyOrderOnItsWayEmailDetails(testData).then((orderOnItsWayEmailVerification) => {
           // Initiate customer return for one quantity
           // Verify the projection and events
           // Verify the customer return confirmation email
@@ -222,7 +223,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
             cy.wait(5000)
             cy.verifyOOSEmailDetails(testData)
           })
-        })
+        //})
       })
     })
   })

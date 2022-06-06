@@ -39,7 +39,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     })
 
     it('[API]  RP-5538-EM|MP|SM-VerifyDeliveryUnlimitedDiscountForEMitemsAndDisplayedInSM', () => {
-      const searchTerm = 'treats' // 'everyday market'
+      const searchTerm = 'pets' // 'everyday market'
       const purchaseQty = 1
       // let shopperId: any;
       let req: any
@@ -52,10 +52,19 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
       // PreCondition- Login with a Shopper Which is DU Subscribed and Rewards Card associated in the Account
       cy.loginViaApiAndHandle2FA(shoppers.emAccountWithRewards27)
-      cy.log('LoggedIn Shopper id is = ' + shoppers.emAccountWithRewards27.shopperId)
-      cy.log('LoggedIn EmailId id is = ' + shoppers.emAccountWithRewards27.email)
-      cy.log('LoggedIn Password is = ' + shoppers.emAccountWithRewards27.password)
-      cy.log('LoggedIn Rewards Card Number is = ' + shoppers.emAccountWithRewards27.rewardsCardNumber)
+      cy.log(
+        'LoggedIn Shopper id is = ' + shoppers.emAccountWithRewards27.shopperId
+      )
+      cy.log(
+        'LoggedIn EmailId id is = ' + shoppers.emAccountWithRewards27.email
+      )
+      cy.log(
+        'LoggedIn Password is = ' + shoppers.emAccountWithRewards27.password
+      )
+      cy.log(
+        'LoggedIn Rewards Card Number is = ' +
+          shoppers.emAccountWithRewards27.rewardsCardNumber
+      )
 
       // Add Wow + EM Multi Seller Items in the Cart
       cy.prepareAnyMultiSellerLineItemWowAndEdmOrder(searchTerm, purchaseQty)
@@ -72,7 +81,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
           shopperId: shopperId,
           orderId: confirmedOrder.Order.OrderId,
           orderReference: confirmedOrder.Order.OrderReference,
-          WoolworthsSubtotal: confirmedOrder.Order.WoolworthsSubtotal
+          WoolworthsSubtotal: confirmedOrder.Order.WoolworthsSubtotal,
         }
       })
     })
