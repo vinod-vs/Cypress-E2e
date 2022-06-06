@@ -233,11 +233,11 @@
         "shopperId": "8518293",
         "platform": "B2C"
     },
-    "emAccountWithRegression": {
-        "email": "notpromouseredm@mailinator.com",
-        "password": "Woolies123",
+    "emAccountWithRegressionSMDispatchReIssueOrder": {
+        "email": "smreissueorder@woolworths.com.au",
+        "password": "testing123",
         "rewardsCardNumber": "",
-        "shopperId": "8466235",
+        "shopperId": "8547196",
         "platform": "B2C"
     },
 

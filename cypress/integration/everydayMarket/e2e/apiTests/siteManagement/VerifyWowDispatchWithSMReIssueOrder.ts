@@ -50,10 +50,10 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
       let reIssueOrderIdNumber
 
-      const shopperId = shoppers.emAccountWithRegression.shopperId
+      const shopperId = shoppers.emAccountWithRegressionSMDispatchReIssueOrder.shopperId
       const testData = wowDispatchData.wowDispatchJSON
 
-      cy.loginViaApiAndHandle2FA(shoppers.emAccountWithRegression)
+      cy.loginViaApiAndHandle2FA(shoppers.emAccountWithRegressionSMDispatchReIssueOrder)
 
       cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
