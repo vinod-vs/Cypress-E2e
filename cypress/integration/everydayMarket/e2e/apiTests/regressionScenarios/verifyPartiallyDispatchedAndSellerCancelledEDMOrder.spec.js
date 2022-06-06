@@ -274,6 +274,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
               expect(response.invoices[0].refunds[0].status).is.equal(
                 'Refunded'
               )
+              expect(response.invoices[0].refunds[0].initiatedBy).is.equal(
+                'SELLER'
+              )
               // Validate refund items
               expect(
                 response.invoices[0].refunds[0].refundItems[0].reason
