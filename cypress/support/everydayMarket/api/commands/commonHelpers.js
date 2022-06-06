@@ -226,10 +226,16 @@ export function verifyOQSOrderStatus (traderOrderId, expectedWOWOrderStatus, isM
           // Verify the WOW items count match the OQS response. If there is a promo like 'Woolworths Disney+ Ooshie Collectibles'
           // This will also be added under OrderedProducts. Hence checking length to be for greater than or equal from testdata
           wowItems.forEach(function (item, k) {
-            expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
-            expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
-            expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
-            expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
+            // Skipping Woolworths Disney+ Ooshie Collectibles verifications
+            if (oqsResponse.OrderProducts[k].Ordered.Brand === 'Woolworths' && oqsResponse.OrderProducts[k].Ordered.Name === 'Woolworths Disney+ Ooshie Collectibles' && oqsResponse.OrderProducts[k].Ordered.Total === 0) {
+              cy.log('Skipping this WOW product as it is Woolworths Disney+ Ooshie Collectibles. Product Details: ' + JSON.stringify(oqsResponse.OrderProducts[k].Ordered))
+            } else {
+              cy.log('Verifying this WOW non Woolworths Disney+ Ooshie Collectibles product. Product Details: ' + JSON.stringify(oqsResponse.OrderProducts[k].Ordered))
+              expect(oqsResponse.OrderProducts[k].Ordered.StockCode).to.be.equal(item.stockCode)
+              expect(oqsResponse.OrderProducts[k].Ordered.Quantity).to.be.equal(item.quantity)
+              expect(oqsResponse.OrderProducts[k].Ordered.SalePrice.Value).to.be.equal(item.pricePerItem)
+              expect(oqsResponse.OrderProducts[k].Ordered.Total).to.be.equal(Number(Number.parseFloat(Number(item.pricePerItem * item.quantity)).toFixed(2)))
+            }
           })
         } else {
           // On WOW order cancellations the OQS response with the new traderOrderId will have empty OrderProducts as the WOW items will be removed and only the EDM products will be retained in the new traderorderId
