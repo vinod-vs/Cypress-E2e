@@ -41,7 +41,6 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     it('[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue', () => {
       const searchTerm = 'pets' // 'everyday market'
       const purchaseQty = 2
-      //let shopperId: any
       let req: any
       let orderId: any
       let WoolworthsSubtotal: any
@@ -50,10 +49,13 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
       let reIssueOrderIdNumber
 
-      const shopperId = shoppers.emAccountWithRegressionSMDispatchReIssueOrder.shopperId
+      const shopperId =
+        shoppers.emAccountWithRegressionSMDispatchReIssueOrder.shopperId
       const testData = wowDispatchData.wowDispatchJSON
 
-      cy.loginViaApiAndHandle2FA(shoppers.emAccountWithRegressionSMDispatchReIssueOrder)
+      cy.loginViaApiAndHandle2FA(
+        shoppers.emAccountWithRegressionSMDispatchReIssueOrder
+      )
 
       cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
