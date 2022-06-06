@@ -8,6 +8,7 @@ import '../../../../../support/siteManagement/ui/commands/orderManagement'
 import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/invoices/api/commands/commands'
 import '../../../../../support/refunds/api/commands/commands'
+import shoppers from '../../../../../fixtures/everydayMarket/shoppers.json'
 
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
@@ -35,30 +36,22 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
-      Cypress.Cookies.preserveOnce('w-rctx')
     })
 
     it('[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue', () => {
       const searchTerm = 'treats' // 'everyday market'
       const purchaseQty = 2
-      let shopperId: any
+      //let shopperId: any
       let req: any
       let orderId: any
       let WoolworthsSubtotal: any
       let edmOrderId: any
       let edmInvoiceId: any
-      let reIssueOrderIdNumber: any
 
+      const shopperId = shoppers.emAccountWithRewardsRegression.shopperId
       const testData = wowDispatchData.wowDispatchJSON
 
-      // Sign up for a new shopper
-      cy.loginWithNewShopperViaApi()
-
-      cy.get('@signUpResponse').then((signUpResp) => {
-        shopperId = signUpResp.ShopperId
-        cy.wrap(shopperId).as('shopperId')
-        cy.log('Shopper id is === ' + shopperId)
-      })
+      cy.loginViaApiAndHandle2FA(shoppers.emAccountWithRewardsRegression)
 
       cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
@@ -254,46 +247,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               .getReissueOrderTotalOnApprovedRefundDetailsScreeen()
               .parent()
               .contains('0.00')
-
-            // Starts the Changes on 27th May 2022 To Verify
-            //Extract the Reissue Order ID 140175087  from the ReIssue Confirmation Screen
-            //Then Search for that ReIssued OrderId and Verify that No EM Tab is present in SM
-            //Now, Perform Below Validations on the Trader Website Page- On My Order Details Page for the ReIssued Order-
-            //Verify - 'Make changes to my order' and 'Cancel my order' Buttons are NOT Present.
-
-            //Extract the ReIssue Order Id -
-            //onOrderManagement.getOrderidOnApprovedRefundDetailsScreeen().parent().invoke('text')//.should('contain', finalProjection.orderId)
-            onOrderManagement
-              .getReissueOrderId()
-              .parent()
-              .invoke('text')
-              .then((reIssueOrderIdLabelText) => {
-                cy.wrap(reIssueOrderIdLabelText).as('reIssueOrderId')
-              })
-
-            cy.get('@reIssueOrderId').then((reIssueOrderId) => {
-              cy.log(' reIssueOrderId Full Label Text is=' + reIssueOrderId)
-              let pattern = /[0-9]+/g
-              reIssueOrderIdNumber = String(reIssueOrderId.match(pattern))
-              cy.wrap(reIssueOrderIdNumber).as('reIssueOrderIdNumber')
-              cy.log('---- reIssueOrderIdNumber is= ' + reIssueOrderIdNumber)
-
-              //Now Search for that ReIssued OrderId extracted Above and Verify that No EM Tab is present in SM details
-              // Click on Order Management Tab to Open the Search Screen
-              onOrderManagement.getOrderManagementTab().click()
-              // Now, Search the ReIssue  Order Id
-              cy.searchAnOrderOnSM(reIssueOrderIdNumber)
-              //Now, Assert for No EM Tab Present on the ReIssued Order
-              onOrderManagement.getEDMTab().should('not.exist')
-
-              //Now, Perform Below Validations on the Trader Website Page- On My Order Details Page for the ReIssued Order
-              //Navigate to the Trader Website -> Login -> Click on My Order Details Page OF the ReIssues OrderID-
-              // Login
-              cy.loginViaUi(shoppers[0])
-              // Navigate to My account
-              cy.navigateToMyAccountViaUi()
-            }) // ENDS - cy.get('@reIssueOrderId').then((reIssueOrderId) => {
-          } // ENDS - IF Condition
+          }
         })
       })
     })
