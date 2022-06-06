@@ -8,6 +8,7 @@ import '../../../../../support/siteManagement/ui/commands/orderManagement'
 import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/invoices/api/commands/commands'
 import '../../../../../support/refunds/api/commands/commands'
+import shoppers from '../../../../../fixtures/everydayMarket/shoppers.json'
 
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
@@ -40,23 +41,21 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     it('[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue', () => {
       const searchTerm = 'pets' // 'everyday market'
       const purchaseQty = 2
-      let shopperId: any
       let req: any
       let orderId: any
       let WoolworthsSubtotal: any
       let edmOrderId: any
       let edmInvoiceId: any
 
+      let reIssueOrderIdNumber
+
+      const shopperId =
+        shoppers.emAccountWithRegressionSMDispatchReIssueOrder.shopperId
       const testData = wowDispatchData.wowDispatchJSON
 
-      // Sign up for a new shopper
-      cy.loginWithNewShopperViaApi()
-
-      cy.get('@signUpResponse').then((signUpResp) => {
-        shopperId = signUpResp.ShopperId
-        cy.wrap(shopperId).as('shopperId')
-        cy.log('Shopper id is === ' + shopperId)
-      })
+      cy.loginViaApiAndHandle2FA(
+        shoppers.emAccountWithRegressionSMDispatchReIssueOrder
+      )
 
       cy.prepareAnySingleLineItemWowAndEdmOrder(searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
@@ -252,6 +251,24 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               .getReissueOrderTotalOnApprovedRefundDetailsScreeen()
               .parent()
               .contains('0.00')
+            //Extract the ReIssue Order Id -
+            onOrderManagement
+              .getReissueOrderId()
+              .parent()
+              .invoke('text')
+              .then((reIssueOrderIdLabelText) => {
+                cy.wrap(reIssueOrderIdLabelText).as('reIssueOrderId')
+              })
+            cy.get('@reIssueOrderId').then((reIssueOrderId) => {
+              cy.log(' reIssueOrderId Full Label Text is=' + reIssueOrderId)
+              let pattern = /[0-9]+/g
+              reIssueOrderIdNumber = String(reIssueOrderId.match(pattern))
+              cy.log('ReIssue Order Id Generated is=' + reIssueOrderIdNumber)
+              //Now, Search for that ReIssued OrderId in Site Management
+              cy.searchAnOrderOnSM(reIssueOrderIdNumber)
+              // And Verify that No EM Tab is present in SM for the ReIssued OrderId
+              onOrderManagement.getEDMTab().should('not.exist')
+            })
           }
         })
       })
