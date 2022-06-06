@@ -233,7 +233,7 @@
         "shopperId": "8518293",
         "platform": "B2C"
     },
-    "emAccountWithRewardsRegression": {
+    "emAccountWithRegression": {
         "email": "notpromouseredm@mailinator.com",
         "password": "Woolies123",
         "rewardsCardNumber": "",
