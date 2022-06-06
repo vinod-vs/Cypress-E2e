@@ -37,7 +37,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
     it('[API] RP-5477 - EDM - Automatically capture any updates to the tracking information', () => {
       const purchaseQty = 5
       const dispatchQty = 2
-      const searchTerm = 'treats'
+      const searchTerm = 'pets'
       let req
       let shipmentId
       const shopper = shoppers.emAccountWithRewards25
@@ -46,7 +46,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApiAndHandle2FA(shopper)
 
-      // Place single line item EDM order with quantity = 2, using 'treats' as search term
+      // Place single line item EDM order with quantity = 2, using 'pets' as search term
       // and grab the first any available EDM item returned by search
       cy.prepareAnySingleLineItemEdmOrder(search.searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')
@@ -56,41 +56,57 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
           ...eventsRequest,
           shopperId: shopper.shopperId,
           orderId: confirmedOrder.Order.OrderId,
-          orderReference: confirmedOrder.Order.OrderReference
+          orderReference: confirmedOrder.Order.OrderReference,
         }
 
         // Call Market Order API and validate the data
-        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
-          function: function (response) {
-            if (response.body.invoices[0].wowStatus !== 'Placed') {
-              throw new Error('Still not sent to Marketplacer yet')
-            }
-          },
-          retries: Cypress.env('marketApiRetryCount'),
-          timeout: Cypress.env('marketApiTimeout')
-        }).as('finalProjection').then((response) => {
-          lib.validateOrderApiAgainstTrader(response)
-          expect(response.invoices[0].invoiceStatus).is.equal('PAID')
-          expect(response.invoices[0].wowStatus).is.equal('Placed')
-          // Validate line items
-          expect(response.invoices[0].lineItems[0].refundableQuantity).is.equal(0)
-          // Validate refunds
-          expect(response.invoices[0].refunds).is.empty
-          // Validate shipments
-          expect(response.invoices[0].shipments).is.empty
-        })
+        cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
+          req.shopperId,
+          req.orderId,
+          {
+            function: function (response) {
+              if (response.body.invoices[0].wowStatus !== 'Placed') {
+                throw new Error('Still not sent to Marketplacer yet')
+              }
+            },
+            retries: Cypress.env('marketApiRetryCount'),
+            timeout: Cypress.env('marketApiTimeout'),
+          }
+        )
+          .as('finalProjection')
+          .then((response) => {
+            lib.validateOrderApiAgainstTrader(response)
+            expect(response.invoices[0].invoiceStatus).is.equal('PAID')
+            expect(response.invoices[0].wowStatus).is.equal('Placed')
+            // Validate line items
+            expect(
+              response.invoices[0].lineItems[0].refundableQuantity
+            ).is.equal(0)
+            // Validate refunds
+            expect(response.invoices[0].refunds).is.empty
+            // Validate shipments
+            expect(response.invoices[0].shipments).is.empty
+          })
 
         // Call the Market Events API and validate the data
         cy.orderEventsApiWithRetry(req.orderReference, {
           function: function (response) {
-            if (!response.body.data.some((element) => element.domainEvent === 'OrderPlaced') ||
-                                !response.body.data.some((element) => element.domainEvent === 'MarketOrderPlaced')) {
+            if (
+              !response.body.data.some(
+                (element) => element.domainEvent === 'OrderPlaced'
+              ) ||
+              !response.body.data.some(
+                (element) => element.domainEvent === 'MarketOrderPlaced'
+              )
+            ) {
               cy.log('Expected OrderPlaced & MarketOrderPlaced to be present')
-              throw new Error('Expected OrderPlaced & MarketOrderPlaced to be present')
+              throw new Error(
+                'Expected OrderPlaced & MarketOrderPlaced to be present'
+              )
             }
           },
           retries: Cypress.env('marketApiRetryCount'),
-          timeout: Cypress.env('marketApiTimeout')
+          timeout: Cypress.env('marketApiTimeout'),
         }).then((response) => {
           lib.validateEvents(response, 'OrderPlaced', 1)
           lib.validateEvents(response, 'MarketOrderPlaced', 1)
@@ -98,70 +114,134 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
 
         cy.get('@finalProjection').then((data) => {
           // Partial dispatch - dispatch 2 out of the 5 items via Marketplacer
-          cy.partialDispatchOfLineItemsInInvoice(data.invoices[0].legacyId, [{ line_item_id: data.invoices[0].lineItems[0].legacyId, quantity: dispatchQty }], shipment.postageTrackingnumber, shipment.postageCarrier, data.invoices[0].seller.sellerName).then((response) => {
+          cy.partialDispatchOfLineItemsInInvoice(
+            data.invoices[0].legacyId,
+            [
+              {
+                line_item_id: data.invoices[0].lineItems[0].legacyId,
+                quantity: dispatchQty,
+              },
+            ],
+            shipment.postageTrackingnumber,
+            shipment.postageCarrier,
+            data.invoices[0].seller.sellerName
+          ).then((response) => {
             shipmentId = response.data.id
             cy.log('Shipment id is ' + shipmentId)
-            cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(data.shopperId, data.orderId, {
-              function: function (response) {
-                if (response.body.invoices[0].wowStatus !== 'PartiallyShipped') {
-                  throw new Error('Still not shipped yet')
-                }
-              },
-              retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
-            }).as('finalProjection').then((response) => {
-              expect(response.invoices[0].invoiceStatus).is.equal('PARTIALLY_SENT')
-              expect(response.invoices[0].wowStatus).is.equal('PartiallyShipped')
-              response.invoices[0].wowStatus = 'Partially shipped'
-              // Validate line items
-              expect(response.invoices[0].lineItems[0].refundableQuantity).is.equal(dispatchQty)
-              response.invoices[0].lineItems[0].totalAmount = dispatchQty * response.invoices[0].lineItems[0].salePrice
+            cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
+              data.shopperId,
+              data.orderId,
+              {
+                function: function (response) {
+                  if (
+                    response.body.invoices[0].wowStatus !== 'PartiallyShipped'
+                  ) {
+                    throw new Error('Still not shipped yet')
+                  }
+                },
+                retries: Cypress.env('marketApiRetryCount'),
+                timeout: Cypress.env('marketApiTimeout'),
+              }
+            )
+              .as('finalProjection')
+              .then((response) => {
+                expect(response.invoices[0].invoiceStatus).is.equal(
+                  'PARTIALLY_SENT'
+                )
+                expect(response.invoices[0].wowStatus).is.equal(
+                  'PartiallyShipped'
+                )
+                response.invoices[0].wowStatus = 'Partially shipped'
+                // Validate line items
+                expect(
+                  response.invoices[0].lineItems[0].refundableQuantity
+                ).is.equal(dispatchQty)
+                response.invoices[0].lineItems[0].totalAmount =
+                  dispatchQty * response.invoices[0].lineItems[0].salePrice
 
-              // Validate refunds
-              expect(response.invoices[0].refunds).is.empty
-              // Validate shipments
-              expect(response.invoices[0].shipments[0].carrier).is.equal(shipment.postageCarrier)
-              expect(response.invoices[0].shipments[0].trackingNumber).is.equal(shipment.postageTrackingnumber)
-              expect(response.invoices[0].shipments[0].shippedItems[0].stockCode).is.equal(data.invoices[0].lineItems[0].stockCode)
-              expect(response.invoices[0].shipments[0].shippedItems[0].quantity).is.equal(dispatchQty)
-            })
+                // Validate refunds
+                expect(response.invoices[0].refunds).is.empty
+                // Validate shipments
+                expect(response.invoices[0].shipments[0].carrier).is.equal(
+                  shipment.postageCarrier
+                )
+                expect(
+                  response.invoices[0].shipments[0].trackingNumber
+                ).is.equal(shipment.postageTrackingnumber)
+                expect(
+                  response.invoices[0].shipments[0].shippedItems[0].stockCode
+                ).is.equal(data.invoices[0].lineItems[0].stockCode)
+                expect(
+                  response.invoices[0].shipments[0].shippedItems[0].quantity
+                ).is.equal(dispatchQty)
+              })
 
             // Call the Market Events API and validate the data
             cy.orderEventsApiWithRetry(data.orderReference, {
               function: function (response) {
-                if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                                            !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched')) {
-                  cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited to be present')
-                  throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited to be present')
+                if (
+                  !response.body.data.some(
+                    (element) =>
+                      element.domainEvent === 'MarketOrderShipmentCreate'
+                  ) ||
+                  !response.body.data.some(
+                    (element) => element.domainEvent === 'MarketOrderDispatched'
+                  )
+                ) {
+                  cy.log(
+                    'Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited to be present'
+                  )
+                  throw new Error(
+                    'Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited to be present'
+                  )
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
+              timeout: Cypress.env('marketApiTimeout'),
             }).then((response) => {
               lib.validateEvents(response, 'MarketOrderShipmentCreate', 1)
               lib.validateEvents(response, 'MarketOrderDispatched', 1)
             })
 
             // Update shipping tracking number
-            cy.updateShippingInformation(shipmentId, data.invoices[0].legacyId, updatedTrackingNumber, data.invoices[0].seller.sellerName).then((response) => {
-              expect(response.data.attributes.shipment_tracking_number).is.equal(updatedTrackingNumber)
+            cy.updateShippingInformation(
+              shipmentId,
+              data.invoices[0].legacyId,
+              updatedTrackingNumber,
+              data.invoices[0].seller.sellerName
+            ).then((response) => {
+              expect(
+                response.data.attributes.shipment_tracking_number
+              ).is.equal(updatedTrackingNumber)
             })
           })
 
           // Get Projection And Verify Updated Tracking Number
-          cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(req.shopperId, req.orderId, {
-            function: function (response) {
-              if (response.body.invoices[0].shipments[0].trackingNumber !== updatedTrackingNumber) {
-                throw new Error('Tracking number not updated yet')
-              }
-            },
-            retries: Cypress.env('marketApiRetryCount'),
-            timeout: Cypress.env('marketApiTimeout')
-          }).as('finalProjection').then((response) => {
-            expect(response.invoices[0].shipments[0].trackingNumber).is.equal(updatedTrackingNumber)
-            response.invoices[0].wowStatus = 'Partially shipped'
-            response.invoices[0].lineItems[0].totalAmount = dispatchQty * response.invoices[0].lineItems[0].salePrice
-          })
+          cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
+            req.shopperId,
+            req.orderId,
+            {
+              function: function (response) {
+                if (
+                  response.body.invoices[0].shipments[0].trackingNumber !==
+                  updatedTrackingNumber
+                ) {
+                  throw new Error('Tracking number not updated yet')
+                }
+              },
+              retries: Cypress.env('marketApiRetryCount'),
+              timeout: Cypress.env('marketApiTimeout'),
+            }
+          )
+            .as('finalProjection')
+            .then((response) => {
+              expect(response.invoices[0].shipments[0].trackingNumber).is.equal(
+                updatedTrackingNumber
+              )
+              response.invoices[0].wowStatus = 'Partially shipped'
+              response.invoices[0].lineItems[0].totalAmount =
+                dispatchQty * response.invoices[0].lineItems[0].salePrice
+            })
 
           // Search Order in SM and verify the Updated Tracking number
           cy.get('@finalProjection').then((response) => {
@@ -176,9 +256,15 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
 
               // Verify Shipping Information
               oqsResponse.MarketOrders.forEach(function (item, i) {
-                expect(oqsResponse.MarketOrders[i].Shipment.Carrier).to.be.equal(response.invoices[i].shipments[0].carrier)
-                expect(oqsResponse.MarketOrders[i].Shipment.TrackingLink).to.be.equal(response.invoices[i].shipments[0].trackingLink)
-                expect(oqsResponse.MarketOrders[i].Shipment.TrackingNumber).to.be.equal(response.invoices[i].shipments[0].trackingNumber)
+                expect(
+                  oqsResponse.MarketOrders[i].Shipment.Carrier
+                ).to.be.equal(response.invoices[i].shipments[0].carrier)
+                expect(
+                  oqsResponse.MarketOrders[i].Shipment.TrackingLink
+                ).to.be.equal(response.invoices[i].shipments[0].trackingLink)
+                expect(
+                  oqsResponse.MarketOrders[i].Shipment.TrackingNumber
+                ).to.be.equal(response.invoices[i].shipments[0].trackingNumber)
               })
             })
           })

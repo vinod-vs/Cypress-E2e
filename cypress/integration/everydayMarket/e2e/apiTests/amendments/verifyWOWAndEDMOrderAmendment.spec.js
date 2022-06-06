@@ -37,7 +37,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
         shopperId = signUpResp.ShopperId
       })
 
-      // Place single line item EDM order with quantity = 2, using 'treats' as search term
+      // Place single line item EDM order with quantity = 2, using 'pets' as search term
       // and grab the first any available EDM item returned by search
       cy.prepareAnySingleLineItemWowAndEdmOrder(search.searchTerm, purchaseQty)
       cy.placeOrderUsingCreditCard().as('confirmedTraderOrder')

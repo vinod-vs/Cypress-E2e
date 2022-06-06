@@ -1,6 +1,6 @@
 {
     "VerifyFullyDispatchedEDMOrder": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
@@ -20,7 +20,7 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "VerifyFullyDispatchedEDMOnlyOrderPaypal": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
@@ -36,7 +36,7 @@
         }
     },
     "VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -52,7 +52,7 @@
         }
     },
     "VerifyMultiplePartialDispatchedEDMOrder": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:123456",
         "address": {
@@ -71,7 +71,7 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "VerifyFullCancellationOfEDMOrder": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -90,7 +90,7 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "customerSelfServiceReturn": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -109,7 +109,7 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "GenericWOWPlusEDMCCPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -128,7 +128,7 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "GenericWOWPlusEDMPPPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
@@ -147,7 +147,7 @@
         "paymentType": "PAYPAL_ONLY"
     },
     "GiftWOWPlusEDMPPPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "isAGiftOrder": true,
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
@@ -169,7 +169,7 @@
         "paymentType": "PAYPAL_ONLY"
     },
     "GenericWOWPlusEDMPaypalRDAndGCPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -188,7 +188,7 @@
         "paymentType": "PAYPAL_PLUS_REWARDS_PLUS_GIFTCARD"
     },
     "GenericWOWPlusEDMCCRDAndGCPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -207,7 +207,7 @@
         "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
     },
     "GenericEMonlyProductTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "quantity": 2
     },
     "GenericStockCodeSearch": {
@@ -219,7 +219,7 @@
         }
     },
     "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -254,7 +254,7 @@
         }
     },
     "VerifyEmailNotifications": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
@@ -274,7 +274,7 @@
         "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
     },
     "VerifyEmailNotificationsEDMOnly": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
