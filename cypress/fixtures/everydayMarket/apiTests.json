@@ -238,7 +238,7 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "VerifyEDMItemsGCLimit": {
-        "searchTerm": "1073741981",
+        "searchTerm": "pets",
         "minCartValue": "5500",
         "items": [{
             "isEDMProduct": "true"

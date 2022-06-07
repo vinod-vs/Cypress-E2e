@@ -11,7 +11,7 @@ Cypress.Commands.add('addGiftCardToAccount', (cardRequest) => {
   }).then((response) => {
     expect(response.status, 'Gift Card Addition status').to.eq(200)
     expect(response.body, 'Gift Card Addition response body').to.not.be.undefined
-    
+
     return response.body
   })
 })
@@ -33,7 +33,10 @@ Cypress.Commands.add('checkAndGetGiftCardPaymentInstrumentWithExpectedBalance', 
   let giftcardPaymentInstrumentId
 
   // Get all payment instruments for the logged in user
+  // Adding a 2 second wait coz sometimes an empty payment instruments is returned even if the test account has registered payment instruments especially the gift cards
+  cy.wait(Cypress.config('twoSecondWait'))
   cy.getDigitalPaymentInstruments().as('paymentInstrumentsResponse')
+  cy.wait(Cypress.config('twoSecondWait'))
 
   // Find out the linked gift cards PaymentInstrumentId
   cy.get('@paymentInstrumentsResponse').then((paymentInstruments) => {
