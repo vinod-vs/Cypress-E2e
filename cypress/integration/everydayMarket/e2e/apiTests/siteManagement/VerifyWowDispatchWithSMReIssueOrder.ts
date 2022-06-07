@@ -30,6 +30,8 @@ import eventsRequest from '../../../../../fixtures/wowDispatch/wowDispatchDataPr
 import '../../../../../support/wowDispatch/wowStatusUpdates'
 
 import { onOrderManagement } from '../../../../../support/siteManagement/ui/pageObjects/OrderManagement'
+import { MyOrderPage } from '../../../../../support/myOrder/ui/pageObjects/MyOrderPage'
+import { onOrderDetailsPage } from '../../../../../support/myOrder/ui/pageObjects/OrderDetailsPage'
 
 TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   describe('[API] RP-5469-EM|SM|EMwithWowDispatchAndSMReIssue', () => {
@@ -268,6 +270,29 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               cy.searchAnOrderOnSM(reIssueOrderIdNumber)
               // And Verify that No EM Tab is present in SM for the ReIssued OrderId
               onOrderManagement.getEDMTab().should('not.exist')
+              // Now, Login to Trader Website
+              cy.clearCookies({ domain: null })
+              cy.clearLocalStorage({ domain: null })
+              cy.loginViaApiAndHandle2FA(
+                shoppers.emAccountWithRegressionSMDispatchReIssueOrder
+              )
+              //Navigate to MyOrders Page
+              cy.visit('/shop/myaccount/myorders')
+              // Passing the orderId to the Page object constructor
+              const onMyOrderPage = new MyOrderPage(reIssueOrderIdNumber)
+              onMyOrderPage
+                .getMyOrderNumber()
+                .should('contain', reIssueOrderIdNumber)
+              // Search for the ReIssued Order Id on MyOrder Page and Verify the $0 amount and View order details
+              onMyOrderPage.getOrderTotal().should('contain.text', '$0')
+              onMyOrderPage
+                .getViewOrderDetailsLink()
+                .should('contain.text', 'View order details')
+              // Navigate to My Order Details Page for the ReIssued Order id
+              onMyOrderPage.getViewOrderDetailsLink().click()
+              // Verify 'Make changes to my order' and 'Cancel my order' Buttons are NOT Present
+              onOrderDetailsPage.getChangeOrderButton().should('not.exist')
+              onOrderDetailsPage.getCancelMyOrderButton().should('not.exist')
             })
           }
         })
