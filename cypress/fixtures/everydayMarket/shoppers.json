@@ -233,6 +233,13 @@
         "shopperId": "8518293",
         "platform": "B2C"
     },
+    "emAccountWithRegressionSMDispatchReIssueOrder": {
+        "email": "smreissueorder@woolworths.com.au",
+        "password": "testing123",
+        "rewardsCardNumber": "",
+        "shopperId": "8547196",
+        "platform": "B2C"
+    },
 
     "New un-used Accounts": {
         "comments": "Newly created curently being un-used accounts for each e2e scenario. Going forward all scenarios must have their own accounts or use newAccount for every run."

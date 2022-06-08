@@ -7,5 +7,6 @@ export const windowType = {
   DIRECT_TO_BOOT: 'directToBoot',
   MORNING: 'morning',
   EVENING: 'evening',
-  LIQUOR_RESTRICTED: 'liquor'
+  LIQUOR_RESTRICTED: 'liquor',
+  ALL_AVAILABLE: 'allAvailable'
 }

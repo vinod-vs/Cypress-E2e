@@ -1,10 +1,10 @@
 {
     "VerifyFullyDispatchedEDMOrder": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -20,11 +20,11 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "VerifyFullyDispatchedEDMOnlyOrderPaypal": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
             "quantity": 2,
@@ -36,11 +36,11 @@
         }
     },
     "VerifyFullyDispatchedEDMOnlyOrderPaypalPlusRD": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
             "quantity": 2,
@@ -52,11 +52,11 @@
         }
     },
     "VerifyMultiplePartialDispatchedEDMOrder": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:123456",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -71,11 +71,11 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "VerifyFullCancellationOfEDMOrder": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -90,11 +90,11 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "customerSelfServiceReturn": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -109,11 +109,11 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "GenericWOWPlusEDMCCPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -128,11 +128,11 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "GenericWOWPlusEDMPPPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -147,12 +147,12 @@
         "paymentType": "PAYPAL_ONLY"
     },
     "GiftWOWPlusEDMPPPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "isAGiftOrder": true,
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -169,11 +169,11 @@
         "paymentType": "PAYPAL_ONLY"
     },
     "GenericWOWPlusEDMPaypalRDAndGCPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 1,
@@ -188,11 +188,11 @@
         "paymentType": "PAYPAL_PLUS_REWARDS_PLUS_GIFTCARD"
     },
     "GenericWOWPlusEDMCCRDAndGCPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -207,7 +207,7 @@
         "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
     },
     "GenericEMonlyProductTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "quantity": 2
     },
     "GenericStockCodeSearch": {
@@ -215,15 +215,15 @@
         "quantity": 1,
         "VendorName": "Healthy Life",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         }
     },
     "GenericWOWPlusEDMCCPaymentTestDataRegressionScenario": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 2,
@@ -238,7 +238,7 @@
         "paymentType": "CREDIT_CARD_ONLY"
     },
     "VerifyEDMItemsGCLimit": {
-        "searchTerm": "1073741981",
+        "searchTerm": "pets",
         "minCartValue": "5500",
         "items": [{
             "isEDMProduct": "true"
@@ -250,15 +250,15 @@
         "quantity": 1,
         "VendorName": "Pet Culture",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         }
     },
     "VerifyEmailNotifications": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
                 "quantity": 5,
@@ -274,11 +274,11 @@
         "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
     },
     "VerifyEmailNotificationsEDMOnly": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
-            "search": "407-419 Elizabeth St, SURRY HILLS"
+            "search": "4 Bandon Rd, VINEYARD"
         },
         "items": [{
             "quantity": 2,

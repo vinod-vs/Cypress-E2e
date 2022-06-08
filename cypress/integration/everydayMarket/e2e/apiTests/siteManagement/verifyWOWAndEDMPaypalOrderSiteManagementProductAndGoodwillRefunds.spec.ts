@@ -21,7 +21,7 @@ import '../../../../../support/rewards/api/commands/rewards'
 import '../../../../../support/orderPaymentService/api/commands/refunds'
 import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
-TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
+TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID', 'E2E-Scenario-1'], () => {
   describe('[API]  RP-5038 - EM | SM | Create CHUB refunds for Everyday Market items via Site Management + goodwill', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -35,7 +35,8 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       let edmOrderId: any
       let edmInvoiceId: any
       const shopperId = shoppers.emAccountWithRewards12.shopperId
-      const rewardsCardNumber = shoppers.emAccountWithRewards12.rewardsCardNumber
+      const rewardsCardNumber =
+        shoppers.emAccountWithRewards12.rewardsCardNumber
       const refundReason = 'Damaged Item'
       const refundComment = 'Automation Refund Comment'
       const goodwillAmount = 15
@@ -79,7 +80,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             }
           },
           retries: Cypress.env('marketApiRetryCount'),
-          timeout: Cypress.env('marketApiTimeout')
+          timeout: Cypress.env('marketApiTimeout'),
         })
           .as('initialOrderPlacedProjection')
           .then((response) => {
@@ -116,7 +117,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
+              timeout: Cypress.env('marketApiTimeout'),
             }).then((response) => {
               lib.verifyEventDetails(
                 response,
@@ -168,7 +169,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                   }
                 },
                 retries: Cypress.env('marketApiRetryCount'),
-                timeout: Cypress.env('marketApiTimeout')
+                timeout: Cypress.env('marketApiTimeout'),
               }
             )
               .as('finalProjection')
@@ -291,7 +292,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                     }
                   },
                   retries: Cypress.env('marketApiRetryCount'),
-                  timeout: Cypress.env('marketApiTimeout')
+                  timeout: Cypress.env('marketApiTimeout'),
                 }).then((response) => {
                   // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
                   lib.verifyEventDetails(
@@ -359,7 +360,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             }
           },
           retries: Cypress.env('marketApiRetryCount'),
-          timeout: Cypress.env('marketApiTimeout')
+          timeout: Cypress.env('marketApiTimeout'),
         })
           .as('newFinalProjection')
           .then((refundedProjection) => {
@@ -395,9 +396,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             ).to.be.greaterThan(0)
             expect(refundedProjection.invoices[0].updatedTimeStampUtc).to.not.be
               .null
-            expect(refundedProjection.invoices[0].refunds.length).to.be.equal(
-              1
-            )
+            expect(refundedProjection.invoices[0].refunds.length).to.be.equal(1)
             expect(
               refundedProjection.invoices[0].orderTrackingStatus
             ).to.be.equal('Cancelled')
@@ -426,17 +425,13 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             expect(
               refundedProjection.invoices[0].shipments[0].shippedItems[0]
                 .stockCode
-            ).to.be.equal(
-              refundedProjection.invoices[0].lineItems[0].stockCode
-            )
+            ).to.be.equal(refundedProjection.invoices[0].lineItems[0].stockCode)
             expect(
               refundedProjection.invoices[0].shipments[0].shippedItems[0]
                 .quantity
             ).to.be.equal(refundedProjection.invoices[0].lineItems[0].quantity)
             // Return
-            expect(refundedProjection.invoices[0].returns.length).to.be.equal(
-              0
-            )
+            expect(refundedProjection.invoices[0].returns.length).to.be.equal(0)
             // Line item details
             expect(refundedProjection.invoices[0].lineItems[0].wowId).to.not.be
               .null
@@ -486,19 +481,13 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             ).to.be.equal('ChubRefunded')
             expect(
               refundedProjection.invoices[0].refunds[0].refundAmount
-            ).to.be.equal(
-              refundedProjection.invoices[0].lineItems[0].salePrice
-            )
+            ).to.be.equal(refundedProjection.invoices[0].lineItems[0].salePrice)
             expect(
               refundedProjection.invoices[0].refunds[0].cashAmount
-            ).to.be.equal(
-              refundedProjection.invoices[0].lineItems[0].salePrice
-            )
+            ).to.be.equal(refundedProjection.invoices[0].lineItems[0].salePrice)
             expect(
               refundedProjection.invoices[0].refunds[0].totalAmount
-            ).to.be.equal(
-              refundedProjection.invoices[0].lineItems[0].salePrice
-            )
+            ).to.be.equal(refundedProjection.invoices[0].lineItems[0].salePrice)
             expect(
               refundedProjection.invoices[0].refunds[0].recoveredAmount
             ).to.be.greaterThan(0)
@@ -551,9 +540,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             ).to.be.greaterThan(0)
             expect(
               refundedProjection.invoices[0].refunds[0].refundItems[0].amount
-            ).to.be.equal(
-              refundedProjection.invoices[0].lineItems[0].salePrice
-            )
+            ).to.be.equal(refundedProjection.invoices[0].lineItems[0].salePrice)
             // RefundItems ->lineitems
             expect(
               refundedProjection.invoices[0].refunds[0].refundItems[0].lineItem
@@ -615,7 +602,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
+              timeout: Cypress.env('marketApiTimeout'),
             }).then((refundedEvents) => {
               // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
               lib.verifyEventDetails(
@@ -680,7 +667,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                 }
               },
               retries: Cypress.env('marketApiRetryCount'),
-              timeout: Cypress.env('marketApiTimeout')
+              timeout: Cypress.env('marketApiTimeout'),
             }).as('refundsDetails')
             cy.get('@refundsDetails').then((refundsDetails: any) => {
               cy.log('Refund details: ' + JSON.stringify(refundsDetails))
@@ -737,7 +724,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                     }
                   },
                   retries: Cypress.env('marketApiRetryCount'),
-                  timeout: Cypress.env('marketApiTimeout')
+                  timeout: Cypress.env('marketApiTimeout'),
                 }
               ).as('refundPaymentsDetails')
               cy.get('@refundPaymentsDetails').then(

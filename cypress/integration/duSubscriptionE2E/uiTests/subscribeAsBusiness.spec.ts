@@ -10,7 +10,7 @@ import signUpDetails from '../../../fixtures/signUp/signUpDetails.json'
 
 const faker = require('faker/locale/en_AU')
 
-TestFilter(['B2C', 'UI', 'Delivery Unlimited Subscriptions - Business', 'P0'], () => {
+TestFilter(['B2C', 'UI', 'P0', 'TOFFEE'], () => {
   describe('[UI] Business user - Subscribe to Delivery unlimited', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
