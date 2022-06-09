@@ -6,7 +6,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -26,10 +27,12 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
-            "quantity": 2,
-            "isEDMProduct": "true"
-        }],
+        "items": [
+            {
+                "quantity": 2,
+                "isEDMProduct": "true"
+            }
+        ],
         "paymentType": "PAYPAL_ONLY",
         "payment": {
             "paypal": true
@@ -42,10 +45,12 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
-            "quantity": 2,
-            "isEDMProduct": "true"
-        }],
+        "items": [
+            {
+                "quantity": 2,
+                "isEDMProduct": "true"
+            }
+        ],
         "paymentType": "PAYPAL_PLUS_REWARDS",
         "payment": {
             "paypal": true
@@ -58,7 +63,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -77,7 +83,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -96,7 +103,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -115,7 +123,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -134,7 +143,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -154,11 +164,11 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true",
                 "searchTerm": "1073741957"
-
             },
             {
                 "isEDMProduct": "false",
@@ -175,7 +185,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 1,
                 "isEDMProduct": "true"
             },
@@ -194,7 +205,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -225,7 +237,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 2,
                 "isEDMProduct": "true"
             },
@@ -240,9 +253,11 @@
     "VerifyEDMItemsGCLimit": {
         "searchTerm": "pets",
         "minCartValue": "5500",
-        "items": [{
-            "isEDMProduct": "true"
-        }],
+        "items": [
+            {
+                "isEDMProduct": "true"
+            }
+        ],
         "paymentType": "GIFTCARD_ONLY"
     },
     "GenericVendorInfoStockCodeSearch": {
@@ -260,7 +275,8 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
+        "items": [
+            {
                 "quantity": 5,
                 "isEDMProduct": "true"
             },
@@ -280,10 +296,27 @@
         "address": {
             "search": "4 Bandon Rd, VINEYARD"
         },
-        "items": [{
-            "quantity": 2,
-            "isEDMProduct": "true"
-        }],
+        "items": [
+            {
+                "quantity": 2,
+                "isEDMProduct": "true"
+            }
+        ],
         "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
+    },
+    "GenericEDMOnlyOrderPaypalAndGCPaymentTestData": {
+        "searchTerm": "treats",
+        "carrier": "Australia Post",
+        "trackingNumber": "Automation:12345",
+        "address": {
+            "search": "407-419 Elizabeth St, SURRY HILLS"
+        },
+        "items": [
+            {
+                "quantity": 3,
+                "isEDMProduct": "true"
+            }
+        ],
+        "paymentType": "PAYPAL_PLUS_GIFTCARD"
     }
 }
