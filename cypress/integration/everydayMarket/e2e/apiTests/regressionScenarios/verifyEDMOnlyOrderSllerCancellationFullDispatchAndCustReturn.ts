@@ -343,14 +343,6 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                         1
                       )
                     })
-
-                    // Invoke OQS TMO api and validate it against the projection
-                    // lib.verifyOQSOrderStatus(
-                    //   testData.orderId,
-                    //   'Received',
-                    //   false,
-                    //   testData
-                    // )
                   })
               })
             }) //END OF SELLER CNACELLATION FLOW
