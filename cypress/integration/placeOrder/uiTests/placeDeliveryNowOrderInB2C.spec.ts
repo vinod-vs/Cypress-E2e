@@ -37,7 +37,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'DN'], () => {
       onFMSWindowSelector.selectDeliveryNowTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30, 'Price High to Low')
 
       onSideCartPage.getViewCartButton().click()
 
