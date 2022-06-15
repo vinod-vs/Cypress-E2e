@@ -139,7 +139,7 @@
     },
     "retries": {
         "runMode": 2,
-        "openMode": 2
+        "openMode": 0
     },
     "tenSecondWait": 10000,
     "fiveSecondWait": 5000,
