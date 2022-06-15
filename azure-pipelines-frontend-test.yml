@@ -55,7 +55,7 @@ jobs:
         displayName: "Find or download node 14"
       - script: |
           npm install
-          npm test 
+          npm test --
             --env 
               tags=${{ parameters.tagsB2C }},
               fileConfig=b2c,
