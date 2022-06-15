@@ -89,7 +89,8 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
           // Increase the Order total by adding more products to cart
           onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(
             'health',
-            100
+            100,
+            'Price High to Low'
           )
 
           onSideCartPage.getViewCartButton().click()

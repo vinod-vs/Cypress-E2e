@@ -181,6 +181,14 @@ export class CheckoutPaymentPanel {
   getNewGiftCardBalanceElement () {
     return cy.get('wow-gift-card-add-payment #newGiftCardBalance')
   }
+
+  getOpenPayOption () {
+    return cy.get('wow-digital-pay-list-item.openpay-list-item')
+  }
+
+  getPurchaseOrderTextBox () {
+    return cy.get('#purchaseOrderInput')
+  }
   // #endregion
 
   // #region - general actions
@@ -202,6 +210,12 @@ export class CheckoutPaymentPanel {
   payWithNewCreditCard (cardNumber: string, expiryMonth: string, expiryYear: string, cvv: string) {
     this.inputNewCreditCardDetails(cardNumber, expiryMonth, expiryYear, cvv)
     this.placeOrder()
+  }
+
+  payWithOpenPayForB2BOrders () {
+    this.getOpenPayOption().click()
+    this.enterPurchaseOrderNumber()
+    this.getPlaceOrderButton().click()
   }
 
   inputExistingCreditCardDetails (cardNumberLast4Digit: string, cvv: string) {
@@ -312,6 +326,10 @@ export class CheckoutPaymentPanel {
   searchForNewBillingAddress (addressKeyword: string) {
     searchForNewAddress(this.billingAddressSelectorTexFieldLocator, this.billingAddressResultListLocator, addressKeyword)
   }
+
+  enterPurchaseOrderNumber () {
+    this.getPurchaseOrderTextBox().clear().type('POUATTEST')
+  }
   // #endregion
 
   // #region - private methods
@@ -325,8 +343,8 @@ export class CheckoutPaymentPanel {
 
     cy.wait('@paymentRequest').then(()=>{
       cy.wait(500)
-      cy.checkIfElementExists('.digitalPayErrorDisplay-errorMessage').then( (result:boolean) => {
-        if(result){
+      cy.checkIfElementExists('.digitalPayErrorDisplay-errorMessage').then( (result: boolean) => {
+        if (result){
           cy.get('.digitalPayErrorDisplay-errorMessage').then(errorTextElement => {
             throw new Error('Payment failed because of digital pay error: ' + errorTextElement.text())
           })
