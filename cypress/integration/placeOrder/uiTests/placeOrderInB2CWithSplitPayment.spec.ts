@@ -43,7 +43,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30, 'Price High to Low')
 
       onSideCartPage.getViewCartButton().click()
 

@@ -16,7 +16,7 @@ export class DeliveryDateAndWindowPage {
   }
 
   getTheFirstTradingAccount () {
-    return cy.get('#deliveryAddressSelector-option1')
+    return cy.get('#deliveryAddressSelector-option0')
   }
 
   getSaveAndContinueButton () {
