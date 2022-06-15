@@ -197,7 +197,7 @@ Cypress.Commands.add("searchItemsAndAddToCartTillGivenLimit", (testData) => {
   let minOrderLimit = Number(testData.orderLimit.minOrderLimit);
 
   for (const item in items) {
-    onHomePage.getB2bCartAmount().then(function (cartElement) {
+    onSideCartPage.getTotalAmountElementOnHeader().then(function (cartElement) {
       const cartAmount = cartElement.text().replace("$", "");
       if (Number(cartAmount) < minOrderLimit) {
         cy.searchAndAddFirstItemToCartBySearchTerm(items[item].searchTerm).then(() => {

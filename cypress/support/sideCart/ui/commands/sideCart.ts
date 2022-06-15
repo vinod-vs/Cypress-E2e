@@ -19,7 +19,7 @@ Cypress.Commands.add("goToCheckout", () => {
 
 Cypress.Commands.add("clearCartViaUi", () => {
   // open cart if it has >0 amount and clear it
-  onHomePage.getB2bCartAmount().then(function (cartElement) {
+  onSideCartPage.getTotalAmountElementOnHeader().then(function (cartElement) {
     cy.log(cartElement.text());
     const cartAmount = cartElement.text();
     if (cartAmount.includes("$0")) {
@@ -60,14 +60,7 @@ Cypress.Commands.add("clearCartViaUi", () => {
       onSideCartPage.getCloseSideCartButton().click();
       cy.wait(500);
       // Verify the cart is closed
-      onHomePage.getB2bCartAmount().should("be.visible");
+      onSideCartPage.getTotalAmountElementOnHeader().should("be.visible");
     }
   });
-});
-
-Cypress.Commands.add("getB2bCartAmountViaUi", () => {
-  onHomePage.getB2bCartAmount().then(function (cartElement) {
-    return cy.wrap(cartElement.text().replace("$", ""))
-  })
-
 });
