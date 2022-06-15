@@ -1,21 +1,26 @@
-[{
+[
+    {
         "email": "tim.hope@yopmail.com",
         "password": "test1234",
-        "platform": "B2B"
+        "platform": "B2B",
+        "type": "business"
     },
     {
         "email": "lot.hardy@yopmail.com",
         "password": "test1234",
-        "platform": "B2B"
+        "platform": "B2B",
+        "type": "business"
     },
     {
         "email": "ruby.hope@yopmail.com",
         "password": "test1234",
-        "platform": "B2B"
+        "platform": "B2B",
+        "type": "business"
     },
     {
         "email": "ben.ten0@yopmail.com",
         "password": "test1234",
-        "platform": "B2B"
+        "platform": "B2B",
+        "type": "business"
     }
 ]
