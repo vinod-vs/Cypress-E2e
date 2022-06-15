@@ -6,19 +6,57 @@ import { editSessionGroupV2Page } from '../../../support/sessionGroupsV2/ui/page
 
 let sessionGroupName: string
 let timeStamp: string
+
 const sessionGroupCount: number = 2
 const sessionGroupNames: string[] = new Array(sessionGroupCount)
-const tableEntries: string[] = new Array(sessionGroupCount)
 const itemsPerPage: number = 5000
 
-TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
-  describe('[UI] Sorting of Session Groups V2', () => {
+TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P0', 'CONWAY'], () => {
+  describe('[UI] Create, Update, Delete, Sort Session Groups V2', () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
       sessionGroupsV2Page.open()
       cy.adminLoginViaUi(loginDetails)
       sessionGroupsV2Page.getShowSelect().select(itemsPerPage.toString())
+    })
+
+    it('Create Session Group v2', function () {
+      timeStamp = new Date().toISOString().substr(0, 26)
+      sessionGroupName = 'SG ' + timeStamp
+      sessionGroupsV2Page.getCreateNewSessionGroup().click()
+      editSessionGroupV2Page.getNameInput().type(sessionGroupName)
+      editSessionGroupV2Page.getDescriptionInput().type('Session group created by test automation')
+      editSessionGroupV2Page.getDomainInput().type('Test Automation Domain')
+      editSessionGroupV2Page.getGroupList().select('DigitalPayData')
+      editSessionGroupV2Page.getAttributeList().select('IsMigratedToDigitalPay')
+      editSessionGroupV2Page.getAddAttribute().click()
+      editSessionGroupV2Page.getAddedAttribute('DigitalPayData', 'IsMigratedToDigitalPay').should('be.visible')
+      editSessionGroupV2Page.getUpdateButton().click()
+      sessionGroupsV2Page.getSessionGroupEntry(sessionGroupName).should('be.visible')
+    })
+
+    it('Update Session Group v2', function () {
+      sessionGroupsV2Page.getSessionGroupEntry(sessionGroupName).click()
+      timeStamp = new Date().toISOString().substr(0, 26)
+      sessionGroupName = 'SG Update ' + timeStamp
+      editSessionGroupV2Page.getNameInput().clear()
+      editSessionGroupV2Page.getNameInput().type(sessionGroupName)
+      editSessionGroupV2Page.getDescriptionInput().clear()
+      editSessionGroupV2Page.getDescriptionInput().type('Update session group created by test automation')
+      editSessionGroupV2Page.getDomainInput().clear()
+      editSessionGroupV2Page.getDomainInput().type('Update Test Automation Domain')
+      editSessionGroupV2Page.getGroupList().select('FulfilmentData')
+      editSessionGroupV2Page.getAttributeList().select('IsNonServicedAddress')
+      editSessionGroupV2Page.getAddAttribute().click()
+      editSessionGroupV2Page.getAddedAttribute('FulfilmentData', 'IsNonServicedAddress').should('be.visible')
+      editSessionGroupV2Page.getUpdateButton().click()
+      sessionGroupsV2Page.getSessionGroupEntry(sessionGroupName).should('be.visible')
+    })
+
+    it('Delete Session Group v2', function () {
+      sessionGroupsV2Page.getDeleteSessionGroup(sessionGroupName).click()
+      sessionGroupsV2Page.getSessionGroupEntry(sessionGroupName).should('not.exist')
     })
 
     it('Session Groups v2 Sorting by Default', () => {
@@ -35,7 +73,7 @@ TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
         editSessionGroupV2Page.getAddedAttribute('DigitalPayData', 'IsMigratedToDigitalPay').should('be.visible')
         editSessionGroupV2Page.getUpdateButton().click()
         sessionGroupsV2Page.getSessionGroupEntry(sessionGroupNames[i]).should('be.visible')
-        sessionGroupsV2Page.getTableRowName(1).should('contain', sessionGroupNames[i].substring(0, 19))
+        sessionGroupsV2Page.getTableRowName(1).should('contain', sessionGroupNames[i])
       }
     })
 
@@ -57,6 +95,7 @@ TestFilter(['UI', 'B2C', 'SessionGroupsV2', 'P1', 'CONWAY'], () => {
     })
 
     it('Session Groups v2 Sorting by Description', () => {
+      cy.wait(1000)
       sessionGroupsV2Page.getDescriptionHeader().click()
       cy.wait(1000)
       sessionGroupsV2Page.getTableRowDescription(1).invoke('text').as('firstRowDescription')
