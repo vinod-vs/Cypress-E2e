@@ -14,38 +14,20 @@ parameters:
       - firefox
       - electron
 
-  - name: tags
-    displayName: Test Tags
+  - name: tagsB2C
+    displayName: B2C Test Tags
     type: string
-    default: E2E
-    values:
-      - API
-      - UI
-      - B2C
-      - B2B
-      - P0
-      - P1
-      - P2
-      - P3
-      - E2E
-      - EDM
-      - Checkout
-      - SM
-      - Login
+    default: B2C-E2E
 
-  - name: fileConfig
-    displayName: Config File Name
+  - name: tagsB2B
+    displayName: B2B Test Tags
     type: string
-    default: b2c
-    values:
-      - b2c
-      - b2b
-      - edm
+    default: B2B-E2E
 
   - name: otpValidationSwitch
     displayName: One Time Password Validation Switch
     type: string
-    default: false
+    default: true
     values:
       - true
       - false
@@ -54,7 +36,7 @@ trigger: none
 
 resources:
   pipelines:
-    - pipeline: WFE_E2E_Automation
+    - pipeline: WFE_Cypress_Automation_Test
       source: Woolworths.Frontend
       project: Trader
       trigger: 
@@ -62,8 +44,8 @@ resources:
         - Deploy_UAT_AAE
 
 jobs:
-  - job: Run_B2C_UI_E2E_Tests
-    displayName: "Install Node.js and run B2C UI tests"
+  - job: Run_B2C_E2E_Tests
+    displayName: "Install Node.js and run B2C E2E tests"
     pool:
       name: wlx-ubuntu1804
     steps:
@@ -73,7 +55,14 @@ jobs:
         displayName: "Find or download node 14"
       - script: |
           npm install
-          npm test -- --env tags=B2C-UI-E2E,fileConfig=b2c,otpValidationSwitch=true,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
+          npm test 
+            --env 
+              tags=${{ parameters.tagsB2C }},
+              fileConfig=b2c,
+              otpValidationSwitch=${{ parameters.otpValidationSwitch }},
+              creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"12","ee":"25","save":false,"verify":false}' 
+              gc_number="$(gc_number)", gc_pin="$(gc_pin)"
+            --browser ${{ parameters.browser }}
         displayName: "Npm install and run B2C UI E2E tests"
 
       - task: PublishTestResults@2
@@ -146,8 +135,8 @@ jobs:
         displayName: 'Send Slack Notification'
         condition: succeededOrFailed()
 
-  - job: Run_B2B_UI_E2E_Tests
-    displayName: "Install Node.js and run B2B UI tests"
+  - job: Run_B2B_E2E_Tests
+    displayName: "Install Node.js and run B2B E2E tests"
     pool:
       name: wlx-ubuntu1804
     steps:
@@ -157,7 +146,13 @@ jobs:
         displayName: "Find or download node 14"
       - script: |
           npm install
-          npm test -- --env tags=B2B-UI-E2E,fileConfig=b2b,otpValidationSwitch=true,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' --browser ${{ parameters.browser }}
+          npm test 
+            --env 
+              tags=B2B-E2E,
+              fileConfig=b2c,
+              otpValidationSwitch=true,
+              creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"10","ee":"24","save":false,"verify":false}' 
+            --browser ${{ parameters.browser }}
         displayName: "Npm install and run B2B UI E2E tests"
 
       - task: PublishTestResults@2

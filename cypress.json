@@ -112,7 +112,11 @@
         "productNoteEndpoint": "/apis/ui/Checkout/ProductNote",
         "segmentationSdkClientEndpoint": "https://dxk8saae.uat.wx-d.net/utsdktestclient/api/v1/Sdk/isingroupbyid/dictionary",
         "segmentationSdkClientEndpointMulti": "https://dxk8saae.uat.wx-d.net/utsdktestclient/api/v1/Sdk/isingroupsbyid/dictionary",
-        "consignmentEndpoint": "https://uat.mobile-api.woolworths.com.au/consignment/aftership/v1/trackings"
+        "consignmentEndpoint": "https://uat.mobile-api.woolworths.com.au/consignment/aftership/v1/trackings",
+        "cc_number": "36053300020952",
+        "cc_cvv": "234",
+        "gc_number": "6280005561011110408",
+        "gc_pin": "7851"
     },
     "viewportHeight": 1080,
     "viewportWidth": 1536,
@@ -132,6 +136,10 @@
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
         "configFile": "reporterConfig.json"
+    },
+    "retries": {
+        "runMode": 2,
+        "openMode": 2
     },
     "tenSecondWait": 10000,
     "fiveSecondWait": 5000,

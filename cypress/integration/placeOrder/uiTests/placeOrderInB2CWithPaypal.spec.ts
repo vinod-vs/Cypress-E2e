@@ -12,7 +12,7 @@ import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
 import addressTestData from '../../../fixtures/checkout/addressSearch.json'
 import TestFilter from '../../../support/TestFilter'
 
-TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
   describe('[UI] Place a delivery order by using Paypal', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
@@ -21,7 +21,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
     })
 
     beforeEach(() => {
-      cy.loginViaUi(b2cShoppers[3])
+      cy.loginViaUi(b2cShoppers.E2ETestAccounts.placeOrderInB2CWithPaypal)
       onSideCartPage.cleanupTrolley()
     })
 
@@ -37,7 +37,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health & beauty', 30)
 
       onSideCartPage.getViewCartButton().click()
 

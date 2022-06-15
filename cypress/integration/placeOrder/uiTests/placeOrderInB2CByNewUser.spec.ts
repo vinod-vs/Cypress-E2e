@@ -12,10 +12,9 @@ import { onHomePage } from '../../../support/homePage/ui/pageObjects/HomePage'
 import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage'
 import addressTestData from '../../../fixtures/checkout/addressSearch.json'
 import storeTestData from '../../../fixtures/checkout/storeSearchBVT.json'
-import creditcardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import TestFilter from '../../../support/TestFilter'
 
-TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E', 'NewUser'], () => {
   describe('[UI] Place orders by new user', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
@@ -41,7 +40,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health & beauty', 30)
 
       onSideCartPage.getViewCartButton().click()
 
@@ -64,7 +63,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onFMSWindowSelector.selectLastTimeslot();
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health & beauty', 30)
 
       onSideCartPage.getViewCartButton().click()
 
@@ -89,7 +88,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health & beauty', 30)
 
       onSideCartPage.getViewCartButton().click()
 
@@ -128,7 +127,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P1', 'E2E', 'NewUser'], () => {
       })
 
       // Pay with instrument
-      onCheckoutPage.onCheckoutPaymentPanel.payWithNewCreditCard(creditcardPayment.aa, creditcardPayment.dd, creditcardPayment.ee, creditcardPayment.bb)
+      onCheckoutPage.onCheckoutPaymentPanel.payWithNewCreditCard(Cypress.env('cc_number'), '12', '25', Cypress.env('cc_cvv'))
 
      // Verify order confirmation page
      onOrderConfirmationPage.VerifyOrderConfirmationHeader()
