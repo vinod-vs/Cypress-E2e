@@ -55,7 +55,7 @@ jobs:
         displayName: "Find or download node 14"
       - script: |
           npm install
-          npm test -- --env tags=${{ parameters.tagsB2C }},fileConfig=b2c,otpValidationSwitch=${{ parameters.otpValidationSwitch }},creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"12","ee":"25","save":false,"verify":false}',gc_number='$(gc_number)',gc_pin="$(gc_pin)" --browser ${{ parameters.browser }}
+          npm test -- --env tags=${{ parameters.tagsB2C }},fileConfig=b2c,otpValidationSwitch=${{ parameters.otpValidationSwitch }},creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"12","ee":"25","save":false,"verify":false}',gc_number="'$(gc_number)'",gc_pin="$(gc_pin)" --browser ${{ parameters.browser }}
         displayName: "Npm install and run B2C UI E2E tests"
 
       - task: PublishTestResults@2
@@ -139,7 +139,7 @@ jobs:
         displayName: "Find or download node 14"
       - script: |
           npm install
-          npm test -- --env tags=${{ parameters.tagsB2B }},fileConfig=b2b,otpValidationSwitch=false,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"12","ee":"25","save":false,"verify":false}',gc_number='$(gc_number)',gc_pin="$(gc_pin)" --browser ${{ parameters.browser }}
+          npm test -- --env tags=${{ parameters.tagsB2B }},fileConfig=b2b,otpValidationSwitch=false,creditCard='{"aa":"$(cc_number)","bb":"$(cc_cvv)","dd":"12","ee":"25","save":false,"verify":false}',gc_number="'$(gc_number)'",gc_pin="$(gc_pin)" --browser ${{ parameters.browser }}
         displayName: "Npm install and run B2B UI E2E tests"
 
       - task: PublishTestResults@2
