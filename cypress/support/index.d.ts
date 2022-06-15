@@ -172,5 +172,11 @@ declare namespace Cypress {
     getEmailDetails(emailId: string, expectedEmailSubject: string, sentFrom: string): any
     getCurrentlyAmendingOrder(): any;
     cancelAmendingOrder(orderId: Cypress.Chainable<number>, revertAmend: boolean): any;
+    selectAvailableDeliveryDetailsOnFms():any;
+    clearCartViaUi(): any;
+    searchItemsAndAddToCartTillGivenLimit(data:any): any;
+    openSideCart(): any;
+    goToCheckout(): any;
+    fillCreditCardPaymentDetails(details: any): any;
   }
 }

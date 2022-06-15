@@ -64,6 +64,10 @@ export class HomePage {
     return cy.get('.productSaveToList-coachMark-coachMarkConfirm ng-tns-c66-13')
   }
 
+  getB2bCartAmount () {
+    return cy.get('.headerCheckout-orderAmount')
+  }
+
 }
 
 export const onHomePage = new HomePage()

@@ -190,3 +190,51 @@ Cypress.Commands.add('searchAndAddProductsToCartBySearchTerm', (testData) => {
     cy.wait(Cypress.config('oneSecondWait'))
   })
 })
+
+
+Cypress.Commands.add("searchItemsAndAddToCartTillGivenLimit", (testData) => {
+  const items = testData.items;
+  let minOrderLimit = Number(testData.orderLimit.minOrderLimit);
+
+  for (const item in items) {
+    onHomePage.getB2bCartAmount().then(function (cartElement) {
+      const cartAmount = cartElement.text().replace("$", "");
+      if (Number(cartAmount) < minOrderLimit) {
+        cy.searchAndAddFirstItemToCartBySearchTerm(items[item].searchTerm).then(() => {
+          cy.log("item : " + items[item].searchTerm);
+        });
+      } else {
+        cy.log("Cart amount limit reached $$ " + cartAmount);
+      }
+    });
+  }
+}
+);
+
+
+Cypress.Commands.add("searchAndAddFirstItemToCartBySearchTerm", (testData) => {
+
+  cy.log("Search for item : " + testData);
+  onHomePage.getSearchHeader().click();
+  cy.wait(Cypress.config("oneSecondWait"));
+  onHomePage.getSearchHeader().clear();
+  onHomePage.getSearchHeader().type(testData).type("{enter}");
+  cy.wait(Cypress.config("fiveSecondWait"));
+
+  if (onSearchResultsPage.getAddToCartByItemLocatorString1()) {
+    cy.document().then(($document) => {
+      const documentResult = $document.querySelectorAll(onSearchResultsPage.getAddToCartByItemLocatorString1())
+      if (documentResult.length) {
+        cy.get(onSearchResultsPage.getAddToCartByItemLocatorString1()).first().then(($btn) => {
+          if ($btn.first().is(':disabled')) {
+            cy.log("Add to cart button Disabled for the item.");
+          } else {
+            cy.get(onSearchResultsPage.getAddToCartByItemLocatorString1()).first().click()
+            cy.log("Clicked on Add to cart for " + testData);
+            cy.wait(1000)
+          }
+        })
+      } else { cy.log("Add to cart button not available.") }
+    })
+  }
+});

@@ -261,5 +261,18 @@ export class SideCartPage {
     })
     onSideCartPage.getCloseSideCartButton().click({force: true})
   }
+  
+  getViewCart () {
+    return cy.get('.headerCheckout-checkout')
+  }
+
+  getClearUnavailbleItemsLink () {
+    return '.linkButton.auto_cart-item-group-action'
+  }
+  
+  getClearEntireCart () {
+    return '.product-actionsClearCart > span'
+  }
+  
 }
 export const onSideCartPage = new SideCartPage()

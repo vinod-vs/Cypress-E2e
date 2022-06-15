@@ -71,3 +71,34 @@ Cypress.Commands.add('selectRandomWindowInCheckout', (fulfilmentType, fulfilment
       }
     })
 })
+
+
+Cypress.Commands.add("selectAvailableDeliveryDetailsOnFms", (tradingAccAddress) => {
+  cy.wait(Cypress.config("twoSecondWait"));
+
+  cy.checkIfElementExists(onDeliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
+    if (shoppingPrefernceExists === true) {
+      onDeliveryDateAndWindowPage.getChangeTradingAccountLink().click();
+    }
+  });
+  onDeliveryDateAndWindowPage.getSelectTradingAccountList().click();
+  onDeliveryDateAndWindowPage.getTheFirstTradingAccount().click();
+  onDeliveryDateAndWindowPage.getSaveAndContinueButton().click();
+  cy.wait(Cypress.config("twoSecondWait"));
+
+  //Select first available day
+  let deliveryDay = false
+  onDeliveryDateAndWindowPage.getAvailableDays().each(($day, index) => {
+    if (!$day.text().includes('Closed') && deliveryDay == false) {
+      deliveryDay = true
+      onDeliveryDateAndWindowPage.getGivenAvailableDay(index + 1)
+      cy.log('Selected delivery day : ' + $day.text())
+    }
+  }).then(() => {
+    if (deliveryDay == false) {
+      throw new Error('Delivery days not available to select')
+    }
+  })
+  onDeliveryDateAndWindowPage.getthefirsttimeslot().check({ force: true });
+  onDeliveryDateAndWindowPage.getContinueShoppingButton().click();
+});
