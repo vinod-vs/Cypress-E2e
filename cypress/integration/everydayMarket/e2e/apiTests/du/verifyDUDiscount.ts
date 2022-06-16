@@ -213,36 +213,44 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }) //.then((response) => {
 
-   // Verify DU Discount Details on the My Order Details Page,  Hit the MyOrderDetails Page API and Verify the DU Discount Details
+   // Verify DU Discount Details on the My Order Details Page,  Hit the MyOrderDetails Page API
     cy.myOrderDetailsDUDiscount(req.orderId).as('myOrderDetailsDUDiscount')
+    cy.wait(Cypress.config('twoSecondWait'))
+    cy.log("Please make sure 'OrderDiscountDetailsList:' should contain 0: {Target: \DeliveryFee\", Source: \"DeliveryPlusSubscription\"}  --> For Wow")
+    cy.log("Please make sure 'OrderDiscountDetailsList:' should contain 1: {Target: \"PackagingFee\", Source: \"DeliveryPlusSubscription\"}  --> For Wow")
+    cy.log("Please make sure 'OrderDiscountDetailsList:' should contain 2: {Target: \"MarketShippingFee\", DiscountSourceId: \"16764\", Source: \"DeliveryPlusSubscription\"}  --> For EM")
+    // and Verify the DU Discount Details.
     cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) => 
     {
-      cy.log("OrderDiscountDetailsList[0].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId)
-      cy.log("OrderDiscountDetailsList[0].Source = "  + duDiscountDetails.OrderDiscountDetailsList[0].Source)
-      cy.log("OrderDiscountDetailsList[0].Target = "  + duDiscountDetails.OrderDiscountDetailsList[0].Target)
+      cy.log("OrderDiscountDetailsList[0].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[2].DiscountSourceId)
+      cy.log("OrderDiscountDetailsList[0].Source = "  + duDiscountDetails.OrderDiscountDetailsList[2].Source)
+      cy.log("OrderDiscountDetailsList[0].Target = "  + duDiscountDetails.OrderDiscountDetailsList[2].Target)
       cy.log("MarketShippingFeeBeforeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount)
       cy.log("MarketShippingFeeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount)
       cy.log("MarketShippingFee = "  + duDiscountDetails.PaymentDetails.MarketShippingFee)
-
-      expect(duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId).contains(duDiscountSourceId)
-      expect(duDiscountDetails.OrderDiscountDetailsList[0].Source).contains(duDiscountSource)
-      expect(duDiscountDetails.OrderDiscountDetailsList[0].Target).contains(duTarget)
+     
+      expect(duDiscountDetails.OrderDiscountDetailsList[2].DiscountSourceId).contains(duDiscountSourceId)
+      expect(duDiscountDetails.OrderDiscountDetailsList[2].Source).contains(duDiscountSource)
+      expect(duDiscountDetails.OrderDiscountDetailsList[2].Target).contains(duTarget)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount).equals(10)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount).equals(10)
-      expect(duDiscountDetails.PaymentDetails.MarketShippingFee).equals(0)
+      expect(duDiscountDetails.PaymentDetails.MarketShippingFee).equals(0)  
     })  // ENDS - cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) =>
 
-          
+    //Now, Implement UI automation to Verify the Site Management Verification      
+    //Login to SM and Navigate to the edmOrderId
+    cy.loginToSMAndSearchOrder(smLogins, edmOrderId)
+    //Click on View All Order
+    //Search for the 'edmOrderId' in the Table and corresponding Column 'Delivery Unlimited Total Discount' Value should display $10
+//OrderReference Order Number	Seller	Date Placed	        Email	                            Status	Order Total	 Total Saved 	Delivery Unlimited Delivery Discount 	Delivery Unlimited Packaging Discount 	Delivery Unlimited Total Discount
+//96XZN-2PY5W8	  EM0072042	  Big W	  16/06/2022 3:51 PM	rjagadishauto34@woolworths.com.au	Shipped	$80.00		   $10.00		                                                                                  $10.00
 
 
 
 
 
 
-
-
-
-              // After dispatch, Invoke the events api and verify the events are updated acordingly
+              // After dispatch, Invoke the events api and verify the events are updated Accordingly
             /*  cy.orderEventsApiWithRetry(req.orderReference, {
                 function: function (response) {
                   if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
