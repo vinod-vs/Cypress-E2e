@@ -1,0 +1,39 @@
+{
+  "b2bOrderData1": {
+    "shopper": {
+      "email": "abe.auto0@yopmail.com",
+      "password": "test1234",
+      "platform": "B2B",
+      "type": "business"
+    },
+    "orderLimit": { "minOrderLimit": 30 },
+    "items": [
+      {
+        "searchTerm": "Energizer Max Batteries"
+      },
+      {
+        "searchTerm": "Dry Nappies"
+      },
+      {
+        "searchTerm": "Slime Starter Kit"
+      },
+      {
+        "searchTerm": "Moccona Coffee"
+      },
+      {
+        "searchTerm": "Knife Sharpener"
+      },
+      {
+        "searchTerm": "Fish"
+      }
+    ],
+    "payment": {
+      "creditCard": {
+        "creditCardNumber": "4242424242424242",
+        "creditCardExpMonth": "08",
+        "creditCardExpYear": "22",
+        "creditCardCVV": "488"
+      }
+    }
+  }
+}
