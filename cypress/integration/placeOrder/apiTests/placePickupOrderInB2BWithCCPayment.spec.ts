@@ -20,7 +20,7 @@ import '../../../support/checkout/api/commands/checkoutHelper'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 
-const searchTerm = 'Fish'
+const searchTerm = 'Health'
 const trolleyThreshold = 50.00
 const platform = Cypress.env('b2bPlatform')
 
