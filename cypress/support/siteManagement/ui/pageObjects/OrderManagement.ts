@@ -396,5 +396,19 @@ export class OrderManagement {
     this.getRefundApproveButton().click()
     cy.url().should('include', '/OrderManagement/OrderRefundDetail')
   }
+
+  getViewAllOrdersButton() {
+    return cy.get('#customerForm > fieldset > div:nth-child(9) > a:nth-child(1) > div')
+  }
+
+  getOrderNumberColumnLabel() {
+    return cy.get('tbody > tr > td:nth-child(2)')
+  }
+
+  getDeliveryUnlimitedTotalDiscountColumnLabel() {
+    return cy.get('td:nth-child(11)')
+  }
+
+
 }
 export const onOrderManagement = new OrderManagement()

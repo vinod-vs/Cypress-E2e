@@ -76,7 +76,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
       // Add Wow + EM Multi Seller Items in the Cart
       //cy.prepareAnyMultiSellerLineItemWowAndEdmOrder(searchTerm, purchaseQty)
-      
+     
       cy.prepareLineItemForWowAndEdmOrderForDU(searchTerm, marketSubTotalUpperLimit)
 
       // Add EM ONLY Multi Seller Items in the Cart
@@ -222,20 +222,22 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     // and Verify the DU Discount Details.
     cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) => 
     {
-      cy.log("OrderDiscountDetailsList[0].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[2].DiscountSourceId)
-      cy.log("OrderDiscountDetailsList[0].Source = "  + duDiscountDetails.OrderDiscountDetailsList[2].Source)
-      cy.log("OrderDiscountDetailsList[0].Target = "  + duDiscountDetails.OrderDiscountDetailsList[2].Target)
+      cy.log("OrderDiscountDetailsList[0].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId)
+      cy.log("OrderDiscountDetailsList[0].Source = "  + duDiscountDetails.OrderDiscountDetailsList[0].Source)
+      cy.log("OrderDiscountDetailsList[0].Target = "  + duDiscountDetails.OrderDiscountDetailsList[0].Target)
       cy.log("MarketShippingFeeBeforeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount)
       cy.log("MarketShippingFeeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount)
       cy.log("MarketShippingFee = "  + duDiscountDetails.PaymentDetails.MarketShippingFee)
      
-      expect(duDiscountDetails.OrderDiscountDetailsList[2].DiscountSourceId).contains(duDiscountSourceId)
-      expect(duDiscountDetails.OrderDiscountDetailsList[2].Source).contains(duDiscountSource)
-      expect(duDiscountDetails.OrderDiscountDetailsList[2].Target).contains(duTarget)
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId).contains(duDiscountSourceId)
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].Source).contains(duDiscountSource)
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].Target).contains(duTarget)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount).equals(10)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount).equals(10)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFee).equals(0)  
     })  // ENDS - cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) =>
+
+
 
     //Now, Implement UI automation to Verify the Site Management Verification      
     //Login to SM and Navigate to the edmOrderId
@@ -319,7 +321,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
       
 
 
-      // Method to Hit the ReDeem Event-
+      // Method to Hit the RedeemMarketOrderSavings Event-
       Cypress.Commands.add('orderEventsApiForRedeemMarketOrderSavings', (traderOrderReference, retryOptions) => {
           const endPoint = String(
             //https://marketk8saae.uat.wx-d.net/order-api/api/v1/events?shopperId=8518293&orderReference=96XZN-2LCT1Z&domainEvent=RedeemMarketOrderSavings
