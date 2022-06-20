@@ -17,7 +17,7 @@ import '../../../../../support/refunds/api/commands/commands'
 import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
-import TGA from '../../../../../fixtures/everydayMarket/advertWithTGAdetails.json'
+import TGA from '../../../../../fixtures/everydayMarket/advertWithTGADetails.json'
 import searchRequest from '../../../../../fixtures/search/productSearch.json'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {

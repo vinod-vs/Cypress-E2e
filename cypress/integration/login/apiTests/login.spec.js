@@ -12,17 +12,17 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.clearLocalStorage({ domain: null })
     })
 
-    Cypress._.times(b2cShoppers.length, (n) => {
-      it('Login as ' + b2cShoppers[n].email, {
+    Cypress._.times(b2cShoppers.loginTestAccounts.length, (n) => {
+      it('Login as ' + b2cShoppers.loginTestAccounts[n].email, {
         retries: {
           runMode: 1
         }
       }, () => {
-        if(b2cShoppers[n].type != 'business'){
-          cy.loginViaApiWith2FA(b2cShoppers[n], Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+        if (b2cShoppers.loginTestAccounts[n].type != 'business') {
+          cy.loginViaApiWith2FA(b2cShoppers.loginTestAccounts[n], Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
         }
-        else{
-          cy.loginViaApi(b2cShoppers[n]).then((response) => {
+        else {
+          cy.loginViaApi(b2cShoppers.loginTestAccounts[n]).then((response) => {
             expect(response).to.have.property('LoginResult', 'Success')
           })
         }
