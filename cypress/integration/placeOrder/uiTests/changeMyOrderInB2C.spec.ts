@@ -23,7 +23,7 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/login/ui/commands/login'
 
-TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
   const searchTerm = 'Pet'
   const trolleyThreshold = 50.0
   const platform = Cypress.env('b2cPlatform')
