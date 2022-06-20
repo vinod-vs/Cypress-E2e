@@ -34,6 +34,14 @@ export class DeliveryDateAndWindowPage {
   getContinueShoppingButton () {
     return cy.get('button.shopper-action').contains('Continue shopping')
   }
+
+  getAvailableDays() {
+    return cy.get('option.ng-star-inserted')
+  }
+
+  getGivenAvailableDay (index: number ) {
+    return cy.get('select.day-dropdown').select(index+': Object')
+  }
 }
 
 export const onDeliveryDateAndWindowPage = new DeliveryDateAndWindowPage()

@@ -360,6 +360,10 @@ export class CheckoutPaymentPanel {
       .children('.payment-amount')
   }
   // #endregion
+
+  selectPlaceOrder () {
+    this.placeOrder()
+  }
 }
 
 export const onCheckoutPaymentPanel = new CheckoutPaymentPanel()

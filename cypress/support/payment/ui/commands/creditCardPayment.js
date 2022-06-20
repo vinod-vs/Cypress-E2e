@@ -19,6 +19,7 @@ Cypress.Commands.add('fillCreditCardPaymentDetails', (creditCard) => {
   cy.checkIfElementExists(creditCardPage.getCreditCardDetailAlreadySavedLocatorString()).then((cardDetailsAlreadyFilled) => {
     cy.log('cardDetailsAlreadyFilled: ' + cardDetailsAlreadyFilled)
     if (cardDetailsAlreadyFilled === true) {
+      cy.get(creditCardPage.getCreditCardCVVIframeLocatorString()).should('be.visible')
       cy.get(creditCardPage.getCreditCardCVVIframeLocatorString()).then($element => {
         const $body = $element.contents().find('body')
         let stripe = cy.wrap($body)

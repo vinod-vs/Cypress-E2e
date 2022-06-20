@@ -33,8 +33,8 @@ TestFilter(['B2C', 'UI', 'Refunds', 'OPS', 'P3'], () => {
       cy.clearLocalStorage({ domain: null })
     })
     it('Place an order', () => {
-      cy.loginViaUi(shoppers[4])
-      shopperEmail = shoppers[4].email
+      cy.loginViaUi(shoppers.refundTest)
+      shopperEmail = shoppers.refundTest.email
       onSideCartPage.cleanupTrolley()
       onFMSRibbon.getFMSRibbonAddressLink().click({ waitForAnimations: false })
       onFMSAddressSelector.selectDeliveyAddress(refundsTestData.refundsOnCC.deliveryAddress)
