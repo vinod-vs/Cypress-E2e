@@ -86,7 +86,7 @@ TestFilter(['B2B', 'UI'], () => {
 
           // Navigate to UI - My order page
           cy.visit('/shop/myaccount/myorders')
-          cy.wait(500)
+          cy.wait(5000)
 
           // Passing the orderId to the Page object constructor
           const onMyOrderPageB2B = new MyOrderPageB2B(orderId)
