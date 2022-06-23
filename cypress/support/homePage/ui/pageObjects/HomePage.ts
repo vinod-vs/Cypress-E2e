@@ -63,7 +63,6 @@ export class HomePage {
   okgotit () {
     return cy.get('.productSaveToList-coachMark-coachMarkConfirm ng-tns-c66-13')
   }
-
 }
 
 export const onHomePage = new HomePage()

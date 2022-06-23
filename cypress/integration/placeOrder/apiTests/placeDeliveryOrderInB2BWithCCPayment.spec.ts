@@ -18,7 +18,7 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-const searchTerm = 'Fish'
+const searchTerm = 'Health'
 const trolleyThreshold = 50.00
 const platform = Cypress.env('b2bPlatform')
 

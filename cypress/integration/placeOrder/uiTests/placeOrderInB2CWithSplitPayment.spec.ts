@@ -10,11 +10,9 @@ import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/Checkou
 import { onHaveYouForgottenPage } from '../../../support/hyf/ui/pageObjects/HaveYouForgottenPage'
 import b2cShoppers from '../../../fixtures/login/b2cShoppers.json'
 import addressTestData from '../../../fixtures/checkout/addressSearch.json'
-import creditcardPayment from '../../../fixtures/payment/creditcardPayment.json'
-import giftCardList from '../../../fixtures/payment/giftCard_UIE2E.json'
 import TestFilter from '../../../support/TestFilter'
 
-TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () => {
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E', 'SplitPayment'], () => {
   describe('[UI] Place orders with split payment', () => {
 
     const expectedFulfilmentAddressAlias = 'expectedAddress'
@@ -29,7 +27,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
     })
 
     beforeEach(() => {
-      cy.loginViaUi(b2cShoppers[3])
+      cy.loginViaUi(b2cShoppers.E2ETestAccounts.placeOrderInB2CWithSplitPayment)
       onSideCartPage.cleanupTrolley()
 
       onFMSRibbon.getFMSRibbonAddressLink().click({ waitForAnimations: false })
@@ -43,7 +41,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
       onFMSWindowSelector.selectLastTimeslot()
       onFMSWindowSelector.getContinueShoppingButton().click()
 
-      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health', 30)
+      onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold('health & beauty', 30, 'Price High to Low')
 
       onSideCartPage.getViewCartButton().click()
 
@@ -75,7 +73,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
 
     it('Place a delivery order by spliting payment with gift card and new credit card', () => {
       const giftCardToBePaidAmount = 0.01
-      onCheckoutPage.onCheckoutPaymentPanel.splitPayWithNewCreditCardAndNewGiftCard(creditcardPayment.aa, creditcardPayment.dd, creditcardPayment.ee, creditcardPayment.bb, giftCardList[0].cardNumber, giftCardList[0].pin, giftCardToBePaidAmount)
+      onCheckoutPage.onCheckoutPaymentPanel.splitPayWithNewCreditCardAndNewGiftCard(Cypress.env('cc_number'), '12', '25', Cypress.env('cc_cvv'), Cypress.env('gc_number'), Cypress.env('gc_pin'), giftCardToBePaidAmount)
 
       // Verify order confirmation page
       onOrderConfirmationPage.VerifyOrderConfirmationHeader()
@@ -90,7 +88,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E', 'SplitPayment'], () =>
 
     it('Place a delivery order by spliting payment with gift card and existing paypal', () => {
       const giftCardToBePaidAmount = 0.01
-      onCheckoutPage.onCheckoutPaymentPanel.splitPayWithExistingPaypalAndNewGiftCard(giftCardList[0].cardNumber, giftCardList[0].pin, giftCardToBePaidAmount)
+      onCheckoutPage.onCheckoutPaymentPanel.splitPayWithExistingPaypalAndNewGiftCard(Cypress.env('gc_number'), Cypress.env('gc_pin'), giftCardToBePaidAmount)
 
       // Verify order confirmation page
       onOrderConfirmationPage.VerifyOrderConfirmationHeader()

@@ -16,7 +16,7 @@ class SessionGroupsV2Page {
   }
 
   getNameHeader () {
-    return cy.get('a:contains("Name")')
+    return cy.get('a:contains("Name")').first()
   }
 
   getDescriptionHeader () {

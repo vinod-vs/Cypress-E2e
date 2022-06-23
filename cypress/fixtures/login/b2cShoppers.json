@@ -1,31 +1,60 @@
-[{
-        "email": "myb2bcustomer@yopmail.com",
-        "password": "test1234",
-        "platform": "B2C",
-        "type": "business"
+{
+    "loginTestAccounts": [
+        {
+            "email": "myb2bcustomer@yopmail.com",
+            "password": "test1234",
+            "platform": "B2C",
+            "type": "business"
+        },
+        {
+            "email": "myb2ccustomer@yopmail.com",
+            "password": "test1234",
+            "platform": "B2C",
+            "type": "personal"
+        },
+        {
+            "email": "pk+biz@woolworths.com.au",
+            "password": "test123",
+            "platform": "B2C",
+            "type": "business"
+        }
+    ],
+    "E2ETestAccounts": {
+        "placeDeliveryNowOrderInB2C": {
+            "email": "b2ccheckoute2e_dn@82f8rhkb.mailosaur.net",
+            "password": "Test1234",
+            "platform": "B2C",
+            "type": "personal"
+        },
+        "placeOrderInB2CWithCreditCard": {
+            "email": "b2ccheckoute2e_cc@82f8rhkb.mailosaur.net",
+            "password": "Test1234",
+            "platform": "B2C",
+            "type": "personal"
+        },
+        "placeOrderInB2CWithPaypal": {
+            "email": "b2ccheckoute2e_pp@82f8rhkb.mailosaur.net",
+            "password": "Test1234",
+            "platform": "B2C",
+            "type": "personal"
+        },
+        "placeOrderInB2CWithSplitPayment": {
+            "email": "b2ccheckoute2e@82f8rhkb.mailosaur.net",
+            "password": "Test1234",
+            "platform": "B2C",
+            "type": "personal"
+        }
     },
-    {
-        "email": "myb2ccustomer@yopmail.com",
-        "password": "test1234",
-        "platform": "B2C",
-        "type": "personal"
-    },
-    {
-        "email": "pk+biz@woolworths.com.au",
-        "password": "test123",
-        "platform": "B2C",
-        "type": "business"
-    },
-    {
-        "email": "b2ccheckoute2e@82f8rhkb.mailosaur.net",
-        "password": "test1234",
-        "platform": "B2C",
-        "type": "personal"
-    },
-    {
+    "refundTest": {
         "email": "uat_cypresstest@82f8rhkb.mailosaur.net",
         "password": "Test1234",
         "platform": "B2C",
         "type": "personal"
+    },
+    "localDebug": {
+        "email": "local_debug@82f8rhkb.mailosaur.net",
+        "password": "Test1234",
+        "platform": "B2C",
+        "type": "personal"
     }
-]
+}

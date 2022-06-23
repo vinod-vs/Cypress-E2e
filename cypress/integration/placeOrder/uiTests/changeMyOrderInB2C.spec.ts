@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
 import TestFilter from '../../../support/TestFilter'
-import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
@@ -23,9 +22,10 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/login/ui/commands/login'
 
-TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
-  const searchTerm = 'Pet'
-  const trolleyThreshold = 50.0
+TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
+  const deliveryAddress = '1 Chatswood Ave, CHATSWOOD NSW 2067'
+  const searchTerm = 'pet'
+  const trolleyThreshold = 30.0
   const platform = Cypress.env('b2cPlatform')
 
   describe('[UI] Change Order in MyOrders for order placed by B2C customer', () => {
@@ -41,7 +41,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
       // Place an order via api
       cy.setFulfilmentLocationWithWindow(
         fulfilmentType.DELIVERY,
-        addressSearchBody,
+        deliveryAddress,
         windowType.ALL_AVAILABLE
       )
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
@@ -88,8 +88,9 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'P0', 'E2E'], () => {
 
           // Increase the Order total by adding more products to cart
           onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(
-            'health',
-            100
+            'household',
+            50,
+            'Price High to Low'
           )
 
           onSideCartPage.getViewCartButton().click()

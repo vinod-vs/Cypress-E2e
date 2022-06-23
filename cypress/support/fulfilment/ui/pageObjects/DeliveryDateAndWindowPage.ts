@@ -16,7 +16,7 @@ export class DeliveryDateAndWindowPage {
   }
 
   getTheFirstTradingAccount () {
-    return cy.get('#deliveryAddressSelector-option1')
+    return cy.get('#deliveryAddressSelector-option0')
   }
 
   getSaveAndContinueButton () {
@@ -33,6 +33,14 @@ export class DeliveryDateAndWindowPage {
 
   getContinueShoppingButton () {
     return cy.get('button.shopper-action').contains('Continue shopping')
+  }
+
+  getAvailableDays() {
+    return cy.get('option.ng-star-inserted')
+  }
+
+  getGivenAvailableDay (index: number ) {
+    return cy.get('select.day-dropdown').select(index+': Object')
   }
 }
 

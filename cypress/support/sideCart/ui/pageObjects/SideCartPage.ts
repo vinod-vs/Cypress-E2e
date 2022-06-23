@@ -9,7 +9,7 @@ export class SideCartPage {
   }
 
   getViewCartButton () {
-    return cy.get('.checkout-button')
+    return cy.get('button#header-view-cart-button-desktop')
   }
 
   getClearEntireCartLink () {
@@ -62,7 +62,10 @@ export class SideCartPage {
   }
 
   getTotalAmountElementOnHeader () {
-    return cy.get('#wx-header-checkout-amount')
+    if(Cypress.env('b2bPlatform'))
+      return cy.get('span.headerCheckout-orderAmount')
+    else
+      return cy.get('#wx-header-checkout-amount')
   }
   // #endregion
 
@@ -261,5 +264,18 @@ export class SideCartPage {
     })
     onSideCartPage.getCloseSideCartButton().click({force: true})
   }
+  
+  getViewCart () {
+    return cy.get('.headerCheckout-checkout')
+  }
+
+  getClearUnavailbleItemsLink () {
+    return '.linkButton.auto_cart-item-group-action'
+  }
+  
+  getClearEntireCart () {
+    return '.product-actionsClearCart > span'
+  }
+  
 }
 export const onSideCartPage = new SideCartPage()
