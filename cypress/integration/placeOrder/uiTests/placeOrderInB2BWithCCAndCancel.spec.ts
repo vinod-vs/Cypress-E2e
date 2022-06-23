@@ -25,13 +25,13 @@ const trolleyThreshold = 50.0
 const platform = Cypress.env('b2bPlatform')
 
 TestFilter(['B2B', 'UI'], () => {
-  describe('[UI] Place an order in B2B with OpenPay Payment', () => {
+  describe('Place a delivery order in B2B with credit card payment and cancel the order', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-    it('Should place an order on Woolworths at Work website using Credit Card as payment option', () => {
+    it('Should place a delivery order on Woolworths at Work website using Credit Card as payment option', () => {
       cy.loginViaApi(shopper).then((response: any) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
