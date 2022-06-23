@@ -305,7 +305,7 @@
         "paymentType": "CREDIT_CARD_PLUS_REWARDS_PLUS_GIFTCARD"
     },
     "GenericEDMOnlyOrderPaypalAndGCPaymentTestData": {
-        "searchTerm": "treats",
+        "searchTerm": "pets",
         "carrier": "Australia Post",
         "trackingNumber": "Automation:12345",
         "address": {
