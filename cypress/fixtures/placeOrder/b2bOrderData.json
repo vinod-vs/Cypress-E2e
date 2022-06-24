@@ -6,6 +6,12 @@
       "platform": "B2B",
       "type": "business"
     },
+    "shopper1": {
+      "email": "melshop2@yopmail.com",
+      "password": "test1234",
+      "platform": "B2B",
+      "type": "business"
+    },
     "orderLimit": { "minOrderLimit": 30 },
     "items": [
       {
