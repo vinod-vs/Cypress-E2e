@@ -701,12 +701,6 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
 
               // Verify the MP and shipping invoices are available for the customer
               cy.verifyOrderInvoice(testData)
-
-              // lib.verifyRefundDetails(
-              //   testData.orderId,
-              //   totalMarketRefundAmount,
-              //   10
-              // )
             })
 
             // Now Calling Rewards API to verify the Rewards Points Balance are not Deducted after the Return is Performed
