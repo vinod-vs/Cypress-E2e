@@ -29,9 +29,12 @@ import * as lib from '../../../../../support/everydayMarket/api/commands/commonH
 import wowDispatchData from '../../../../../fixtures/wowDispatch/wowDispatch.json'
 import eventsRequest from '../../../../../fixtures/wowDispatch/wowDispatchDataPrep.json'
 import '../../../../../support/wowDispatch/wowStatusUpdates'
-
-import { onOrderManagement } from '../../../../../support/siteManagement/ui/pageObjects/OrderManagement'
 import { json } from 'stream/consumers'
+
+import { OrderManagementMenu } from 'cypress/support/siteManagement/ui/commands/OrderManagementMenu'
+import { HomepageTopMenu } from 'cypress/support/siteManagement/ui/commands/HomepageTopMenu'
+import { onOrderManagement } from '../../../../../support/siteManagement/ui/pageObjects/OrderManagement'
+
 
 TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
   describe('[API]  RP-5538-EM|MP|SM-VerifyDeliveryUnlimitedDiscountForEMitemsAndDisplayedInSM', () => {
@@ -222,16 +225,16 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     // and Verify the DU Discount Details.
     cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) => 
     {
-      cy.log("OrderDiscountDetailsList[0].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId)
-      cy.log("OrderDiscountDetailsList[0].Source = "  + duDiscountDetails.OrderDiscountDetailsList[0].Source)
-      cy.log("OrderDiscountDetailsList[0].Target = "  + duDiscountDetails.OrderDiscountDetailsList[0].Target)
+      cy.log("OrderDiscountDetailsList[1].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[1].DiscountSourceId)
+      cy.log("OrderDiscountDetailsList[1].Source = "  + duDiscountDetails.OrderDiscountDetailsList[1].Source)
+      cy.log("OrderDiscountDetailsList[1].Target = "  + duDiscountDetails.OrderDiscountDetailsList[1].Target)
       cy.log("MarketShippingFeeBeforeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount)
       cy.log("MarketShippingFeeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount)
       cy.log("MarketShippingFee = "  + duDiscountDetails.PaymentDetails.MarketShippingFee)
      
-      expect(duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId).contains(duDiscountSourceId)
-      expect(duDiscountDetails.OrderDiscountDetailsList[0].Source).contains(duDiscountSource)
-      expect(duDiscountDetails.OrderDiscountDetailsList[0].Target).contains(duTarget)
+      expect(duDiscountDetails.OrderDiscountDetailsList[1].DiscountSourceId).contains(duDiscountSourceId)
+      expect(duDiscountDetails.OrderDiscountDetailsList[1].Source).contains(duDiscountSource)
+      expect(duDiscountDetails.OrderDiscountDetailsList[1].Target).contains(duTarget)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount).equals(10)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount).equals(10)
       expect(duDiscountDetails.PaymentDetails.MarketShippingFee).equals(0)  
@@ -241,86 +244,39 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
     //Now, Implement UI automation to Verify the Site Management Verification      
     //Login to SM and Navigate to the edmOrderId
-    cy.loginToSMAndSearchOrder(smLogins, edmOrderId)
-    //Click on View All Order
-    //Search for the 'edmOrderId' in the Table and corresponding Column 'Delivery Unlimited Total Discount' Value should display $10
-//OrderReference Order Number	Seller	Date Placed	        Email	                            Status	Order Total	 Total Saved 	Delivery Unlimited Delivery Discount 	Delivery Unlimited Packaging Discount 	Delivery Unlimited Total Discount
-//96XZN-2PY5W8	  EM0072042	  Big W	  16/06/2022 3:51 PM	rjagadishauto34@woolworths.com.au	Shipped	$80.00		   $10.00		                                                                                  $10.00
+    cy.siteManagementLoginViaUi(smLogins.email, smLogins.password)
+    cy.selectTopMenu(HomepageTopMenu.ORDER_MANAGEMENT)
+    cy.selectOrderManagementSubMenu(OrderManagementMenu.CUSTOMER_SEARCH)
+    cy.wait(Cypress.config('twoSecondWait'))
+    onOrderManagement.getOrderIDTextField().click({ force: true })
+    cy.wait(Cypress.config('twoSecondWait'))
+    // Enter 'EM Order Id'
+    onOrderManagement.getOrderIDTextField().should('be.visible').type(edmOrderId)
+    // Click on 'Customer Search' Button
+    onOrderManagement.getCustomerSearchButton().should('be.visible').click()
+    // Click on 'View All Orders' Button --> For This in OrderManagement.ts file Added the Locator for this Button
+    onOrderManagement.getViewAllOrdersButton().click()
+    // Now,Search for the Above EM order Id and Corresponding Column of 'Delivery Unlimited Total Discount'
+    onOrderManagement.getOrderNumberColumnLabel().each(($e1, index, $list) => 
+    {
+      const OrderNumberColumnValue = $e1.text()
+      if(OrderNumberColumnValue.includes(edmOrderId))
+      {  onOrderManagement.getDeliveryUnlimitedTotalDiscountColumnLabel().eq(index).then(function (DeliveryUnlimitedTotalDiscountValue) {
+         expect(DeliveryUnlimitedTotalDiscountValue.text()).contains(duDiscountAmount) }) 
+      }
+    })
 
 
-
-
-
-
-              // After dispatch, Invoke the events api and verify the events are updated Accordingly
-            /*  cy.orderEventsApiWithRetry(req.orderReference, {
-                function: function (response) {
-                  if (!response.body.data.some((element) => element.domainEvent === 'MarketOrderShipmentCreate') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketOrderDispatched') ||
-                    !response.body.data.some((element) => element.domainEvent === 'MarketRewardsCredited')) {
-                    cy.log('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
-                    throw new Error('Expected MarketOrderShipmentCreate, MarketOrderDispatched & MarketRewardsCredited were not present')
-                  }
-                },
-                retries: Cypress.env('marketApiRetryCount'),
-                timeout: Cypress.env('marketApiTimeout')
-              }).then((response) => {
-                // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                //lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
-                // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                //lib.verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
-                // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                //lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
-              })
-              */
-
-              /*
-              cy.refundRequestCreateInitiatedBy(encodedEdmInvoiceId, encodedEdmLineitemId, testData.items[0].quantity, true, initiator)
-              .then((response) => {
-                // Verify Order Projection details
-                cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
-                  retries: Cypress.env('marketApiRetryCount'),
-                  timeout: Cypress.env('marketApiTimeout')
-                }).then((response) => {
-                  //  verify the response status in graphQL endpoint
-                  cy.refundRequestReturn(encodedMarketRefundedId).then((response) => {
-                    expect(response.data.refundRequestReturn.refundRequest.status).to.be.equal('RETURNED')
-                  }) // end of refund request return
-                  // Verify Order Projection details
-                  cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
-                    function: function (response) {
-                      if (response.body.invoices[0].invoiceStatus !== 'REFUNDED') {
-                        cy.log('invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
-                        throw new Error('invoiceStatus was ' + response.body.invoices[0].invoiceStatus + ' instead of REFUNDED')
-                      }
-                    },
-                    retries: Cypress.env('marketApiRetryCount'),
-                    timeout: Cypress.env('marketApiTimeout')
-                  }).as('finalProjection').then((response) => {
-                    // Invoke OQS TMO api and validate it against the projection
-                    lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
-                  })
-                })
-              })  // ENDS - cy.refundRequestCreateInitiatedBy
-              */
-
-
+      //Later, Put Logic to Verify the Rewards Points on Order Details Page and 
 
 
 
               
 
-            }) // ENDS - }).then((response) => {
-          }) // ENDS - cy.fullDispatchAnInvoice
-          
-
-
-
-          
-          }) // ENDS - .then((response) => {
+    }) // ENDS - }).then((response) => {
+    }) // ENDS - cy.fullDispatchAnInvoice      
+    }) // ENDS - .then((response) => {
       
-
-
       // Method to Hit the RedeemMarketOrderSavings Event-
       Cypress.Commands.add('orderEventsApiForRedeemMarketOrderSavings', (traderOrderReference, retryOptions) => {
           const endPoint = String(
@@ -371,8 +327,8 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
 
       }  // ENDS- IF        
-        else {
-          cy.log("DU Discount is Not Applicable Because in checkOutResponse EM Subtotal is = " + checkOutResponse.Model.Order.MarketSubtotal)
+        else 
+        { cy.log("DU Discount is Not Applicable Because in checkOutResponse EM Subtotal is = " + checkOutResponse.Model.Order.MarketSubtotal)
         }  // ENDS - Else 
       })  // ENDS- cy.navigateToCheckout().then((checkOutResponse) => {
       
@@ -383,7 +339,6 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
 
 
       //Later, Put Logic to Verify the Rewards Points on Order Details Page and 
-      //Later, Put Logic to Include the FreeShipping Threshold  i.e. 'MarketSubtotal' >= $100 
 
 
     
