@@ -54,14 +54,18 @@ Cypress.Commands.add('addAvailableNonRestrictedPriceLimitedWowItemsToTrolley', (
 })
 
 function addToTrolleyAfterReducingProductProperties (productArr) {
-  let trolleyItems = []
+  if (productArr.length === 0) {
+    cy.log('No Products to be added to trolley')
+  } else {
+    let trolleyItems = []
   
-  productArr.map(({ name, price, isSubstitutable, shopperNotes, ...trolleyProperties }) => trolleyProperties).forEach((item) => {
-    trolleyItems.push(item)
-  })
-
-  addUpdateItemsRequestBody.items = trolleyItems
-  cy.addUpdateItemsToTrolley(addUpdateItemsRequestBody)
+    productArr.map(({ name, price, isSubstitutable, shopperNotes, ...trolleyProperties }) => trolleyProperties).forEach((item) => {
+      trolleyItems.push(item)
+    })
+  
+    addUpdateItemsRequestBody.items = trolleyItems
+    cy.addUpdateItemsToTrolley(addUpdateItemsRequestBody)
+  }
 }
 
 Cypress.Commands.add('addAvailableNonRestrictedWowItemsToTrolley', (searchTerm) => {

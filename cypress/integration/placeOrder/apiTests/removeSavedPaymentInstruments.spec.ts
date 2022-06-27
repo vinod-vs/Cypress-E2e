@@ -4,7 +4,7 @@ import '../../../support/login/api/commands/login'
 import '../../../support/payment/api/commands/giftCard'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
+TestFilter(['API', 'B2C', 'SPUD', 'Checkout'], () => {
   const creditCard = Cypress.env('creditCard')
   let instrumentId: any
 
@@ -21,13 +21,19 @@ TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
       cy.addCreditCardViaApi(creditCard).then((response: any) => {
         instrumentId = response.paymentInstrument.itemId
         cy.getDigitalPaymentInstruments().then((response: any) => {
-          const hasInstrumentId = response.CreditCard.Instruments.filter((instrument: { [x: string]: any }) => instrument.PaymentInstrumentId === instrumentId)
+          const hasInstrumentId = response.CreditCard.Instruments.filter(
+            (instrument: { [x: string]: any }) =>
+              instrument.PaymentInstrumentId === instrumentId
+          )
           expect(hasInstrumentId, 'Credit Card added to account').to.not.be.null
         })
       })
       cy.removeSavedCreditAndGiftCardsViaAPI().then(() => {
         cy.getDigitalPaymentInstruments().then((response: any) => {
-          expect(response.CreditCard.Instruments.length, 'Number of Credit Cards in Customer Account').to.eql(0)
+          expect(
+            response.CreditCard.Instruments.length,
+            'Number of Credit Cards in Customer Account'
+          ).to.eql(0)
         })
       })
     })
@@ -36,13 +42,19 @@ TestFilter(['API', 'B2C', 'P1', 'SPUD', 'Checkout'], () => {
       cy.addGiftCardToAccount(giftCard).then((response: any) => {
         instrumentId = response.GiftCard.PaymentInstrumentId
         cy.getDigitalPaymentInstruments().then((response: any) => {
-          const hasInstrumentId = response.GiftCard.Instruments.filter((instrument: { [x: string]: any }) => instrument.PaymentInstrumentId === instrumentId)
+          const hasInstrumentId = response.GiftCard.Instruments.filter(
+            (instrument: { [x: string]: any }) =>
+              instrument.PaymentInstrumentId === instrumentId
+          )
           expect(hasInstrumentId, 'Gift Card added to account').to.not.be.null
         })
       })
       cy.removeSavedCreditAndGiftCardsViaAPI().then(() => {
         cy.getDigitalPaymentInstruments().then((response: any) => {
-          expect(response.CreditCard.Instruments.length, 'Number of Gift Cards in Customer Account').to.eql(0)
+          expect(
+            response.CreditCard.Instruments.length,
+            'Number of Gift Cards in Customer Account'
+          ).to.eql(0)
         })
       })
     })

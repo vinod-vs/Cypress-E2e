@@ -1,8 +1,14 @@
 {
   "ppAccount1": {
-    "email": "ecom_qa_web+59@woolworths.com.au",
+    "email": "ecom_qa_web+60@woolworths.com.au",
     "password": "Woolies123",
-    "shopperId": "5279269",
+    "shopperId": "5279270",
+    "platform": "B2C"
+  },
+  "ppAccount2": {
+    "email": "ecom_qa_web+61@woolworths.com.au",
+    "password": "Woolies123",
+    "shopperId": "5279273",
     "platform": "B2C"
   }
 }

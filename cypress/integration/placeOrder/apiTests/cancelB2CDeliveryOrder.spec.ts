@@ -11,9 +11,10 @@ import '../../../support/login/api/commands/login'
 import '../../../support/fulfilment/api/commands/fulfilment'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
   const searchTerm = 'Freezer'
-  const trolleyThreshold = 60.00
+  const additionalSearchTerm = 'Fish'
+  const trolleyThreshold = 50.0
   const platform = Cypress.env('b2cPlatform')
 
   describe('[API] Cancel placed order for B2C customer', () => {
@@ -22,11 +23,24 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.clearLocalStorage({ domain: null })
 
       cy.loginWithNewShopperViaApi()
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
-      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
-        cy.wrap(confirmOrderResponse.Order.OrderId).as('orderId')
-      })
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.FLEET_DELIVERY
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        additionalSearchTerm,
+        trolleyThreshold
+      )
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then(
+        (confirmOrderResponse: any) => {
+          cy.wrap(confirmOrderResponse.Order.OrderId).as('orderId')
+        }
+      )
     })
 
     it('Place an order for B2C customer, then cancel the order', () => {

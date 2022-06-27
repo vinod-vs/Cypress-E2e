@@ -15,7 +15,7 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 
-TestFilter(['B2C', 'API', 'P1', 'SPUD', 'Checkout'], () => {
+TestFilter(['B2C', 'API', 'SPUD', 'Checkout', 'E2E'], () => {
   const platform = Cypress.env('b2cPlatform')
 
   describe('[API] Place a Delivery Now order in B2C platform', () => {
@@ -36,15 +36,20 @@ TestFilter(['B2C', 'API', 'P1', 'SPUD', 'Checkout'], () => {
         expect(response.Address.AddressId).to.greaterThan(0)
       })
 
-      cy.getFulfilmentWindowViaApi(windowType.DELIVERY_NOW).then((response: any) => {
-        expect(response.Id, 'Fulfilment Window ID').to.greaterThan(0)
-      })
+      cy.getFulfilmentWindowViaApi(windowType.DELIVERY_NOW).then(
+        (response: any) => {
+          expect(response.Id, 'Fulfilment Window ID').to.greaterThan(0)
+        }
+      )
 
       cy.completeWindowFulfilmentViaApi().then((response: any) => {
         expect(response, 'Fulfilment').to.have.property('IsSuccessful', true)
       })
 
-      cy.addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(searchTerm, 20)
+      cy.addAvailableNonRestrictedItemCountLimitedWowItemsToTrolley(
+        searchTerm,
+        20
+      )
 
       // Restricted properties in /products are not reliable for DN. Need to use Trolley to remove confirm only available items remain
       cy.removeRestrictedItemsFromTrolley()
@@ -56,9 +61,11 @@ TestFilter(['B2C', 'API', 'P1', 'SPUD', 'Checkout'], () => {
         }
       })
 
-      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.OrderId, 'Order ID').to.not.be.null
-      })
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then(
+        (confirmOrderResponse: any) => {
+          expect(confirmOrderResponse.Order.OrderId, 'Order ID').to.not.be.null
+        }
+      )
     })
   })
 })
