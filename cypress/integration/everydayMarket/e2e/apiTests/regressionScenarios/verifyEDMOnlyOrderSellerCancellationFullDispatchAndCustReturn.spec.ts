@@ -199,13 +199,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                 totalMarketRefundAmount =
                   response.invoices[0].refunds[0].refundAmount
                 //  Approve the seller cancellation and verify the response status in graphQL endpoint
-                cy.refundRequestReturn(encodedMarketRefundedId).then(
-                  (response) => {
-                    expect(
-                      response.data.refundRequestReturn.refundRequest.status
-                    ).to.be.equal('RETURNED')
-                  }
-                )
+                cy.refundRequestReturn(encodedMarketRefundedId)
                 // Verify Order Projection details after seller cancellation
                 cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
                   shopperId,
