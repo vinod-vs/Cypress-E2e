@@ -178,5 +178,6 @@ declare namespace Cypress {
     openSideCart(): any;
     goToCheckout(): any;
     fillCreditCardPaymentDetails(details: any): any;
+    selectAvailablePickUpDetailsOnFms():any;
   }
 }
