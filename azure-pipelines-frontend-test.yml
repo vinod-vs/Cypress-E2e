@@ -17,12 +17,12 @@ parameters:
   - name: tagsB2C
     displayName: B2C Test Tags
     type: string
-    default: B2C-E2E
+    default: B2C-UI-E2E
 
   - name: tagsB2B
     displayName: B2B Test Tags
     type: string
-    default: B2B-E2E
+    default: B2B-UI-E2E
 
   - name: otpValidationSwitch
     displayName: One Time Password Validation Switch
