@@ -82,7 +82,7 @@ export class CheckoutReviewItemsPanel {
 
   // #region - Selectors of unavalialbe products panel
   getUnavailableProductsNotificationPanel () {
-    return cy.get('.auto_group-restricted-location')
+    return cy.get('.notification-group')
   }
 
   getUnavailableProductsList () {

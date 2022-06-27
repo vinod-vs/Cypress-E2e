@@ -44,7 +44,7 @@ Cypress.Commands.add('payWithLinkedPaypalAccount', (digitalPaymentRequest) => {
 
 Cypress.Commands.add('getLinkedPayPalAccountInstrumentId', () => {
   cy.getDigitalPaymentInstruments().then((instruments) => {
-    const paypalInstruments = instruments.Paypal.Instruments.filter(instrument => instrument.Status === 'VERIFIED' && instrument.Allowed)
+    const paypalInstruments = instruments.Paypal.Instruments.filter(instrument => instrument.Allowed === true)
     expect(paypalInstruments, 'Verified PayPal Instruments linked to customer account').to.have.length(1)
     return paypalInstruments[0].PaymentInstrumentId
   })

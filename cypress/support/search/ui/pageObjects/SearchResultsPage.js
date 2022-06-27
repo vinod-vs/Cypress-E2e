@@ -4,103 +4,103 @@ import searchRequestPayload from '../../../../fixtures/search/productSearch.json
 import '../../api/commands/search'
 
 export class SearchResultsPage {
-  addItemToCart (itemPositionNumber) {
+  addItemToCart(itemPositionNumber) {
     return cy.get('#search-content .product-grid > div:nth-child(' + itemPositionNumber + ') .cartControls-addCart')
   }
 
-  getIncreaseQuantityButton () {
+  getIncreaseQuantityButton() {
     return cy.get('.cartControls-incrementButton')
   }
 
-  getProductPrice () {
+  getProductPrice() {
     return cy.get('.price.price--large.ng-star-inserted')
   }
 
-  getProductPriceByItemLocatorString () {
+  getProductPriceByItemLocatorString() {
     return '#search-content .product-grid > div:nth-child(INDEX) .price.price--large.ng-star-inserted'
   }
 
-  getIncreaseQuantityButtonByItemLocatorString () {
+  getIncreaseQuantityButtonByItemLocatorString() {
     return '#search-content .product-grid > div:nth-child(INDEX) .cartControls-incrementButton'
   }
 
-  getQuantityInputFieldByItemLocatorString () {
+  getQuantityInputFieldByItemLocatorString() {
     return '#search-content .product-grid > div:nth-child(INDEX) .cartControls-quantityInput'
   }
 
-  getAddToCartByItemLocatorString () {
+  getAddToCartByItemLocatorString() {
     return '#search-content .product-grid > div:nth-child(INDEX) .cartControls-addCart'
   }
 
-  getAddToCartByItemLocatorString1 () {
+  getAddToCartByItemLocatorString1() {
     return '#search-content .product-grid > div .cartControls-addCart'
   }
 
-  getAllAddToCartButtons () {
+  getAllAddToCartButtons() {
     return cy.get('.cartControls-addButton .cartControls-addCart')
   }
 
-  getMarketProductRoundelLocatorString () {
+  getMarketProductRoundelLocatorString() {
     return '#search-content .product-grid > div:nth-child(INDEX) img[alt="Everyday Market Product"]'
   }
 
-  getItemTitleLocatorString () {
+  getItemTitleLocatorString() {
     return '#search-content .product-grid > div:nth-child(INDEX) .shelfProductTile-descriptionLink'
   }
 
-  getSaveToListButton () {
+  getSaveToListButton() {
     return cy.get('button.productSaveToList-buttonLink')
   }
 
-  getCreateANewListButton () {
+  getCreateANewListButton() {
     return cy.get('button.productSaveToList-actionItems-createList')
   }
 
-  getNewListNameTextInput () {
+  getNewListNameTextInput() {
     return cy.get('#productSaveToList-input')
   }
 
-  getCreateNewListActionButton () {
+  getCreateNewListActionButton() {
     return cy.get('button.productSaveToList-actionItems-createButton')
   }
 
-  getTheListnameCheckBox (listName) {
+  getTheListnameCheckBox(listName) {
     return cy.get('input[name=\'' + listName + '\']')
   }
 
-  getProductSaveToNewListButton () {
+  getProductSaveToNewListButton() {
     return cy.get('button.productSaveToList-actionItems-saveButton')
   }
 
-  getProductTitle () {
+  getProductTitle() {
     return cy.get('shared-product-tile')
   }
 
-  getProductSavedNotification () {
+  getProductSavedNotification() {
     return cy.get('shared-toast')
   }
 
-  getAllPageNumberElements () {
+  getAllPageNumberElements() {
     return cy.get('.paging-pageNumber')
   }
 
-  getGoNextButton () {
+  getGoNextButton() {
     return cy.get('.next-marker')
   }
 
-  getSortByDropdownButton () {
+  getSortByDropdownButton() {
     return cy.get('.sort-by-dropdown button')
   }
 
-  getSortProductsDropdownOptionsSpan () {
+  getSortProductsDropdownOptionsSpan() {
     return cy.get('span.dropdown-item__button')
   }
 
-  getOkButtonInRestrictedItemsPopup () {
+  getOkButtonInRestrictedItemsPopup() {
     return cy.get('.primary > .ng-star-inserted').contains('Ok, got it')
   }
 
-  sortSearchResultProductsBy (sortByOptionText) {
+  sortSearchResultProductsBy(sortByOptionText) {
     this.getSortByDropdownButton().should('be.visible').click({ force: true })
 
     cy.intercept({
@@ -113,7 +113,7 @@ export class SearchResultsPage {
     cy.wait('@productSearch')
   }
 
-  sortCategoryProductsBy (sortByOptionText) {
+  sortCategoryProductsBy(sortByOptionText) {
     this.getSortByDropdownButton().should('be.visible').click({ force: true })
 
     cy.intercept({
@@ -126,7 +126,7 @@ export class SearchResultsPage {
     cy.wait('@browseCategory')
   }
 
-  addRandomProductsFromEachDepartmentToCartUntilReachSpendThreshold (spendThreshold) {
+  addRandomProductsFromEachDepartmentToCartUntilReachSpendThreshold(spendThreshold) {
     let cartAmountText = ''
     let cartAmount = 0
     const totalCartValue = parseFloat(spendThreshold)
@@ -170,7 +170,7 @@ export class SearchResultsPage {
     })
   }
 
-  searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold (searchTerm, minSpendThreshold, sortByOption) {
+  searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(searchTerm, minSpendThreshold, sortByOption) {
     onHomePage.getSearchHeader().click()
 
     cy.intercept({
@@ -202,7 +202,7 @@ export class SearchResultsPage {
     })
   }
 
-  #addAvailableProductsToCartFromCurrentPage (searchTerm, minSpendThreshold) {
+  #addAvailableProductsToCartFromCurrentPage(searchTerm, minSpendThreshold) {
     cy.checkIfElementExists('.cartControls-addButton .cartControls-addCart').then(result => {
       if (result) {
         this.#addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold)
@@ -210,7 +210,7 @@ export class SearchResultsPage {
     })
   }
 
-  #addAvailableProductsToCartFromAllPagesRecursively (searchTerm, minSpendThreshold, currentPageIndex, lastPageIndex) {
+  #addAvailableProductsToCartFromAllPagesRecursively(searchTerm, minSpendThreshold, currentPageIndex, lastPageIndex) {
     if (currentPageIndex > lastPageIndex) {
       throw new Error('All search result products are out of stock or unavailable')
     }
@@ -230,7 +230,7 @@ export class SearchResultsPage {
     })
   }
 
-  #addAvailableProductsUntilReachMinSpendThreshold (searchTerm, minSpendThreshold) {
+  #addAvailableProductsUntilReachMinSpendThreshold(searchTerm, minSpendThreshold) {
     cy.intercept({
       method: 'POST',
       url: Cypress.env('productSearchEndpoint'),
@@ -283,7 +283,7 @@ export class SearchResultsPage {
     })
   }
 
-  #traverseAddingProductsUntilReachMinspendThreshold (minSpendThreshold, currentProductIndex, totalProductCount, apiProductSearchResultSetAsReference) {
+  #traverseAddingProductsUntilReachMinspendThreshold(minSpendThreshold, currentProductIndex, totalProductCount, apiProductSearchResultSetAsReference) {
     cy.intercept({
       method: 'POST',
       url: Cypress.env('productSearchEndpoint'),
@@ -295,7 +295,9 @@ export class SearchResultsPage {
     } else {
       cy.get('.shelfProductTile').eq(currentProductIndex).then(element => {
         if (apiProductSearchResultSetAsReference.some(o => o.DisplayName == element.find('.shelfProductTile-descriptionLink').text().trim())) {
-          cy.wrap(element).find('.cartControls-addCart').click({ force: true })
+          if (element.find('.cartControls-incrementButton').length === 0) {
+            cy.wrap(element).find('.cartControls-addCart').click({ force: true })
+          }
           this.#increaseProductQuantityUntilReachMinSpendThreshold(minSpendThreshold, element)
 
           onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
@@ -310,7 +312,7 @@ export class SearchResultsPage {
     }
   }
 
-  #increaseProductQuantityUntilReachMinSpendThreshold (minSpendThreshold, shelfProductTileElement) {
+  #increaseProductQuantityUntilReachMinSpendThreshold(minSpendThreshold, shelfProductTileElement) {
     cy.wait(1000)
     onSideCartPage.getTotalAmountElementOnHeader().then(totalAmountEle => {
       if (Number(totalAmountEle.text().substring(1)) < Number(minSpendThreshold)) {

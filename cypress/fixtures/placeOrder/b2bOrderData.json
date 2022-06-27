@@ -6,6 +6,12 @@
       "platform": "B2B",
       "type": "business"
     },
+    "shopper1": {
+      "email": "any.auto0@yopmail.com",
+      "password": "test1234",
+      "platform": "B2B",
+      "type": "business"
+    },
     "orderLimit": { "minOrderLimit": 30 },
     "items": [
       {
@@ -15,13 +21,13 @@
         "searchTerm": "Dry Nappies"
       },
       {
-        "searchTerm": "Slime Starter Kit"
+        "searchTerm": "care"
       },
       {
         "searchTerm": "Moccona Coffee"
       },
       {
-        "searchTerm": "Knife Sharpener"
+        "searchTerm": "health"
       },
       {
         "searchTerm": "Fish"

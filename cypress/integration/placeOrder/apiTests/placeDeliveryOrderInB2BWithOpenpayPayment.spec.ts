@@ -71,7 +71,7 @@ TestFilter(['B2B', 'API', 'P0'], () => {
         expect(response).to.have.property('TotalTrolleyItemQuantity', 0)
       })
 
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('fish', 30.0)
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Health', 30.0)
 
       cy.navigateToCheckout().then((response: any) => {
         expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)

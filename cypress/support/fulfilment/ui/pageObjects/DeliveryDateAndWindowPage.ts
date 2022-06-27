@@ -42,6 +42,22 @@ export class DeliveryDateAndWindowPage {
   getGivenAvailableDay (index: number ) {
     return cy.get('select.day-dropdown').select(index+': Object')
   }
+
+  getPickupTabButton() {
+    return cy.get('ul.tab-list >:nth-child(2) > .tab-button')
+  }
+
+  getPickUpAddressInput() {
+    return cy.get('#pickupAddressSelector')
+  }
+
+  getSelectPickUpAddressMatchingSearchResult() {
+    return cy.get('#pickupAddressSelector-option0')
+  }
+
+  getSelectFirstPickUpAddressStore() {
+    return cy.get('.stores > :nth-child(1)')
+  }
 }
 
 export const onDeliveryDateAndWindowPage = new DeliveryDateAndWindowPage()

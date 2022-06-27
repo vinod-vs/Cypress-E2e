@@ -12,9 +12,10 @@ import '../../../support/orders/api/commands/amendOrder'
 import '../../../support/shared/api/commands/bootstrap'
 import '../../../support/payment/api/commands/zero'
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
   const searchTerm = 'Freezer'
-  const trolleyThreshold = 90.00
+  const additionalSearchTerm = 'Fish'
+  const trolleyThreshold = 50.0
   const platform = Cypress.env('b2cPlatform')
 
   describe('[API] Amend placed order for B2C customer', () => {
@@ -22,13 +23,28 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
       cy.loginWithNewShopperViaApi()
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.FLEET_DELIVERY
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        additionalSearchTerm,
+        trolleyThreshold
+      )
 
-      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
-        cy.wrap(confirmOrderResponse.Order.OrderId).as('initialOrderId')
-        cy.wrap(confirmOrderResponse.Order.TotalIncludingGst).as('initialOrderTotal')
-      })
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then(
+        (confirmOrderResponse: any) => {
+          cy.wrap(confirmOrderResponse.Order.OrderId).as('initialOrderId')
+          cy.wrap(confirmOrderResponse.Order.TotalIncludingGst).as(
+            'initialOrderTotal'
+          )
+        }
+      )
 
       cy.get('@initialOrderId').then(($orderId: any) => {
         cy.amendOrder($orderId).then((response: any) => {
@@ -39,15 +55,19 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           })
         })
       })
-      removeUnavailableStockCodes()  
+      removeUnavailableStockCodes()
     })
 
     it('Should place an order for B2C customer, then amend the order and place amended order with additional order total', () => {
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 30.00)
+      cy.wait(60000)
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 30.0)
 
       cy.getBootstrapResponse().then(($response: any) => {
         cy.get('@initialOrderTotal').then((initialTotal: any) => {
-          expect($response.TrolleyRequest.Totals.Total, 'Amended Order Total').to.be.greaterThan(initialTotal)
+          expect(
+            $response.TrolleyRequest.Totals.Total,
+            'Amended Order Total'
+          ).to.be.greaterThan(initialTotal)
         })
       })
 
@@ -55,12 +75,13 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         expect(response.Order.OrderId, 'Order ID').to.not.be.null
         expect(response.Order.OrderStatus, 'Order Status').to.equal('Placed')
         expect(response.Order.AmendCutoff, 'Amend Cutoff Time').to.not.be.empty
-      })  
+      })
     })
 
     it('Should place an order for B2C customer, then amend the order and place amended order with the same or reduced total value', () => {
+      cy.wait(60000)
       cy.zero().then((response: any) => {
-        expect(response.Result, "Zero Amend Request").to.eql(true)
+        expect(response.Result, 'Zero Amend Request Result').to.eql(true)
         expect(response.PlacedOrderId, 'Placed Order ID').to.not.be.null
         expect(response.OrderReference, 'Order Reference').to.not.be.empty
       })
@@ -73,7 +94,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
             expect(response.OrderId, 'Amending Order Id').to.be.null
           })
         })
-      }) 
+      })
     })
 
     // Workaround for issue on UAT whereby products from initial order become unavailable on starting an amendment
