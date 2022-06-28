@@ -12,7 +12,7 @@ import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/Checkou
 import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage'
 
 TestFilter(["B2B", "UI", "P0"], () => {
-  describe("[UI] Place a pickup order on Woolworths at Work website using Credit Card", () => {
+  describe("[UI] Place a direct to boot order on Woolworths at Work website using Credit Card", () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null });
       cy.clearLocalStorage({ domain: null });
@@ -20,7 +20,7 @@ TestFilter(["B2B", "UI", "P0"], () => {
       
     });
 
-    it("Place a pickup order on Woolworths at Work website using Credit Card", () => {
+    it("Place a direct to boot order on Woolworths at Work website using Credit Card", () => {
       let shopper =data.b2bOrderData1.shopper1;
       let testdata =data.b2bOrderData1
       // Login
