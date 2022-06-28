@@ -4,7 +4,7 @@ import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import TestFilter from '../../../support/TestFilter'
-import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
+import storeSearchBody from '../../../fixtures/checkout/b2storeSearch.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/fulfilment/api/commands/fulfilment'
@@ -14,24 +14,45 @@ import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
+import '../../../support/delivery/api/commands/options'
+import '../../../support/address/api/commands/searchSetValidateAddress'
+import '../../../support/login/ui/commands/login'
 import '../../../support/checkout/api/commands/checkoutHelper'
+<<<<<<<< HEAD:cypress/integration/placeOrder/uiTests/placePickupOrderInB2BWithCCAndCancel.spec.ts
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import { MyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
+========
+import { MyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
+import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
+>>>>>>>> 3df92e48c17db39040b99ab5e5bc2cd36438fd82:cypress/integration/placeOrder/uiTests/amendPickupOrderInB2B.ts
 import { onOrderDetailsPage } from '../../../support/myOrder/ui/pageObjects/OrderDetailsPage'
+import { onSideCartPage } from '../../../support/sideCart/ui/pageObjects/SideCartPage'
+import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/CheckoutPage'
+import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage'
+import { onSearchResultsPage } from '../../../support/search/ui/pageObjects/SearchResultsPage'
 
-const searchTerm = 'baby'
-const trolleyThreshold = 50.0
+const searchTerm = 'pantry'
+const trolleyThreshold = 30.0
 const platform = Cypress.env('b2bPlatform')
 
 TestFilter(['B2B', 'UI'], () => {
+<<<<<<<< HEAD:cypress/integration/placeOrder/uiTests/placePickupOrderInB2BWithCCAndCancel.spec.ts
   describe('Place a pickup order in B2B with credit card payment and cancel the order', () => {
+========
+  describe('Place a pickup order in B2B with credit card Payment and amend the order', () => {
+>>>>>>>> 3df92e48c17db39040b99ab5e5bc2cd36438fd82:cypress/integration/placeOrder/uiTests/amendPickupOrderInB2B.ts
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
+<<<<<<<< HEAD:cypress/integration/placeOrder/uiTests/placePickupOrderInB2BWithCCAndCancel.spec.ts
     it('Should place a pickup order on Woolworths at Work website using Credit Card as payment option and Cancel the order', () => {
+========
+    it('Should place a pickup order on Woolworths at Work website using Credit Card as payment option and amend the order', () => {
+>>>>>>>> 3df92e48c17db39040b99ab5e5bc2cd36438fd82:cypress/integration/placeOrder/uiTests/amendPickupOrderInB2B.ts
       cy.loginViaApi(shopper).then((response: any) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
@@ -82,29 +103,91 @@ TestFilter(['B2B', 'UI'], () => {
         (confirmOrderResponse: any) => {
           // Save the Order Id of the order placed
           const orderId = confirmOrderResponse.Order.OrderId
-          cy.wait(500)
+          cy.wait(3000)
 
           // Navigate to UI - My order page
           cy.visit('/shop/myaccount/myorders')
+<<<<<<<< HEAD:cypress/integration/placeOrder/uiTests/placePickupOrderInB2BWithCCAndCancel.spec.ts
           cy.wait(5000)
           cy.reload()
+========
+          cy.reload()
+          cy.wait(500)
+>>>>>>>> 3df92e48c17db39040b99ab5e5bc2cd36438fd82:cypress/integration/placeOrder/uiTests/amendPickupOrderInB2B.ts
 
           // Passing the orderId to the Page object constructor
           const onMyOrderPage = new MyOrderPage(orderId)
 
+<<<<<<<< HEAD:cypress/integration/placeOrder/uiTests/placePickupOrderInB2BWithCCAndCancel.spec.ts
           // Get to the Order details on My Orders page and cancel the order
           onMyOrderPage.getMyOrderNumber().should('contain', orderId)
           onMyOrderPage.getViewOrderDetailsLink().click()
           onOrderDetailsPage.getCancelMyOrderButton().click()
           onOrderDetailsPage.getMyOrderModalCheckbox().then((chekbox) => {
             cy.wrap(chekbox)
+========
+          // Get to the Order details on My Orders page and Change the order
+          onMyOrderPage.getMyOrderNumber().should('contain', orderId)
+          onMyOrderPage.getViewOrderDetailsLink().click()
+          onOrderDetailsPage.getChangeOrderButton().click()
+          onOrderDetailsPage.getMyOrderModalCheckbox().then((checkbox) => {
+            cy.wrap(checkbox)
+>>>>>>>> 3df92e48c17db39040b99ab5e5bc2cd36438fd82:cypress/integration/placeOrder/uiTests/amendPickupOrderInB2B.ts
               .should('not.be.visible')
               .check({ force: true })
               .should('be.checked')
           })
-          onOrderDetailsPage.getCancelMyOrderModalButton().click()
+          onOrderDetailsPage
+            .getChangeMyOrderModalButton()
+            .should('contain', 'Change my order')
+            .click({ force: true })
+          // cy.wait(500)
+
+          onSideCartPage.getAvailableProductsInCartPanel().should('be.visible')
+
+          // check cart if any items are under any notifications and remove them
+          onSideCartPage
+            .getCloseSideCartButton()
+            .click({ force: true, multiple: true })
+          onSideCartPage.removeAllItemsUnderNotificationGroupsFromCart()
+
+          // Increase the Order total by adding more products to cart
+          onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(
+            'pantry',
+            60,
+            'Aisle'
+          )
+
+          onSideCartPage.getViewCartButton().click()
+
+          cy.intercept('api/v3/ui/fulfilment/windows?*').as('fulfilmentWindow')
+
+          onSideCartPage.getTotalAmountElement().then((totalAmount) => {
+            cy.wrap(totalAmount.text()).as('expectedTotalAmount')
+          })
+
+          onSideCartPage.gotoCheckout()
+
+          cy.wait('@fulfilmentWindow')
+
+          const expectedTotalAmountAlias = 'expectedTotalAmount'
+
+          onCheckoutPage.onCheckoutPaymentPanel
+            .getPaymentTotalAmountElement()
+            .then((totalAmount) => {
+              cy.wrap(totalAmount.text()).as(expectedTotalAmountAlias)
+            })
+
+          onCheckoutPage.onCheckoutPaymentPanel.payWithExistingCreditCard(
+            '0321',
+            creditCardPayment.bb
+          )
           cy.wait(500)
-          onOrderDetailsPage.getCancelledStatus().should('contain', 'Cancelled')
+
+          // Verify order confirmation page
+
+          onOrderConfirmationPage.VerifyOrderConfirmationHeader()
+          onOrderConfirmationPage.VerifyTotalAmount(expectedTotalAmountAlias)
         }
       )
     })

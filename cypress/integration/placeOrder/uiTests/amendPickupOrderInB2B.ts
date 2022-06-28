@@ -32,7 +32,7 @@ const trolleyThreshold = 30.0
 const platform = Cypress.env('b2bPlatform')
 
 TestFilter(['B2B', 'UI'], () => {
-  describe('Place a pickup order in B2B with credit card Payment and amend the order', () => {
+  describe('[UI] Place a pickup order in B2B with credit card Payment and amend the order', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
