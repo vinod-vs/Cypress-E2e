@@ -25,7 +25,8 @@ import '../../../support/login/ui/commands/login'
 TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
   const deliveryAddress = '1 Chatswood Ave, CHATSWOOD NSW 2067'
   const searchTerm = 'pet'
-  const trolleyThreshold = 30.0
+  const initialOrderTrolleyThreshold = 30.0
+  const amendingOrderTrolleyThreshold = 50.0
   const platform = Cypress.env('b2cPlatform')
 
   describe('[UI] Change Order in MyOrders for order placed by B2C customer', () => {
@@ -46,7 +47,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
       )
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
         searchTerm,
-        trolleyThreshold
+        initialOrderTrolleyThreshold
       )
 
       creditCardPayment.save = true
@@ -89,7 +90,7 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
           // Increase the Order total by adding more products to cart
           onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(
             'household',
-            50,
+            amendingOrderTrolleyThreshold,
             'Price High to Low'
           )
 
@@ -97,13 +98,33 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
 
           cy.intercept('api/v3/ui/fulfilment/windows?*').as('fulfilmentWindow')
 
-          onSideCartPage.getTotalAmountElement().then((totalAmount) => {
-            cy.wrap(totalAmount.text()).as('expectedTotalAmount')
-          })
-
           onSideCartPage.gotoCheckout()
 
           cy.wait('@fulfilmentWindow')
+
+          // Dues to bug SPUD-2532, remove all unavailable items if exist
+          onCheckoutPage.onCheckoutReviewItemsPanel.removeAllUnavailableItemsIfExist()
+          
+          // Check if total amount is less than amending order trolley value dues to some items might be removed.
+          // If less than amending trolley value, go back to search result and add more items
+          onCheckoutPage.onCheckoutPaymentPanel
+            .getPaymentTotalAmountElement()
+            .then((totalAmount) => {
+              if(Number(totalAmount.text()) < amendingOrderTrolleyThreshold) {
+                onCheckoutPage.getContinueShoppingLink().click()
+
+                onSearchResultsPage.searchAndAddAvailableWowItemsToCartUntilReachMinSpendThreshold(
+                  'household',
+                  amendingOrderTrolleyThreshold,
+                  'Price High to Low'
+                )
+
+                onSideCartPage.getViewCartButton().click()
+                onSideCartPage.gotoCheckout()
+                cy.wait('@fulfilmentWindow')
+              }
+            })
+
 
           const expectedTotalAmountAlias = 'expectedTotalAmount'
 

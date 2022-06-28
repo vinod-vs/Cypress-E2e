@@ -123,6 +123,14 @@ export class CheckoutReviewItemsPanel {
     this.getUnavailableProductsNotificationRemoveItemsLink().click()
   }
 
+  removeAllUnavailableItemsIfExist () {
+    cy.checkIfElementExists('.notification-group').then((result : boolean) => {
+      if(result){
+        this.removeAllUnavailableItems()
+      }      
+    })
+  }
+
   changeSubstitutionsByProductName (productName: string, expectedValue: boolean) {
     this.findItemDetailsByName(productName)
       .find('shared-checkbox').then(sharedCheckbox => {
