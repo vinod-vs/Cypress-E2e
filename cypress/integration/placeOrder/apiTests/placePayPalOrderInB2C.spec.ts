@@ -12,8 +12,9 @@ import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import '../../../support/checkout/api/commands/navigateToCheckout'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-TestFilter(['B2C', 'API', 'P1', 'Checkout', 'SPUD'], () => {
-  const searchTerm = 'Fish'
+TestFilter(['B2C', 'API', 'Checkout', 'SPUD', 'E2E'], () => {
+  const searchTerm = 'Kitchen'
+  const additionalSearchTerm = 'Fish'
   const trolleyThreshold = 50.0
 
   describe('[API] Place an order on B2C platform via PayPal with a previously linked account', () => {
@@ -26,9 +27,24 @@ TestFilter(['B2C', 'API', 'P1', 'Checkout', 'SPUD'], () => {
     })
 
     it('Should place an order with full payment via a previously linked PayPal account', () => {
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.FLEET_DELIVERY
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        additionalSearchTerm,
+        trolleyThreshold
+      )
       cy.navigateToCheckout().then((response: any) => {
+        expect(
+          response.Model.Order.BalanceToPay,
+          'Balance To Pay'
+        ).to.be.greaterThan(30.0)
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })
 

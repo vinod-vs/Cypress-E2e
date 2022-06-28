@@ -20,7 +20,7 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
   describe('[API] Place a Pick up order in B2C platform using Credit Card', () => {
     before(() => {
       cy.clearCookies({ domain: null })
@@ -34,7 +34,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         cy.setBillingAddressViaApi(response.body.Response[0].Id)
       })
 
-      cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.postCode).then((response) => {
+      cy.searchPickupDTBStores(fulfilmentType.PICK_UP, storeSearchBody.suburb).then((response) => {
         expect(response.AddressId, 'Pick up store Address Id').to.not.be.null
       })
 
@@ -47,9 +47,10 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       })
 
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Kitchen', 50.0)
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 50.0)
 
       cy.navigateToCheckout().then((response) => {
-        expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(0)
+        expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(30.0)
 
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })

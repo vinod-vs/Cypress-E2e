@@ -17,7 +17,7 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/checkout/api/commands/checkoutHelper'
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
   describe('[API] Place a delivery order in B2C platform using Credit Card', () => {
     const creditCard = Cypress.env('creditCard')
 
@@ -55,14 +55,14 @@ TestFilter(['B2C', 'API', 'P0'], () => {
         expect(response, 'Fulfilment').to.have.property('IsSuccessful', true)
       })
 
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0).then((response) => {
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 50.0).then((response) => {
         expect(response[0].stockCode, 'At least 1 product added to trolley').to.not.be.null
       })
 
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Kitchen, 50.0')
 
       cy.navigateToCheckout().then((response) => {
-        expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(0)
+        expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(30.0)
 
         digitalPayment.payments[0].amount = response.Model.Order.BalanceToPay
       })

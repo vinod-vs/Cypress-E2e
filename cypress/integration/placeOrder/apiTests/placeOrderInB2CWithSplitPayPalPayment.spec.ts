@@ -22,16 +22,17 @@ import '../../../support/logout/api/commands/logout'
 import '../../../support/checkout/api/commands/checkoutHelper'
 import '../../../support/payment/api/commands/paypal'
 
-TestFilter(['B2C', 'API', 'P1'], () => {
+TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
   describe('[API] Place an order on B2C Platform via split PayPal payment', () => {
     const searchTerm = 'Fish'
+    const additionalSearchTerm = 'Kitchen'
     const trolleyThreshold = 50.0
 
     beforeEach(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
       cy.logOutViaApi()
-      cy.loginViaApiAndHandle2FA(shopper.ppAccount1)
+      cy.loginViaApiAndHandle2FA(shopper.ppAccount2)
       cy.removeSavedCreditAndGiftCardsViaAPI()
       cy.clearTrolley()
     })
@@ -39,11 +40,31 @@ TestFilter(['B2C', 'API', 'P1'], () => {
     it('Should place a split payment order via PayPal & Gift Card', () => {
       const giftCardPaymentAmount = 0.01
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.CROWD_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.CROWD_DELIVERY
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        additionalSearchTerm,
+        trolleyThreshold
+      )
 
       cy.navigateToCheckout().then((response: any) => {
-        splitPayPalPayment.payments[0].amount = (response.Model.Order.BalanceToPay * 100 - giftCardPaymentAmount * 100) / 100
+        expect(
+          response.Model.Order.BalanceToPay,
+          'Balance To Pay'
+        ).to.be.greaterThan(30.0)
+        splitPayPalPayment.payments[0].amount =
+          Math.round(
+            response.Model.Order.BalanceToPay * 100 -
+              giftCardPaymentAmount * 100
+          ) / 100
+
         splitPayPalPayment.payments[1].amount = giftCardPaymentAmount
       })
 
@@ -52,7 +73,11 @@ TestFilter(['B2C', 'API', 'P1'], () => {
         splitPayPalPayment.payments[0].paymentInstrumentId = instrumentId
       })
 
-      cy.addGiftCardAndCompleteSplitPaymentOrderViaAPI(giftCard, giftCardPaymentAmount, splitPayPalPayment)
+      cy.addGiftCardAndCompleteSplitPaymentOrderViaAPI(
+        giftCard,
+        giftCardPaymentAmount,
+        splitPayPalPayment
+      )
     })
   })
 })

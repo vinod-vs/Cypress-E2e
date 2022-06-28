@@ -22,10 +22,11 @@ import '../../../support/logout/api/commands/logout'
 import '../../../support/checkout/api/commands/checkoutHelper'
 import '../../../support/payment/api/commands/paypal'
 
-TestFilter(['B2C', 'API', 'P0'], () => {
+TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
   describe('[API] Place an order on B2C Platform via split card payment', () => {
     const creditCard = Cypress.env('creditCard')
     const searchTerm = 'Fish'
+    const additionalSearchTerm = 'Freezer'
     const trolleyThreshold = 50.0
 
     before(() => {
@@ -40,11 +41,12 @@ TestFilter(['B2C', 'API', 'P0'], () => {
 
       cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.CROWD_DELIVERY)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(additionalSearchTerm, trolleyThreshold)
 
       cy.navigateToCheckout().then((response) => {
-        cy.log('Balance To Pay is: ' + response.Model.Order.BalanceToPay)
+        expect(response.Model.Order.BalanceToPay, 'Balance To Pay').to.be.greaterThan(30.0)
 
-        splitPayment.payments[0].amount = (response.Model.Order.BalanceToPay * 100 - giftCardPaymentAmount * 100) / 100
+        splitPayment.payments[0].amount = Math.round(response.Model.Order.BalanceToPay * 100 - giftCardPaymentAmount * 100) / 100
         splitPayment.payments[1].amount = giftCardPaymentAmount
       })
 

@@ -17,7 +17,7 @@ import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/checkout/api/commands/checkoutHelper'
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
-import { MyOrderPageB2B } from '../../../support/myOrder/ui/pageObjects/MyOrderPageB2B'
+import { MyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
 import { onOrderDetailsPage } from '../../../support/myOrder/ui/pageObjects/OrderDetailsPage'
 
 const searchTerm = 'baby'
@@ -25,13 +25,13 @@ const trolleyThreshold = 50.0
 const platform = Cypress.env('b2bPlatform')
 
 TestFilter(['B2B', 'UI'], () => {
-  describe('[UI] Place an order in B2B with OpenPay Payment', () => {
+  describe('Place a pickup order in B2B with credit card payment and cancel the order', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-    it('Should place an order on Woolworths at Work website using Credit Card as payment option', () => {
+    it('Should place a pickup order on Woolworths at Work website using Credit Card as payment option and Cancel the order', () => {
       cy.loginViaApi(shopper).then((response: any) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
@@ -86,14 +86,15 @@ TestFilter(['B2B', 'UI'], () => {
 
           // Navigate to UI - My order page
           cy.visit('/shop/myaccount/myorders')
-          cy.wait(500)
+          cy.wait(5000)
+          cy.reload()
 
           // Passing the orderId to the Page object constructor
-          const onMyOrderPageB2B = new MyOrderPageB2B(orderId)
+          const onMyOrderPage = new MyOrderPage(orderId)
 
           // Get to the Order details on My Orders page and cancel the order
-          onMyOrderPageB2B.getMyOrderNumber().should('contain', orderId)
-          onMyOrderPageB2B.getViewOrderDetailsLink().click()
+          onMyOrderPage.getMyOrderNumber().should('contain', orderId)
+          onMyOrderPage.getViewOrderDetailsLink().click()
           onOrderDetailsPage.getCancelMyOrderButton().click()
           onOrderDetailsPage.getMyOrderModalCheckbox().then((chekbox) => {
             cy.wrap(chekbox)

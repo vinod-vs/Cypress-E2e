@@ -19,7 +19,8 @@ import '../../../support/checkout/api/commands/checkoutHelper'
 TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
   // Skip until Gifting Service authorisation is more stable
   describe.skip('[API] Place an order on the B2C site with a gift card payment', () => {
-    const instrumentIdAssertionMsg = 'Gift Card Payment Instrument ID returned from DigitalPay'
+    const instrumentIdAssertionMsg =
+      'Gift Card Payment Instrument ID returned from DigitalPay'
 
     beforeEach(() => {
       cy.clearCookies({ domain: null })
@@ -29,12 +30,19 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
     it('Should place a delivery order with full payment via gift card', () => {
       cy.loginWithNewShopperViaApi()
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.FLEET_DELIVERY
+      )
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Fish', 50.0)
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 50.0)
       cy.navigateToCheckout().then((response: any) => {
         const balToPay: number = response.Model.Order.BalanceToPay
 
-        cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(balToPay).then((response: any) => {
+        cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(
+          balToPay
+        ).then((response: any) => {
           expect(response, instrumentIdAssertionMsg).to.exist
           giftCardPayment.payments[0].paymentInstrumentId = response
           giftCardPayment.payments[0].amount = balToPay
@@ -46,16 +54,25 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
     it('Should place a delivery order with payment split across 2 gift cards', () => {
       cy.loginWithNewShopperViaApi()
 
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.FLEET_DELIVERY
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Frozen', 50.0)
       cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley('Pet', 50.0)
 
       cy.navigateToCheckout().then((response: any) => {
         const balToPay: number = response.Model.Order.BalanceToPay
         const card1Payment = 0.01
 
+        expect(balToPay, 'Balance To Pay').to.be.greaterThan(30.0)
+
         // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
         cy.addGiftCardToAccount(giftCard).then(() => {
-          cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(card1Payment).then((response: any) => {
+          cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(
+            card1Payment
+          ).then((response: any) => {
             expect(response, instrumentIdAssertionMsg).to.exist
             multipleGiftCardPayment.payments[0].paymentInstrumentId = response
             multipleGiftCardPayment.payments[0].amount = card1Payment
