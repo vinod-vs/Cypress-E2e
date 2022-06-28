@@ -48,7 +48,7 @@ class CreditCardPage {
   }
 
   getCreditCardIframeLocatorString () {
-    return '.creditCardAdd-form > iframe'
+    return '.creditCardAdd-form>.creditCardAdd-iframe'
   }
 
   getCreditCardCVVIframeLocatorString () {
