@@ -58,6 +58,14 @@ export class DeliveryDateAndWindowPage {
   getSelectFirstPickUpAddressStore() {
     return cy.get('.stores > :nth-child(1)')
   }
+
+  getDirectToBootTabButton() {
+    return cy.get('ul.tab-list >:nth-child(3) > .tab-button')
+  }
+
+  getAddressTypeHeadingText() {
+    return cy.get('h4.pickup-address__heading')
+  }
 }
 
 export const onDeliveryDateAndWindowPage = new DeliveryDateAndWindowPage()
