@@ -24,7 +24,7 @@ const searchTerm = 'baby'
 const trolleyThreshold = 50.0
 const platform = Cypress.env('b2bPlatform')
 
-TestFilter(['B2B', 'UI'], () => {
+TestFilter(['B2B', 'UI', 'P0'], () => {
   describe('[UI] Place a pickup order in B2B with credit card payment and cancel the order', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
