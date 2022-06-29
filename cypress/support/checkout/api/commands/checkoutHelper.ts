@@ -6,75 +6,118 @@ import '../../../../support/payment/api/commands/creditcard'
 import '../../../../support/payment/api/commands/digitalPayment'
 import '../../../../support/checkout/api/commands/confirmOrder'
 
-Cypress.Commands.add('placeOrderViaApiWithAddedCreditCard', (platform: string, creditCardDetails?: any) => {
-  cy.navigateToCheckout().then((response: any) => {
-    const balanceToPay = response.Model.Order.BalanceToPay
-    expect(balanceToPay, 'Balance To Pay').to.be.greaterThan(0)
+Cypress.Commands.add(
+  'placeOrderViaApiWithAddedCreditCard',
+  (platform: string, creditCardDetails?: any) => {
+    cy.navigateToCheckout().then((response: any) => {
+      const balanceToPay = response.Model.Order.BalanceToPay
+      expect(balanceToPay, 'Balance To Pay').to.be.greaterThan(0)
 
-    digitalPayment.payments[0].amount = balanceToPay
+      digitalPayment.payments[0].amount = balanceToPay
 
-    cy.navigatingToCreditCardIframe().then((response: any) => {
-      expect(response.Success, 'Credit card iframe endpoint connection success status?').to.be.true
-      creditcardSessionHeader.creditcardSessionId = response.IframeUrl.toString().split('/')[5]
+      cy.navigatingToCreditCardIframe().then((response: any) => {
+        expect(
+          response.Success,
+          'Credit card iframe endpoint connection success status?'
+        ).to.be.true
+        creditcardSessionHeader.creditcardSessionId =
+          response.IframeUrl.toString().split('/')[5]
+      })
     })
-  })
 
-  let creditCardRequest
+    let creditCardRequest
 
-  if (typeof creditCardDetails !== 'undefined') {
-    creditCardRequest = creditCardDetails
-  } else {
-    creditCardRequest = Cypress.env('creditCard')
-  }
-
-  cy.creditcardTokenisation(creditCardRequest, creditcardSessionHeader).then((response: any) => {
-    if (platform.toUpperCase() === 'B2C') {
-      digitalPayment.payments[0].paymentInstrumentId = response.paymentInstrument.itemId
-    } else if (platform.toUpperCase() === 'B2B') {
-      digitalPayment.payments[0].paymentInstrumentId = response.itemId
-    }
-  })
-
-  cy.digitalPay(digitalPayment).then((response: any) => {
-    if (response.TransactionReceipt === null || response.PlacedOrderId === null) {
-      cy.checkForOrderPlacementErrorsAndThrow(response)
+    if (typeof creditCardDetails !== 'undefined') {
+      creditCardRequest = creditCardDetails
     } else {
-      confirmOrderParameter.placedOrderId = response.PlacedOrderId
+      creditCardRequest = Cypress.env('creditCard')
     }
-  })
 
-  cy.confirmOrder(confirmOrderParameter).then((response: any) => {
-    cy.log('This is the order id: ' + response.Order.OrderId)
+    cy.creditcardTokenisation(creditCardRequest, creditcardSessionHeader).then(
+      (response: any) => {
+        if (platform.toUpperCase() === 'B2C') {
+          digitalPayment.payments[0].paymentInstrumentId =
+            response.paymentInstrument.itemId
+        } else if (platform.toUpperCase() === 'B2B') {
+          digitalPayment.payments[0].paymentInstrumentId = response.itemId
+        }
+      }
+    )
 
-    return cy.wrap(response)
-  })
-})
+    cy.digitalPay(digitalPayment).then((response: any) => {
+      if (
+        response.TransactionReceipt === null ||
+        response.PlacedOrderId === null
+      ) {
+        cy.checkForOrderPlacementErrorsAndThrow(response)
+      } else {
+        confirmOrderParameter.placedOrderId = response.PlacedOrderId
+      }
+    })
 
-Cypress.Commands.add('checkForOrderPlacementErrorsAndThrow', (paymentResponse) => {
-  const orderPlacementErrors = paymentResponse.OrderPlacementErrors
+    cy.confirmOrder(confirmOrderParameter).then((response: any) => {
+      cy.log('This is the order id: ' + response.Order.OrderId)
 
-  if (orderPlacementErrors !== null) {
-    const type = orderPlacementErrors[0].Type
-    const message = orderPlacementErrors[0].Message
-    throw new Error('Error on Payment.' + '\n' + 'Type is: ' + type + '.' + '\n' + 'Message is: ' + message)
+      return cy.wrap(response)
+    })
   }
-})
+)
+
+Cypress.Commands.add(
+  'checkForOrderPlacementErrorsAndThrow',
+  (paymentResponse) => {
+    const orderPlacementErrors = paymentResponse.OrderPlacementErrors
+
+    if (orderPlacementErrors !== null) {
+      const type = orderPlacementErrors[0].Type
+      const message = orderPlacementErrors[0].Message
+      throw new Error(
+        'Error on Payment.' +
+          '\n' +
+          'Type is: ' +
+          type +
+          '.' +
+          '\n' +
+          'Message is: ' +
+          message
+      )
+    }
+  }
+)
 
 Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
   cy.digitalPay(paymentRequest).then((response: any) => {
-    if (response.PaymentResponses.length > 0) {
+    if (response.PaymentResponses !== null) {
       cy.log('Payment Responses exist: ' + response.PaymentResponses.length)
-      cy.get(response.PaymentResponses).each((instrument: any) => {
-        expect(instrument.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrument.PaymentInstrumentType).to.be.null
-      }).then(() => {
-        cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
-          cy.log('Order Placement response is: ' + JSON.stringify(response))
-          expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null
-          expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
-
-          confirmOrderParameter.placedOrderId = response.PlacedOrderId
+      cy.get(response.PaymentResponses)
+        .each((instrument: any) => {
+          cy.log(
+            'External Service Message for instrument ' +
+              instrument.PaymentInstrumentType +
+              ' is: ' +
+              instrument.ExternalServiceMessage
+          )
+          expect(
+            instrument.ErrorCode,
+            'Error Code on Payment Instrument Type of ' +
+              instrument.PaymentInstrumentType
+          ).to.be.null
+          expect(
+            instrument.ErrorMessage,
+            'Error Message on Payment Instrument Type of ' +
+              instrument.PaymentInstrumentType
+          ).to.be.null
         })
-      })
+        .then(() => {
+          cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
+            cy.log('Order Placement response is: ' + JSON.stringify(response))
+            expect(response.TransactionReceipt, 'Payment Transaction Receipt')
+              .to.not.be.null
+            expect(response.PlacedOrderId, 'Order Placement Id').to.not.be.null
+
+            confirmOrderParameter.placedOrderId = response.PlacedOrderId
+          })
+        })
     } else {
       cy.checkForOrderPlacementErrorsAndThrow(response)
     }
@@ -82,7 +125,9 @@ Cypress.Commands.add('placeOrderViaApiWithPaymentRequest', (paymentRequest) => {
 
   cy.confirmOrder(confirmOrderParameter).then((response: any) => {
     const orderId = response.Order.OrderId
-    expect(orderId, 'Order Placement Id').to.eqls(confirmOrderParameter.placedOrderId)
+    expect(orderId, 'Order Placement Id').to.eqls(
+      confirmOrderParameter.placedOrderId
+    )
 
     cy.log('This is the order id: ' + response.Order.OrderId)
 
@@ -113,13 +158,18 @@ Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
   })
 })
 
-Cypress.Commands.add('addGiftCardAndCompleteSplitPaymentOrderViaAPI', (giftCard, giftCardPaymentAmount, splitPaymentRequest) => {
-  // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
-  cy.addGiftCardToAccount(giftCard).then(() => {
-    cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(giftCardPaymentAmount).then((response: any) => {
-      expect(response, 'DigitalPay Gift Card Payment Instrument ID').to.exist
-      splitPaymentRequest.payments[1].paymentInstrumentId = response
+Cypress.Commands.add(
+  'addGiftCardAndCompleteSplitPaymentOrderViaAPI',
+  (giftCard, giftCardPaymentAmount, splitPaymentRequest) => {
+    // RC 08/02/22: Add existing gift card until Gifting Service authorisation is more stable
+    cy.addGiftCardToAccount(giftCard).then(() => {
+      cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(
+        giftCardPaymentAmount
+      ).then((response: any) => {
+        expect(response, 'DigitalPay Gift Card Payment Instrument ID').to.exist
+        splitPaymentRequest.payments[1].paymentInstrumentId = response
+      })
+      cy.placeOrderViaApiWithPaymentRequest(splitPaymentRequest)
     })
-    cy.placeOrderViaApiWithPaymentRequest(splitPaymentRequest)
-  })
-})
+  }
+)

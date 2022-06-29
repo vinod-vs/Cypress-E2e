@@ -19,9 +19,10 @@ import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/address/api/commands/searchSetValidateAddress'
 
-TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
+TestFilter(['B2C', 'API', 'Checkout', 'SPUD'], () => {
   const searchTerm = 'Kitchen'
-  const trolleyThreshold = 50.00
+  const additionalSearchTerm = 'Fish'
+  const trolleyThreshold = 50.0
   const platform = Cypress.env('b2cPlatform')
 
   describe('[API] Place a delivery order on B2C Platform with delivery options selected', () => {
@@ -32,42 +33,94 @@ TestFilter(['B2C', 'API', 'Checkout', 'P1'], () => {
     })
 
     it('Should place an order with leave unattended selected', () => {
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.FLEET_DELIVERY
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        additionalSearchTerm,
+        trolleyThreshold
+      )
 
       deliveryOptions.CanLeaveUnattended = true
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.CanLeaveOrderUnattended, 'Order Confirmation can Leave Order Unattended').to.eql(true)
-      })
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then(
+        (confirmOrderResponse: any) => {
+          expect(
+            confirmOrderResponse.Order.CanLeaveOrderUnattended,
+            'Order Confirmation can Leave Order Unattended'
+          ).to.eql(true)
+        }
+      )
     })
 
     it('Should place an order with delivery driver notes', () => {
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.DELIVERY, addressSearchBody.search, windowType.FLEET_DELIVERY)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.DELIVERY,
+        addressSearchBody.search,
+        windowType.FLEET_DELIVERY
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        additionalSearchTerm,
+        trolleyThreshold
+      )
 
-      deliveryOptions.DeliveryInstructions = 'Delivery Instructions added by API'
+      deliveryOptions.DeliveryInstructions =
+        'Delivery Instructions added by API'
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.DeliveryInstructions, 'Order Confirmation Delivery Instructions').to.eql(deliveryOptions.DeliveryInstructions)
-      })
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then(
+        (confirmOrderResponse: any) => {
+          expect(
+            confirmOrderResponse.Order.DeliveryInstructions,
+            'Order Confirmation Delivery Instructions'
+          ).to.eql(deliveryOptions.DeliveryInstructions)
+        }
+      )
     })
 
     it('Should place an order with store pick up notes', () => {
-      cy.searchBillingAddressViaApi(addressSearchBody.search).then((response: any) => {
-        cy.setBillingAddressViaApi(response.body.Response[0].Id)
-      })
-      cy.setFulfilmentLocationWithWindow(fulfilmentType.PICK_UP, storeSearchBody.postCode, windowType.PICK_UP)
-      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(searchTerm, trolleyThreshold)
+      cy.searchBillingAddressViaApi(addressSearchBody.search).then(
+        (response: any) => {
+          cy.setBillingAddressViaApi(response.body.Response[0].Id)
+        }
+      )
+      cy.setFulfilmentLocationWithWindow(
+        fulfilmentType.PICK_UP,
+        storeSearchBody.postCode,
+        windowType.PICK_UP
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        searchTerm,
+        trolleyThreshold
+      )
+      cy.addAvailableNonRestrictedPriceLimitedWowItemsToTrolley(
+        additionalSearchTerm,
+        trolleyThreshold
+      )
 
-      deliveryOptions.PickupInstructions = 'Store Pick up Instructions added by API'
+      deliveryOptions.PickupInstructions =
+        'Store Pick up Instructions added by API'
       cy.setDeliveryOptionsViaApi(deliveryOptions)
 
-      cy.placeOrderViaApiWithAddedCreditCard(platform).then((confirmOrderResponse: any) => {
-        expect(confirmOrderResponse.Order.DeliveryInstructions, 'Order Confirmation Pick up Instructions').to.eql(deliveryOptions.PickupInstructions)
-      })
+      cy.placeOrderViaApiWithAddedCreditCard(platform).then(
+        (confirmOrderResponse: any) => {
+          expect(
+            confirmOrderResponse.Order.DeliveryInstructions,
+            'Order Confirmation Pick up Instructions'
+          ).to.eql(deliveryOptions.PickupInstructions)
+        }
+      )
     })
   })
 })

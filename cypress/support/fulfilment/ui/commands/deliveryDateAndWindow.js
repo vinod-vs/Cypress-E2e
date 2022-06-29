@@ -102,3 +102,72 @@ Cypress.Commands.add("selectAvailableDeliveryDetailsOnFms", (tradingAccAddress) 
   onDeliveryDateAndWindowPage.getthefirsttimeslot().check({ force: true });
   onDeliveryDateAndWindowPage.getContinueShoppingButton().click();
 });
+
+Cypress.Commands.add("selectAvailablePickUpDetailsOnFms", (pickUpAddress) => {
+  cy.wait(Cypress.config("twoSecondWait"));
+
+  cy.checkIfElementExists(onDeliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
+    if (shoppingPrefernceExists === true) {
+      onDeliveryDateAndWindowPage.getChangeTradingAccountLink().click();
+    }
+  });
+  onDeliveryDateAndWindowPage.getPickupTabButton().click();
+  onDeliveryDateAndWindowPage.getSelectTradingAccountList().click();
+  onDeliveryDateAndWindowPage.getTheFirstTradingAccount().click();
+  onDeliveryDateAndWindowPage.getPickUpAddressInput().click().clear().type('Armidale');
+  onDeliveryDateAndWindowPage.getSelectPickUpAddressMatchingSearchResult().click();
+  onDeliveryDateAndWindowPage.getSelectFirstPickUpAddressStore().click();
+  onDeliveryDateAndWindowPage.getSaveAndContinueButton().click();
+  cy.wait(Cypress.config("twoSecondWait"));
+
+  //Select first available day
+  let deliveryDay = false
+  onDeliveryDateAndWindowPage.getAvailableDays().each(($day, index) => {
+    if (!$day.text().includes('Closed') && deliveryDay == false) {
+      deliveryDay = true
+      onDeliveryDateAndWindowPage.getGivenAvailableDay(index + 1)
+      cy.log('Selected delivery day : ' + $day.text())
+    }
+  }).then(() => {
+    if (deliveryDay == false) {
+      throw new Error('Delivery days not available to select')
+    }
+  })
+  onDeliveryDateAndWindowPage.getthefirsttimeslot().check({ force: true });
+  onDeliveryDateAndWindowPage.getContinueShoppingButton().click();
+});
+
+Cypress.Commands.add("selectAvailableDirectToBootDetailsOnFms", (directToBootAddress) => {
+  cy.wait(Cypress.config("twoSecondWait"));
+
+  cy.checkIfElementExists(onDeliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
+    if (shoppingPrefernceExists === true) {
+      onDeliveryDateAndWindowPage.getChangeTradingAccountLink().click();
+    }
+  });
+  onDeliveryDateAndWindowPage.getDirectToBootTabButton().click();
+  onDeliveryDateAndWindowPage.getAddressTypeHeadingText().contains('Choose a Direct to boot store')
+  onDeliveryDateAndWindowPage.getSelectTradingAccountList().click();
+  onDeliveryDateAndWindowPage.getTheFirstTradingAccount().click();
+  onDeliveryDateAndWindowPage.getPickUpAddressInput().click().clear().type('Castle Hill');
+  onDeliveryDateAndWindowPage.getSelectPickUpAddressMatchingSearchResult().click();
+  onDeliveryDateAndWindowPage.getSelectFirstPickUpAddressStore().click();
+  onDeliveryDateAndWindowPage.getSaveAndContinueButton().click();
+  cy.wait(Cypress.config("twoSecondWait"));
+
+  //Select first available day
+  let deliveryDay = false
+  onDeliveryDateAndWindowPage.getAvailableDays().each(($day, index) => {
+    if (!$day.text().includes('Closed') && deliveryDay == false) {
+      deliveryDay = true
+      onDeliveryDateAndWindowPage.getGivenAvailableDay(index + 1)
+      cy.log('Selected delivery day : ' + $day.text())
+    }
+  }).then(() => {
+    if (deliveryDay == false) {
+      throw new Error('Delivery days not available to select')
+    }
+  })
+  onDeliveryDateAndWindowPage.getthefirsttimeslot().check({ force: true });
+  onDeliveryDateAndWindowPage.getContinueShoppingButton().click();
+});
