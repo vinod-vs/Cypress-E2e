@@ -73,7 +73,7 @@
   "DeferredOrderPromotions": [{
     "searchTerm": "beauty",
     "stockcode": "815301",
-    "TotalRewardsPointsEarned" :2000,
+    "TotalRewardsPointsEarned" :2040,
     "Subtotal":40,
     "Quantity":1,
     "BeingEarned":2
@@ -108,6 +108,7 @@
   "CouponPromotions": [{
     "searchTerm":"Fruits",
     "Quantity":10,
+    "stockcode":"161749",
     "PercentOFF":0.1,
     "SubtotalCouponCodePercentOFF":"10%OFFSUBTOTALAUTO",
     "DeliveryFeeCouponCodePercentOFF":"10%OFFDELIVERYFEEAUTO",
@@ -117,11 +118,13 @@
   },{
     "searchTerm":"Health & Beauty",
     "Quantity":2,
+    "stockcode":"1073759395",
     "PercentOFF":0.1,
     "MarketShippingFeeCouponCode":"10%OFFMARKETSHIPPINGFEE"
   },{
     "searchTerm":"798377",
     "Quantity": 1,
+    "stockcode":"798377",
     "ClassicProductPromoCouponCode":"5$OFFCOUPON",
     "DollarOFF":5
   }],
