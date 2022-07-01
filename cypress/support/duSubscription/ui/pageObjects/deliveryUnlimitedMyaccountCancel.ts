@@ -9,7 +9,6 @@ export class DeliveryUnlimitedMyaccountCancel {
   }
 
   getWhyCancelOption01 () {
-    //return cy.get('#du-cancel-QUALFRESH')
     return cy.get('[for="du-cancel-QUALFRESH"]')
   }
 

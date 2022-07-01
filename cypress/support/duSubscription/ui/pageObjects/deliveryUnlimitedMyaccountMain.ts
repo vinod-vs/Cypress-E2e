@@ -9,7 +9,6 @@ export class DeliveryUnlimitedMyaccountMain {
   }
 
   getManageSubscriptionSection () {
-    //return cy.get('[class="symbol ng-tns-c188-17 ng-star-inserted"]')
     return cy.contains('Manage Subscription')
   }
 
