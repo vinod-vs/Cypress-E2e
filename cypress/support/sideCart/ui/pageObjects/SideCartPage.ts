@@ -184,12 +184,12 @@ export class SideCartPage {
 
   gotoCheckout () {
     cy.wait(500)
-    cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
+   /* cy.checkIfElementExists('.auto_group-restricted-location button.linkButton').then((result: boolean) => {
       if (result) {
         cy.get('.auto_group-restricted-location button.linkButton').click()
         cy.wait(500)
       }
-    })
+    })*/
     this.getCheckoutButton().click()
   }
 

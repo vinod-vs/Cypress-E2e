@@ -288,6 +288,27 @@ Cypress.Commands.add('payTheOrder', (testData) => {
         })
       })
       break
+    case paymentType.PAYPAL_PLUS_GIFTCARD:
+      // Checkout
+      cy.navigateToCheckout().as('checkoutResponse').then((response) => {
+        expect(response.Model.Order.BalanceToPay).to.be.greaterThan(0)
+      })
+      // Get gift card paymentInstrumentId
+      cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(10)
+      // Pay with paypal and GC of $10
+      cy.get('@checkoutResponse').then((checkoutResponse) => {
+        cy.get('@giftcardPaymentInstrumentId').then((giftcardPaymentInstrumentId) => {
+          // payment[0] is for PP. It's paymentInstrumentId is set by the command payWithLinkedPaypalAccount at payments[0] position.
+          // payment[1] is for GC
+          const payments = [{ amount: checkoutResponse.Model.Order.BalanceToPay - 10, paymentInstrumentId: 0, stepUpToken: 'tokenise-stepup-token' }, { amount: 10, paymentInstrumentId: giftcardPaymentInstrumentId, stepUpToken: 'tokenise-stepup-token' }]
+          digitalPaymentRequest.payments = payments
+          cy.log('giftcardPaymentInstrumentId: ' + giftcardPaymentInstrumentId)
+          cy.log('payments: ' + JSON.stringify(payments))
+          cy.log('digitalPaymentRequest: ' + JSON.stringify(digitalPaymentRequest))
+          cy.payWithLinkedPaypalAccount(digitalPaymentRequest).as('paymentResponse')
+        })
+      })
+      break
     default: // default is CREDIT_CARD_ONLY
       cy.payByCreditCard(true)
       break
@@ -387,8 +408,8 @@ Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchRespons
 
   for (y in response.Products) {
     if (response.Products[y].Products[0].Price !== null &&
-            response.Products[y].Products[0].IsInStock === true &&
-            response.Products[y].Products[0].IsMarketProduct === true) {
+      response.Products[y].Products[0].IsInStock === true &&
+      response.Products[y].Products[0].IsMarketProduct === true) {
       mpStockCode = response.Products[y].Products[0].Stockcode
       cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
       break

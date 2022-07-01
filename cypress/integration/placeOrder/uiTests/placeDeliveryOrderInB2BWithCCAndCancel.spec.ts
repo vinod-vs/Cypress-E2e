@@ -4,7 +4,6 @@ import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import creditCardPayment from '../../../fixtures/payment/creditcardPayment.json'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import TestFilter from '../../../support/TestFilter'
-import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/fulfilment/api/commands/fulfilment'
@@ -15,23 +14,22 @@ import '../../../support/checkout/api/commands/confirmOrder'
 import '../../../support/payment/api/commands/creditcard'
 import '../../../support/payment/api/commands/digitalPayment'
 import '../../../support/checkout/api/commands/checkoutHelper'
-import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
 import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
 import { MyOrderPage } from '../../../support/myOrder/ui/pageObjects/MyOrderPage'
 import { onOrderDetailsPage } from '../../../support/myOrder/ui/pageObjects/OrderDetailsPage'
 
 const searchTerm = 'baby'
-const trolleyThreshold = 50.0
+const trolleyThreshold = 31.0
 const platform = Cypress.env('b2bPlatform')
 
 TestFilter(['B2B', 'UI', 'P0'], () => {
-  describe('[UI] Place a pickup order in B2B with credit card payment and cancel the order', () => {
+  describe('[UI] Place a delivery order in B2B with credit card payment and cancel the order', () => {
     // pre-requisite to clear all cookies before login
     before(() => {
       cy.clearCookies({ domain: null })
       cy.clearLocalStorage({ domain: null })
     })
-    it('Should place a pickup order on Woolworths at Work website using Credit Card as payment option and Cancel the order', () => {
+    it('Should place a delivery order on Woolworths at Work website using Credit Card as payment option and Cancel the order', () => {
       cy.loginViaApi(shopper).then((response: any) => {
         expect(response).to.have.property('LoginResult', 'Success')
       })
@@ -42,23 +40,28 @@ TestFilter(['B2B', 'UI', 'P0'], () => {
         expect(response.Id).to.not.be.null
       })
 
-      cy.searchPickupDTBStores(
-        fulfilmentType.PICK_UP,
-        storeSearchBody.postCode
-      ).then((response: any) => {
-        expect(response.AddressId).to.not.be.null
+      cy.addDeliveryAddress().then((response: any) => {
+        expect(response.Address.AddressId).to.greaterThan(0)
+
+        expect(response.Address.AddressId).to.not.be.null
+
+        expect(response.Address.AreaId).to.greaterThan(0)
+
+        expect(response.Address.AreaId).to.not.be.null
+
+        expect(response.Address.SuburbId).to.greaterThan(0)
+
+        expect(response.Address.SuburbId).to.not.be.null
       })
 
-      cy.getFulfilmentWindowViaApi(windowType.PICK_UP).then((response: any) => {
-        expect(response.Id).to.be.greaterThan(0)
-      })
+      cy.getFulfilmentWindowViaApi(windowType.FLEET_DELIVERY).then(
+        (response: any) => {
+          expect(response.Id).to.greaterThan(0)
+        }
+      )
 
       cy.completeWindowFulfilmentViaApi().then((response: any) => {
-        if (!response.IsSuccessful) {
-          cy.completeWindowFulfilmentViaApi().then((newResponse: any) => {
-            expect(newResponse).to.have.property('IsSuccessful', true)
-          })
-        }
+        expect(response).to.have.property('IsSuccessful', true)
       })
 
       cy.clearTrolley().then((response: any) => {
