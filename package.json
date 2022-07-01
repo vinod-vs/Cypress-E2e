@@ -16,7 +16,7 @@
         "allure:trend": "cp -R allure-report/history cypress/allure-results ; allure generate cypress/allure-results --clean && allure open",
         "cy:parallel": "cypress-parallel -s cypress:run -m false",
         "lint": "npx run pretest",
-        "lint:fix": "eslint . --fix"
+        "lint:fix": "eslint --fix --ext .js,.ts ."
     },
     "author": "Test Automation Atom|Autobots Chapter",
     "license": "ISC",

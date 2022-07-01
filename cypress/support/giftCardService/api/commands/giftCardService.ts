@@ -10,7 +10,7 @@ Cypress.Commands.add('authorizeGiftingService', () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
-      DateAtClient: dateAtClient
+      'DateAtClient': dateAtClient
     },
     body: gifCardAuthorizeRequest,
     url: Cypress.env('giftCardServiceEndpoint') + '/authorize'
@@ -34,7 +34,7 @@ Cypress.Commands.add('generateANewGiftCard', (giftCardAmount, ...args) => {
   cy.get('@giftingServiceAuthToken').then((giftingServiceAuthToken: any) => {
     generateGiftCardRequest.Cards[0].Amount = giftCardAmount
 
-    //Set the number of gift cards required count if passed
+    // Set the number of gift cards required count if passed
     if (args.length > 0) {
       generateGiftCardRequest.NumberOfCards = args[0]
       cy.log('Required NumberOfCards is ' + args[0])
@@ -44,8 +44,8 @@ Cypress.Commands.add('generateANewGiftCard', (giftCardAmount, ...args) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        DateAtClient: dateAtClient,
-        TransactionId: Number(Math.floor(Math.random() * 100000))
+        'DateAtClient': dateAtClient,
+        'TransactionId': Number(Math.floor(Math.random() * 100000))
       },
       auth: {
         bearer: giftingServiceAuthToken.AuthToken

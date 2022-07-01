@@ -32,7 +32,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
 
       // Set the Delivery address and add the items to Trolley
       cy.addAvailableQuantityLimitedItemsToTrolley(promotions.DeferredProductPromotions[0].stockcode.toString(), promotions.DeferredProductPromotions[0].Quantity)
-      
+
       cy.viewTrolley().then((response: any) => {
         expect(response.WowRewardsSummary.TotalRewardsPointsEarned).to.be.eqls(promotions.DeferredProductPromotions[0].TotalRewardsPointsEarned)
       })

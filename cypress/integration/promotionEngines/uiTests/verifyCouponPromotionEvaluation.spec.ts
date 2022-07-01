@@ -20,8 +20,8 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
 
     it('Verify the Coupon promotion is applied on the grocery subtotal - %OFF & $OFF and Delivery Fee - % OFF & $OFF', () => {
       // Search for untraceable item stockcode
-      let deliveryFee = 0
-      var itemCost = 0.00
+      const deliveryFee = 0
+      let itemCost = 0.00
       onHomePage.getSearchHeader().click()
       onHomePage.getSearchHeader().type(promotions.CouponPromotions[0].stockcode.toString()).type('{enter}')
 
@@ -41,11 +41,11 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
       onSideCartPage.gotoCheckout()
 
       onCheckoutPage.onCheckoutPaymentPanel.addPromoCode(<string>promotions.CouponPromotions[0].SubtotalCouponCodeDollarOFF)
-      onCheckoutPage.onCheckoutPaymentPanel.getPromoCodeDollarsAmount().should('contain', '-$' + 2 + ".00")
+      onCheckoutPage.onCheckoutPaymentPanel.getPromoCodeDollarsAmount().should('contain', '-$' + 2 + '.00')
       onCheckoutPage.onCheckoutPaymentPanel.getPromoCodeRemoveButton().click()
 
       onCheckoutPage.onCheckoutPaymentPanel.addPromoCode(<string>promotions.CouponPromotions[0].DeliveryFeeCouponCodeDollarOFF)
-      onCheckoutPage.onCheckoutPaymentPanel.getPromoCodeDollarsAmount().should('contain', '-$'  + 2 + ".00")
+      onCheckoutPage.onCheckoutPaymentPanel.getPromoCodeDollarsAmount().should('contain', '-$'  + 2 + '.00')
       onCheckoutPage.onCheckoutPaymentPanel.getPromoCodeRemoveButton().click()
 
     })
@@ -97,7 +97,7 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
       onCheckoutPage.onCheckoutPaymentPanel.getPaymentYouHaveSavedAmountElement().should('contain', '$'+ promotions.CouponPromotions[2].DollarOFF + '.00')
       onCheckoutPage.onCheckoutPaymentPanel.getPromoCodeRemoveButton().click()
     })
-    
+
     afterEach(() => {
       // clear cart
       onCheckoutPage.getContinueShoppingLink().click()

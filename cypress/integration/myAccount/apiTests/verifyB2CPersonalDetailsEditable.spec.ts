@@ -7,6 +7,7 @@ import '../../../support/myAccount/api/commands/personalDetailsEdit'
 import '../../../support/utilities/ui/utility'
 
 const faker = require('faker/locale/en_AU')
+
 const FirstName: any = faker.name.firstName()
 const LastName: any = faker.name.lastName()
 let DateOfBirthInput: any
@@ -66,7 +67,7 @@ TestFilter(['API', 'B2C', 'P1'], () => {
         expect(response.body).to.contain('Personal details updated')
         expect(response.body).to.contain('Update to your Woolworths account')
         expect(response.body).to.contain('Your account details have been updated.')
-        expect(response.body).to.contain("Your personal details have been successfully updated. To view these details, visit 'Account Details' in your My Account.")
+        expect(response.body).to.contain('Your personal details have been successfully updated. To view these details, visit \'Account Details\' in your My Account.')
       })
     })
   })

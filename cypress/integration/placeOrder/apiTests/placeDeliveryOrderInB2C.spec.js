@@ -81,7 +81,7 @@ TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
       cy.digitalPay(digitalPayment).then((response) => {
         if (response.PaymentResponses !== null) {
           const paymentResponse = response.PaymentResponses[0]
-          const instrumentType = paymentResponse.PaymentInstrumentType 
+          const instrumentType = paymentResponse.PaymentInstrumentType
           expect(paymentResponse.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrumentType).to.be.null
 
           cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {

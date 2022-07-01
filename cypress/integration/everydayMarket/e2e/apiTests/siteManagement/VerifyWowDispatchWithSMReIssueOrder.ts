@@ -176,7 +176,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               .contains('465135')
           ) {
             cy.log(
-              "Compare the ReIssue 'ISS' CheckBox for the StockCode 465135"
+              'Compare the ReIssue \'ISS\' CheckBox for the StockCode 465135'
             )
             onOrderManagement
               .getWowLineItemsTable()
@@ -186,7 +186,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               .parent()
               .within(function () {
                 cy.log(
-                  "----Now Clicking on the ReIssue 'ISS' CheckBox for the StockCode 465135----"
+                  '----Now Clicking on the ReIssue \'ISS\' CheckBox for the StockCode 465135----'
                 )
                 cy.get('td').eq(2).click()
               })
@@ -235,12 +235,12 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             onOrderManagement.getWowApproveButton().click()
             cy.wait(Cypress.config('tenSecondWait'))
             cy.log(
-              "----Now, Click on 'Submit and Place Order Button' on 'Confirm your Reissued Order' Screen ----"
+              '----Now, Click on \'Submit and Place Order Button\' on \'Confirm your Reissued Order\' Screen ----'
             )
             onOrderManagement.getSubmitAndPlaceOrderButton().click()
             cy.wait(Cypress.config('fiveSecondWait'))
             cy.log(
-              "----Now, Verify 'Order ID' and 'Reissue Order Total' are displayed ----"
+              '----Now, Verify \'Order ID\' and \'Reissue Order Total\' are displayed ----'
             )
             onOrderManagement
               .getOrderidOnApprovedRefundDetailsScreeen()
@@ -251,7 +251,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               .getReissueOrderTotalOnApprovedRefundDetailsScreeen()
               .parent()
               .contains('0.00')
-            //Extract the ReIssue Order Id -
+            // Extract the ReIssue Order Id -
             onOrderManagement
               .getReissueOrderId()
               .parent()
@@ -261,10 +261,10 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               })
             cy.get('@reIssueOrderId').then((reIssueOrderId) => {
               cy.log(' reIssueOrderId Full Label Text is=' + reIssueOrderId)
-              let pattern = /[0-9]+/g
+              const pattern = /[0-9]+/g
               reIssueOrderIdNumber = String(reIssueOrderId.match(pattern))
               cy.log('ReIssue Order Id Generated is=' + reIssueOrderIdNumber)
-              //Now, Search for that ReIssued OrderId in Site Management
+              // Now, Search for that ReIssued OrderId in Site Management
               cy.searchAnOrderOnSM(reIssueOrderIdNumber)
               // And Verify that No EM Tab is present in SM for the ReIssued OrderId
               onOrderManagement.getEDMTab().should('not.exist')

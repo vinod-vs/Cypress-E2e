@@ -88,7 +88,7 @@ export class CheckoutPaymentPanel {
     return this.getPaymentDetailsContainer().find('.payment-save-earn .rewards-credits-redeemed')
   }
 
-  
+
 
   getPaymentRewardsPointElement () {
     return this.getPaymentDetailsContainer().find('.rewards span')

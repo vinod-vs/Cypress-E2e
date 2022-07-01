@@ -1,10 +1,10 @@
 import digitalPayment from '../../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
-import '../../../../support/checkout/api/commands/navigateToCheckout'
-import '../../../../support/payment/api/commands/creditcard'
-import '../../../../support/payment/api/commands/digitalPayment'
-import '../../../../support/checkout/api/commands/confirmOrder'
+import './navigateToCheckout'
+import '../../../payment/api/commands/creditcard'
+import '../../../payment/api/commands/digitalPayment'
+import './confirmOrder'
 
 Cypress.Commands.add(
   'placeOrderViaApiWithAddedCreditCard',

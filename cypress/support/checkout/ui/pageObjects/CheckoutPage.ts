@@ -12,11 +12,11 @@ export class CheckoutPage {
   onCheckoutMarketplaceFulfilmentWindowPanel = new CheckoutMarketplaceFulfilmentWindowPanel()
 
   getContinueShoppingLink () {
-       return cy.get('.continue-shopping-link.ng-star-inserted') 
+       return cy.get('.continue-shopping-link.ng-star-inserted')
   }
 
   getSpinner() {
-    return cy.get(".spinner-container");
+    return cy.get('.spinner-container');
   }
 }
 

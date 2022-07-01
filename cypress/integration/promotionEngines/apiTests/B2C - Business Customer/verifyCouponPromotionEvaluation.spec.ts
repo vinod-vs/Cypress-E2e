@@ -17,7 +17,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
     beforeEach(() => {
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApi(shoppers.PESBusinessAccount2).then((response: any) => {
-        //cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+        // cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
 
@@ -34,7 +34,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       cy.navigateToCheckout().then((response: any) => {
         expect(response.Model.Order.Subtotal).to.be.greaterThan(0)
       })
-      //Order Discount - %OFF
+      // Order Discount - %OFF
       cy.addPromotionCode(<string>promotions.CouponPromotions[0].SubtotalCouponCodePercentOFF).then((response: any) => {
         const orderDiscount = parseFloat(((response.Model.Order.Subtotal) * <number>promotions.CouponPromotions[0].PercentOFF).toFixed(2))
         expect(response.Model.Order.Discounts[0].Amount).to.be.eqls(orderDiscount)
@@ -48,7 +48,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.Model.Order.OrderDiscountWithoutTeamDiscount).to.be.eqls(0)
       })
 
-      //Delivery Fee Discount - %OFF
+      // Delivery Fee Discount - %OFF
       cy.addPromotionCode(<string>promotions.CouponPromotions[0].DeliveryFeeCouponCodePercentOFF).then((response: any) => {
         const deliveryFeeDiscount = parseFloat(((response.Model.Order.DeliveryFeeBeforeDiscount) * <number>promotions.CouponPromotions[0].PercentOFF).toFixed(2))
         expect(response.Model.Order.Discounts[0].Amount).to.be.eqls(deliveryFeeDiscount)
@@ -61,7 +61,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.Model.Order.DeliveryFeeDiscount).to.be.eqls(0)
       })
 
-      //Order Discount - %OFF
+      // Order Discount - %OFF
       cy.addPromotionCode(<string>promotions.CouponPromotions[0].SubtotalCouponCodeDollarOFF).then((response: any) => {
         const orderDiscount = promotions.CouponPromotions[0].DollarOFF
         expect(response.Model.Order.Discounts[0].Amount).to.be.eqls(orderDiscount)
@@ -75,7 +75,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.Model.Order.OrderDiscountWithoutTeamDiscount).to.be.eqls(0)
       })
 
-      //Delivery Fee Discount - $OFF
+      // Delivery Fee Discount - $OFF
       cy.addPromotionCode(<string>promotions.CouponPromotions[0].DeliveryFeeCouponCodeDollarOFF).then((response: any) => {
         const deliveryFeeDiscount = promotions.CouponPromotions[0].DollarOFF
         expect(response.Model.Order.Discounts[0].Amount).to.be.eqls(deliveryFeeDiscount)
@@ -97,7 +97,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
         expect(response.Model.Order.Subtotal).to.be.greaterThan(0)
       })
 
-      //Classic Product Promotion + Coupon Promotion
+      // Classic Product Promotion + Coupon Promotion
       cy.addPromotionCode(<string>promotions.CouponPromotions[2].ClassicProductPromoCouponCode).then((response: any) => {
         const productDiscount = Math.round((response.Model.Order.Products[0].ListPrice - <number>promotions.CouponPromotions[2].DollarOFF) * 100) / 100
         expect(response.Model.Order.Products[0].SalePrice).to.be.eqls(productDiscount)

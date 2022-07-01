@@ -45,8 +45,8 @@ export class SideCartPage {
   }
 
   getRewardcreditscheckElement(){
-    return cy.get('[id^=shared-toggle-switch]').click({ force: true }) 
-    
+    return cy.get('[id^=shared-toggle-switch]').click({ force: true })
+
   }
 
   getTotalAmountElement () {
@@ -62,10 +62,11 @@ export class SideCartPage {
   }
 
   getTotalAmountElementOnHeader () {
-    if(Cypress.env('b2bPlatform'))
-      return cy.get('span.headerCheckout-orderAmount')
-    else
-      return cy.get('#wx-header-checkout-amount')
+    if (Cypress.env('b2bPlatform')) {
+return cy.get('span.headerCheckout-orderAmount')
+} else {
+return cy.get('#wx-header-checkout-amount')
+}
   }
   // #endregion
 
@@ -81,7 +82,7 @@ export class SideCartPage {
 
   // #region - Selectors of available products panel
   getAvailableProductsInCartPanel () {
-    return cy.get('.auto_products-in-cart') 
+    return cy.get('.auto_products-in-cart')
   }
 
   getAvailableProductsList () {
@@ -112,10 +113,10 @@ export class SideCartPage {
     return cy.get('.rewards-credits-items')
   }
   getAvailableCreditItemsProductPriceDivList(){
-    return this.getAvailableCreditItemsProductsInCartPanel().find('.price')  
+    return this.getAvailableCreditItemsProductsInCartPanel().find('.price')
 
   }
-  
+
   getAvailableProductsRemoveButtonList () {
     return this.getAvailableProductsInCartPanel().find('.cart-item-remove-button')
   }
@@ -179,7 +180,7 @@ export class SideCartPage {
   }
 
   closeSideCart () {
-    this.getCloseSideCartButton().click({ force: true })   
+    this.getCloseSideCartButton().click({ force: true })
   }
 
   gotoCheckout () {
@@ -264,7 +265,7 @@ export class SideCartPage {
     })
     onSideCartPage.getCloseSideCartButton().click({force: true})
   }
-  
+
   getViewCart () {
     return cy.get('.headerCheckout-checkout')
   }
@@ -272,10 +273,10 @@ export class SideCartPage {
   getClearUnavailbleItemsLink () {
     return '.linkButton.auto_cart-item-group-action'
   }
-  
+
   getClearEntireCart () {
     return '.product-actionsClearCart > span'
   }
-  
+
 }
 export const onSideCartPage = new SideCartPage()

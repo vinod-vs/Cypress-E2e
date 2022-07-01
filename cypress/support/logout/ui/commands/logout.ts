@@ -7,7 +7,9 @@ Cypress.Commands.add('logoutViaUi', (shopper) => {
   } else
   if (shopper.platform === 'B2B') {
     onHomePage.getB2BMyAccount().contains('My Account').click()
-  } else { onHomePage.getMyAccount().contains('My Account').click() }
+  } else {
+ onHomePage.getMyAccount().contains('My Account').click()
+}
 
   onMyAccountPage.getLeftNavigationMenu().contains('Logout').click({force : true})
 

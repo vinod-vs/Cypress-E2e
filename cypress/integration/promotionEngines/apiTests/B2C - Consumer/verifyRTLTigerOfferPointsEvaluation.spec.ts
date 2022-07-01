@@ -28,7 +28,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    /*it('Verify the Tiger offer points for product with minimum Spend ', () => {
+    /* it('Verify the Tiger offer points for product with minimum Spend ', () => {
       // add the items to Trolley
       cy.addAvailableQuantityLimitedItemsToTrolley(promotions.TigerOffers[0].stockcode.toString(), <number>promotions.TigerOffers[0].minQty)
 

@@ -39,7 +39,7 @@ TestFilter(['UI', 'B2C', 'PES', 'P2', 'OHNO'], () => {
       onCheckoutPage.onCheckoutPaymentPanel.getPaymentRewardsPointElement().should('contain',  promotions.DeferredOrderPromotions[0].TotalRewardsPointsEarned + ' points')
       onCheckoutPage.onCheckoutPaymentPanel.getPaymentCreditsEarnedElement().should('contain', promotions.DeferredOrderPromotions[0].BeingEarned + ' credits')
     })
-    
+
     afterEach(() => {
       // clear cart
       onCheckoutPage.getContinueShoppingLink().click()

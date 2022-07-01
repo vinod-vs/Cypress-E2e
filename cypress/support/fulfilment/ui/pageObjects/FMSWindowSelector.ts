@@ -69,8 +69,8 @@ export class FMSWindowSelector {
     cy.get('.day-dropdown > option')
       .contains(dayKeyword)
       .then(dayOption => {
-        if(dayOption.text().includes('Closed')){
-          throw new Error("The day you selected: " + dayKeyword + " is closed");
+        if (dayOption.text().includes('Closed')){
+          throw new Error('The day you selected: ' + dayKeyword + ' is closed');
         }
         cy.wrap(dayOption).parent().select(dayOption.text())
       })
@@ -81,11 +81,10 @@ export class FMSWindowSelector {
   }
 
   selectDeliveryNowTimeslot () {
-    cy.checkIfElementExists('.delivery-now').then((result:boolean) => {
-      if(!result){
-        throw new Error("No Delivery Now window for selected address")
-      }
-      else{
+    cy.checkIfElementExists('.delivery-now').then((result: boolean) => {
+      if (!result){
+        throw new Error('No Delivery Now window for selected address')
+      } else {
         cy.intercept(Cypress.env('bootstrapEndpoint')).as('bootstrap')
         cy.get('.delivery-now').parents('.time-slot-badge-container').click({force: true})
         cy.wait('@bootstrap')

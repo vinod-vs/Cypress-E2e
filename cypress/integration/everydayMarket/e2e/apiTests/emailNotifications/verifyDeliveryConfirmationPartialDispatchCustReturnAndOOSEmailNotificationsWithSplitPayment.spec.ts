@@ -19,11 +19,12 @@ import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/mailosaur/api/commands/mailosaurHelpers'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
-import '../../../../../support/rewards/api/commands/rewards'
+import { verifyOrderTotals, generateRandomString } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+
 import rewardsDetails from '../../../../../fixtures/everydayMarket/rewards.json'
 
 const { JSDOM } = require('jsdom')
+
 const testData: any = tests.VerifyEmailNotifications
 let orderId: any
 let orderReference: any
@@ -36,7 +37,7 @@ let lineItemLegacyId: any
 let encodedEdmInvoiceId: any
 let encodedEdmLineitemId: any
 const sentFrom: string = 'shoponline@woolworths.com.au'
-let rewardsCardNumber: any = shopper.rewardsCardNumber
+const rewardsCardNumber: any = shopper.rewardsCardNumber
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
   describe('[API] RP-5568 - Email Notifications | Verify delivery confirmation, partial dispatch, customer return-refund and partial OOS email notifications with split payments', () => {
@@ -48,7 +49,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
     after(() => {
         // Make sure we add back some points so that the account has some money
         cy.addRewardPoints(rewardsDetails.partnerId, rewardsDetails.siteId, rewardsDetails.posId, rewardsDetails.loyaltySiteType, rewardsCardNumber, 10000)
-  
+
         // Reset Redeem to 0. If the test fails inbetween and the reward dollars was set,
         // future order placements and payments from the account will keep on failing with an error from RPG.
         // Resetting to 0 will avoid this
@@ -67,7 +68,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
         cy.log('This is the order id: ' + response.Order.OrderId + ', Order ref: ' + response.Order.OrderReference)
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -111,7 +112,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
         // Dispatch 2 quantity
         // Verify the projection and events
         // Verify the delivery confirmation email
-        const trackingId1 = lib.generateRandomString()
+        const trackingId1 = generateRandomString()
         const data1 = [{ line_item_id: lineItemLegacyId, quantity: 2 }]
         cy.partialDispatchOfLineItemsInInvoice(testData.edmInvoiceId, data1, trackingId1, testData.carrier, testData.items[0].sellerName).then((response) => {
           const partialDispatchNumber = 1
@@ -148,9 +149,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
           }).as('partialDispatchEvents')
         })
 
-        //Commenting this as this email notification is currently toggled off
+        // Commenting this as this email notification is currently toggled off
         // Verify the delivery confirmation email
-        //cy.verifyOrderOnItsWayEmailDetails(testData).then((orderOnItsWayEmailVerification) => {
+        // cy.verifyOrderOnItsWayEmailDetails(testData).then((orderOnItsWayEmailVerification) => {
           // Initiate customer return for one quantity
           // Verify the projection and events
           // Verify the customer return confirmation email
@@ -223,7 +224,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'EmailNotifications'], () => {
             cy.wait(5000)
             cy.verifyOOSEmailDetails(testData)
           })
-        //})
+        // })
       })
     })
   })
@@ -260,12 +261,12 @@ Cypress.Commands.add('verifyDeliveryConfirmationEmailDetails', (testData) => {
           expect(body).to.include(Number(Number.parseFloat(Number(testData.packagingFee)).toFixed(2)))
 
           // Verify links
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/myaccount/myorders']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/myaccount/myinvoices']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/myaccount/myorders/" + orderId + "']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/myaccount/trackmyorder?ordernumber=" + orderId + "']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/discover/shopping-online/delivery']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/page/about-us/terms-and-conditions']") !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/myaccount/myorders\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/myaccount/myinvoices\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/myaccount/myorders/' + orderId + '\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/myaccount/trackmyorder?ordernumber=' + orderId + '\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/discover/shopping-online/delivery\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/page/about-us/terms-and-conditions\']') !== null).to.be.true
 
           // Verify payment method
           expect(body).to.include('Paid with Everyday Rewards dollars'.toLowerCase())
@@ -324,8 +325,8 @@ Cypress.Commands.add('verifyOrderOnItsWayEmailDetails', (testData) => {
           expect(body).to.include(partialDispatchOqsResponse.Shopper.FirstName.toLowerCase())
 
           // Verify links
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/page/help-and-support-faq']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/Shop/Discover/about-us/terms-and-conditions']") !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/page/help-and-support-faq\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/Shop/Discover/about-us/terms-and-conditions\']') !== null).to.be.true
 
           // Verify EDM items
           let i
@@ -336,7 +337,7 @@ Cypress.Commands.add('verifyOrderOnItsWayEmailDetails', (testData) => {
             expect(body).to.include('2') // Shipped quantity
             // expect(body).to.include('2 / 5') //Shipped quantity
             // Verify TrackingLink - https://auspost.com.au/mypost/track/#/details/oHQ4NTGPQF
-            expect(emailDetails.dom.window.document.querySelector("a[href*='" + partialDispatchOqsResponse.MarketOrders[i].Shipment.TrackingLink + "']") !== null).to.be.true
+            expect(emailDetails.dom.window.document.querySelector('a[href*=\'' + partialDispatchOqsResponse.MarketOrders[i].Shipment.TrackingLink + '\']') !== null).to.be.true
 
             let j
             const products = partialDispatchOqsResponse.MarketOrders[i].Products
@@ -364,10 +365,10 @@ Cypress.Commands.add('verifyCustomerReturnAndRefundEmailDetails', (testData) => 
           expect(emailDetails.body).to.include(edmOrderId)
 
           // Verify label download link and other links
-          expect(emailDetails.dom.window.document.querySelector("a[href*='" + customerReturnOqsResponse.MarketOrders[0].Returns[0].Labels[0].Url + "']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='https://auspost.com.au/locate/']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/Shop/Discover/about-us/terms-and-conditions']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/page/help-and-support-faq']") !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'' + customerReturnOqsResponse.MarketOrders[0].Returns[0].Labels[0].Url + '\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'https://auspost.com.au/locate/\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/Shop/Discover/about-us/terms-and-conditions\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/page/help-and-support-faq\']') !== null).to.be.true
 
           // Verify EDM items
           let i
@@ -391,8 +392,8 @@ Cypress.Commands.add('verifyCustomerReturnAndRefundEmailDetails', (testData) => 
           expect(body).to.include(customerReturnOqsResponse.Shopper.FirstName.toLowerCase())
 
           // Verify links
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/page/help-and-support-faq']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='Shop/Discover/about-us/terms-and-conditions']") !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/page/help-and-support-faq\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'Shop/Discover/about-us/terms-and-conditions\']') !== null).to.be.true
 
           // Refund amount
           const refundText = 'Your credit/debit card used for payment will be refunded with the amount of $' + customerReturnOqsResponse.MarketOrders[0].Products[0].SalePrice + '. Your refund may take 3 to 5 business days depending on your financial institution’s processing time.'
@@ -438,8 +439,8 @@ Cypress.Commands.add('verifyOOSEmailDetails', (testData) => {
           expect(body).to.include(oosRefundText.toLowerCase())
 
           // Verify links
-          expect(emailDetails.dom.window.document.querySelector("a[href*='/shop/page/help-and-support-faq']") !== null).to.be.true
-          expect(emailDetails.dom.window.document.querySelector("a[href*='Shop/Discover/about-us/terms-and-conditions']") !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'/shop/page/help-and-support-faq\']') !== null).to.be.true
+          expect(emailDetails.dom.window.document.querySelector('a[href*=\'Shop/Discover/about-us/terms-and-conditions\']') !== null).to.be.true
 
           // Verify EDM items
           let i

@@ -20,7 +20,7 @@ import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyCommonOrderDetails, verifyRefundDetails, verifyEventDetails, verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 const testData: any = tests.GenericEDMOnlyOrderPaypalAndGCPaymentTestData
 const dispatchQty = 2
@@ -64,7 +64,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
         )
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -104,7 +104,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
             )
 
             // Verify the projection details
-            lib.verifyInitialOrderDetails(response, testData, shopperId)
+            verifyInitialOrderDetails(response, testData, shopperId)
 
             // Invoke the events api and verify the content
             cy.orderEventsApiWithRetry(orderReference, {
@@ -228,7 +228,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                   .as('finalProjection')
                   .then((response) => {
                     // Order details
-                    lib.verifyCommonOrderDetails(response, testData, shopperId)
+                    verifyCommonOrderDetails(response, testData, shopperId)
                     expect(response.invoices[0].invoiceStatus).to.be.equal(
                       'REFUNDED'
                     )
@@ -257,7 +257,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                     expect(
                       response.invoices[0].lineItems[0].refundableQuantity
                     ).to.be.equal(0)
-                    //refunds
+                    // refunds
                     expect(response.invoices[0].refunds.length).to.be.equal(1)
                     expect(response.invoices[0].refunds[0].status).to.be.equal(
                       'Refunded'
@@ -271,7 +271,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                     expect(response.invoices[0].returns.length).to.be.equal(0)
 
                     // Verify "Partial Refund Amount" after seller refund
-                    lib.verifyRefundDetails(
+                    verifyRefundDetails(
                       testData.orderId,
                       totalMarketRefundAmount,
                       0
@@ -324,14 +324,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                       retries: Cypress.env('marketApiRetryCount'),
                       timeout: Cypress.env('marketApiTimeout'),
                     }).then((response) => {
-                      lib.verifyEventDetails(
+                      verifyEventDetails(
                         response,
                         'MarketOrderRefund',
                         testData,
                         shopperId,
                         1
                       )
-                      lib.verifyEventDetails(
+                      verifyEventDetails(
                         response,
                         'RefundCompleted',
                         testData,
@@ -341,7 +341,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                     })
                   })
               })
-            }) //END OF SELLER CNACELLATION FLOW
+            }) // END OF SELLER CNACELLATION FLOW
 
             cy.log(
               '&&&&&&&&&&&&&&&&&&&&&&&& FULL DISPATCH &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&'
@@ -377,7 +377,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                 }
               ).then((response) => {
                 // Order details
-                lib.verifyCommonOrderDetails(response, testData, shopperId)
+                verifyCommonOrderDetails(response, testData, shopperId)
                 // Seller details
                 expect(response.invoices[0].seller.sellerId).to.not.be.null
                 expect(response.invoices[0].seller.sellerName).to.be.equal(
@@ -499,7 +499,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                   timeout: Cypress.env('marketApiTimeout'),
                 }).then((response) => {
                   // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                  lib.verifyEventDetails(
+                  verifyEventDetails(
                     response,
                     'MarketOrderShipmentCreate',
                     testData,
@@ -507,7 +507,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                     1
                   )
                   // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                  lib.verifyEventDetails(
+                  verifyEventDetails(
                     response,
                     'MarketOrderDispatched',
                     testData,
@@ -515,7 +515,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                     1
                   )
                   // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                  lib.verifyEventDetails(
+                  verifyEventDetails(
                     response,
                     'MarketRewardsCredited',
                     testData,
@@ -524,7 +524,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                   )
                 })
               })
-            }) //END OF FULL DISPATCH
+            }) // END OF FULL DISPATCH
 
             cy.log(
               '&&&&&&&&&&&&&&&&&&&&&&&&&&&& SELF SERVICE RETURN &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&'
@@ -720,7 +720,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
                   testData.rewardPointAfter
                 )
               })
-            } //END OF CUSTOMER RETURN AND REFUND
+            } // END OF CUSTOMER RETURN AND REFUND
 
             cy.log(
               '&&&&&&&&&&&&&&&&&&&&&&&&&&&& OQS AND REWARDS VERIFICATION &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&'
@@ -754,14 +754,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-2'], () => {
             cy.verifyOrderInvoice(testData)
 
             // Invoke OQS TMO api and validate it against the projection
-            lib.verifyOQSOrderStatus(
+            verifyOQSOrderStatus(
               testData.orderId,
               'Received',
               true,
               testData
             )
           })
-      }) //LOGIN END
+      }) // LOGIN END
     })
   })
 })

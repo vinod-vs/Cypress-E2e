@@ -9,6 +9,7 @@ import '../../../support/utilities/ui/utility'
 import { onMyAccountDetailsPage } from '../../../support/myAccount/ui/pageObjects/MyAccountDetailsPage'
 
 const faker = require('faker/locale/en_AU')
+
 const FirstName: any = faker.name.firstName()
 const LastName: any = faker.name.lastName()
 const SecondaryNumber: any = faker.phone.phoneNumber('04########')

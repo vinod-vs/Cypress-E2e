@@ -17,7 +17,7 @@ export class MyPaymentMethodsPage {
 
   getButtonSave () {
     return cy
-      .get(".add-credit-card-button-group button[type='submit']")
+      .get('.add-credit-card-button-group button[type=\'submit\']')
       .contains('Save')
   }
 

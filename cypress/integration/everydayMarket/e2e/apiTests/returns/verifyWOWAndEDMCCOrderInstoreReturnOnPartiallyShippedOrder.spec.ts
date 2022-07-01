@@ -20,7 +20,7 @@ import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, verifyRefundDetails, verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 import shipment from '../../../../../fixtures/everydayMarket/shipment.json'
 import { refundRequestInitiatorType } from '../../../../../support/everydayMarket/common/refundRequestInitiatorType'
 
@@ -63,7 +63,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
         )
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -104,7 +104,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
               encodedLineItem
           )
           // Verify the projection details
-          lib.verifyInitialOrderDetails(response, testData, shopperId)
+          verifyInitialOrderDetails(response, testData, shopperId)
 
           // Invoke the events api and verify the content
           cy.orderEventsApiWithRetry(orderReference, {
@@ -128,14 +128,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
             retries: Cypress.env('marketApiRetryCount'),
             timeout: Cypress.env('marketApiTimeout'),
           }).then((response) => {
-            lib.verifyEventDetails(
+            verifyEventDetails(
               response,
               'OrderPlaced',
               testData,
               shopperId,
               1
             )
-            lib.verifyEventDetails(
+            verifyEventDetails(
               response,
               'MarketOrderPlaced',
               testData,
@@ -347,7 +347,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                       // TO-DO Verify the invoice content
                       cy.verifyOrderInvoice(testData)
                       // Verify "Partial Refund Amount" after Admin initiated Return
-                      lib.verifyRefundDetails(
+                      verifyRefundDetails(
                         testData.orderId,
                         totalMarketRefundAmount,
                         0
@@ -422,14 +422,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                         retries: Cypress.env('marketApiRetryCount'),
                         timeout: Cypress.env('marketApiTimeout'),
                       }).then((response) => {
-                        lib.verifyEventDetails(
+                        verifyEventDetails(
                           response,
                           'MarketOrderRefund',
                           testData,
                           shopperId,
                           1
                         )
-                        lib.verifyEventDetails(
+                        verifyEventDetails(
                           response,
                           'RefundCompleted',
                           testData,
@@ -439,7 +439,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                       })
 
                       // Invoke OQS TMO api and validate it against the projection
-                      lib.verifyOQSOrderStatus(
+                      verifyOQSOrderStatus(
                         testData.orderId,
                         'Received',
                         false,

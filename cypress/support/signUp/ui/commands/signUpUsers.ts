@@ -1,5 +1,5 @@
 import { onSignup } from '../pageObjects/Signup'
-import { onTwoStepAuthPageSignUp } from '../../../signUp/ui/pageObjects/TwoStepAuthPageSignUp'
+import { onTwoStepAuthPageSignUp } from '../pageObjects/TwoStepAuthPageSignUp'
 import { onMyAccountPage } from '../../../myAccount/ui/pageObjects/MyAccountPage'
 import '../../../utilities/ui/utility'
 import '../../../../fixtures/signUp/signUpDetails.json'
@@ -53,7 +53,7 @@ Cypress.Commands.add('signUpBusinessUser', (userinfo) => {
   onSignup.getCompanyName().type(userinfo.companyName)
   onSignup.getTermsAndConditions().click()
   cy.intercept('api/v3/ui/signup').as('signup')
-  onSignup.getSubmitButton().click() 
+  onSignup.getSubmitButton().click()
   cy.wait('@signup')
   onMyAccountPage.getMyAccountHeaderLink().contains('My Account').click()
 })

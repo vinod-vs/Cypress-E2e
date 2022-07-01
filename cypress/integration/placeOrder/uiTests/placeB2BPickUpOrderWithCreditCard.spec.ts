@@ -1,28 +1,28 @@
 /// <reference types="cypress" />
 
-import TestFilter from "../../../support/TestFilter";
-import data from "../../../fixtures/placeOrder/b2bOrderData.json";
-import "../../../support/login/ui/commands/login";
-import "../../../support/logout/ui/commands/logout";
-import "../../../support/fulfilment/ui/commands/deliveryDateAndWindow";
-import "../../../support/search/ui/commands/searchAndAddProduct";
-import "../../../support/payment/ui/commands/creditCardPayment";
-import "../../../support/sideCart/ui/commands/sideCart";
+import TestFilter from '../../../support/TestFilter';
+import data from '../../../fixtures/placeOrder/b2bOrderData.json';
+import '../../../support/login/ui/commands/login';
+import '../../../support/logout/ui/commands/logout';
+import '../../../support/fulfilment/ui/commands/deliveryDateAndWindow';
+import '../../../support/search/ui/commands/searchAndAddProduct';
+import '../../../support/payment/ui/commands/creditCardPayment';
+import '../../../support/sideCart/ui/commands/sideCart';
 import { onCheckoutPage } from '../../../support/checkout/ui/pageObjects/CheckoutPage'
 import { onOrderConfirmationPage } from '../../../support/orderConfirmation/ui/pageObjects/OrderConfirmationPage'
 
-TestFilter(["B2B", "UI", "P0"], () => {
-  describe("[UI] Place a pickup order on Woolworths at Work website using Credit Card", () => {
+TestFilter(['B2B', 'UI', 'P0'], () => {
+  describe('[UI] Place a pickup order on Woolworths at Work website using Credit Card', () => {
     beforeEach(() => {
       cy.clearCookies({ domain: null });
       cy.clearLocalStorage({ domain: null });
-      Cypress.Cookies.preserveOnce("w-rctx");
-      
+      Cypress.Cookies.preserveOnce('w-rctx');
+
     });
 
-    it("Place a pickup order on Woolworths at Work website using Credit Card", () => {
-      let shopper =data.b2bOrderData1.shopper1;
-      let testdata =data.b2bOrderData1
+    it('Place a pickup order on Woolworths at Work website using Credit Card', () => {
+      const shopper =data.b2bOrderData1.shopper1;
+      const testdata =data.b2bOrderData1
       // Login
       cy.loginViaUi(shopper);
       // Select Delivery date Window

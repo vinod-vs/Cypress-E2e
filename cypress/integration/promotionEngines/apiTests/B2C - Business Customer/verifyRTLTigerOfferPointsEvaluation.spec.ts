@@ -18,7 +18,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
     beforeEach(() => {
       // Login using shopper saved in the fixture and verify it's successful
       cy.loginViaApi(shoppers.PESBusinessAccount2).then((response: any) => {
-        //cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
+        // cy.validate2FALoginStatus(response, Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
       })
     })
 
@@ -28,7 +28,7 @@ TestFilter(['B2C', 'PES', 'API', 'P1', 'OHNO'], () => {
       })
     })
 
-    /*it('Verify the Tiger offer points for product with minimum Spend ', () => {
+    /* it('Verify the Tiger offer points for product with minimum Spend ', () => {
       // add the items to Trolley
       cy.addAvailableQuantityLimitedItemsToTrolley(promotions.TigerOffers[0].stockcode.toString(), <number>promotions.TigerOffers[0].minQty)
 

@@ -102,14 +102,13 @@ export class OrderConfirmationPage {
   VerifyFulfilmentDay(expectedDayAliasString: string){
     cy.get<string>('@' + expectedDayAliasString).then(expectedFulfilmentDay => {
 
-      // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time, 
+      // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time,
       // if script selects same day window, the checkout page will show day of week of tomorrow but order confirmaiton page shows 'Tomorrow'
       const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-      cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek : string) => {
-        if(expectedFulfilmentDay.includes(tomorrowDayOfWeek)){
+      cy.getDayOfWeek(tomorrow).then((tomorrowDayOfWeek: string) => {
+        if (expectedFulfilmentDay.includes(tomorrowDayOfWeek)){
           this.getConfirmationFulfilmentDetailsContentElement().should('contain.text', 'Tomorrow');
-        }
-        else{
+        } else {
           this.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentDay);
         }
       })
@@ -163,19 +162,18 @@ export class OrderConfirmationPage {
 
     this.getOrderFulfilmentTime().then(timeElement => {
       cy.log('Order fulfilment time is ' + timeElement.text()).then(()=>{
-        if(timeElement.text().toLocaleLowerCase().includes(DNFulfilmentTimeString.toLocaleLowerCase())){
+        if (timeElement.text().toLocaleLowerCase().includes(DNFulfilmentTimeString.toLocaleLowerCase())){
           assert.ok(DNFulfilmentTimeString + ' is on confirmation page')
-        }
-        else{
+        } else {
           // 5:55PM - 6:05PM
-          let timeStringsArray = timeElement.text().split('-')
+          const timeStringsArray = timeElement.text().split('-')
 
           // 5:55PM -> 17:55
-          let startMoment = moment(timeStringsArray[0].trim(), ["h:mm A"])
-          let endMoment = moment(timeStringsArray[1].trim(), ["h:mm A"])
-          let expectedMoment = moment(DNFulfilmentTimeString, ["h:mm A"])
+          const startMoment = moment(timeStringsArray[0].trim(), ['h:mm A'])
+          const endMoment = moment(timeStringsArray[1].trim(), ['h:mm A'])
+          const expectedMoment = moment(DNFulfilmentTimeString, ['h:mm A'])
 
-          assert.isTrue(expectedMoment.isBetween(startMoment, endMoment), 'Expected Time ' + DNFulfilmentTimeString + " is in estimated arrival time range " + timeElement.text())
+          assert.isTrue(expectedMoment.isBetween(startMoment, endMoment), 'Expected Time ' + DNFulfilmentTimeString + ' is in estimated arrival time range ' + timeElement.text())
         }
       })
     })

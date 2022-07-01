@@ -19,7 +19,7 @@ import smLogins from '../../../../../fixtures/siteManagement/loginDetails.json'
 import '../../../../../support/checkout/api/commands/confirmOrder'
 import '../../../../../support/rewards/api/commands/rewards'
 import '../../../../../support/orderPaymentService/api/commands/refunds'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, verifyCommonOrderDetails, verifyOQSOrderStatus, verifyRefundDetails } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 import { onOrderManagement } from '../../../../../support/siteManagement/ui/pageObjects/OrderManagement'
 
 TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
@@ -73,7 +73,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         )
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -107,7 +107,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
                 edmInvoiceId
             )
             // Verify the projection details
-            lib.verifyInitialOrderDetails(response, testData, shopperId)
+            verifyInitialOrderDetails(response, testData, shopperId)
 
             // Invoke the events api and verify the content
             cy.orderEventsApiWithRetry(orderReference, {
@@ -131,14 +131,14 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
             }).then((response) => {
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'OrderPlaced',
                 testData,
                 shopperId,
                 1
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'MarketOrderPlaced',
                 testData,
@@ -280,7 +280,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
           .as('finalProjection')
           .then((response) => {
             // Order details
-            lib.verifyCommonOrderDetails(response, testData, shopperId)
+            verifyCommonOrderDetails(response, testData, shopperId)
             // Seller details
             expect(response.invoices[0].seller.sellerId).to.not.be.null
             expect(response.invoices[0].seller.sellerName).to.be.equal(
@@ -389,7 +389,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               'Customer Return from EM Test Automation_Full_Return'
             )
             expect(response.invoices[0].refunds[0].notes[1].note).to.be.equal(
-              "Automation refundRequestReturn note: I don't want this"
+              'Automation refundRequestReturn note: I don\'t want this'
             )
             expect(response.invoices[0].refunds[0].notes[2].note).to.be.equal(
               'Auto-refund cancellation'
@@ -530,49 +530,49 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
             }).then((response) => {
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'MarketOrderShipmentCreate',
                 testData,
                 shopperId,
                 1
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'MarketOrderDispatched',
                 testData,
                 shopperId,
                 1
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'MarketRewardsCredited',
                 testData,
                 shopperId,
                 1
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'MarketReturnCreated',
                 testData,
                 shopperId,
                 1
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'RefundRequestUpdate',
                 testData,
                 shopperId,
                 3
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'RefundCompleted',
                 testData,
                 shopperId,
                 1
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 response,
                 'MarketOrderRefund',
                 testData,
@@ -582,7 +582,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
             })
           })
         // Invoke OQS TMO api and validate it against the projection
-        lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
+        verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
       })
 
       // Login to SM and create a product refund. Add a good will too. Then verify the order details
@@ -639,7 +639,7 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
           .as('newFinalProjection')
           .then((refundedProjection) => {
             // Order details
-            lib.verifyCommonOrderDetails(
+            verifyCommonOrderDetails(
               refundedProjection,
               testData,
               shopperId
@@ -887,21 +887,21 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout')
             }).then((refundedEvents) => {
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 refundedEvents,
                 'RefundCompleted',
                 testData,
                 shopperId,
                 2
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 refundedEvents,
                 'RefundRequestUpdate',
                 testData,
                 shopperId,
                 6
               )
-              lib.verifyEventDetails(
+              verifyEventDetails(
                 refundedEvents,
                 'MarketOrderRefund',
                 testData,
@@ -918,14 +918,14 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
         .then((newFinalProjection) => {
           cy.get('@finalProjection').then((finalProjection) => {
             // Verify refund details on trader my order details page
-            lib.verifyRefundDetails(
+            verifyRefundDetails(
               testData.orderId,
               finalProjection.invoices[0].lineItems[0].salePrice * 2,
               0
             )
 
             // Verify OQS details are updated after the refund from CHUB
-            lib.verifyOQSOrderStatus(
+            verifyOQSOrderStatus(
               testData.orderId,
               'Received',
               false,

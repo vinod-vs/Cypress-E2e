@@ -147,8 +147,12 @@ Cypress.Commands.add('changeDateFormatToAddSlash', (date: any) => {
   let month = givenDate.getMonth()
   month++
   const year = givenDate.getFullYear()
-  if (month >= 10) { return cy.wrap(day + '/' + month + '/' + year) }
-  if (month < 10) { return cy.wrap(day + '/0' + month + '/' + year) }
+  if (month >= 10) {
+ return cy.wrap(day + '/' + month + '/' + year)
+}
+  if (month < 10) {
+ return cy.wrap(day + '/0' + month + '/' + year)
+}
 })
 
 /*

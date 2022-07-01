@@ -140,64 +140,64 @@ export class OrderManagement {
 
   getRefundCheckboxForStockcode(stockcode: any) {
     const checkbocLoc =
-      "input[class*='refund-checkbox'][name*='" + stockcode + "']"
+      'input[class*=\'refund-checkbox\'][name*=\'' + stockcode + '\']'
     return cy.get(checkbocLoc)
   }
 
   getRefundDetailsForStockcode(stockcode: any) {
     const refundDetailsLoc =
-      "tr[class*='" +
+      'tr[class*=\'' +
       stockcode +
-      " return'] td[class*='refund-order-stockcode']"
+      ' return\'] td[class*=\'refund-order-stockcode\']'
     return cy.get(refundDetailsLoc)
   }
 
   getRefundDetailsTDForStockcode(stockcode: any) {
-    const refundDetailsLoc = "tr[class*='" + stockcode + " return']"
+    const refundDetailsLoc = 'tr[class*=\'' + stockcode + ' return\']'
     return cy.get(refundDetailsLoc)
   }
 
   getRefundReasonFieldForStockcode(stockcode: any) {
     const refundReasonLoc =
-      "select[class='refund-edit-reason'][name*='" + stockcode + "']"
+      'select[class=\'refund-edit-reason\'][name*=\'' + stockcode + '\']'
     return cy.get(refundReasonLoc)
   }
 
   getRefundCommentFieldForStockcode(stockcode: any) {
     const refundCommentLoc =
-      "input[class='refund-edit-comment'][name*='" + stockcode + "']"
+      'input[class=\'refund-edit-comment\'][name*=\'' + stockcode + '\']'
     return cy.get(refundCommentLoc)
   }
 
   getRefundQuantityFieldForStockcode(stockcode: any) {
     const refundQuantityLoc =
-      "input[class='refund-edit-amount'][name*='" +
+      'input[class=\'refund-edit-amount\'][name*=\'' +
       stockcode +
-      "-Payment].Quantity']"
+      '-Payment].Quantity\']'
     return cy.get(refundQuantityLoc)
   }
 
   getRefundSaveButton() {
-    return cy.get("input[name='SaveButton']")
+    return cy.get('input[name=\'SaveButton\']')
   }
 
   getRefundApproveButton() {
-    return cy.get("input[name='ApproveButton']")
+    return cy.get('input[name=\'ApproveButton\']')
   }
 
   getRefundShippingFeeCheckbox() {
-    return cy.get("input[class*='refund-checkbox'][name*='RefundLine[-2-0]']")
+    return cy.get('input[class*=\'refund-checkbox\'][name*=\'RefundLine[-2-0]\']')
   }
 
   getRefundShippingFeeReasonField() {
     return cy.get(
-      "select[class='refund-edit-reason'][name*='RefundLines[-2-0-Payment].ReasonID']"
+      'select[class=\'refund-edit-reason\'][name*=\'RefundLines[-2-0-Payment].ReasonID\']'
     )
   }
 
   getRefundShippingFeeCommentField() {
     return cy.get(
-      "input[class='refund-edit-comment'][name*='RefundLines[-2-0-Payment].Comment']"
+      'input[class=\'refund-edit-comment\'][name*=\'RefundLines[-2-0-Payment].Comment\']'
     )
   }
 
@@ -279,7 +279,7 @@ export class OrderManagement {
   }
 
   getReissueOrderId() {
-    //Added on 28th May
+    // Added on 28th May
     return cy.get(
       '#content-panel > div > div.tab-layout > div:nth-child(17) > label'
     )
@@ -293,35 +293,35 @@ export class OrderManagement {
 
   getGoodwillCheckboxForStockCode(stockcode: any) {
     return cy.get(
-      "input[class*='goodwill-checkbox'][name*='" + stockcode + "']"
+      'input[class*=\'goodwill-checkbox\'][name*=\'' + stockcode + '\']'
     )
   }
 
   getGoodwillReasonForStockCode(stockcode: any) {
     return cy.get(
-      "select[class='refund-edit-reason'][name*='" + stockcode + "-Goodwill']"
+      'select[class=\'refund-edit-reason\'][name*=\'' + stockcode + '-Goodwill\']'
     )
   }
 
   getGoodwillCommentForStockCode(stockcode: any) {
     return cy.get(
-      "input[class='refund-edit-comment'][name*='" + stockcode + "-Goodwill']"
+      'input[class=\'refund-edit-comment\'][name*=\'' + stockcode + '-Goodwill\']'
     )
   }
 
   getGoodwillQuantityFieldForStockcode(stockcode: any) {
     return cy.get(
-      "input[class='refund-edit-amount'][name*='" +
+      'input[class=\'refund-edit-amount\'][name*=\'' +
         stockcode +
-        "-Goodwill']:nth-child(2)"
+        '-Goodwill\']:nth-child(2)'
     )
   }
 
   getGoodwillAmountFieldForStockcode(stockcode: any) {
     return cy.get(
-      "input[class='refund-edit-amount'][name*='" +
+      'input[class=\'refund-edit-amount\'][name*=\'' +
         stockcode +
-        "-Goodwill']:nth-child(1)"
+        '-Goodwill\']:nth-child(1)'
     )
   }
 

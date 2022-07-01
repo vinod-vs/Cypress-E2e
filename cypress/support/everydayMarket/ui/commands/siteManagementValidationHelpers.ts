@@ -1,6 +1,6 @@
 import { TwoFactorAuthPage } from 'cypress/support/login/ui/pageObjects/TwoStepAuthPage'
 import { OrderManagementMenu } from 'cypress/support/siteManagement/ui/commands/OrderManagementMenu'
-import { onOrderManagement } from '../../../../support/siteManagement/ui/pageObjects/OrderManagement'
+import { onOrderManagement } from '../../../siteManagement/ui/pageObjects/OrderManagement'
 
 Cypress.Commands.add('validateOrderDetailsOnSM', (isMarketOnly) => {
   cy.get('@finalProjection').then((finalProjection) => {
@@ -194,11 +194,11 @@ Cypress.Commands.add('verifySelfServiceReturnOnSM', (returnType) => {
               .should('contain', lineItems.notes)
             // Verify the Return tracking ID
             cy.get('@stockcodeRefundCommonLocator')
-              .find("span a[href*='" + lineItems.trackingId + "']")
+              .find('span a[href*=\'' + lineItems.trackingId + '\']')
               .invoke('text')
               .should('contain', invoice.legacyIdFormatted)
             cy.get('@stockcodeRefundCommonLocator')
-              .find("span a[href*='" + lineItems.trackingId + "']")
+              .find('span a[href*=\'' + lineItems.trackingId + '\']')
               .then(($a) => {
                 cy.get($a).should('have.attr', 'href')
               })

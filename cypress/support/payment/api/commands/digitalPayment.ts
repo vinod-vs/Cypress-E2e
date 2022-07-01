@@ -21,7 +21,7 @@ Cypress.Commands.add('openPayDigitalPay', (openPayDigitalPayment) => {
 })
 
 Cypress.Commands.add('getDigitalPaymentInstruments', () => {
-  //Adding a 2 second wait coz sometimes an empty payment instruments is returned even if the test account has registered payment instruments especially the gift cards
+  // Adding a 2 second wait coz sometimes an empty payment instruments is returned even if the test account has registered payment instruments especially the gift cards
   cy.wait(Cypress.config('twoSecondWait'))
   cy.api({
     method: 'GET',

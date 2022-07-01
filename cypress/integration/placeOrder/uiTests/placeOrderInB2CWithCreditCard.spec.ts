@@ -66,10 +66,10 @@ TestFilter(['B2C', 'UI', 'Checkout', 'SPUD', 'E2E'], () => {
       cy.wait('@fulfilmentWindow')
 
       // Wrap order basic info from checkout page and save into alias
-      let expectedFulfilmentAddressAlias = 'expectedAddress'
-      let expectedFulfilmentDayAlias = 'expectedFulfilmentDay'
-      let expectedFulfilmentTimeAlias = 'expectedFulfilmentTime'
-      let expectedTotalAmountAlias = 'expectedTotalAmount'
+      const expectedFulfilmentAddressAlias = 'expectedAddress'
+      const expectedFulfilmentDayAlias = 'expectedFulfilmentDay'
+      const expectedFulfilmentTimeAlias = 'expectedFulfilmentTime'
+      const expectedTotalAmountAlias = 'expectedTotalAmount'
 
       onCheckoutPage.onCheckoutFulfilmentSelectionPanel.getSummarisedFulfilmentAddressElement().then(address => {
         cy.wrap(address.text()).as(expectedFulfilmentAddressAlias);
