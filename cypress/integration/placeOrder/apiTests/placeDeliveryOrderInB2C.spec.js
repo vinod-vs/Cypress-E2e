@@ -5,7 +5,7 @@ import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
 import TestFilter from '../../../support/TestFilter'
-import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import '../../../support/login/api/commands/login'
 import '../../../support/search/api/commands/search'
 import '../../../support/fulfilment/api/commands/fulfilment'
@@ -80,8 +80,9 @@ TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
 
       cy.digitalPay(digitalPayment).then((response) => {
         if (response.PaymentResponses !== null) {
-          expect(response.PaymentResponses[0].ErrorDetail, 'Error Status on Payment Instrument Type of ' +
-          response.PaymentResponses[0].PaymentInstrumentType).to.be.null
+          const paymentResponse = response.PaymentResponses[0]
+          const instrumentType = paymentResponse.PaymentInstrumentType 
+          expect(paymentResponse.ErrorDetail, 'Error Status on Payment Instrument Type of ' + instrumentType).to.be.null
 
           cy.checkForOrderPlacementErrorsAndThrow(response).then(() => {
             expect(response.TransactionReceipt, 'Payment Transaction Receipt').to.not.be.null

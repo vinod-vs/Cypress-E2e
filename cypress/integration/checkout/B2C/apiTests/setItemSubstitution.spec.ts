@@ -33,9 +33,9 @@ TestFilter(['API', 'B2C', 'Checkout', 'SPUD'], () => {
         substitutionRequest.Items = subsItems
 
         cy.setItemSubstitutionviaAPI(substitutionRequest).then(
-          (response: any) => {
+          (subsResponse: any) => {
             expect(
-              response.ErrorMessage,
+              subsResponse.ErrorMessage,
               'Error Message on post to /substitution'
             ).to.be.empty
           }

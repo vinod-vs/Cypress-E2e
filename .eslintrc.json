@@ -35,7 +35,7 @@
     "no-unused-vars": "warn",
     "no-undef": "warn",
     "prefer-const": "warn",
-    "space-before-function-paren": "warn",
+    "space-before-function-paren": "off",
     "quotes": ["warn", "single"],
     "brace-style": ["warn", "1tbs"],
     "quote-props": ["warn", "consistent-as-needed"],

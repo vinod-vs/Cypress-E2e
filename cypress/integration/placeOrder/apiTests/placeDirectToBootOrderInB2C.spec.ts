@@ -3,8 +3,8 @@
 
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
-import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
-import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
+import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'
@@ -65,9 +65,9 @@ TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
 
         digitalPayment.payments[0].amount = balanceToPay
 
-        cy.navigatingToCreditCardIframe().then((response: any) => {
+        cy.navigatingToCreditCardIframe().then((iframeResponse: any) => {
           creditcardSessionHeader.creditcardSessionId =
-            response.IframeUrl.toString().split('/')[5]
+            iframeResponse.IframeUrl.toString().split('/')[5]
         })
       })
 
@@ -93,13 +93,15 @@ TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
         })
       })
 
-      cy.confirmOrder(confirmOrderParameter).then((response: any) => {
-        expect(response.Order.OrderId, 'Order Id').to.eqls(
-          confirmOrderParameter.placedOrderId
-        )
+      cy.confirmOrder(confirmOrderParameter).then(
+        (response: ConfirmedOrderResponse) => {
+          expect(response.Order.OrderId, 'Order Id').to.eqls(
+            confirmOrderParameter.placedOrderId
+          )
 
-        cy.log('This is the order id: ' + response.Order.OrderId)
-      })
+          cy.log('This is the order id: ' + response.Order.OrderId)
+        }
+      )
     })
   })
 })
