@@ -179,5 +179,6 @@ declare namespace Cypress {
     goToCheckout(): any;
     fillCreditCardPaymentDetails(details: any): any;
     selectAvailablePickUpDetailsOnFms():any;
+    cancelSubscription(): any
   }
 }
