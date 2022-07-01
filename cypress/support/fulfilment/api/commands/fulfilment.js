@@ -172,7 +172,7 @@ function getAvailableWindowsByWindowType (windowResponse, selectedWindowType) {
             if (time.Available === true) {
               timesArr.push(time)
             }
-            break  
+            break
           default: // pick up/DTB - neither have window types
             if (time.Available === true) {
               timesArr.push(time)

@@ -20,8 +20,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
       }, () => {
         if (b2cShoppers.loginTestAccounts[n].type != 'business') {
           cy.loginViaApiWith2FA(b2cShoppers.loginTestAccounts[n], Cypress.env('otpValidationSwitch'), Cypress.env('otpStaticCode'))
-        }
-        else {
+        } else {
           cy.loginViaApi(b2cShoppers.loginTestAccounts[n]).then((response) => {
             expect(response).to.have.property('LoginResult', 'Success')
           })

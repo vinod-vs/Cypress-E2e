@@ -1,6 +1,6 @@
-import { onHomePage } from '../../../homePage/ui/pageObjects//HomePage'
+import { onHomePage } from '../../../homePage/ui/pageObjects/HomePage'
 import { onCheckoutPage } from '../../../checkout/ui/pageObjects/CheckoutPage'
-import { onSideCartPage } from '../../../sideCart/ui/pageObjects/SideCartPage'
+import { onSideCartPage } from '../pageObjects/SideCartPage'
 
 Cypress.Commands.add('clearTrolleyViaUi', () => {
   // clear cart if required

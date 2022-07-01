@@ -15,7 +15,8 @@ import '../../../support/lists/api/commands/getProductsInList'
 import '../../../support/lists/api/commands/updateList'
 
 const faker = require('faker')
-var BreakException = {}
+
+const BreakException = {}
 
 TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
   describe('[API] Add a new list and set the list as default', () => {
@@ -66,7 +67,9 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
             }
           })
         } catch (e) {
-          if (e !== BreakException) throw e
+          if (e !== BreakException) {
+throw e
+}
         }
       })
     })

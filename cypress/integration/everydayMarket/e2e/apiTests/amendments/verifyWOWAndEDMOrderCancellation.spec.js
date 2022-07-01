@@ -21,7 +21,7 @@ import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/orders/api/commands/cancelOrder'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, verifyCommonOrderDetails, verifyCompleteRefundDetailsWithRetry, verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
   describe('[API] RP-5032 - Cancel grocery order and verify Everyday Market order remains unchanged', () => {
@@ -61,7 +61,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
         )
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, placedOrderResponse)
+        verifyOrderTotals(testData, placedOrderResponse)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
@@ -99,7 +99,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                 edmInvoiceId
             )
             // Verify the projection details
-            lib.verifyInitialOrderDetails(response, testData, shopperId)
+            verifyInitialOrderDetails(response, testData, shopperId)
           })
 
         // Invoke the events api and verify the content
@@ -124,14 +124,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
           retries: Cypress.env('marketApiRetryCount'),
           timeout: Cypress.env('marketApiTimeout'),
         }).then((response) => {
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'OrderPlaced',
             testData,
             shopperId,
             1
           )
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'MarketOrderPlaced',
             testData,
@@ -204,7 +204,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                   newOrderId = response.orderId
 
                   // Order details
-                  lib.verifyCommonOrderDetails(
+                  verifyCommonOrderDetails(
                     response,
                     { ...testData, orderId: response.orderId },
                     shopperId
@@ -334,21 +334,21 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                   }).then((response) => {
                     // Verify events related to the old trader orderId
                     // Skipping traderOrderId validations as the events can be associated with either of the old or new orderIds to avoid failures
-                    lib.verifyEventDetails(
+                    verifyEventDetails(
                       response,
                       'MarketOrderShipmentCreate',
                       { ...testData, orderId: null },
                       shopperId,
                       1
                     )
-                    lib.verifyEventDetails(
+                    verifyEventDetails(
                       response,
                       'MarketOrderDispatched',
                       { ...testData, orderId: null },
                       shopperId,
                       1
                     )
-                    lib.verifyEventDetails(
+                    verifyEventDetails(
                       response,
                       'MarketRewardsCredited',
                       { ...testData, orderId: null },
@@ -356,7 +356,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                       1
                     )
                     // Verify events related to the new trader orderId
-                    lib.verifyEventDetails(
+                    verifyEventDetails(
                       response,
                       'MarketOrderAmended',
                       { ...testData, orderId: null },
@@ -426,7 +426,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
             ).toFixed(2)
             cy.log('ExpectedWowRefund: ' + wowRefund)
             // Verify just the WOW order is refunded and not the EM order
-            lib.verifyCompleteRefundDetailsWithRetry(
+            verifyCompleteRefundDetailsWithRetry(
               testData.orderId,
               wowRefund,
               0,
@@ -436,7 +436,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
 
             // Invoke OQS TMO api and validate it against the projection
             // New trader order will be in Received state, Will be an MP ONLY Order and will NOT have all the WOW items in it
-            lib.verifyOQSOrderStatus(
+            verifyOQSOrderStatus(
               finalProjection.orderId,
               'Received',
               true,

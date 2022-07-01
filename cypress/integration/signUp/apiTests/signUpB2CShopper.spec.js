@@ -6,6 +6,7 @@ import '../../../support/signUp/api/commands/signUp'
 import '../../../support/login/api/commands/login'
 import '../../../support/logout/api/commands/logout'
 import '../../../support/utilities/ui/utility'
+
 const faker = require('faker/locale/en_AU')
 
 TestFilter(['B2C', 'API', 'P0'], () => {

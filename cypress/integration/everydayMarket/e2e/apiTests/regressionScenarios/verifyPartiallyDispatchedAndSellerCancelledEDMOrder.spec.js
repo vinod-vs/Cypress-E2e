@@ -15,8 +15,8 @@ import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import '../../../../../support/rewards/api/commands/rewards'
 import '../../../../../support/refunds/api/commands/commands'
-import * as lib from '../../../../../support/everydayMarket/api/commands/validationHelpers'
-import * as refundsLib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { validateOrderApiAgainstTrader, validateEvents } from '../../../../../support/everydayMarket/api/commands/validationHelpers'
+import { verifyRefundDetails } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
   describe('[API] RP-5044 - Partial Dispatch and Partial seller cancellation (partial OOS) Everyday Market order. {Failing because of BUG: MPPF-1450}', () => {
@@ -64,7 +64,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
         )
           .as('placedMarketOrderApiData')
           .then((response) => {
-            lib.validateOrderApiAgainstTrader(response)
+            validateOrderApiAgainstTrader(response)
             expect(response.invoices[0].invoiceStatus).is.equal('PAID')
             expect(response.invoices[0].wowStatus).is.equal('Placed')
             // Validate line items
@@ -97,8 +97,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
           retries: Cypress.env('marketApiRetryCount'),
           timeout: Cypress.env('marketApiTimeout'),
         }).then((response) => {
-          lib.validateEvents(response, 'OrderPlaced', 1)
-          lib.validateEvents(response, 'MarketOrderPlaced', 1)
+          validateEvents(response, 'OrderPlaced', 1)
+          validateEvents(response, 'MarketOrderPlaced', 1)
         })
 
         // Get reward points before we start dispatching/OOSing items via Marketplacer
@@ -200,9 +200,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
             retries: Cypress.env('marketApiRetryCount'),
             timeout: Cypress.env('marketApiTimeout'),
           }).then((response) => {
-            lib.validateEvents(response, 'MarketOrderShipmentCreate', 1)
-            lib.validateEvents(response, 'MarketOrderDispatched', 1)
-            lib.validateEvents(response, 'MarketRewardsCredited', 1)
+            validateEvents(response, 'MarketOrderShipmentCreate', 1)
+            validateEvents(response, 'MarketOrderDispatched', 1)
+            validateEvents(response, 'MarketRewardsCredited', 1)
           })
         })
 
@@ -237,9 +237,9 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
             retries: Cypress.env('marketApiRetryCount'),
             timeout: Cypress.env('marketApiTimeout'),
           }).then((response) => {
-            lib.validateEvents(response, 'RefundRequestUpdate', 3) // Returned, Create, Refunded
-            lib.validateEvents(response, 'MarketOrderRefund', 1)
-            lib.validateEvents(response, 'RefundCompleted', 1)
+            validateEvents(response, 'RefundRequestUpdate', 3) // Returned, Create, Refunded
+            validateEvents(response, 'MarketOrderRefund', 1)
+            validateEvents(response, 'RefundCompleted', 1)
           })
 
           cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(
@@ -356,7 +356,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
           'cancelledProjection.invoices[0].refunds[0].refundAmount: ' +
             cancelledProjection.invoices[0].refunds[0].refundAmount
         )
-        refundsLib.verifyRefundDetails(
+        verifyRefundDetails(
           req.orderId,
           cancelledProjection.invoices[0].refunds[0].refundAmount,
           0

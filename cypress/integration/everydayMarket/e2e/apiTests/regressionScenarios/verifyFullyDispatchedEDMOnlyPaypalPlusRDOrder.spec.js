@@ -20,7 +20,7 @@ import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
 import rewardsDetails from '../../../../../fixtures/everydayMarket/rewards.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, verifyCommonOrderDetails, verifyRefundDetails, verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
   describe('[API] RP-5093 - Place Everyday Market only order using Paypal and Rewards dollars', () => {
@@ -60,7 +60,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
         cy.log('This is the order id: ' + response.Order.OrderId + ', Order ref: ' + response.Order.OrderReference)
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -79,7 +79,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
           // Verify the projection details
-          lib.verifyInitialOrderDetails(response, testData, shopperId)
+          verifyInitialOrderDetails(response, testData, shopperId)
 
           // Invoke the events api and verify the content
           cy.orderEventsApiWithRetry(orderReference, {
@@ -93,8 +93,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
             retries: Cypress.env('marketApiRetryCount'),
             timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
-            lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
-            lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
+            verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
+            verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
           })
 
           // Verify the MP and shipping invoices are available for the customer
@@ -126,7 +126,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
               timeout: Cypress.env('marketApiTimeout')
             }).as('finalProjection').then((response) => {
               // Order details
-              lib.verifyCommonOrderDetails(response, testData, shopperId)
+              verifyCommonOrderDetails(response, testData, shopperId)
               // Seller details
               expect(response.invoices[0].seller.sellerId).to.not.be.null
               expect(response.invoices[0].seller.sellerName).to.be.equal(testData.items[0].sellerName)
@@ -187,11 +187,11 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
                 // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
+                verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                lib.verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
+                verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
+                verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
               })
 
               // Verify the reward points are credited to customers card after EDM dispatch
@@ -210,14 +210,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                 })
               }
               // Verify No refund details
-              lib.verifyRefundDetails(testData.orderId, 0, 0)
+              verifyRefundDetails(testData.orderId, 0, 0)
 
               // Verify the MP and shipping invoices are available for the customer
               // TO-DO Verify the invoice content
               cy.verifyOrderInvoice(testData)
 
               // Invoke OQS TMO api and validate it against the projection
-              lib.verifyOQSOrderStatus(testData.orderId, 'Received', true, testData)
+              verifyOQSOrderStatus(testData.orderId, 'Received', true, testData)
             })
           })
         })

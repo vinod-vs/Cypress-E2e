@@ -16,10 +16,11 @@ import '../../../support/lists/api/commands/getProductsInList'
 import '../../../support/search/api/commands/search'
 
 const faker = require('faker')
-var data
-let arraySpecialProductsBeforeToggle = []
-let arraySpecialProductsAfterToggle = []
-var BreakException = {}
+
+let data
+const arraySpecialProductsBeforeToggle = []
+const arraySpecialProductsAfterToggle = []
+const BreakException = {}
 
 TestFilter(['API', 'B2C', 'P0'], () => {
   describe('[API] Verify that only special producuts are displayed on the User Generated List page when the Specials Only toggle is ON', () => {
@@ -42,7 +43,7 @@ TestFilter(['API', 'B2C', 'P0'], () => {
       })
 
       // Add item to list
-      let addTolist = () => {
+      const addTolist = () => {
         cy.get('@stockCode').then(stockCode => {
           listItemBody.StockCode = stockCode
           cy.get('@listId').then(listId => {
@@ -54,7 +55,7 @@ TestFilter(['API', 'B2C', 'P0'], () => {
       }
 
       // Compare the products
-      let compareProducts = (arrayToCompareTwo, arrayToCompareOne) => {
+      const compareProducts = (arrayToCompareTwo, arrayToCompareOne) => {
         let result
         console.log('COMPARING ' + arrayToCompareTwo.length + ' products with other ' + arrayToCompareOne.length)
         const arrayToCompareOneSorted = arrayToCompareOne.slice().sort();
@@ -90,7 +91,9 @@ TestFilter(['API', 'B2C', 'P0'], () => {
             }
           })
         } catch (e) {
-          if (e !== BreakException) throw e
+          if (e !== BreakException) {
+throw e
+}
         }
       }).then(() => {
         addTolist()

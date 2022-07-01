@@ -7,8 +7,8 @@ import allProductsBody from '../../../fixtures/lists/allProducts.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/lists/api/commands/otherAPIs'
 
-let displayNames = []
-var totalRecords
+const displayNames = []
+let totalRecords
 let numOfPages
 
 TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
@@ -29,7 +29,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
       }
 
       // Set the PageSize to go through each page and retrieve products
-      function setNumOfPages() {
+      function setNumOfPages () {
         cy.getAllProducts(allProductsBody).then((response) => {
           expect(response.status).to.eq(200)
           totalRecords = response.body.TotalRecordCount
@@ -40,12 +40,12 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
       }
 
       // Go through all the pages and get all the product names
-      let getAllPageProds = () => {
-        var numOfPagesArray = Array.from({ length: numOfPages }, (v, k) => k + 1)
+      const getAllPageProds = () => {
+        const numOfPagesArray = Array.from({ length: numOfPages }, (v, k) => k + 1)
         numOfPagesArray.forEach(async index => {
           await cy.getAllProducts(allProductsBody).then((response) => {
             expect(response.status).to.eq(200)
-            let data = response.body.Items
+            const data = response.body.Items
             console.log('Page: ' + index)
             console.log(data)
             data.forEach(obj => {
@@ -53,7 +53,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
               console.log('-----------------')
             })
             if (index === numOfPages) {
-              console.log("Reached last page i.e. " + numOfPages)
+              console.log('Reached last page i.e. ' + numOfPages)
               console.log('Total products are: ' + displayNames.length)
             } else {
               allProductsBody.PageNumber = index + 1
@@ -64,11 +64,11 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
       }
 
       // Verify no duplicate products are displayed
-      let verifyDuplicates = (arrayToVerify) => {
-        let filteredNames = arrayToVerify.filter(Boolean); // remove null or blank values
+      const verifyDuplicates = (arrayToVerify) => {
+        const filteredNames = arrayToVerify.filter(Boolean); // remove null or blank values
         console.log(filteredNames)
-        let sortedArray = filteredNames.slice().sort();
-        let result = [];
+        const sortedArray = filteredNames.slice().sort();
+        const result = [];
         for (let i = 0; i < sortedArray.length - 1; i++) {
           if (sortedArray[i + 1] === sortedArray[i]) {
             result.push(sortedArray[i]);
@@ -76,8 +76,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         }
         if (result.length === 0) {
           console.log('No duplicate products are displayed.')
-        }
-        else {
+        } else {
           console.log('There are total ' + result.length + ' duplicate products displayed, they are: ' + result)
         }
       }

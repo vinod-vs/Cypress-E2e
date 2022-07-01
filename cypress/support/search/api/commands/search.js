@@ -40,7 +40,7 @@ Cypress.Commands.add('getNonRestrictedWowItemSetFromApiSearch', (searchRequestPa
   cy.productSearch(searchRequestPayload).then(searchResponse => {
     return cy.findAvailableNonRestrictedWowItems(searchResponse)
   })
-}) 
+})
 
 export function getAgeRestrictedWowItems (productResponse) {
   const productArr = []

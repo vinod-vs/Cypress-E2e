@@ -4,7 +4,7 @@ import '../../../refunds/api/commands/commands'
 import '../../../invoices/api/commands/commands'
 import '../../../oqs/api/commands/oqs'
 
-export function verifyEventDetails(
+export function verifyEventDetails (
   response,
   expectedEventName,
   testData,
@@ -38,7 +38,7 @@ export function verifyEventDetails(
   expect(events).to.have.length(expectedEventCount)
 }
 
-export function verifyShipmentStatusDetails(
+export function verifyShipmentStatusDetails (
   response,
   expectedEventName,
   testData,
@@ -63,7 +63,7 @@ export function verifyShipmentStatusDetails(
   })
 }
 
-export function verifyCommonOrderDetails(response, testData, shopperId) {
+export function verifyCommonOrderDetails (response, testData, shopperId) {
   // Order details
   expect(response.orderId).to.equal(Number(testData.orderId))
   expect(response.orderReference).to.be.equal(testData.orderReference)
@@ -77,7 +77,7 @@ export function verifyCommonOrderDetails(response, testData, shopperId) {
   expect(response.invoices.length).to.be.equal(1)
 }
 
-export function verifyOrderTotals(testData, confirmOrderResponse) {
+export function verifyOrderTotals (testData, confirmOrderResponse) {
   testData.edmDeliveryCharges = confirmOrderResponse.Order.MarketShippingFee
   testData.wowDeliveryCharges = confirmOrderResponse.Order.WoolworthsDeliveryFee
   testData.packagingFee = confirmOrderResponse.Order.PackagingFee
@@ -122,7 +122,7 @@ export function verifyOrderTotals(testData, confirmOrderResponse) {
   )
 }
 
-export function generateRandomString() {
+export function generateRandomString () {
   let randomStr = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -134,7 +134,7 @@ export function generateRandomString() {
   return randomStr
 }
 
-export function verifyRefundDetails(
+export function verifyRefundDetails (
   traderOrderId,
   expectedEdmRefundTotal,
   expectedEdmShippingFeeRefund
@@ -156,7 +156,7 @@ export function verifyRefundDetails(
   })
 }
 
-export function verifyCompleteRefundDetails(
+export function verifyCompleteRefundDetails (
   traderOrderId,
   expectedWOWRefundTotal,
   expectedWOWReusableBagsRefund,
@@ -189,7 +189,7 @@ export function verifyCompleteRefundDetails(
   })
 }
 
-export function verifyCompleteRefundDetailsWithRetry(
+export function verifyCompleteRefundDetailsWithRetry (
   traderOrderId,
   expectedWOWRefundTotal,
   expectedWOWReusableBagsRefund,
@@ -247,7 +247,7 @@ export function verifyCompleteRefundDetailsWithRetry(
   })
 }
 
-export function verifyInvoiceDetails(invoice, testData) {
+export function verifyInvoiceDetails (invoice, testData) {
   expect(invoice).to.not.be.null
   expect(invoice.InvoiceId).to.be.equal(Number(testData.orderId))
   expect(invoice.CollectionType).to.be.equal('Courier')
@@ -273,7 +273,7 @@ export function verifyInvoiceDetails(invoice, testData) {
   expect(invoice.MarketInvoices[1].DayRangeDispatchNote).to.be.null
 }
 
-export function verifyInitialOrderDetails(response, testData, shopperId) {
+export function verifyInitialOrderDetails (response, testData, shopperId) {
   // Common Order details
   verifyCommonOrderDetails(response, testData, shopperId)
 
@@ -340,7 +340,7 @@ export function verifyInitialOrderDetails(response, testData, shopperId) {
  *
  * Make sure your latest projection is saved as 'finalProjection'. OQS response is verified against this projection
  */
-export function verifyOQSOrderStatus(
+export function verifyOQSOrderStatus (
   traderOrderId,
   expectedWOWOrderStatus,
   isMarketOnly,

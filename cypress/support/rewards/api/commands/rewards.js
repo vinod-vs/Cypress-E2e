@@ -18,7 +18,7 @@ Cypress.Commands.add('getRewardsCardDetails', (partnerId, siteId, posId, loyalty
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      client_id: 'p9AqIhwoNaCmb3iJrEjONWknSCPfOU3J',
+      'client_id': 'p9AqIhwoNaCmb3iJrEjONWknSCPfOU3J',
       'x-correlation-id': 'test',
       'x-woolies-internal': 'test'
     },
@@ -52,7 +52,7 @@ Cypress.Commands.add('addRewardPoints', (partnerId, siteId, posId, loyaltySiteTy
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      client_id: 'p9AqIhwoNaCmb3iJrEjONWknSCPfOU3J',
+      'client_id': 'p9AqIhwoNaCmb3iJrEjONWknSCPfOU3J',
       'x-correlation-id': 'test',
       'x-woolies-internal': 'test'
     },

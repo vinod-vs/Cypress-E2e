@@ -11,7 +11,7 @@ import creditCardDetails from '../../../../fixtures/payment/creditcard.json'
 import digitalPaymentRequest from '../../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderRequest from '../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
-import * as lib from './commonHelpers'
+import { verifyInvoiceDetails } from './commonHelpers'
 import '../../../login/api/commands/login'
 import '../../../search/api/commands/search'
 import '../../../checkout/api/commands/navigateToCheckout'
@@ -397,7 +397,7 @@ Cypress.Commands.add('verifyOrderInvoice', (testData) => {
     cy.log('Required invoices: ' + JSON.stringify(invoices))
     expect(invoices).to.have.length(1)
     const invoice = invoices[0]
-    lib.verifyInvoiceDetails(invoice, testData)
+    verifyInvoiceDetails(invoice, testData)
   })
 })
 

@@ -22,7 +22,7 @@ import '../../../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
 import '../../../../../support/payment/api/commands/giftCard'
 import confirmOrderRequest from '../../../../../fixtures/orderConfirmation/confirmOrderParameter.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyEventDetails, verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'feature', 'EDM-E2E-API'], () => {
   describe('[API] RP-5476  Verify Everyday Market Order more than 5000 cannot be placed using Gift cards', () => {
@@ -149,11 +149,11 @@ TestFilter(['EDM', 'API', 'feature', 'EDM-E2E-API'], () => {
             timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
             // Verify Market Order is Failed
-            lib.verifyEventDetails(response, 'MarketOrderFailed', testData, shopperId, 1)
+            verifyEventDetails(response, 'MarketOrderFailed', testData, shopperId, 1)
           })
 
           // Invoke OQS TMO api and validate it against the projection
-          lib.verifyOQSOrderStatus(testData.orderId, 'Received', true, testData)
+          verifyOQSOrderStatus(testData.orderId, 'Received', true, testData)
         })
       })
     })

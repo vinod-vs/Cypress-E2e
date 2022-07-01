@@ -1,8 +1,8 @@
 import { onDeliveryDateAndWindowPage } from '../pageObjects/DeliveryDateAndWindowPage'
 import { onCheckoutPage } from '../../../checkout/ui/pageObjects/CheckoutPage'
 import '../../../utilities/ui/utility'
-import { windowType } from '../../../../../cypress/fixtures/checkout/fulfilmentWindowType'
-import '../../../../support/shared/api/commands/bootstrap'
+import { windowType } from '../../../../fixtures/checkout/fulfilmentWindowType'
+import '../../../shared/api/commands/bootstrap'
 
 Cypress.Commands.add('selectDeliveryDateAndWindow', (tradingAccAddress) => {
   // Wait for the FMS page to load before checking whether shopping Preferences is saved
@@ -73,8 +73,8 @@ Cypress.Commands.add('selectRandomWindowInCheckout', (fulfilmentType, fulfilment
 })
 
 
-Cypress.Commands.add("selectAvailableDeliveryDetailsOnFms", (tradingAccAddress) => {
-  cy.wait(Cypress.config("twoSecondWait"));
+Cypress.Commands.add('selectAvailableDeliveryDetailsOnFms', (tradingAccAddress) => {
+  cy.wait(Cypress.config('twoSecondWait'));
 
   cy.checkIfElementExists(onDeliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
     if (shoppingPrefernceExists === true) {
@@ -84,9 +84,9 @@ Cypress.Commands.add("selectAvailableDeliveryDetailsOnFms", (tradingAccAddress) 
   onDeliveryDateAndWindowPage.getSelectTradingAccountList().click();
   onDeliveryDateAndWindowPage.getTheFirstTradingAccount().click();
   onDeliveryDateAndWindowPage.getSaveAndContinueButton().click();
-  cy.wait(Cypress.config("twoSecondWait"));
+  cy.wait(Cypress.config('twoSecondWait'));
 
-  //Select first available day
+  // Select first available day
   let deliveryDay = false
   onDeliveryDateAndWindowPage.getAvailableDays().each(($day, index) => {
     if (!$day.text().includes('Closed') && deliveryDay == false) {
@@ -103,8 +103,8 @@ Cypress.Commands.add("selectAvailableDeliveryDetailsOnFms", (tradingAccAddress) 
   onDeliveryDateAndWindowPage.getContinueShoppingButton().click();
 });
 
-Cypress.Commands.add("selectAvailablePickUpDetailsOnFms", (pickUpAddress) => {
-  cy.wait(Cypress.config("twoSecondWait"));
+Cypress.Commands.add('selectAvailablePickUpDetailsOnFms', (pickUpAddress) => {
+  cy.wait(Cypress.config('twoSecondWait'));
 
   cy.checkIfElementExists(onDeliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
     if (shoppingPrefernceExists === true) {
@@ -118,9 +118,9 @@ Cypress.Commands.add("selectAvailablePickUpDetailsOnFms", (pickUpAddress) => {
   onDeliveryDateAndWindowPage.getSelectPickUpAddressMatchingSearchResult().click();
   onDeliveryDateAndWindowPage.getSelectFirstPickUpAddressStore().click();
   onDeliveryDateAndWindowPage.getSaveAndContinueButton().click();
-  cy.wait(Cypress.config("twoSecondWait"));
+  cy.wait(Cypress.config('twoSecondWait'));
 
-  //Select first available day
+  // Select first available day
   let deliveryDay = false
   onDeliveryDateAndWindowPage.getAvailableDays().each(($day, index) => {
     if (!$day.text().includes('Closed') && deliveryDay == false) {
@@ -137,8 +137,8 @@ Cypress.Commands.add("selectAvailablePickUpDetailsOnFms", (pickUpAddress) => {
   onDeliveryDateAndWindowPage.getContinueShoppingButton().click();
 });
 
-Cypress.Commands.add("selectAvailableDirectToBootDetailsOnFms", (directToBootAddress) => {
-  cy.wait(Cypress.config("twoSecondWait"));
+Cypress.Commands.add('selectAvailableDirectToBootDetailsOnFms', (directToBootAddress) => {
+  cy.wait(Cypress.config('twoSecondWait'));
 
   cy.checkIfElementExists(onDeliveryDateAndWindowPage.getTodaysShoppingPreferenceLocatorString()).then((shoppingPrefernceExists) => {
     if (shoppingPrefernceExists === true) {
@@ -153,9 +153,9 @@ Cypress.Commands.add("selectAvailableDirectToBootDetailsOnFms", (directToBootAdd
   onDeliveryDateAndWindowPage.getSelectPickUpAddressMatchingSearchResult().click();
   onDeliveryDateAndWindowPage.getSelectFirstPickUpAddressStore().click();
   onDeliveryDateAndWindowPage.getSaveAndContinueButton().click();
-  cy.wait(Cypress.config("twoSecondWait"));
+  cy.wait(Cypress.config('twoSecondWait'));
 
-  //Select first available day
+  // Select first available day
   let deliveryDay = false
   onDeliveryDateAndWindowPage.getAvailableDays().each(($day, index) => {
     if (!$day.text().includes('Closed') && deliveryDay == false) {

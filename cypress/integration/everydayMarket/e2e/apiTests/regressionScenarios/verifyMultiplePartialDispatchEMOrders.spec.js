@@ -19,7 +19,7 @@ import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, generateRandomString, verifyRefundDetails, verifyOQSOrderStatus, verifyCommonOrderDetails } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 const rewardsCardNumber = shoppers.emAccountWithRewards22.rewardsCardNumber
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
@@ -58,7 +58,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
         )
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -91,7 +91,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
               edmInvoiceId
           )
           // Verify the projection details
-          lib.verifyInitialOrderDetails(response, testData, shopperId)
+          verifyInitialOrderDetails(response, testData, shopperId)
 
           // Invoke the events api and verify the content
           cy.orderEventsApiWithRetry(orderReference, {
@@ -115,14 +115,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
             retries: Cypress.env('marketApiRetryCount'),
             timeout: Cypress.env('marketApiTimeout'),
           }).then((response) => {
-            lib.verifyEventDetails(
+            verifyEventDetails(
               response,
               'OrderPlaced',
               testData,
               shopperId,
               1
             )
-            lib.verifyEventDetails(
+            verifyEventDetails(
               response,
               'MarketOrderPlaced',
               testData,
@@ -156,7 +156,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
           cy.verifyOrderInvoice(testData)
 
           // Dispatch partial order with a unique tracking id
-          trackingId1 = lib.generateRandomString()
+          trackingId1 = generateRandomString()
           cy.log('First Tracking Id :' + trackingId1)
           const data1 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
           cy.partialDispatchOfLineItemsInInvoice(
@@ -203,7 +203,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
           // TO-DO Verify the invoice content
           cy.verifyOrderInvoice(testData)
 
-          trackingId2 = lib.generateRandomString()
+          trackingId2 = generateRandomString()
           cy.log('Second Tracking Id :' + trackingId2)
           const data2 = [{ line_item_id: lineItemLegacyId, quantity: 1 }]
           cy.partialDispatchOfLineItemsInInvoice(
@@ -251,16 +251,16 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
           cy.verifyOrderInvoice(testData)
 
           // Verify NO refund details
-          lib.verifyRefundDetails(testData.orderId, 0, 0)
+          verifyRefundDetails(testData.orderId, 0, 0)
         })
         // Invoke OQS TMO api and validate it against the projection
-        lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
+        verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
       })
     })
   })
 })
 
-function verifyOrderProjectionDetails(
+function verifyOrderProjectionDetails (
   shopperId,
   orderId,
   testData,
@@ -311,7 +311,7 @@ function verifyOrderProjectionDetails(
     .as('finalProjection')
     .then((response) => {
       // Order details
-      lib.verifyCommonOrderDetails(response, testData, shopperId)
+      verifyCommonOrderDetails(response, testData, shopperId)
       // Seller details
       expect(response.invoices[0].seller.sellerId).to.not.be.null
       expect(response.invoices[0].seller.sellerName).to.be.equal(
@@ -470,7 +470,7 @@ function verifyOrderProjectionDetails(
       }).then((response) => {
         if (partialDispatchNumber === 1) {
           // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'MarketOrderShipmentCreate',
             testData,
@@ -478,7 +478,7 @@ function verifyOrderProjectionDetails(
             1
           )
           // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'MarketOrderDispatched',
             testData,
@@ -486,7 +486,7 @@ function verifyOrderProjectionDetails(
             1
           )
           // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'MarketRewardsCredited',
             testData,
@@ -495,7 +495,7 @@ function verifyOrderProjectionDetails(
           )
         } else {
           // Verify there are  8 events. New event after dispatch is MarketOrderShipmentCreate
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'MarketOrderShipmentCreate',
             testData,
@@ -503,7 +503,7 @@ function verifyOrderProjectionDetails(
             2
           )
           // Verify there are  8 events. New event after dispatch is "MarketOrderDispatched"
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'MarketOrderDispatched',
             testData,
@@ -511,7 +511,7 @@ function verifyOrderProjectionDetails(
             2
           )
           // Verify there are  8 events. New event after dispatch is "MarketRewardsCredited"
-          lib.verifyEventDetails(
+          verifyEventDetails(
             response,
             'MarketRewardsCredited',
             testData,

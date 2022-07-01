@@ -20,7 +20,7 @@ import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/orders/api/commands/amendOrder'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 import searchRequest from '../../../../../fixtures/search/productSearch.json'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
@@ -55,7 +55,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
         cy.log('This is the order id: ' + placedOrderResponse.Order.OrderId + ', Order ref: ' + placedOrderResponse.Order.OrderReference)
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, placedOrderResponse)
+        verifyOrderTotals(testData, placedOrderResponse)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -74,7 +74,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
           // Verify the projection details
-          lib.verifyInitialOrderDetails(response, testData, shopperId)
+          verifyInitialOrderDetails(response, testData, shopperId)
         })
 
         // Invoke the events api and verify the content
@@ -89,8 +89,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           retries: Cypress.env('marketApiRetryCount'),
           timeout: Cypress.env('marketApiTimeout')
         }).then((response) => {
-          lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
-          lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
+          verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
+          verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
         })
 
         // Amend the above created WOW order
@@ -119,7 +119,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
         })
 
         // Invoke OQS TMO api and validate it against the projection
-        lib.verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
+        verifyOQSOrderStatus(testData.orderId, 'Received', false, testData)
       })
     })
   })

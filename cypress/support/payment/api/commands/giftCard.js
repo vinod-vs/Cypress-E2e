@@ -120,7 +120,11 @@ Cypress.Commands.add('generateGiftCards', (expectedGiftCardBalance) => {
         cy.log('Added newly created gift card to account: ' + JSON.stringify(giftCardDetails))
         cy.log('Payment instrument id of the newly added giftcard is ' + response.body.GiftCard.PaymentInstrumentId)
         // If last card, set the lastCardValue as amount. Else set the maxAmount
-        if (i === (newGiftCards.Cards.length - 1)) { giftcardPaymentInstrumentIds.push({ InstrumentId: response.body.GiftCard.PaymentInstrumentId, amount: lastCardValue }) } else { giftcardPaymentInstrumentIds.push({ InstrumentId: response.body.GiftCard.PaymentInstrumentId, amount: maxAmount }) }
+        if (i === (newGiftCards.Cards.length - 1)) {
+ giftcardPaymentInstrumentIds.push({ InstrumentId: response.body.GiftCard.PaymentInstrumentId, amount: lastCardValue })
+} else {
+ giftcardPaymentInstrumentIds.push({ InstrumentId: response.body.GiftCard.PaymentInstrumentId, amount: maxAmount })
+}
       })
     })
   })

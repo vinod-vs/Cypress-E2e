@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
-import '../../../../support/payment/api/commands/digitalPayment'
+import './digitalPayment'
 /*
     This cypress command searches for the paypal accounts linked to the logged in account.
     Gets the first enabled paypal accounts paypalPaymentInstrumentId and places an order with it.

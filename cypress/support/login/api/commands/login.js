@@ -1,4 +1,4 @@
-import '../../../../../cypress/support/signUp/api/commands/signUp'
+import '../../../signUp/api/commands/signUp'
 
 Cypress.Commands.add('loginViaApi', (shopper) => {
   cy.api({
@@ -62,9 +62,9 @@ Cypress.Commands.add('postOneTimePasswordRequest', (oneTimePassword) => {
 Cypress.Commands.add('loginViaApiWith2FA', (shopper, otpValidationSwitch = null, otpCode = null) => {
   cy.loginViaApi(shopper).then((loginResponse) => {
     const flagValue = otpValidationSwitch === null ? Cypress.env('otpValidationSwitch') : otpValidationSwitch
-    if(flagValue){
+    if (flagValue){
       expect(loginResponse).to.have.property('LoginResult', 'PartialSuccess')
-      if(otpCode === null){
+      if (otpCode === null){
         cy.emailTheOptCode().then(()=>{
           cy.getMailosaurEmailByEmailAddress(shopper.email).then(email => {
             const otpCodefromEmail = email.subject.substr(0, 6)
@@ -72,12 +72,10 @@ Cypress.Commands.add('loginViaApiWith2FA', (shopper, otpValidationSwitch = null,
             cy.validate2FALoginStatus(otpCodefromEmail)
           })
         })
-      }
-      else{
+      } else {
         cy.validate2FALoginStatus(otpCode)
-      } 
-    }
-    else{
+      }
+    } else {
       expect(loginResponse).to.have.property('LoginResult', 'Success')
     }
     cy.getCookie('w-rctx').should('exist')

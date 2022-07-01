@@ -20,7 +20,7 @@ import '../../../../../support/everydayMarket/api/commands/orderApi'
 import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, verifyCommonOrderDetails, verifyRefundDetails, verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
   describe('[API] RP-5039 - Full dispatch Everyday Market order via Marketplacer', () => {
@@ -56,7 +56,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
         )
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -88,7 +88,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
               edmInvoiceId
           )
           // Verify the projection details
-          lib.verifyInitialOrderDetails(response, testData, shopperId)
+          verifyInitialOrderDetails(response, testData, shopperId)
 
           // Invoke the events api and verify the content
           cy.orderEventsApiWithRetry(orderReference, {
@@ -112,14 +112,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
             retries: Cypress.env('marketApiRetryCount'),
             timeout: Cypress.env('marketApiTimeout'),
           }).then((response) => {
-            lib.verifyEventDetails(
+            verifyEventDetails(
               response,
               'OrderPlaced',
               testData,
               shopperId,
               1
             )
-            lib.verifyEventDetails(
+            verifyEventDetails(
               response,
               'MarketOrderPlaced',
               testData,
@@ -185,7 +185,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
               .as('finalProjection')
               .then((response) => {
                 // Order details
-                lib.verifyCommonOrderDetails(response, testData, shopperId)
+                verifyCommonOrderDetails(response, testData, shopperId)
                 // Seller details
                 expect(response.invoices[0].seller.sellerId).to.not.be.null
                 expect(response.invoices[0].seller.sellerName).to.be.equal(
@@ -305,7 +305,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                   timeout: Cypress.env('marketApiTimeout'),
                 }).then((response) => {
                   // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                  lib.verifyEventDetails(
+                  verifyEventDetails(
                     response,
                     'MarketOrderShipmentCreate',
                     testData,
@@ -313,7 +313,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                     1
                   )
                   // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                  lib.verifyEventDetails(
+                  verifyEventDetails(
                     response,
                     'MarketOrderDispatched',
                     testData,
@@ -321,7 +321,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                     1
                   )
                   // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                  lib.verifyEventDetails(
+                  verifyEventDetails(
                     response,
                     'MarketRewardsCredited',
                     testData,
@@ -371,14 +371,14 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
                 }
 
                 // Verify No refund details
-                lib.verifyRefundDetails(testData.orderId, 0, 0)
+                verifyRefundDetails(testData.orderId, 0, 0)
 
                 // Verify the MP and shipping invoices are available for the customer
                 // TO-DO Verify the invoice content
                 cy.verifyOrderInvoice(testData)
 
                 // Invoke OQS TMO api and validate it against the projection
-                lib.verifyOQSOrderStatus(
+                verifyOQSOrderStatus(
                   testData.orderId,
                   'Received',
                   false,

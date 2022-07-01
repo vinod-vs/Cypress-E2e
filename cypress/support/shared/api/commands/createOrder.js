@@ -29,7 +29,9 @@ export default class CreateB2CDeliveryOrderPaidViaCreditCard {
                           response.Products[x].Products[0].ProductRestrictionMessage === null &&
                           response.Products[x].Products[0].Price >= 10 &&
                           response.Products[x].Products[0].SupplyLimit >= 5 &&
-                          response.Products[x].Products[0].ProductWarningMessage === null) { productStockCode = response.Products[x].Products[0].Stockcode }
+                          response.Products[x].Products[0].ProductWarningMessage === null) {
+ productStockCode = response.Products[x].Products[0].Stockcode
+}
                     }
 
                     addItemsBody.StockCode = productStockCode

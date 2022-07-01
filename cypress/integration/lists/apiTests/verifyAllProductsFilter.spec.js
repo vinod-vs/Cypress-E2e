@@ -6,8 +6,8 @@ import allProductsbody from '../../../fixtures/lists/allProducts.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/lists/api/commands/otherAPIs'
 
-var term;
-var displayName;
+let term;
+let displayName;
 
 TestFilter(['API', 'B2C', 'P0'], () => {
   describe('[API] Verify that the All Products Filter API is working as expected', () => {
@@ -27,13 +27,13 @@ TestFilter(['API', 'B2C', 'P0'], () => {
         console.log('Display Name is:' + displayName)
         term = response.body.Items[0].Brand
         console.log('Brand is:' + term)
-        allProductsbody.Filters = [{ Key: 'Brand', Items: [{ 'Term': term }] }]
+        allProductsbody.Filters = [{ Key: 'Brand', Items: [{ Term: term }] }]
       })
 
       // Verify that the filter result- Display name and brand name match with the saved ones
       cy.getAllProducts(allProductsbody).then((response) => {
         expect(response.status).to.eq(200)
-        let data = response.body.Items
+        const data = response.body.Items
         let result, brandName
         const matchingDisplayName = data.filter(Item => Item.DisplayName === displayName)
         expect(matchingDisplayName).length(1)

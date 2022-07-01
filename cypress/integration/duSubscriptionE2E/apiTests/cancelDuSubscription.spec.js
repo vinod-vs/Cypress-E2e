@@ -37,13 +37,13 @@ TestFilter(['B2C', 'API', 'P0'], () => {
     availablePlans.cancelPlans.forEach((plan) => {
       it(`Should subscribe for a new delivery unlimited plan for ${plan.SubscriberType}`, () => {
 
-        var shopperId = "";
+        let shopperId = '';
 
         signUpDetails.firstName = faker.name.firstName()
         signUpDetails.lastName = faker.name.lastName()
         signUpDetails.emailAddress = faker.internet.userName() + '@' + Cypress.env('mailosaur_serverDomain')
         signUpDetails.mobilePhone = faker.phone.phoneNumber('04########')
-        
+
         switch (plan.SubscriberType) {
           case 'senior':
           cy.getDOB('senior').then((value) => {
@@ -68,7 +68,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
             signUpDetails.isBusinessPurchase = businessUserData.isBusinessPurchase
             break;
         }
-        
+
         cy.logOutViaApi().then((response) => {
           expect(response.status).to.eq(200)
         })
@@ -95,7 +95,7 @@ TestFilter(['B2C', 'API', 'P0'], () => {
               shopperId = response.body.ShopperId
               cy.log('This is the shopper id for the user : ' + shopperId)
             })
-            break; 
+            break;
         }
 
         // logout successfully after signing up
@@ -116,10 +116,11 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           expect(response.body).to.have.property('HasActiveDeliverySaver', false)
           expect(response.body).to.have.property('IsDeliverySaverEnabled', true)
           expect(response.body).to.have.property('IsEligibleForDeliverySaver', true)
-          if (plan.SubscriberType == 'business')
-            expect(response.body).to.have.property('IsBusinessAccount', true)
-          else
-            expect(response.body).to.have.property('IsBusinessAccount', false)
+          if (plan.SubscriberType == 'business') {
+expect(response.body).to.have.property('IsBusinessAccount', true)
+} else {
+expect(response.body).to.have.property('IsBusinessAccount', false)
+}
         })
         // Test a new user has any existing subscription plan
         cy.checkExistingPlanViaApi(shopperId).then((response) => {
@@ -189,10 +190,11 @@ TestFilter(['B2C', 'API', 'P0'], () => {
                   expect(response.status).to.eq(200)
                   expect(response.body).to.have.property('IsDeliverySaverEnabled', true)
                   expect(response.body).to.have.property('IsEligibleForDeliverySaver', false)
-                  if (plan.SubscriberType == 'business')
-                    expect(response.body).to.have.property('IsBusinessAccount', true)
-                  else
-                    expect(response.body).to.have.property('IsBusinessAccount', false)
+                  if (plan.SubscriberType == 'business') {
+expect(response.body).to.have.property('IsBusinessAccount', true)
+} else {
+expect(response.body).to.have.property('IsBusinessAccount', false)
+}
 
                   // Set the Date back to current Date & Time after cancellation is confirmed
                   cy.setDateTime(currentDateTime).then((response) => {
@@ -209,13 +211,13 @@ TestFilter(['B2C', 'API', 'P0'], () => {
           signUpDetails.createdTime = new Date().toLocaleString()
           signUpDetails.status = 'Subscription cancelled'
           cy.writeTestDataUsed(`${Cypress.env('duSubscriptionTestDataFilePath')}/personalSubscriptionUsedData.json`, signUpDetails)
-        
-          //Reset values  
-          signUpDetails.shopperId = ""
-          signUpDetails.planId = ""
-          signUpDetails.planPrice = ""
-          signUpDetails.createdTime = ""
-          signUpDetails.status = ""
+
+          // Reset values
+          signUpDetails.shopperId = ''
+          signUpDetails.planId = ''
+          signUpDetails.planPrice = ''
+          signUpDetails.createdTime = ''
+          signUpDetails.status = ''
         })
       })
     })

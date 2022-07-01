@@ -26,7 +26,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
       }
 
       // Set the search term and search products
-      allProductsBody.SearchTerm = "Milk"
+      allProductsBody.SearchTerm = 'Milk'
       cy.getAllProducts(allProductsBody).then((response) => {
         expect(response.status).to.eq(200)
         console.log('Product Search was successful.')

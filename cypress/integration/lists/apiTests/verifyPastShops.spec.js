@@ -7,7 +7,7 @@ import pastShopsBody from '../../../fixtures/lists/pastShops.json'
 import '../../../support/login/api/commands/login'
 import '../../../support/lists/api/commands/otherAPIs'
 
-var mapPastShops = new Map();
+const mapPastShops = new Map();
 let count = 1;
 
 TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
@@ -40,7 +40,7 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
         count = count - 1
         console.log(mapPastShops)
       }).then(() => {
-        var itemDateArray = Array.from({ length: count }, (v, k) => k + 1)
+        const itemDateArray = Array.from({ length: count }, (v, k) => k + 1)
         console.log('Total Number of past purchases on the left panel is: ' + itemDateArray.length)
         console.log('-----------------')
         let UniqueProductCount, BasketId
@@ -56,14 +56,14 @@ TestFilter(['API', 'B2C', 'B2B', 'P0'], () => {
           }
           await cy.getPastShopsByID(pastShopsBody, BasketId).then((response) => {
             expect(response.status).to.eq(200)
-            let data = response.body.TotalRecordCount
+            const data = response.body.TotalRecordCount
             console.log('Product count on the main page is: ' + data)
             expect(UniqueProductCount).to.eq(data)
             console.log('-----------------')
             if (index === count) {
-              console.log("Reached last purchase i.e. " + count)
+              console.log('Reached last purchase i.e. ' + count)
             } else {
-              let num = index + 1
+              const num = index + 1
               console.log('Purchase: ' + num)
               BasketId = mapPastShops.get('BasketId' + num)
               UniqueProductCount = mapPastShops.get('UniqueProductCount' + num)

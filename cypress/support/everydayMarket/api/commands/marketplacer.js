@@ -3,7 +3,7 @@
 import fullDispatchAnInvoiceRequest from '../../../../fixtures/everydayMarket/marketplacer/fullDispatchAnInvoice.json'
 import partialDispatchOfLineItemsInInvoice from '../../../../fixtures/everydayMarket/marketplacer/partialDispatchOfLineItemsInInvoice.json'
 import CustomerReturnRequest from '../../../../fixtures/everydayMarket/returns.json'
-import { refundRequestInitiatorType } from '../../../../support/everydayMarket/common/refundRequestInitiatorType'
+import { refundRequestInitiatorType } from '../../common/refundRequestInitiatorType'
 import { getInvoiceDetailsQuery } from './marketplacerGqlQueries'
 
 Cypress.Commands.add(

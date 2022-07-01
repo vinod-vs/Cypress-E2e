@@ -20,11 +20,13 @@ import '@bahmutov/cy-api/support'
 import chaiExclude from 'chai-exclude'
 
 const customCommands = require('./commands.js')
+
 module.exports = {
   commands: customCommands
 }
 
 require('cypress-xpath')
+
 chai.use(chaiExclude)
 
 // Alternatively you can use CommonJS syntax:

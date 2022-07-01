@@ -22,7 +22,7 @@ import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/everydayMarket/api/commands/orderPlacementHelpers'
 import search from '../../../../../fixtures/everydayMarket/search.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/validationHelpers'
+import { validateOrderApiAgainstTrader, validateEvents } from '../../../../../support/everydayMarket/api/commands/validationHelpers'
 import '../../../../../support/everydayMarket/ui/commands/siteManagementHelpers'
 import '../../../../../support/everydayMarket/ui/commands/siteManagementValidationHelpers'
 import smLogins from '../../../../../fixtures/siteManagement/loginDetails.json'
@@ -75,7 +75,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
         )
           .as('finalProjection')
           .then((response) => {
-            lib.validateOrderApiAgainstTrader(response)
+            validateOrderApiAgainstTrader(response)
             expect(response.invoices[0].invoiceStatus).is.equal('PAID')
             expect(response.invoices[0].wowStatus).is.equal('Placed')
             // Validate line items
@@ -108,8 +108,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
           retries: Cypress.env('marketApiRetryCount'),
           timeout: Cypress.env('marketApiTimeout'),
         }).then((response) => {
-          lib.validateEvents(response, 'OrderPlaced', 1)
-          lib.validateEvents(response, 'MarketOrderPlaced', 1)
+          validateEvents(response, 'OrderPlaced', 1)
+          validateEvents(response, 'MarketOrderPlaced', 1)
         })
 
         cy.get('@finalProjection').then((data) => {
@@ -199,8 +199,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-HYBRID'], () => {
               retries: Cypress.env('marketApiRetryCount'),
               timeout: Cypress.env('marketApiTimeout'),
             }).then((response) => {
-              lib.validateEvents(response, 'MarketOrderShipmentCreate', 1)
-              lib.validateEvents(response, 'MarketOrderDispatched', 1)
+              validateEvents(response, 'MarketOrderShipmentCreate', 1)
+              validateEvents(response, 'MarketOrderDispatched', 1)
             })
 
             // Update shipping tracking number

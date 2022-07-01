@@ -12,7 +12,7 @@ import '../../../../../support/refunds/api/commands/commands'
 import '../../../../../support/orders/api/commands/amendOrder'
 import search from '../../../../../fixtures/everydayMarket/search.json'
 import * as lib from '../../../../../support/everydayMarket/api/commands/validationHelpers'
-import * as commonLib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOQSOrderStatus } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
   describe('[API] RP-5031 - EM | Amend grocery order and verify Everyday Market order remains unchanged', () => {
@@ -160,7 +160,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API', 'E2E-Scenario-1'], () => {
 
                 // Invoke OQS TMO api and validate it against the projection
                 // New trader order will be in Received state, Will be an WOW + MP Order and will have all the WOW items in it. Passing testdata as null as this test does not use testdata. So skipping wow items verifications.
-                commonLib.verifyOQSOrderStatus(
+                verifyOQSOrderStatus(
                   afterData.orderId,
                   'Received',
                   false,

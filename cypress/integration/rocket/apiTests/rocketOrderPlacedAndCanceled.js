@@ -5,7 +5,9 @@ import rocketCancelOrderInfo from '../../../fixtures/rocketOrder/rocketCancelOrd
 import TestFilter from '../../../support/TestFilter'
 import '../../../support/rocket/api/commands/createAndCancelOrder'
 import '../../../support/utilities/ui/utility'
+
 const faker = require('faker/locale/en_AU')
+
 const dateNow = new Date()
 const moment = require('moment')
 

@@ -21,7 +21,7 @@ import '../../../../../support/everydayMarket/api/commands/marketplacer'
 import '../../../../../support/everydayMarket/api/commands/utility'
 import '../../../../../support/afterShip/api/commands/afterShip'
 import tests from '../../../../../fixtures/everydayMarket/apiTests.json'
-import * as lib from '../../../../../support/everydayMarket/api/commands/commonHelpers'
+import { verifyOrderTotals, verifyInitialOrderDetails, verifyEventDetails, verifyShipmentStatusDetails } from '../../../../../support/everydayMarket/api/commands/commonHelpers'
 import { afterShipShipmentStatus } from '../../../../../support/afterShip/api/commands/shipmentStatus'
 
 TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
@@ -50,7 +50,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
         cy.log('This is the order id: ' + response.Order.OrderId + ', Order ref: ' + response.Order.OrderReference)
 
         // Verify the order totals are as expected
-        lib.verifyOrderTotals(testData, response)
+        verifyOrderTotals(testData, response)
 
         // Invoke the order api and verify the projection content
         cy.ordersApiByShopperIdAndTraderOrderIdWithRetry(shopperId, orderId, {
@@ -69,7 +69,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
           testData.edmInvoiceId = edmInvoiceId
           cy.log('This is the MPOrder Id: ' + edmOrderId + ', MPInvoice Id: ' + edmInvoiceId)
           // Verify the projection details
-          lib.verifyInitialOrderDetails(response, testData, shopperId)
+          verifyInitialOrderDetails(response, testData, shopperId)
 
           // Invoke the events api and verify the content
           cy.orderEventsApiWithRetry(orderReference, {
@@ -83,8 +83,8 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
             retries: Cypress.env('marketApiRetryCount'),
             timeout: Cypress.env('marketApiTimeout')
           }).then((response) => {
-            lib.verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
-            lib.verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
+            verifyEventDetails(response, 'OrderPlaced', testData, shopperId, 1)
+            verifyEventDetails(response, 'MarketOrderPlaced', testData, shopperId, 1)
           })
 
           // Verify the MP and shipping invoices are available for the customer
@@ -126,11 +126,11 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
                 // Verify there are only 5 events. New event after dispatch is MarketOrderShipmentCreate
-                lib.verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
+                verifyEventDetails(response, 'MarketOrderShipmentCreate', testData, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketOrderDispatched"
-                lib.verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
+                verifyEventDetails(response, 'MarketOrderDispatched', testData, shopperId, 1)
                 // Verify there are only 5 events. New event after dispatch is "MarketRewardsCredited"
-                lib.verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
+                verifyEventDetails(response, 'MarketRewardsCredited', testData, shopperId, 1)
               })
               // Consignment aftership webhook  for each of the Shipment Status
               cy.invokeConsignmentWebhook(trackNo, id, {
@@ -175,7 +175,7 @@ TestFilter(['EDM', 'API', 'EDM-E2E-API'], () => {
                 timeout: Cypress.env('marketApiTimeout')
               }).then((response) => {
                 // Verify the event has got"MarketShipmentStatusUpdated" for the respective Shipment Status {'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED', 'AVAILABLE_FOR_PICKUP'}
-                lib.verifyShipmentStatusDetails(response, 'MarketShipmentStatusUpdated', testData, shopperId, id)
+                verifyShipmentStatusDetails(response, 'MarketShipmentStatusUpdated', testData, shopperId, id)
               })
             })
           })

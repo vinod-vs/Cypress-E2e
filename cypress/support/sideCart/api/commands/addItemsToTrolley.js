@@ -2,7 +2,7 @@ import addItemsRequestBody from '../../../../fixtures/sideCart/addItemsToTrolley
 import addUpdateItemsRequestBody from '../../../../fixtures/sideCart/addUpdateItemsToTrolley.json'
 import searchRequestBody from '../../../../fixtures/search/productSearch.json'
 import { restrictionType } from '../../../../fixtures/product/restrictionType.js'
-import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWowItems as groupLimitRetrictedItems, getAgeRestrictedWowItems as ageRestrictedItems } from '../../../../support/search/api/commands/search.js'
+import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWowItems as groupLimitRetrictedItems, getAgeRestrictedWowItems as ageRestrictedItems } from '../../../search/api/commands/search.js'
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
   cy.request('POST', Cypress.env('addItemsToTrolleyEndpoint'), addItemsBody).then((response) => {
@@ -57,12 +57,12 @@ function addToTrolleyAfterReducingProductProperties (productArr) {
   if (productArr.length === 0) {
     cy.log('No Products to be added to trolley')
   } else {
-    let trolleyItems = []
-  
+    const trolleyItems = []
+
     productArr.map(({ name, price, isSubstitutable, shopperNotes, ...trolleyProperties }) => trolleyProperties).forEach((item) => {
       trolleyItems.push(item)
     })
-  
+
     addUpdateItemsRequestBody.items = trolleyItems
     cy.addUpdateItemsToTrolley(addUpdateItemsRequestBody)
   }
@@ -248,7 +248,7 @@ Cypress.Commands.add('addMultiSellerAvailableEDMItemsToTrolley', (searchTerm, qu
         .filter(searchProduct => searchProduct.Products[0].IsMarketProduct && searchProduct.Products[0].IsAvailable)
       // Select the Products Available - EM Multi Seller
         .forEach(edmMultiSellerItems => {
-          cy.log("EM Seller's=  \" " + edmMultiSellerItems.Products[0].Vendor + ' " , Added Product Display Name is =  " ' + edmMultiSellerItems.Products[0].DisplayName + ' " ' + ' and StockCode is= " ' + edmMultiSellerItems.Products[0].Stockcode + ' " ')
+          cy.log('EM Seller\'s=  " ' + edmMultiSellerItems.Products[0].Vendor + ' " , Added Product Display Name is =  " ' + edmMultiSellerItems.Products[0].DisplayName + ' " ' + ' and StockCode is= " ' + edmMultiSellerItems.Products[0].Stockcode + ' " ')
           cy.addItemsToTrolley({ ...addItemsRequestBody, StockCode: edmMultiSellerItems.Products[0].Stockcode, Quantity: quantity })
         })
       )
