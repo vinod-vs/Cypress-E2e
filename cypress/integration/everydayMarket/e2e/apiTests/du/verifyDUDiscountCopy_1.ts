@@ -224,24 +224,23 @@ TestFilter(['EDM', 'EDM-HYBRID', 'EDM-E2E-HYBRID'], () => {
     cy.log("Please make sure 'OrderDiscountDetailsList:' should contain 2: {Target: \"MarketShippingFee\", DiscountSourceId: \"16764\", Source: \"DeliveryPlusSubscription\"}  --> For EM")
     // and Verify the DU Discount Details.
     cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) => 
-    {   duDiscountDetails.OrderDiscountDetailsList.forEach((OrderDiscountDetailsList, index, array) => {
-        if(OrderDiscountDetailsList.Source === "DeliveryPlusSubscription")
-        {cy.log("OrderDiscountDetailsList[" + index + "].DiscountSourceId= " + duDiscountDetails.OrderDiscountDetailsList[index].DiscountSourceId)
-         cy.log("OrderDiscountDetailsList[" + index + "].Source= " + duDiscountDetails.OrderDiscountDetailsList[index].Source)
-         cy.log("OrderDiscountDetailsList[" + index + "].Target= " + duDiscountDetails.OrderDiscountDetailsList[index].Target)
-         cy.log("MarketShippingFeeBeforeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount)
-         cy.log("MarketShippingFeeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount)
-         cy.log("MarketShippingFee = "  + duDiscountDetails.PaymentDetails.MarketShippingFee)
-  
-         expect(duDiscountDetails.OrderDiscountDetailsList[index].DiscountSourceId).contains(duDiscountSourceId)
-         expect(duDiscountDetails.OrderDiscountDetailsList[index].Source).contains(duDiscountSource)
-         expect(duDiscountDetails.OrderDiscountDetailsList[index].Target).contains(duTarget)
-         expect(duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount).equals(duDiscountAmount)
-         expect(duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount).equals(duDiscountAmount)
-         expect(duDiscountDetails.PaymentDetails.MarketShippingFee).equals(marketEMShippingFee) 
-        }
-      })
+    {
+      cy.log("OrderDiscountDetailsList[1].DiscountSourceId = "  + duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId)
+      cy.log("OrderDiscountDetailsList[1].Source = "  + duDiscountDetails.OrderDiscountDetailsList[0].Source)
+      cy.log("OrderDiscountDetailsList[1].Target = "  + duDiscountDetails.OrderDiscountDetailsList[0].Target)
+      cy.log("MarketShippingFeeBeforeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount)
+      cy.log("MarketShippingFeeDiscount = "  + duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount)
+      cy.log("MarketShippingFee = "  + duDiscountDetails.PaymentDetails.MarketShippingFee)
+     
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].DiscountSourceId).contains(duDiscountSourceId)
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].Source).contains(duDiscountSource)
+      expect(duDiscountDetails.OrderDiscountDetailsList[0].Target).contains(duTarget)
+      expect(duDiscountDetails.PaymentDetails.MarketShippingFeeBeforeDiscount).equals(10)
+      expect(duDiscountDetails.PaymentDetails.MarketShippingFeeDiscount).equals(10)
+      expect(duDiscountDetails.PaymentDetails.MarketShippingFee).equals(0)  
     })  // ENDS - cy.get('@myOrderDetailsDUDiscount').then((duDiscountDetails) =>
+
+
 
     //Now, Implement UI automation to Verify the Site Management Verification      
     //Login to SM and Navigate to the edmOrderId
