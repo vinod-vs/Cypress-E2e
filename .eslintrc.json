@@ -42,7 +42,13 @@
     "no-undef": "warn",
     "prefer-const": "warn",
     "space-before-function-paren": "off",
-    "quotes": ["warn", "single"],
+    "quotes": [
+      "warn",
+      "single", 
+      { 
+        "avoidEscape": true
+      }
+    ],
     "brace-style": ["warn", "1tbs"],
     "quote-props": ["warn", "consistent-as-needed"],
     "@typescript-eslint/triple-slash-reference": "warn",
@@ -83,7 +89,8 @@
       }
     ],
     "curly": "warn",
-    "guard-for-in": "warn",
+    "guard-for-in": "off",
+    "no-prototype-builtins": "warn",
     "no-labels": [
       "warn",
       {

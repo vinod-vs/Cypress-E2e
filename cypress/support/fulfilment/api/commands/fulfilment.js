@@ -127,7 +127,7 @@ function getAvailableWindowsByWindowType(windowResponse, selectedWindowType) {
   for (x = windowResponse.body.Days.length - 1; x >= 0; x--) {
     const day = daysResp[x]
     if (day.Available === true) {
-      for (y of day.Times) {
+      for (y in day.Times) {
         const time = daysResp[x].Times[y]
         switch (selectedWindowType) {
           case windowType.FLEET_DELIVERY:
@@ -285,12 +285,12 @@ Cypress.Commands.add('getFulfilmentWindowViaApi', (selectedWindowType) => {
   })
 })
 
-Cypress.Commands.add('getRandomAvailableWindowViaApi', (locAddressId, locAreaId, suburbId, fulfilmentType, selectedWindowType) => {
+Cypress.Commands.add('getRandomAvailableWindowViaApi', (locAddressId, locAreaId, locSuburbId, selectedFulfilmentType, selectedWindowType) => {
   timeSlotParams = {
     addressId: locAddressId,
     areaId: locAreaId,
-    suburbId: suburbId,
-    fulfilmentMethod: fulfilmentType
+    suburbId: locSuburbId,
+    fulfilmentMethod: selectedFulfilmentType
   }
   cy.buildQueryString(timeSlotParams).then((queryString) => {
     cy.api({
