@@ -98,7 +98,7 @@ TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
     })
 
     // Workaround for issue on UAT whereby products from initial order become unavailable on starting an amendment
-    function removeUnavailableStockCodes() {
+    function removeUnavailableStockCodes () {
       cy.getUnavailableStockCodes().then((stockCodes: any) => {
         if (stockCodes.length > 0) {
           cy.removeItems({ ...removeItemsRequestBody, StockCodes: stockCodes })

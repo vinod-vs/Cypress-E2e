@@ -15,7 +15,7 @@ export class CheckoutPage {
        return cy.get('.continue-shopping-link.ng-star-inserted')
   }
 
-  getSpinner() {
+  getSpinner () {
     return cy.get('.spinner-container');
   }
 }

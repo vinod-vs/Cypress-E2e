@@ -95,7 +95,7 @@ Cypress.Commands.add('completeOrderAmendment', (traderOrderId) => {
   return payOrder()
 })
 
-function getUnavailableItemsStockcodes() {
+function getUnavailableItemsStockcodes () {
   const unavailableItemsArr: number[] = []
 
   cy.getBootstrapResponse().then((response: any) => {
@@ -107,7 +107,7 @@ function getUnavailableItemsStockcodes() {
   return unavailableItemsArr
 }
 
-function doUnavailableItemsExist(): boolean {
+function doUnavailableItemsExist (): boolean {
   return cy.getBootstrapResponse().then((response: any) => {
     if (response.TrolleyRequest.UnavailableItems.length === 0) {
       return false
@@ -128,7 +128,7 @@ Cypress.Commands.add('placeOrderUsingCreditCardAndGiftCard', () => {
   return payOrder()
 })
 
-function placeOrderUsingCreditCard() {
+function placeOrderUsingCreditCard () {
   // Grab new credit card session Id to be passed on to find Digital pay instrument Id
   cy.navigatingToCreditCardIframe()
     .its('IframeUrl')
@@ -153,7 +153,7 @@ function placeOrderUsingCreditCard() {
   })
 }
 
-function placeOrderUsingGiftCard() {
+function placeOrderUsingGiftCard () {
   // Override the fixture with our own test gift card details
   const giftCardReq = {
     ...giftCardRequest,
@@ -171,7 +171,7 @@ function placeOrderUsingGiftCard() {
   })
 }
 
-function payOrder() {
+function payOrder () {
   // Grab balance to pay to be later passed on to /payment
   cy.navigateToCheckout().its('Model.Order.BalanceToPay').as('balanceToPay')
   cy.get('@balanceToPay').then((amount: any) => {
@@ -224,7 +224,7 @@ function payOrder() {
   getTraderPlacedOrderId()
 }
 
-function getTraderPlacedOrderId() {
+function getTraderPlacedOrderId () {
   cy.get('@traderPlacedOrderId').then((traderPlacedOrderId) => {
     return cy.confirmOrder({
       ...confirmOrderRequest,

@@ -93,15 +93,13 @@ TestFilter(['B2C', 'API', 'SPUD', 'E2E'], () => {
         })
       })
 
-      cy.confirmOrder(confirmOrderParameter).then(
-        (response: ConfirmedOrderResponse) => {
-          expect(response.Order.OrderId, 'Order Id').to.eqls(
-            confirmOrderParameter.placedOrderId
-          )
+      cy.confirmOrder(confirmOrderParameter).then((response: any) => {
+        expect(response.Order.OrderId, 'Order Id').to.eqls(
+          confirmOrderParameter.placedOrderId
+        )
 
-          cy.log('This is the order id: ' + response.Order.OrderId)
-        }
-      )
+        cy.log('This is the order id: ' + response.Order.OrderId)
+      })
     })
   })
 })

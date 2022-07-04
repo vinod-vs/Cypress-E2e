@@ -1,150 +1,150 @@
 export class OrderManagement {
-  getCustomerSearchMenu() {
+  getCustomerSearchMenu () {
     return cy.get('a:contains("Customer Search")')
   }
 
-  getOrderIDTextField() {
+  getOrderIDTextField () {
     return cy.get('#OrderID')
   }
 
-  getEmailAddressTextField() {
+  getEmailAddressTextField () {
     return cy.get('#Email')
   }
 
-  getCustomerSearchButton() {
+  getCustomerSearchButton () {
     return cy.get('input[value="Customer Search"]')
   }
 
-  getSearchButton() {
+  getSearchButton () {
     return cy.get('input[value="Search"]')
   }
 
-  getUserLockingMenu() {
+  getUserLockingMenu () {
     return cy.get('a:contains("User Locking")')
   }
 
   // Search order page common elements
-  getOrderReference() {
+  getOrderReference () {
     return cy.get('label[for="OrderReference"]')
   }
 
-  getOrderTotal() {
+  getOrderTotal () {
     return cy.get('div label[for="OrderTotal"]')
   }
 
-  getEdrNumber() {
+  getEdrNumber () {
     return cy.get('div label[for="EdrNumber"]')
   }
 
   // WOW TAB Elements
-  getWOWTab() {
+  getWOWTab () {
     return cy.get('li[class*="tab-woolworths"]')
   }
 
-  getWOWTabOrderId() {
+  getWOWTabOrderId () {
     return cy.get('div#tab-woolworths-form div label[for="OrderID"]')
   }
 
-  getWOWTabOrderStatus() {
+  getWOWTabOrderStatus () {
     return cy.get('div#tab-woolworths-form div label[for="OrderStatus"]')
   }
 
-  getWOWTabOrderDeliveryFee() {
+  getWOWTabOrderDeliveryFee () {
     return cy.get('div#tab-woolworths-form div label[for="OrderDeliveryFee"]')
   }
 
-  getWOWTabSubtotal() {
+  getWOWTabSubtotal () {
     return cy.get('div#tab-woolworths-form div label[for="WowSubtotal"]')
   }
 
   // WOW TAB ordered items elements
-  getWOWTabItemsTable() {
+  getWOWTabItemsTable () {
     return cy.get('div#tab-woolworths-form div.refund-lines-table')
   }
 
   // EDM TAB Elements
-  getEDMTab() {
+  getEDMTab () {
     return cy.get('li[class*="tab-market"]')
   }
 
-  getEDMTabSellerDetailsCommonDivString() {
+  getEDMTabSellerDetailsCommonDivString () {
     return '.seller-info'
   }
 
-  getEDMTabOrderDeliveryFee() {
+  getEDMTabOrderDeliveryFee () {
     return cy.get('div#tab-market-form div label[for="DeliveryFee"]')
   }
 
-  getEDMTabOrderItemsMainDiv() {
+  getEDMTabOrderItemsMainDiv () {
     return cy.get('form#market-refund-lines-form > div:first-child')
   }
 
   // Common Individual Sellers details section
-  getEDMTabSellerNameString() {
+  getEDMTabSellerNameString () {
     return 'div[class*="seller-header"]'
   }
 
-  getEDMTabCommonOrderItemsBySellerOrderIdString() {
+  getEDMTabCommonOrderItemsBySellerOrderIdString () {
     return 'label[for="seller_InvoiceId"]'
   }
 
-  getEDMTabCommonOrderItemsBySellerOrderStatusString() {
+  getEDMTabCommonOrderItemsBySellerOrderStatusString () {
     return 'label[for="seller_OrderStatus"]'
   }
 
-  getEDMTabCommonOrderItemsBySellerTrackingLink() {
+  getEDMTabCommonOrderItemsBySellerTrackingLink () {
     return cy.get('.seller-info label[for="seller_Shipments"]')
   }
 
-  getEDMTabCommonOrderItemsBySellerSubtotalString() {
+  getEDMTabCommonOrderItemsBySellerSubtotalString () {
     return 'label[for="seller_Subtotal"]'
   }
 
   // Individual Sellers section. Items table
-  getEDMTabCommonItemsTable() {
+  getEDMTabCommonItemsTable () {
     return cy.get('div#tab-market-form div.refund-lines-table')
   }
 
   // Common items table elements. Same for WOW & MP
-  getCommonItemsTableStockcodeString() {
+  getCommonItemsTableStockcodeString () {
     return 'td.refund-order-stockcode'
   }
 
-  getCommonItemsTableTRString() {
+  getCommonItemsTableTRString () {
     return 'tr[class*="refund-order-line"]'
   }
 
-  getCommonItemsTablePackageSize() {
+  getCommonItemsTablePackageSize () {
     return cy.get('td.refund-order-package-size')
   }
 
-  getCommonItemsTableQuantityString() {
+  getCommonItemsTableQuantityString () {
     return 'td[class*="quantity-ordered-column"]'
   }
 
-  getCommonItemsTableReturnQuantityString() {
+  getCommonItemsTableReturnQuantityString () {
     return 'td[class="quantity-column"]'
   }
 
-  getCommonItemsTableUnitPriceString() {
+  getCommonItemsTableUnitPriceString () {
     return 'td[class="refund-order-unit-price"]'
   }
 
-  getCommonItemsTablePriceBeforeDiscountString() {
+  getCommonItemsTablePriceBeforeDiscountString () {
     return 'td[class="numeric"]'
   }
 
-  getCommonItemsTableItemTotalString() {
+  getCommonItemsTableItemTotalString () {
     return 'td[class="total-column"]'
   }
 
-  getRefundCheckboxForStockcode(stockcode: any) {
+  getRefundCheckboxForStockcode (stockcode: any) {
     const checkbocLoc =
       'input[class*=\'refund-checkbox\'][name*=\'' + stockcode + '\']'
     return cy.get(checkbocLoc)
   }
 
-  getRefundDetailsForStockcode(stockcode: any) {
+  getRefundDetailsForStockcode (stockcode: any) {
     const refundDetailsLoc =
       'tr[class*=\'' +
       stockcode +
@@ -152,24 +152,24 @@ export class OrderManagement {
     return cy.get(refundDetailsLoc)
   }
 
-  getRefundDetailsTDForStockcode(stockcode: any) {
+  getRefundDetailsTDForStockcode (stockcode: any) {
     const refundDetailsLoc = 'tr[class*=\'' + stockcode + ' return\']'
     return cy.get(refundDetailsLoc)
   }
 
-  getRefundReasonFieldForStockcode(stockcode: any) {
+  getRefundReasonFieldForStockcode (stockcode: any) {
     const refundReasonLoc =
       'select[class=\'refund-edit-reason\'][name*=\'' + stockcode + '\']'
     return cy.get(refundReasonLoc)
   }
 
-  getRefundCommentFieldForStockcode(stockcode: any) {
+  getRefundCommentFieldForStockcode (stockcode: any) {
     const refundCommentLoc =
       'input[class=\'refund-edit-comment\'][name*=\'' + stockcode + '\']'
     return cy.get(refundCommentLoc)
   }
 
-  getRefundQuantityFieldForStockcode(stockcode: any) {
+  getRefundQuantityFieldForStockcode (stockcode: any) {
     const refundQuantityLoc =
       'input[class=\'refund-edit-amount\'][name*=\'' +
       stockcode +
@@ -177,139 +177,139 @@ export class OrderManagement {
     return cy.get(refundQuantityLoc)
   }
 
-  getRefundSaveButton() {
+  getRefundSaveButton () {
     return cy.get('input[name=\'SaveButton\']')
   }
 
-  getRefundApproveButton() {
+  getRefundApproveButton () {
     return cy.get('input[name=\'ApproveButton\']')
   }
 
-  getRefundShippingFeeCheckbox() {
+  getRefundShippingFeeCheckbox () {
     return cy.get('input[class*=\'refund-checkbox\'][name*=\'RefundLine[-2-0]\']')
   }
 
-  getRefundShippingFeeReasonField() {
+  getRefundShippingFeeReasonField () {
     return cy.get(
       'select[class=\'refund-edit-reason\'][name*=\'RefundLines[-2-0-Payment].ReasonID\']'
     )
   }
 
-  getRefundShippingFeeCommentField() {
+  getRefundShippingFeeCommentField () {
     return cy.get(
       'input[class=\'refund-edit-comment\'][name*=\'RefundLines[-2-0-Payment].Comment\']'
     )
   }
 
-  getGoodwillTotalField() {
+  getGoodwillTotalField () {
     return cy.get('.goodwill-total')
   }
 
-  getRefundTotalField() {
+  getRefundTotalField () {
     return cy.get('.refund-total')
   }
 
   // ------------- WOW Tab Specific Locators ---------------------
-  getWowLineItemsTable() {
+  getWowLineItemsTable () {
     return cy.get(
       '#refund-lines-form > div.refund-lines-table > div > table > tbody'
     )
   }
 
-  getWowLineItemsStockCodeString() {
+  getWowLineItemsStockCodeString () {
     return 'td:nth-child(5)'
   }
 
-  getWowLineItemsStockReIssueCheckBoxString() {
+  getWowLineItemsStockReIssueCheckBoxString () {
     return ' > tr > td:nth-child(5)'
   }
 
-  getWowLineItemsReIssueReasonSelectString() {
+  getWowLineItemsReIssueReasonSelectString () {
     return ' > tr.refund-order-line-reissue.line-1.sc-465135.edit.parent-stockcode- > td:nth-child(2) > select'
   }
 
-  getWowLineItemsShoppersNoteTextBoxString() {
+  getWowLineItemsShoppersNoteTextBoxString () {
     return ' > tr.refund-order-line-reissue.line-1.sc-465135.edit.parent-stockcode- > td:nth-child(9) > input'
   }
 
-  getWowLineItemsCommentTextBoxString() {
+  getWowLineItemsCommentTextBoxString () {
     return ' > tr.refund-order-line-reissue.line-1.sc-465135.edit.parent-stockcode- > td:nth-child(2) > input.refund-edit-comment'
   }
 
-  getWowSaveButton() {
+  getWowSaveButton () {
     return cy.get('input[type=submit]:nth-child(6)')
   }
 
-  getCourierRadioButton() {
+  getCourierRadioButton () {
     return cy.get('label[for="Courier"]')
   }
 
-  getCourierDeliveryAddressDropDown() {
+  getCourierDeliveryAddressDropDown () {
     return cy.get('select[class="AddressID"]')
   }
 
-  getChangeDeliveryWindowDropDown() {
+  getChangeDeliveryWindowDropDown () {
     return cy.get('select#courierDeliveryWindow')
   }
 
-  getDeliveryInstructionsTextBox() {
+  getDeliveryInstructionsTextBox () {
     return cy.get('textarea#DeliveryInstructions')
   }
 
-  getWowApproveButton() {
+  getWowApproveButton () {
     return cy.get('input[name="ApproveButton"]')
   }
 
-  getWowApproveFormSubmit() {
+  getWowApproveFormSubmit () {
     return cy.get('form[class="refund-approve-form"]')
   }
 
-  getSubmitAndPlaceOrderButton() {
+  getSubmitAndPlaceOrderButton () {
     return cy.get('input[type="submit"]')
   }
 
-  getOrderidOnApprovedRefundDetailsScreeen() {
+  getOrderidOnApprovedRefundDetailsScreeen () {
     return cy.get('label[for="OrderNumber"]')
   }
 
-  getReissueOrderTotalOnApprovedRefundDetailsScreeen() {
+  getReissueOrderTotalOnApprovedRefundDetailsScreeen () {
     return cy.get(
       '#content-panel > div > div.tab-layout > div:nth-child(18) > label'
     )
   }
 
-  getReissueOrderId() {
+  getReissueOrderId () {
     // Added on 28th May
     return cy.get(
       '#content-panel > div > div.tab-layout > div:nth-child(17) > label'
     )
   }
 
-  getOrderManagementTab() {
+  getOrderManagementTab () {
     return cy.get(
       '#manage-menu-top a[href*="/CustomerMaintenance/CustomerMaintenanceSearch"]'
     )
   }
 
-  getGoodwillCheckboxForStockCode(stockcode: any) {
+  getGoodwillCheckboxForStockCode (stockcode: any) {
     return cy.get(
       'input[class*=\'goodwill-checkbox\'][name*=\'' + stockcode + '\']'
     )
   }
 
-  getGoodwillReasonForStockCode(stockcode: any) {
+  getGoodwillReasonForStockCode (stockcode: any) {
     return cy.get(
       'select[class=\'refund-edit-reason\'][name*=\'' + stockcode + '-Goodwill\']'
     )
   }
 
-  getGoodwillCommentForStockCode(stockcode: any) {
+  getGoodwillCommentForStockCode (stockcode: any) {
     return cy.get(
       'input[class=\'refund-edit-comment\'][name*=\'' + stockcode + '-Goodwill\']'
     )
   }
 
-  getGoodwillQuantityFieldForStockcode(stockcode: any) {
+  getGoodwillQuantityFieldForStockcode (stockcode: any) {
     return cy.get(
       'input[class=\'refund-edit-amount\'][name*=\'' +
         stockcode +
@@ -317,7 +317,7 @@ export class OrderManagement {
     )
   }
 
-  getGoodwillAmountFieldForStockcode(stockcode: any) {
+  getGoodwillAmountFieldForStockcode (stockcode: any) {
     return cy.get(
       'input[class=\'refund-edit-amount\'][name*=\'' +
         stockcode +
@@ -325,12 +325,12 @@ export class OrderManagement {
     )
   }
 
-  getRefundIdTitleHearder() {
+  getRefundIdTitleHearder () {
     return cy.get('.manage-title>h1')
   }
 
   // get first stock code in the order
-  public getFirstStockCodeInOrder() {
+  public getFirstStockCodeInOrder () {
     cy.get(
       '.refund-lines-table > div > table > tbody > tr._filter-table-row td:nth-child(5)'
     ).each(($el, index, $list) => {
@@ -358,7 +358,7 @@ export class OrderManagement {
     })
   }
 
-  public generateRefundInSiteManagement(
+  public generateRefundInSiteManagement (
     stockcode: any,
     refundReason: string,
     refundComment: string,

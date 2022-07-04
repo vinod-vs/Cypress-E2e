@@ -32,7 +32,13 @@
     "no-var": "warn",
     "no-unused-expressions": "off",
     "chai-friendly/no-unused-expressions": "warn",
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "ignoreRestSiblings": true  
+      }
+    ],
     "no-undef": "warn",
     "prefer-const": "warn",
     "space-before-function-paren": "off",
@@ -101,6 +107,7 @@
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/no-misused-new": "warn",
     "@typescript-eslint/no-non-null-assertion": "warn",
+    "no-shadow": "off",
     "@typescript-eslint/no-shadow": [
       "warn",
       {
@@ -140,7 +147,12 @@
     "import/first": "warn",
     "import/exports-last": "warn",
     "import/no-duplicates": "warn",
-    "import/no-namespace": "warn",
+    "import/no-namespace": [
+      "warn",
+      {
+        "allowDeclarations": true
+      }
+    ], 
     "import/extensions": [
       "warn",
       {

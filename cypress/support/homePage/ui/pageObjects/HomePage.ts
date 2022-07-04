@@ -41,7 +41,7 @@ export class HomePage {
 
    }
 
-   getItemnotFound() {
+   getItemnotFound () {
      return cy.get('.no-results-primary-text')
 
    }

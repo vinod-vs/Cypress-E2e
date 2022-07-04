@@ -44,7 +44,7 @@ export class SideCartPage {
     return cy.get('.cartLoyalty-pointsTotal')
   }
 
-  getRewardcreditscheckElement(){
+  getRewardcreditscheckElement (){
     return cy.get('[id^=shared-toggle-switch]').click({ force: true })
 
   }
@@ -112,7 +112,7 @@ return cy.get('#wx-header-checkout-amount')
   getAvailableCreditItemsProductsInCartPanel (){
     return cy.get('.rewards-credits-items')
   }
-  getAvailableCreditItemsProductPriceDivList(){
+  getAvailableCreditItemsProductPriceDivList (){
     return this.getAvailableCreditItemsProductsInCartPanel().find('.price')
 
   }

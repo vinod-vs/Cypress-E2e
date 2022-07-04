@@ -4,7 +4,7 @@ export class MyOrderPage {
   myOrdersListB2B: string
   private readonly detailsContent = '.details-content'
 
-  constructor(orderId: string) {
+  constructor (orderId: string) {
     this.myOrdersList = 'wow-my-orders-list-container'
     this.myOrdersListB2B = 'wow-my-orders-container'
     this.orderId = orderId
@@ -12,7 +12,7 @@ export class MyOrderPage {
   }
 
   // Logic to wait and reload my order page and check if order exists
-  private waitandReload() {
+  private waitandReload () {
     let reloadCount = 0
     const reloadLimit = 10
     const checkAndReload = (orderId: any) => {
@@ -68,7 +68,7 @@ export class MyOrderPage {
     }
   }
 
-  private getmyOrderListContainersOnPage() {
+  private getmyOrderListContainersOnPage () {
     if (Cypress.env('b2bPlatform')) {
       return cy.get(this.myOrdersListB2B).find('.order >' + this.detailsContent)
     } else {
@@ -76,7 +76,7 @@ export class MyOrderPage {
     }
   }
 
-  private getMyOrdersListContainer(orderId: string) {
+  private getMyOrdersListContainer (orderId: string) {
     if (Cypress.env('b2bPlatform')) {
       return cy.get(this.myOrdersListB2B).filter(`:contains(${orderId})`)
     } else {
@@ -84,37 +84,37 @@ export class MyOrderPage {
     }
   }
 
-  private getMyOrdersContainerHeader() {
+  private getMyOrdersContainerHeader () {
     return this.getMyOrdersListContainer(this.orderId).find('.header')
   }
 
-  getMyOrderNumber() {
+  getMyOrderNumber () {
     return this.getMyOrdersListContainer(this.orderId).find(
       '.order >' + this.detailsContent
     )
   }
 
-  getOrderDate() {
+  getOrderDate () {
     return this.getMyOrdersContainerHeader().find('section.date > .content')
   }
 
-  getOrderTotal() {
+  getOrderTotal () {
     return this.getMyOrdersContainerHeader().find('section.total > .content')
   }
 
-  getDeliveryDate() {
+  getDeliveryDate () {
     return this.getMyOrdersListContainer(this.orderId).find(
       '.delivery >' + this.detailsContent
     )
   }
 
-  getTrackMyOrderLink() {
+  getTrackMyOrderLink () {
     return this.getMyOrdersListContainer(this.orderId).find(
       '.auto_my-orders-tmo-link.button'
     )
   }
 
-  getViewOrderDetailsLink() {
+  getViewOrderDetailsLink () {
     return this.getMyOrdersListContainer(this.orderId)
       .find('.view-order-link')
       .first()

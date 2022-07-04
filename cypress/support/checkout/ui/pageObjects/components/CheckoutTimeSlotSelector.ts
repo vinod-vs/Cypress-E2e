@@ -12,67 +12,83 @@ export class CheckoutTimeSlotSelector {
   crowdSourced = '.crowd-sourced'
   timeSpan = '.time-span'
 
-  private getAllDaysElList () {
+  private getAllDaysElList() {
     return cy.get('.dates-container-outer').find('.day')
   }
 
-  private getDayEl (day: string) {
-    return this.getAllDaysElList().find(this.dayDescription).filter(`:contains(${day})`)
+  private getDayEl(day: string) {
+    return this.getAllDaysElList()
+      .find(this.dayDescription)
+      .filter(`:contains(${day})`)
   }
 
-  private getAllAvailableDaysElList (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private getAllAvailableDaysElList(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getAllDaysElList().not('.closed')
   }
 
-  private getAllAvailableNextDayElList (): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.getAllAvailableDaysElList().find(this.dayDescription).not(':contains("Today")')
+  private getAllAvailableNextDayElList(): Cypress.Chainable<
+    JQuery<HTMLElement>
+  > {
+    return this.getAllAvailableDaysElList()
+      .find(this.dayDescription)
+      .not(':contains("Today")')
   }
 
-  private getWindowElList (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private getWindowElList(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.timeSlot)
   }
 
-  private getSelectedWindowEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private getSelectedWindowEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getWindowElList().filter('.selected')
   }
 
-  private selectRandomWindow (windowElList: any) {
+  private selectRandomWindow(windowElList: any) {
     windowElList[Math.floor(Math.random() * windowElList.length)].click()
   }
 
-  private selectDayHavingFleetWindow (startIndex: number) {
+  private selectDayHavingFleetWindow(startIndex: number) {
     let found = false
 
-    this.getAllAvailableNextDayElList().as('dayList').its('length').then(len => {
-      if (startIndex >= len) {
-        throw new Error('Test failed. Unable to find day with available fleet window(s)')
-      }
-
-      cy.get('@dayList').eq(startIndex).click().then(() => {
-        const totalWindowLength = Cypress.$(this.timeSlot).length
-        const crowdWindowLength = Cypress.$(this.timeSlot + ' ' + this.crowdSourced).length
-
-        if (totalWindowLength != crowdWindowLength) {
-          found = true
-          return false
+    this.getAllAvailableNextDayElList()
+      .as('dayList')
+      .its('length')
+      .then((len) => {
+        if (startIndex >= len) {
+          throw new Error(
+            'Test failed. Unable to find day with available fleet window(s)'
+          )
         }
+
+        cy.get('@dayList')
+          .eq(startIndex)
+          .click()
+          .then(() => {
+            const totalWindowLength = Cypress.$(this.timeSlot).length
+            const crowdWindowLength = Cypress.$(
+              this.timeSlot + ' ' + this.crowdSourced
+            ).length
+
+            if (totalWindowLength !== crowdWindowLength) {
+              found = true
+              return false
+            }
+          })
+          .then(() => {
+            if (!found) {
+              this.selectDayHavingFleetWindow(++startIndex)
+            }
+          })
       })
-        .then(() => {
-          if (!found) {
-            this.selectDayHavingFleetWindow(++startIndex)
-          }
-        })
-    })
   }
 
   /**
    * Select a Next Day window (Delivery, Pick up/Direct to boot). For Delivery, it'll filter out
    * Crowd windows so only Fleet will be selected
    */
-  public selectNextDayWindow () {
+  public selectNextDayWindow() {
     this.selectDayHavingFleetWindow(0)
 
-    cy.get(this.timeSlot).each(eachTimeSlot => {
+    cy.get(this.timeSlot).each((eachTimeSlot) => {
       if (!eachTimeSlot.find(this.crowdSourced).length) {
         cy.wrap(eachTimeSlot).click()
         return false
@@ -89,9 +105,12 @@ export class CheckoutTimeSlotSelector {
    * @param day day to select, e.g. 'Today' or 'Thursday'
    * @param time formatted time to select (e.g. 7:00 am - 10:00 am)
    */
-  public selectWindow (day: string, time: any) {
+  public selectWindow(day: string, time: any) {
     this.getDayEl(day).click()
-    cy.get(this.timeSpan).filter(`:contains(${time})`).closest(this.timeSlot).click()
+    cy.get(this.timeSpan)
+      .filter(`:contains(${time})`)
+      .closest(this.timeSlot)
+      .click()
   }
 
   /**
@@ -99,12 +118,15 @@ export class CheckoutTimeSlotSelector {
    *
    * @returns The selected window time within a Cypress.Chainable<string> object
    */
-  public getSelectedWindowTime (): Cypress.Chainable<string> {
-    return this.getSelectedWindowEl().find(this.timeSpan).invoke('text').then(text => {
-      cy.removeNewLineCarriageReturn(text).then((crText) => {
-        return crText.trim()
+  public getSelectedWindowTime(): Cypress.Chainable<string> {
+    return this.getSelectedWindowEl()
+      .find(this.timeSpan)
+      .invoke('text')
+      .then((text) => {
+        cy.removeNewLineCarriageReturn(text).then((crText) => {
+          return crText.trim()
+        })
       })
-    })
   }
 
   /**
@@ -112,7 +134,7 @@ export class CheckoutTimeSlotSelector {
    *
    * @returns The selected window cost within a Cypress.Chainable<string> object
    */
-  public getSelectedWindowCost (): Cypress.Chainable<string> {
+  public getSelectedWindowCost(): Cypress.Chainable<string> {
     return this.getSelectedWindowEl().find('.window-price').invoke('text')
   }
 
@@ -121,7 +143,7 @@ export class CheckoutTimeSlotSelector {
    *
    * @returns The selected window duration within a Cypress.Chainable<string> object
    */
-  public getSelectedWindowDuration (): Cypress.Chainable<string> {
+  public getSelectedWindowDuration(): Cypress.Chainable<string> {
     return this.getSelectedWindowEl().find('.window-length').invoke('text')
   }
 }

@@ -1,5 +1,5 @@
 import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
-import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import TestFilter from '../../../support/TestFilter'
 import giftCard from '../../../fixtures/payment/giftCard.json'
@@ -42,9 +42,9 @@ TestFilter(['B2C', 'API', 'Checkout', 'P0'], () => {
 
         cy.checkAndGetGiftCardPaymentInstrumentWithExpectedBalance(
           balToPay
-        ).then((response: any) => {
-          expect(response, instrumentIdAssertionMsg).to.exist
-          giftCardPayment.payments[0].paymentInstrumentId = response
+        ).then((giftCardResponse: any) => {
+          expect(giftCardResponse, instrumentIdAssertionMsg).to.exist
+          giftCardPayment.payments[0].paymentInstrumentId = giftCardResponse
           giftCardPayment.payments[0].amount = balToPay
         })
         cy.placeOrderViaApiWithPaymentRequest(giftCardPayment)

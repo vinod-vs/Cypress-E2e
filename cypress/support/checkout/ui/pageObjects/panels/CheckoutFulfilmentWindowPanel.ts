@@ -7,10 +7,12 @@ import { ToggleSwitch } from '../../../../shared/ui/components/ToggleSwitch'
 import { CheckoutAccordionPanel } from './CheckoutAccordionPanel'
 
 export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
-  private readonly fulfilmentWindowDetailsSection = 'wow-checkout-delivery-details'
+  private readonly fulfilmentWindowDetailsSection =
+    'wow-checkout-delivery-details'
   private readonly pickUpNotesTextArea = '.auto_pickup-notes'
   private readonly delNotesTextArea = '.auto_delivery-notes'
-  private readonly fulfilmentWindowSummary = 'wow-checkout-fulfilment-windows-summary'
+  private readonly fulfilmentWindowSummary =
+    'wow-checkout-fulfilment-windows-summary'
   private readonly fulfilmentDateSummaryText = '.delivery-date-summary-text'
   private readonly fulfilmentDateTimeValue = '.auto_fulfilment-date-time'
   private readonly fulfilmentDateTimeSummaryTextDN = '.auto_express-date-time'
@@ -20,19 +22,21 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
   private readonly selfIsolationSummary = '.auto_self-isolation'
   private readonly leaveUnattendedSummary = '.auto_leave-unattended'
   private readonly notesSummary = '.notes'
-  private readonly deliveryInstructionsNotification = 'wow-checkout-delivery-instructions-notifications'
+  private readonly deliveryInstructionsNotification =
+    'wow-checkout-delivery-instructions-notifications'
   private readonly selfIsolationContainer = '.covid-19-container'
   private readonly leaveUnattendedContainer = '.unattended-delivery-section'
   private readonly nominatedIdField = '.auto_restricted-items-id'
   private readonly nominatedIDSummary = '.auto_nominated-id-summary'
-  private readonly instructionsPanelBase = 'wow-checkout-delivery-instructions-panel'
+  private readonly instructionsPanelBase =
+    'wow-checkout-delivery-instructions-panel'
 
   private readonly chilled = 'chilled'
   private readonly restricted = 'restricted'
 
   inCheckoutTimeSlotSelector = new CheckoutTimeSlotSelector()
 
-  constructor () {
+  constructor() {
     super('.auto_checkout-accordion-panel__time')
   }
 
@@ -42,7 +46,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false
    */
-  public isAccordionActiveAndEditable () {
+  public isAccordionActiveAndEditable(): boolean {
     return cy.checkIfElementExists(this.fulfilmentWindowDetailsSection)
   }
 
@@ -52,7 +56,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false
    */
-  public isAccordionSavedAndSummarised () {
+  public isAccordionSavedAndSummarised(): boolean {
     return cy.checkIfElementExists(this.fulfilmentWindowSummary)
   }
 
@@ -62,79 +66,82 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false
    */
-  public isAccordionCollapsedAndClosed () {
-    return !(this.isAccordionActiveAndEditable() && this.isAccordionSavedAndSummarised())
+  public isAccordionCollapsedAndClosed(): boolean {
+    return !(
+      this.isAccordionActiveAndEditable() &&
+      this.isAccordionSavedAndSummarised()
+    )
   }
 
-  private summarySectionEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private summarySectionEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.fulfilmentWindowSummary)
   }
 
-  private fulfilmentDaySummaryEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private fulfilmentDaySummaryEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.summarySectionEl().find(this.fulfilmentDateSummaryText)
   }
 
-  private fulfilmentTimeSummaryEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private fulfilmentTimeSummaryEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.summarySectionEl().find(this.fulfilmentDateTimeValue)
   }
 
-  private standardDeliveryFeeEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private standardDeliveryFeeEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.deliveryFeeSummaryNoDiscount)
   }
 
-  private saleDeliveryFeeEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private saleDeliveryFeeEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.normalDeliveryFee)
   }
 
-  private selfIsolationToggle (): ToggleSwitch {
+  private selfIsolationToggle(): ToggleSwitch {
     return new ToggleSwitch(cy.get(this.selfIsolationContainer))
   }
 
-  private selfIsolationDetails (): Button {
+  private selfIsolationDetails(): Button {
     return new Button(cy.get(this.selfIsolationContainer))
   }
 
-  private leaveUnattendedToggle (): ToggleSwitch {
+  private leaveUnattendedToggle(): ToggleSwitch {
     return new ToggleSwitch(cy.get(this.leaveUnattendedContainer))
   }
 
-  private leaveUnattendedDetails (): Button {
+  private leaveUnattendedDetails(): Button {
     return new Button(cy.get(this.leaveUnattendedContainer))
   }
 
-  private notesEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private notesEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.summarySectionEl().find(this.notesSummary)
   }
 
-  private pickUpDTBNotesTextArea (): TextArea {
+  private pickUpDTBNotesTextArea(): TextArea {
     return new TextArea(cy.get(this.pickUpNotesTextArea))
   }
 
-  private deliveryNotesTextArea (): TextArea {
+  private deliveryNotesTextArea(): TextArea {
     return new TextArea(cy.get(this.delNotesTextArea))
   }
 
-  private selfIsolationSummaryEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private selfIsolationSummaryEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.selfIsolationSummary)
   }
 
-  private leaveUnattendedSummaryEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private leaveUnattendedSummaryEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.leaveUnattendedSummary)
   }
 
-  private chilledNotificationSummary (): Notification {
+  private chilledNotificationSummary(): Notification {
     return new Notification(cy.get(this.deliveryInstructionsNotification))
   }
 
-  private chilledNotificationEditView (): Notification {
+  private chilledNotificationEditView(): Notification {
     return new Notification(cy.get(this.instructionsPanelBase))
   }
 
-  private restrictedItemsId (): TextBox {
+  private restrictedItemsId(): TextBox {
     return new TextBox(cy.get(this.nominatedIdField))
   }
 
-  private restrictedItemIDSummaryEl (): Cypress.Chainable<JQuery<HTMLElement>> {
+  private restrictedItemIDSummaryEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.nominatedIDSummary)
   }
 
@@ -144,26 +151,42 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns day of reserved window
    */
-  public getSummarisedFulfilmentDay (): Cypress.Chainable<string> {
-    return cy.checkIfElementExists(this.fulfilmentDateTimeSummaryTextDN).then((result: boolean) => {
-      if (result) {
-        return ''
-      } else {
-        this.fulfilmentDaySummaryEl().invoke('text').then(($text) => {
-          if (!$text.includes('Today') && !$text.includes('Tomorrow') && !$text.includes('In approx')) {
-            cy.removeDateOrdinals($text).then((noOrdinals: any) => {
-              const shortWeekdayString = noOrdinals.substring(0, noOrdinals.indexOf(' '))
-              cy.convertShortWeekDayToLong(shortWeekdayString).then((longWeekdayString: any) => {
-                const str = longWeekdayString + ',' + noOrdinals.substring(noOrdinals.indexOf(' '))
-                return str.replace(' of', '')
-              })
+  public getSummarisedFulfilmentDay(): Cypress.Chainable<string> {
+    return cy
+      .checkIfElementExists(this.fulfilmentDateTimeSummaryTextDN)
+      .then((result: boolean) => {
+        if (result) {
+          return ''
+        } else {
+          this.fulfilmentDaySummaryEl()
+            .invoke('text')
+            .then(($text) => {
+              if (
+                !$text.includes('Today') &&
+                !$text.includes('Tomorrow') &&
+                !$text.includes('In approx')
+              ) {
+                cy.removeDateOrdinals($text).then((noOrdinals: any) => {
+                  const shortWeekdayString = noOrdinals.substring(
+                    0,
+                    noOrdinals.indexOf(' ')
+                  )
+                  cy.convertShortWeekDayToLong(shortWeekdayString).then(
+                    (longWeekdayString: any) => {
+                      const str =
+                        longWeekdayString +
+                        ',' +
+                        noOrdinals.substring(noOrdinals.indexOf(' '))
+                      return str.replace(' of', '')
+                    }
+                  )
+                })
+              } else {
+                return $text
+              }
             })
-          } else {
-            return $text
-          }
-        })
-      }
-    })
+        }
+      })
   }
 
   /**
@@ -172,20 +195,24 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns time of reserved window
    */
-  public getSummarisedFulfilmentTime (): Cypress.Chainable<string> {
-    return cy.checkIfElementExists(this.fulfilmentDateTimeSummaryTextDN).then((result: boolean) => {
-      if (result) {
-        this.convertDNEstimateTimeTextToMinutes().then(estimatesMunites => {
-          return this.getEstimateDeliveryTimeForDN(estimatesMunites)
-        })
-      } else {
-        return this.fulfilmentTimeSummaryEl().invoke('text').then(($text) => {
-          cy.removeNewLineCarriageReturn($text).then((noCr: any) => {
-            return noCr.split('between')[1].replace('and-', '-').trim()
+  public getSummarisedFulfilmentTime(): Cypress.Chainable<string> {
+    return cy
+      .checkIfElementExists(this.fulfilmentDateTimeSummaryTextDN)
+      .then((result: boolean) => {
+        if (result) {
+          this.convertDNEstimateTimeTextToMinutes().then((estimatesMunites) => {
+            return this.getEstimateDeliveryTimeForDN(estimatesMunites)
           })
-        })
-      }
-    })
+        } else {
+          return this.fulfilmentTimeSummaryEl()
+            .invoke('text')
+            .then(($text) => {
+              cy.removeNewLineCarriageReturn($text).then((noCr: any) => {
+                return noCr.split('between')[1].replace('and-', '-').trim()
+              })
+            })
+        }
+      })
   }
 
   /**
@@ -194,22 +221,24 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns cost of reserved window
    */
-  public getSummarisedDeliveryCost (): Cypress.Chainable<string> {
-    return cy.checkIfElementExists(this.standardDeliveryFeeEl()).then((present: any) => {
-      if (present === true) {
-        this.standardDeliveryFeeEl().invoke('text').then(($text) => {
-          return $text.replace('$', '').trim()
-        })
-      } else {
-        this.saleDeliveryFeeEl().invoke('text').then(($text) => {
-          return $text.split('now')[1].replace('$', '').trim()
-        })
-      }
-    })
-    /*
-    return this.standardDeliveryFeeEl().invoke('text').then(($text) => {
-      return $text.replace('$', '').trim();
-    }) */
+  public getSummarisedDeliveryCost(): Cypress.Chainable<string> {
+    return cy
+      .checkIfElementExists(this.standardDeliveryFeeEl())
+      .then((present: any) => {
+        if (present === true) {
+          this.standardDeliveryFeeEl()
+            .invoke('text')
+            .then(($text) => {
+              return $text.replace('$', '').trim()
+            })
+        } else {
+          this.saleDeliveryFeeEl()
+            .invoke('text')
+            .then(($text) => {
+              return $text.split('now')[1].replace('$', '').trim()
+            })
+        }
+      })
   }
 
   /**
@@ -219,10 +248,12 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @returns summarised notes
    *
    */
-  public getSummarisedNotes (): Cypress.Chainable<string> {
-    return this.notesEl().invoke('text').then(($text) => {
-      return $text.replace('\'', '')
-    })
+  public getSummarisedNotes(): Cypress.Chainable<string> {
+    return this.notesEl()
+      .invoke('text')
+      .then(($text) => {
+        return $text.replace("'", '')
+      })
   }
 
   /**
@@ -230,7 +261,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns CheckoutTimeSlotSelector object
    */
-  public timeSlotSelector (): CheckoutTimeSlotSelector {
+  public timeSlotSelector(): CheckoutTimeSlotSelector {
     return new CheckoutTimeSlotSelector()
   }
 
@@ -240,7 +271,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @param notes notes to enter
    * @returns CheckoutFulfilmentWindowPanel instance
    */
-  public enterPickupNotes (notes: string): CheckoutFulfilmentWindowPanel {
+  public enterPickupNotes(notes: string): CheckoutFulfilmentWindowPanel {
     this.pickUpDTBNotesTextArea().enterText(notes)
     return this
   }
@@ -251,7 +282,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @param notes notes to enter
    * @returns CheckoutFulfilmentWindowPanel instance
    */
-  public enterDeliveryNotes (notes: string): CheckoutFulfilmentWindowPanel {
+  public enterDeliveryNotes(notes: string): CheckoutFulfilmentWindowPanel {
     this.deliveryNotesTextArea().enterText(notes)
     return this
   }
@@ -263,7 +294,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @param state true (to toggle on), false (to toggle off)
    * @returns CheckoutFulfilmentWindowPanel instance
    */
-  public toggleSelfIsolation (state: boolean): CheckoutFulfilmentWindowPanel {
+  public toggleSelfIsolation(state: boolean): CheckoutFulfilmentWindowPanel {
     this.selfIsolationToggle().setToggleState(state)
     return this
   }
@@ -275,7 +306,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @param state true (to toggle on), false (to toggle off)
    * @returns CheckoutFulfilmentWindowPanel instance
    */
-  public toggleLeaveUnattended (state: boolean): CheckoutFulfilmentWindowPanel {
+  public toggleLeaveUnattended(state: boolean): CheckoutFulfilmentWindowPanel {
     this.leaveUnattendedToggle().setToggleState(state)
     return this
   }
@@ -285,7 +316,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false (as a Chainable) for leave unattended being enabled
    */
-  public isLeaveUnattendedEnabled () {
+  public isLeaveUnattendedEnabled() {
     return this.leaveUnattendedToggle().isEnabled()
   }
 
@@ -294,7 +325,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false (as a Chainable) for leave unattended being selected
    */
-  public isLeaveUnattendedSelected () {
+  public isLeaveUnattendedSelected(): Cypress.Chainable<boolean> {
     return this.leaveUnattendedToggle().getToggleState()
   }
 
@@ -303,10 +334,12 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns self-isolation text as a Chainable string
    */
-  public getSelfIsolationSummaryText (): Cypress.Chainable<string> {
-    return this.selfIsolationSummaryEl().invoke('text').then(($text) => {
-      return $text.trim()
-    })
+  public getSelfIsolationSummaryText(): Cypress.Chainable<string> {
+    return this.selfIsolationSummaryEl()
+      .invoke('text')
+      .then(($text) => {
+        return $text.trim()
+      })
   }
 
   /**
@@ -314,10 +347,12 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns leave unattended text as a Chainable string
    */
-  public getLeaveUnattendedSummaryText () {
-    return this.leaveUnattendedSummaryEl().invoke('text').then(($text) => {
-      return $text.trim()
-    })
+  public getLeaveUnattendedSummaryText(): Cypress.Chainable<string> {
+    return this.leaveUnattendedSummaryEl()
+      .invoke('text')
+      .then(($text) => {
+        return $text.trim()
+      })
   }
 
   /**
@@ -325,7 +360,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false (as a Chainable) on chilled items notification being present
    */
-  public isChilledItemNotificationPresentOnSummary (): Cypress.Chainable<boolean> {
+  public isChilledItemNotificationPresentOnSummary(): Cypress.Chainable<boolean> {
     const chilledNotification = this.chilledNotificationSummary()
 
     return chilledNotification.isPresent().then((response) => {
@@ -344,7 +379,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false (as a Chainable) on chilled items notification being present
    */
-  public isChilledItemNotificationPresentOnDetailsView (): Cypress.Chainable<boolean> {
+  public isChilledItemNotificationPresentOnDetailsView(): Cypress.Chainable<boolean> {
     const chilledNotification = this.chilledNotificationEditView()
 
     return chilledNotification.isPresent().then((response) => {
@@ -363,7 +398,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false (as a Chainable) on the self-isolation option being present
    */
-  public isSelfIsolationOptionPresent (): boolean {
+  public isSelfIsolationOptionPresent(): boolean {
     return cy.checkIfElementExists(this.selfIsolationContainer)
   }
 
@@ -372,7 +407,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false (as a Chainable) on the Nominated ID field being present
    */
-  public isNominatedIDFieldPresent (): boolean {
+  public isNominatedIDFieldPresent(): boolean {
     return cy.checkIfElementExists(this.nominatedIdField)
   }
 
@@ -382,7 +417,7 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    * @param id name to enter for Nominated ID
    * @returns CheckoutFulfilmentWindowPanel instance
    */
-  public enterNominatedID (id: string): CheckoutFulfilmentWindowPanel {
+  public enterNominatedID(id: string): CheckoutFulfilmentWindowPanel {
     this.restrictedItemsId().enterValue(id)
     return this
   }
@@ -392,10 +427,13 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns Nominated ID (as a Chainable string)
    */
-  public getNominatedIDOnSummary (): Cypress.Chainable<string> {
-    return this.restrictedItemIDSummaryEl().find('span').invoke('text').then(($text) => {
-      return $text.trim()
-    })
+  public getNominatedIDOnSummary(): Cypress.Chainable<string> {
+    return this.restrictedItemIDSummaryEl()
+      .find('span')
+      .invoke('text')
+      .then(($text) => {
+        return $text.trim()
+      })
   }
 
   /**
@@ -403,8 +441,10 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
    *
    * @returns true or false (as a Chainable) on the Restricted Item notification being present
    */
-  public isRestrictedItemNotificationPresentOnSummary (): Cypress.Chainable<boolean> {
-    const restrictedNotification = new Notification(cy.get(this.deliveryInstructionsNotification))
+  public isRestrictedItemNotificationPresentOnSummary(): Cypress.Chainable<boolean> {
+    const restrictedNotification = new Notification(
+      cy.get(this.deliveryInstructionsNotification)
+    )
     return restrictedNotification.isPresent().then((response) => {
       if (response) {
         restrictedNotification.getPrimaryHeaderText().then(($text) => {
@@ -416,37 +456,56 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
     })
   }
 
-  public convertDNEstimateTimeTextToMinutes (): Cypress.Chainable<number> {
-    return cy.get(this.fulfilmentDateTimeSummaryTextDN).then(textElement => {
+  public convertDNEstimateTimeTextToMinutes(): Cypress.Chainable<number> {
+    return cy.get(this.fulfilmentDateTimeSummaryTextDN).then((textElement) => {
       let hours = 0
       let minutes = 0
 
       if (textElement.text().includes('hr')) {
-        hours = Number(textElement.text().charAt((textElement.text().indexOf('hr') - 1)))
+        hours = Number(
+          textElement.text().charAt(textElement.text().indexOf('hr') - 1)
+        )
       }
       if (textElement.text().includes('mins')) {
-        minutes = Number(textElement.text().substring((textElement.text().indexOf('mins') - 2), textElement.text().indexOf('mins')))
+        minutes = Number(
+          textElement
+            .text()
+            .substring(
+              textElement.text().indexOf('mins') - 2,
+              textElement.text().indexOf('mins')
+            )
+        )
       }
 
       return hours * 60 + minutes
     })
   }
 
-  private getEstimateDeliveryTimeForDN (estimateMinutes: number): string {
+  private getEstimateDeliveryTimeForDN(estimateMinutes: number): string {
     const currentDate = new Date() // get current system date time.
-    const futureDateTime = new Date(currentDate.getTime() + estimateMinutes * 60000)
+    const futureDateTime = new Date(
+      currentDate.getTime() + estimateMinutes * 60000
+    )
 
     const estimateDeliveryTime = this.RoundUpDeliveryTime(futureDateTime)
 
     // eg, 1:15:30 AM
-    const deliveryTimeStringArray = estimateDeliveryTime.toLocaleTimeString('en-US').split(':')
+    const deliveryTimeStringArray = estimateDeliveryTime
+      .toLocaleTimeString('en-US')
+      .split(':')
     // eg, 1:15AM
-    const deliveryTimeString = deliveryTimeStringArray[0] + ':' + deliveryTimeStringArray[1] + deliveryTimeStringArray[2].substring(deliveryTimeStringArray[2].length - 2)
+    const deliveryTimeString =
+      deliveryTimeStringArray[0] +
+      ':' +
+      deliveryTimeStringArray[1] +
+      deliveryTimeStringArray[2].substring(
+        deliveryTimeStringArray[2].length - 2
+      )
 
     return deliveryTimeString
   }
 
-  private RoundUpDeliveryTime (furtureDateTime: Date): Date {
+  private RoundUpDeliveryTime(furtureDateTime: Date): Date {
     const minuteLastDigit = furtureDateTime.getMinutes().toString().charAt(1)
     switch (minuteLastDigit) {
       case '0':
@@ -470,4 +529,5 @@ export class CheckoutFulfilmentWindowPanel extends CheckoutAccordionPanel {
   }
 }
 
-export const onCheckoutFulfilmentWindowPanel = new CheckoutFulfilmentWindowPanel()
+export const onCheckoutFulfilmentWindowPanel =
+  new CheckoutFulfilmentWindowPanel()

@@ -13,38 +13,42 @@ export class Notification {
    *
    * @param elLocator parent locator through which the notification can be uniquely identified
    */
-  constructor (elLocator: Cypress.Chainable<JQuery<HTMLElement>>) {
+  constructor(elLocator: Cypress.Chainable<JQuery<HTMLElement>>) {
     elLocator.as('notificationParent')
   }
 
-  private notificationContainerEl () {
+  private notificationContainerEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get('@notificationParent').find(this.notificationContainer)
   }
 
-  private primaryHeaderTextEl () {
+  private primaryHeaderTextEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get('@notificationParent').find(this.primaryHeaderText)
   }
 
-  private secondaryHeaderEl () {
+  private secondaryHeaderEl(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get('@notificationParent').find(this.secondaryHeaderText)
   }
 
-  private linkElList (): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.notificationContainerEl().find(this.textContainer).find(this.action)
+  private linkElList(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return this.notificationContainerEl()
+      .find(this.textContainer)
+      .find(this.action)
   }
 
-  private selectLink (index: number) {
+  private selectLink(index: number) {
     this.linkElList().eq(index).click()
   }
 
-  private hasType (type: string): Cypress.Chainable<boolean> {
-    return this.notificationContainerEl().invoke('attr', 'class').then(($notification: any) => {
-      if ($notification.includes(type)) {
-        return true
-      } else {
-        return false
-      }
-    })
+  private hasType(type: string): Cypress.Chainable<boolean> {
+    return this.notificationContainerEl()
+      .invoke('attr', 'class')
+      .then(($notification: any) => {
+        if ($notification.includes(type)) {
+          return true
+        } else {
+          return false
+        }
+      })
   }
 
   /**
@@ -52,7 +56,7 @@ export class Notification {
    *
    * @returns primary text as a Chainable<string>
    */
-  public getPrimaryHeaderText (): Cypress.Chainable<string> {
+  public getPrimaryHeaderText(): Cypress.Chainable<string> {
     return this.primaryHeaderTextEl().invoke('text')
   }
 
@@ -61,7 +65,7 @@ export class Notification {
    *
    * @returns secondary text as a Chainable<string>
    */
-  public getSecondaryHeaderText (): Cypress.Chainable<string> {
+  public getSecondaryHeaderText(): Cypress.Chainable<string> {
     return this.secondaryHeaderEl().invoke('text')
   }
 
@@ -70,7 +74,7 @@ export class Notification {
    *
    * @returns text of the primary link as a Chainable<string>
    */
-  public getPrimaryLinkText (): Cypress.Chainable<string> {
+  public getPrimaryLinkText(): Cypress.Chainable<string> {
     return this.linkElList().eq(0).invoke('text')
   }
 
@@ -79,7 +83,7 @@ export class Notification {
    *
    * @returns text of the secondary link as a Chainable<string>
    */
-  public getSecondaryLinkText (): Cypress.Chainable<string> {
+  public getSecondaryLinkText(): Cypress.Chainable<string> {
     return this.linkElList().eq(0).invoke('text')
   }
 
@@ -88,7 +92,7 @@ export class Notification {
    *
    * @returns Notification instance
    */
-  public selectPrimaryLink (): Notification {
+  public selectPrimaryLink(): Notification {
     this.selectLink(0)
     return this
   }
@@ -98,7 +102,7 @@ export class Notification {
    *
    * @returns Notification instance
    */
-  public selectSecondaryLink (): Notification {
+  public selectSecondaryLink(): Notification {
     this.selectLink(1)
     return this
   }
@@ -108,7 +112,7 @@ export class Notification {
    *
    * @returns true or false as a Chainable<boolean> on Notification presence
    */
-  public isPresent (): Cypress.Chainable<boolean> {
+  public isPresent(): Cypress.Chainable<boolean> {
     return cy.get('@notificationParent').then(($parent) => {
       if ($parent.find(this.sharedNotificationTag).length > 0) {
         return true
@@ -123,7 +127,7 @@ export class Notification {
    *
    * @returns true or false as a Chainable<boolean>
    */
-  public IsWarning (): Cypress.Chainable<boolean> {
+  public isWarning(): Cypress.Chainable<boolean> {
     return this.hasType('warning')
   }
 
@@ -132,7 +136,7 @@ export class Notification {
    *
    * @returns true or false as a Chainable<boolean>
    */
-  public isError (): Cypress.Chainable<boolean> {
+  public isError(): Cypress.Chainable<boolean> {
     return this.hasType('error')
   }
 
@@ -141,7 +145,7 @@ export class Notification {
    *
    * @returns true or false as a Chainable<boolean>
    */
-  public IsInfo (): Cypress.Chainable<boolean> {
+  public isInfo(): Cypress.Chainable<boolean> {
     return this.hasType('info')
   }
 }

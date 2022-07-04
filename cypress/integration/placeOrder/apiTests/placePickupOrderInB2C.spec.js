@@ -2,8 +2,8 @@
 
 import addressSearchBody from '../../../fixtures/checkout/addressSearch.json'
 import storeSearchBody from '../../../fixtures/checkout/storeSearch.json'
-import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType.js'
-import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType.js'
+import { fulfilmentType } from '../../../fixtures/checkout/fulfilmentType'
+import { windowType } from '../../../fixtures/checkout/fulfilmentWindowType'
 import digitalPayment from '../../../fixtures/payment/digitalPayment.json'
 import creditcardSessionHeader from '../../../fixtures/payment/creditcardSessionHeader.json'
 import confirmOrderParameter from '../../../fixtures/orderConfirmation/confirmOrderParameter.json'

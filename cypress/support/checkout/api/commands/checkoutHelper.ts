@@ -15,13 +15,13 @@ Cypress.Commands.add(
 
       digitalPayment.payments[0].amount = balanceToPay
 
-      cy.navigatingToCreditCardIframe().then((response: any) => {
+      cy.navigatingToCreditCardIframe().then((iframeResponse: any) => {
         expect(
-          response.Success,
+          iframeResponse.Success,
           'Credit card iframe endpoint connection success status?'
         ).to.be.true
         creditcardSessionHeader.creditcardSessionId =
-          response.IframeUrl.toString().split('/')[5]
+          iframeResponse.IframeUrl.toString().split('/')[5]
       })
     })
 
@@ -151,8 +151,8 @@ Cypress.Commands.add('removeSavedCreditAndGiftCardsViaAPI', () => {
     }
 
     for (const instrument of digitalPaymentInstruments) {
-      cy.removePaymentInstrument(instrument).then((response: any) => {
-        expect(response.Success, 'Removing Card Instrument').to.be.true
+      cy.removePaymentInstrument(instrument).then((digiPayResponse: any) => {
+        expect(digiPayResponse.Success, 'Removing Card Instrument').to.be.true
       })
     }
   })

@@ -20,8 +20,8 @@ TestFilter(['API', 'B2C', 'SPUD', 'Checkout'], () => {
 
       cy.addCreditCardViaApi(creditCard).then((response: any) => {
         instrumentId = response.paymentInstrument.itemId
-        cy.getDigitalPaymentInstruments().then((response: any) => {
-          const hasInstrumentId = response.CreditCard.Instruments.filter(
+        cy.getDigitalPaymentInstruments().then((digiPayResponse: any) => {
+          const hasInstrumentId = digiPayResponse.CreditCard.Instruments.filter(
             (instrument: { [x: string]: any }) =>
               instrument.PaymentInstrumentId === instrumentId
           )

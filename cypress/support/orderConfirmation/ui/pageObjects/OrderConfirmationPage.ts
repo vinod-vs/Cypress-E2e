@@ -88,18 +88,18 @@ export class OrderConfirmationPage {
     this.getTrackMyOrderButton().click()
   }
 
-  VerifyOrderConfirmationHeader(){
+  VerifyOrderConfirmationHeader (){
     this.getOrderConfirmationHeader().should('be.visible').and('have.text', 'Order received');
     cy.url().should('include', '/confirmation');
   }
 
-  VerifyFulfilmentAddress(expectedAddressAliasString: string){
+  VerifyFulfilmentAddress (expectedAddressAliasString: string){
     cy.get<string>('@' + expectedAddressAliasString).then(expectedAddress => {
       this.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedAddress);
     })
   }
 
-  VerifyFulfilmentDay(expectedDayAliasString: string){
+  VerifyFulfilmentDay (expectedDayAliasString: string){
     cy.get<string>('@' + expectedDayAliasString).then(expectedFulfilmentDay => {
 
       // This is for handling the case when tests running on VM, the machine local time is one day back of woolworths app server time,
@@ -115,32 +115,32 @@ export class OrderConfirmationPage {
     })
   }
 
-  VerifyFulfilmentTime(expectedTimeAliasString: string){
+  VerifyFulfilmentTime (expectedTimeAliasString: string){
     cy.get<string>('@' + expectedTimeAliasString).then(expectedFulfilmentTime => {
       this.getConfirmationFulfilmentDetailsContentElement().should('contain.text', expectedFulfilmentTime);
     })
   }
 
-  VerifyDeliveryNowFulfilmentTime(expectedDNTimeAliasString: string){
+  VerifyDeliveryNowFulfilmentTime (expectedDNTimeAliasString: string){
     cy.get<string>('@' + expectedDNTimeAliasString).then(expectedDNFulfilmentTime => {
       this.checkIfGivenDeliveryNowTimeIsInFulfilmentTimeRange(expectedDNFulfilmentTime)
     })
   }
 
-  VerifyTotalAmount(expectedTotalAmountAliasString: string){
+  VerifyTotalAmount (expectedTotalAmountAliasString: string){
     cy.get<string>('@' + expectedTotalAmountAliasString).then(expectedTotalAmount => {
       this.getOrderPaymentSummaryTotalAmountElement().should('contain.text', expectedTotalAmount);
     })
   }
 
-  VerifySplitPaymentGiftCardAmount(expectedGiftCardAmount: number){
+  VerifySplitPaymentGiftCardAmount (expectedGiftCardAmount: number){
     this.getOrderSplitPaymentPaidWithGiftCardAmount().should(giftCardAmountElement => {
       const giftCardPaidAmount = giftCardAmountElement.text().trim().substring(1)
       expect(Number(giftCardPaidAmount)).to.equal(expectedGiftCardAmount)
     })
   }
 
-  VerifySplitPaymentCreditCardAmount(paidGiftCardAmount: number, expectedTotalAmountAliasString: string){
+  VerifySplitPaymentCreditCardAmount (paidGiftCardAmount: number, expectedTotalAmountAliasString: string){
     this.getOrderSplitPaymentPaidWithCreditCardAmount().then(creditCardAmountElement => {
       cy.get<string>('@' + expectedTotalAmountAliasString).then(expectedTotalAmount => {
         expect(Number(creditCardAmountElement.text().trim().substring(1))).to.equal(Number(expectedTotalAmount.substring(1)) - paidGiftCardAmount)
@@ -148,7 +148,7 @@ export class OrderConfirmationPage {
     })
   }
 
-  VerifySplitPaymentPayPalAmount(paidGiftCardAmount: number, expectedTotalAmountAliasString: string){
+  VerifySplitPaymentPayPalAmount (paidGiftCardAmount: number, expectedTotalAmountAliasString: string){
     this.getOrderSplitPaymentPaidWithPayPalAmount().then(paypalAmountElement => {
       cy.get<string>('@'+ expectedTotalAmountAliasString).then(expectedTotalAmount => {
         expect(Number(paypalAmountElement.text().trim().substring(1))).to.equal(Number(expectedTotalAmount.substring(1)) - paidGiftCardAmount)
