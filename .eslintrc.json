@@ -172,5 +172,13 @@
     "browser": true,
     "amd": true,
     "jquery": true
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
 }
