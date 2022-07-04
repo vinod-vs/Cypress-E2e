@@ -147,12 +147,13 @@
     "import/first": "warn",
     "import/exports-last": "warn",
     "import/no-duplicates": "warn",
-    "import/no-namespace": [
+    "import/no-namespace": "off",
+    "@typescript-eslint/no-namespace": [
       "warn",
       {
         "allowDeclarations": true
       }
-    ], 
+    ],  
     "import/extensions": [
       "warn",
       {

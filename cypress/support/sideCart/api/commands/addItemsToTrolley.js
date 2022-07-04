@@ -1,7 +1,7 @@
 import addItemsRequestBody from '../../../../fixtures/sideCart/addItemsToTrolley.json'
 import addUpdateItemsRequestBody from '../../../../fixtures/sideCart/addUpdateItemsToTrolley.json'
 import searchRequestBody from '../../../../fixtures/search/productSearch.json'
-import { restrictionType } from '../../../../fixtures/product/restrictionType.'
+import { restrictionType } from '../../../../fixtures/product/restrictionType'
 import { getPmRestrictedWowItems as pmRestrictedItems, getGroupLimitRestrictedWowItems as groupLimitRetrictedItems, getAgeRestrictedWowItems as ageRestrictedItems } from '../../../search/api/commands/search'
 
 Cypress.Commands.add('addItemsToTrolley', (addItemsBody) => {
