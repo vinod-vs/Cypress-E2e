@@ -65,6 +65,21 @@ Cypress.Commands.add(
   }
 )
 
+Cypress.Commands.add(
+  'ordersApiByEdmInvoiceId', (invoiceId) => {
+    const endPoint = String(Cypress.env('ordersApiByInvoiceIdEndpoint'))
+      .replace('INVOICE_ID', invoiceId)
+
+    cy.api({
+      method: 'GET',
+      url: Cypress.env('ordersApiEndpoint') + endPoint
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      return response.body[0]
+    })
+  }
+)
+
 Cypress.Commands.add('events', (shopperId, traderOrderId, orderReference) => {
   const queryParams = {
     shopperId: shopperId,

@@ -15,3 +15,19 @@ Cypress.Commands.add('invoiceSearch', (pageNumber) => {
     return response.body
   })
 })
+
+/*
+  Usage: cy.newInvoiceSearch('trader_order_id')
+  Usage: cy.newInvoiceSearch('edm_invoice_id')
+*/
+Cypress.Commands.add('newInvoiceSearch', (orderId) => {
+  let endpoint = String(Cypress.env('newInvoicesEndpoint'))
+  endpoint = endpoint.replace('ORDERID', orderId)
+  cy.api({
+    method: 'GET',
+    url: endpoint
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+    return response.body
+  })
+})

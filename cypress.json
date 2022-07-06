@@ -79,6 +79,7 @@
         "amendingOrderEndPoint": "/api/v3/ui/order/amending",
         "giftingEndPoint": "api/v3/ui/gifting",
         "invoicesEndpoint": "api/v3/ui/invoices/search?pageNumber=PAGE_NUMBER",
+        "newInvoicesEndpoint": "/invoice-service/v1/invoices/ORDERID",
         "refundsEndpoint": "apis/ui/Order/TRADER_ORDER_ID/Refunds",
         "marketplacerGQLEndpoint": "https://woolworths.test-fresh.marketplacer.com/graphql",
         "marketplacerGQLApiKey": "79f4f7801bcd3043e4c44ca42ef1a205",

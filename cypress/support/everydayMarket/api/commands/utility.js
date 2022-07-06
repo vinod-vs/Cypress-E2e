@@ -392,12 +392,23 @@ Cypress.Commands.add('getExpectedCCCardDetails', () => {
 })
 
 Cypress.Commands.add('verifyOrderInvoice', (testData) => {
-  cy.invoiceSearch(1).then((response) => {
-    const invoices = response.Invoices.filter(inv => inv.InvoiceId === Number(testData.orderId))
-    cy.log('Required invoices: ' + JSON.stringify(invoices))
-    expect(invoices).to.have.length(1)
-    const invoice = invoices[0]
-    lib.verifyInvoiceDetails(invoice, testData)
+  // New invoice API and verifications
+  cy.verifyNewOrderInvoice(testData)
+
+  // Legacy invoice API and verifications
+  // cy.invoiceSearch(1).then((response) => {
+  //   const invoices = response.Invoices.filter(inv => inv.InvoiceId === Number(testData.orderId))
+  //   cy.log('Required invoices: ' + JSON.stringify(invoices))
+  //   expect(invoices).to.have.length(1)
+  //   const invoice = invoices[0]
+  //   lib.verifyInvoiceDetails(invoice, testData)
+  // })
+})
+
+Cypress.Commands.add('verifyNewOrderInvoice', (testData) => {
+  cy.newInvoiceSearch(Number(testData.orderId)).then((response) => {
+    cy.log('Required invoices: ' + JSON.stringify(response))
+    lib.verifyNewInvoiceDetails(response, testData)
   })
 })
 
@@ -408,8 +419,8 @@ Cypress.Commands.add('searchEMProductAndStashTheResponse', (productSearchRespons
 
   for (y in response.Products) {
     if (response.Products[y].Products[0].Price !== null &&
-      response.Products[y].Products[0].IsInStock === true &&
-      response.Products[y].Products[0].IsMarketProduct === true) {
+            response.Products[y].Products[0].IsInStock === true &&
+            response.Products[y].Products[0].IsMarketProduct === true) {
       mpStockCode = response.Products[y].Products[0].Stockcode
       cy.log('MarketProduct: ' + mpStockCode + ' , SupplyLimit: ' + response.Products[y].Products[0].SupplyLimit + ' , PerItemPrice: ' + response.Products[y].Products[0].Price)
       break

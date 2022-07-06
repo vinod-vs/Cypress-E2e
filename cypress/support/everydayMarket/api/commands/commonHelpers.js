@@ -4,7 +4,7 @@ import '../../../refunds/api/commands/commands'
 import '../../../invoices/api/commands/commands'
 import '../../../oqs/api/commands/oqs'
 
-export function verifyEventDetails(
+export function verifyEventDetails (
   response,
   expectedEventName,
   testData,
@@ -13,9 +13,9 @@ export function verifyEventDetails(
 ) {
   cy.log(
     'Expected Event Name: ' +
-      expectedEventName +
-      ' , expected count: ' +
-      expectedEventCount
+        expectedEventName +
+        ' , expected count: ' +
+        expectedEventCount
   )
   const events = response.data.filter(
     (event) => event.domainEvent === String(expectedEventName)
@@ -38,7 +38,7 @@ export function verifyEventDetails(
   expect(events).to.have.length(expectedEventCount)
 }
 
-export function verifyShipmentStatusDetails(
+export function verifyShipmentStatusDetails (
   response,
   expectedEventName,
   testData,
@@ -63,7 +63,7 @@ export function verifyShipmentStatusDetails(
   })
 }
 
-export function verifyCommonOrderDetails(response, testData, shopperId) {
+export function verifyCommonOrderDetails (response, testData, shopperId) {
   // Order details
   expect(response.orderId).to.equal(Number(testData.orderId))
   expect(response.orderReference).to.be.equal(testData.orderReference)
@@ -77,23 +77,23 @@ export function verifyCommonOrderDetails(response, testData, shopperId) {
   expect(response.invoices.length).to.be.equal(1)
 }
 
-export function verifyOrderTotals(testData, confirmOrderResponse) {
+export function verifyOrderTotals (testData, confirmOrderResponse) {
   testData.edmDeliveryCharges = confirmOrderResponse.Order.MarketShippingFee
   testData.wowDeliveryCharges = confirmOrderResponse.Order.WoolworthsDeliveryFee
   testData.packagingFee = confirmOrderResponse.Order.PackagingFee
   testData.teamDiscount = confirmOrderResponse.Order.TeamDiscount
   testData.orderDiscountWithoutTeamDiscount =
-    confirmOrderResponse.Order.OrderDiscountWithoutTeamDiscount
+        confirmOrderResponse.Order.OrderDiscountWithoutTeamDiscount
   testData.orderTotal = Number(
     Number.parseFloat(
       Number(
         Number(testData.edmTotal) +
-          Number(testData.edmDeliveryCharges) +
-          Number(testData.wowTotal) +
-          Number(testData.packagingFee) +
-          Number(testData.wowDeliveryCharges) -
-          Number(testData.teamDiscount) -
-          Number(testData.orderDiscountWithoutTeamDiscount)
+                Number(testData.edmDeliveryCharges) +
+                Number(testData.wowTotal) +
+                Number(testData.packagingFee) +
+                Number(testData.wowDeliveryCharges) -
+                Number(testData.teamDiscount) -
+                Number(testData.orderDiscountWithoutTeamDiscount)
       )
     ).toFixed(2)
   )
@@ -102,7 +102,7 @@ export function verifyOrderTotals(testData, confirmOrderResponse) {
   cy.log('TeamDiscount: ' + testData.teamDiscount)
   cy.log(
     'OrderDiscountWithoutTeamDiscount: ' +
-      testData.orderDiscountWithoutTeamDiscount
+        testData.orderDiscountWithoutTeamDiscount
   )
   expect(confirmOrderResponse.Order.WoolworthsSubtotal).to.be.equal(
     Number(Number.parseFloat(Number(testData.wowTotal)).toFixed(2))
@@ -122,10 +122,10 @@ export function verifyOrderTotals(testData, confirmOrderResponse) {
   )
 }
 
-export function generateRandomString() {
+export function generateRandomString () {
   let randomStr = ''
   const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   for (let i = 0; i < 10; i++) {
     randomStr += characters.charAt(
       Math.floor(Math.random() * characters.length)
@@ -134,7 +134,7 @@ export function generateRandomString() {
   return randomStr
 }
 
-export function verifyRefundDetails(
+export function verifyRefundDetails (
   traderOrderId,
   expectedEdmRefundTotal,
   expectedEdmShippingFeeRefund
@@ -156,7 +156,7 @@ export function verifyRefundDetails(
   })
 }
 
-export function verifyCompleteRefundDetails(
+export function verifyCompleteRefundDetails (
   traderOrderId,
   expectedWOWRefundTotal,
   expectedWOWReusableBagsRefund,
@@ -168,9 +168,9 @@ export function verifyCompleteRefundDetails(
       Number(
         Number.parseFloat(
           Number(expectedEdmRefundTotal) +
-            Number(expectedEdmShippingFeeRefund) +
-            Number(expectedWOWRefundTotal) +
-            Number(expectedWOWReusableBagsRefund)
+                    Number(expectedEdmShippingFeeRefund) +
+                    Number(expectedWOWRefundTotal) +
+                    Number(expectedWOWReusableBagsRefund)
         ).toFixed(2)
       )
     )
@@ -189,7 +189,7 @@ export function verifyCompleteRefundDetails(
   })
 }
 
-export function verifyCompleteRefundDetailsWithRetry(
+export function verifyCompleteRefundDetailsWithRetry (
   traderOrderId,
   expectedWOWRefundTotal,
   expectedWOWReusableBagsRefund,
@@ -198,37 +198,37 @@ export function verifyCompleteRefundDetailsWithRetry(
 ) {
   const total = Number.parseFloat(
     Number(expectedWOWRefundTotal) +
-      Number(expectedWOWReusableBagsRefund) +
-      Number(expectedEdmRefundTotal) +
-      Number(expectedEdmShippingFeeRefund)
+        Number(expectedWOWReusableBagsRefund) +
+        Number(expectedEdmRefundTotal) +
+        Number(expectedEdmShippingFeeRefund)
   ).toFixed(2)
   cy.getRefundDetailsWithRetry(traderOrderId, {
     function: function (response) {
       if (response.body.Total !== Number(total)) {
         cy.log(
           'Total expected was ' +
-            total +
-            ' , but api returned ' +
-            response.body.Total
+                    total +
+                    ' , but api returned ' +
+                    response.body.Total
         )
         throw new Error(
           'Total expected was ' +
-            total +
-            ' , but api returned ' +
-            response.body.Total
+                    total +
+                    ' , but api returned ' +
+                    response.body.Total
         )
       }
     },
     retries: Cypress.env('refundApiRetryCount'),
-    timeout: Cypress.env('refundApiTimeout'),
+    timeout: Cypress.env('refundApiTimeout')
   }).then((response) => {
     expect(response.Total).to.be.equal(
       Number(
         Number.parseFloat(
           Number(expectedEdmRefundTotal) +
-            Number(expectedEdmShippingFeeRefund) +
-            Number(expectedWOWRefundTotal) +
-            Number(expectedWOWReusableBagsRefund)
+                    Number(expectedEdmShippingFeeRefund) +
+                    Number(expectedWOWRefundTotal) +
+                    Number(expectedWOWReusableBagsRefund)
         ).toFixed(2)
       )
     )
@@ -247,7 +247,7 @@ export function verifyCompleteRefundDetailsWithRetry(
   })
 }
 
-export function verifyInvoiceDetails(invoice, testData) {
+export function verifyInvoiceDetails (invoice, testData) {
   expect(invoice).to.not.be.null
   expect(invoice.InvoiceId).to.be.equal(Number(testData.orderId))
   expect(invoice.CollectionType).to.be.equal('Courier')
@@ -273,7 +273,82 @@ export function verifyInvoiceDetails(invoice, testData) {
   expect(invoice.MarketInvoices[1].DayRangeDispatchNote).to.be.null
 }
 
-export function verifyInitialOrderDetails(response, testData, shopperId) {
+export function verifyNewInvoiceDetails (invoiceResponse, testData) {
+  // Get the EDM order details
+  cy.ordersApiByEdmInvoiceId(testData.edmOrderId).then((projection) => {
+    // Verify the invoice response against the EDM order details from projection
+    expect(invoiceResponse.items.length).to.be.equal(projection.invoices.length + 1)
+
+    // Verify each seller/invoice has its individual invoices pdf and verify the order details
+    invoiceResponse.items.forEach(function (invoice, i) {
+      // Common verifications
+      expect(invoice.invoiceId).to.not.be.null
+      expect(invoice.invoiceDate).to.not.be.null
+      expect(Number(invoice.orderId)).to.be.equal(Number(projection.orderId))
+      expect(String(invoice.orderReference)).to.be.equal(String(projection.orderReference))
+      expect(invoice.pdfUrl).to.not.be.null
+
+      // Customer details
+      expect(Number(invoice.customer.shopperId)).to.be.equal(projection.shopperId)
+
+      // Rewards details
+      // To-do add rewards card verification
+
+      // Common ext details
+      expect(invoice.ext.thirdPartyOrderId).to.be.equal(projection.thirdPartyOrderId)
+      expect(invoice.ext.thirdPartyName).to.be.equal(projection.thirdPartyName)
+
+      // Last invoice is the shipping invoice
+      // Verify the shipping invoice
+      if (i === invoiceResponse.items.length - 1) {
+        cy.log('Verifying shipping invoice: ' + invoice.tenant)
+        expect(Number(invoice.totalAmount)).to.be.equal(projection.shippingAmount)
+        expect(Number(invoice.freightAmount)).to.be.equal(projection.shippingAmount)
+        expect(invoice.tenant).to.be.equal('MP-SHIPPING')
+        expect(invoice.items).to.be.null
+      } else {
+        cy.log('Verifying seller invoice: ' + invoice.tenant)
+        // verify seller invoices
+        // Seller specific common details
+        expect(Number(invoice.totalAmount)).to.be.equal(projection.invoices[i].invoiceTotal)
+        expect(invoice.tenant).to.contain(projection.invoices[i].seller.sellerName)
+
+        // Seller specific ext details
+        expect(Number(invoice.ext.legacyId)).to.be.equal(projection.invoices[i].legacyId)
+        expect(invoice.ext.legacyIdFormatted).to.be.equal(projection.invoices[i].legacyIdFormatted)
+        expect(invoice.ext.id).to.be.equal(projection.invoices[i].invoiceId)
+        expect(Number(invoice.ext.idDecoded)).to.be.equal(projection.invoices[i].legacyId)
+        expect(invoice.ext.phases).to.not.be.null
+
+        // Seller specific items details
+        expect(invoice.items.length).to.be.equal(projection.invoices[i].lineItems.length)
+        invoice.items.forEach(function (invoiceItem, j) {
+          // Ordered details
+          expect(invoiceItem.ordered.description).to.not.be.null
+          expect(Number(invoiceItem.ordered.stockCode)).to.be.equal(projection.invoices[i].lineItems[j].stockCode)
+          expect(Number(invoiceItem.ordered.quantity)).to.be.equal(projection.invoices[i].lineItems[j].quantity)
+          expect(Number(invoiceItem.ordered.pricePerUnit)).to.be.equal(projection.invoices[i].lineItems[j].salePrice)
+          expect(Number(invoiceItem.ordered.amount)).to.be.equal(projection.invoices[i].lineItems[j].totalAmount)
+          // Supplied details
+          expect(invoiceItem.supplied[0].description).to.not.be.null
+          expect(Number(invoiceItem.supplied[0].stockCode)).to.be.equal(projection.invoices[i].lineItems[j].stockCode)
+          expect(Number(invoiceItem.supplied[0].quantity)).to.be.equal(projection.invoices[i].lineItems[j].quantityPlaced)
+          expect(Number(invoiceItem.supplied[0].pricePerUnit)).to.be.equal(projection.invoices[i].lineItems[j].salePrice)
+          expect(Number(invoiceItem.supplied[0].amount)).to.be.equal(projection.invoices[i].lineItems[j].totalAmount)
+          // Ext details
+          expect(Number(invoiceItem.ext.legacyId)).to.be.equal(projection.invoices[i].lineItems[j].legacyId)
+          expect(Number(invoiceItem.ext.idDecoded)).to.be.equal(projection.invoices[i].lineItems[j].legacyId)
+          expect(invoiceItem.ext.id).to.be.equal(projection.invoices[i].lineItems[j].lineItemId)
+          expect(Number(invoiceItem.ext.variantIdDecoded)).to.be.equal(projection.invoices[i].lineItems[j].variantLegacyId)
+          expect(invoiceItem.ext.variantId).to.be.equal(projection.invoices[i].lineItems[j].variantId)
+          // expect(invoiceItem.ext.variantName).to.not.be.null
+        })
+      }
+    })
+  })
+}
+
+export function verifyInitialOrderDetails (response, testData, shopperId) {
   // Common Order details
   verifyCommonOrderDetails(response, testData, shopperId)
 
@@ -340,7 +415,7 @@ export function verifyInitialOrderDetails(response, testData, shopperId) {
  *
  * Make sure your latest projection is saved as 'finalProjection'. OQS response is verified against this projection
  */
-export function verifyOQSOrderStatus(
+export function verifyOQSOrderStatus (
   traderOrderId,
   expectedWOWOrderStatus,
   isMarketOnly,
@@ -388,18 +463,18 @@ export function verifyOQSOrderStatus(
             // Skipping Woolworths Disney+ Ooshie Collectibles verifications
             if (
               oqsResponse.OrderProducts[k].Ordered.Brand === 'Woolworths' &&
-              oqsResponse.OrderProducts[k].Ordered.Name ===
-                'Woolworths Disney+ Ooshie Collectibles' &&
-              oqsResponse.OrderProducts[k].Ordered.Total === 0
+                            oqsResponse.OrderProducts[k].Ordered.Name ===
+                            'Woolworths Disney+ Ooshie Collectibles' &&
+                            oqsResponse.OrderProducts[k].Ordered.Total === 0
             ) {
               cy.log(
                 'Skipping this WOW product as it is Woolworths Disney+ Ooshie Collectibles. Product Details: ' +
-                  JSON.stringify(oqsResponse.OrderProducts[k].Ordered)
+                                JSON.stringify(oqsResponse.OrderProducts[k].Ordered)
               )
             } else {
               cy.log(
                 'Verifying this WOW non Woolworths Disney+ Ooshie Collectibles product. Product Details: ' +
-                  JSON.stringify(oqsResponse.OrderProducts[k].Ordered)
+                                JSON.stringify(oqsResponse.OrderProducts[k].Ordered)
               )
               expect(
                 oqsResponse.OrderProducts[k].Ordered.StockCode
@@ -459,9 +534,9 @@ export function verifyOQSOrderStatus(
           } else {
             cy.log(
               'Skipping status validation. Projection Status: ' +
-                projection.invoices[i].wowStatus +
-                ' , OQS Status: ' +
-                oqsResponse.MarketOrders[i].Status
+                            projection.invoices[i].wowStatus +
+                            ' , OQS Status: ' +
+                            oqsResponse.MarketOrders[i].Status
             )
           }
           expect(oqsResponse.MarketOrders[i].Total).to.be.equal(
