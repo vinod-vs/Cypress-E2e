@@ -341,7 +341,6 @@ export function verifyNewInvoiceDetails (invoiceResponse, testData) {
           expect(invoiceItem.ext.id).to.be.equal(projection.invoices[i].lineItems[j].lineItemId)
           expect(Number(invoiceItem.ext.variantIdDecoded)).to.be.equal(projection.invoices[i].lineItems[j].variantLegacyId)
           expect(invoiceItem.ext.variantId).to.be.equal(projection.invoices[i].lineItems[j].variantId)
-          // expect(invoiceItem.ext.variantName).to.not.be.null
         })
       }
     })
